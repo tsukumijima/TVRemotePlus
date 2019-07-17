@@ -1,0 +1,13 @@
+Options -Indexes
+ErrorDocument 403 /files/error/403.php
+ErrorDocument 404 /files/error/404.php
+ErrorDocument 500 /files/error/500.php
+ErrorDocument 502 /files/error/502.php
+ErrorDocument 503 /files/error/503.php
+
+# m3u8をキャッシュから除外
+<Files ~ "\.(m3u8)$">
+Header add Pragma "no-cache"
+Header set Cache-Control no-cache
+</Files>
+

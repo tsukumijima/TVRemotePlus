@@ -1,0 +1,67 @@
+# Ignore Files
+#---------------------------
+/config.php
+/bin/Apache/conf/httpd.conf
+/bin/Apache/conf/openssl.cnf
+/bin/Apache/conf/openssl.ext
+/bin/Apache/conf/server.crt
+/bin/Apache/conf/server.csr
+/bin/Apache/conf/server.key
+/bin/Apache/logs/*
+!.gitkeep
+/bin/QSVEncC/qsv_check.html
+/bin/TSTask/BonDriver/*
+!.gitkeep
+/bin/TSTask/*.log
+/data/twitter_session/*
+!.gitkeep
+/data/session/*
+!.gitkeep
+/data/comment.json
+/data/nico.cookie
+/data/setting.json
+/data/tweet_time.dat
+/htdocs/server.crt
+/htdocs/files/info
+/htdocs/files/thumb
+/htdocs/files/fileinfo.json
+/htdocs/files/history.json
+/htdocs/stream/*
+!.gitkeep
+/htdocs/tweet/upload/*
+!.gitkeep
+
+# Temporary Files
+#---------------------------
+# vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+# Emacs
+.\#*
+# Backup files
+#---------------------------
+*~
+*.orig
+*.bak
+# yyyyMMdd
+*.[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+# yyyyMMddHHmm
+*.[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+# yyyyMMddHHmmss
+*.[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]
+# OS dependent files
+#---------------------------
+.DS_Store
+Thumbs.db
+# Bundler specific
+#---------------------------
+/vendor/bundle/
+/.bundle/
+# Office specific
+~$*
+*.tmp
+# Vagrant specific
+.vagrant/
