@@ -1,0 +1,51 @@
+{
+    "name": "TVRemotePlus",
+    "short_name": "TVRemotePlus",
+    "start_url": "/",
+    "scope": ".",
+    "display": "standalone",
+    "background_color": "#272727",
+    "theme_color": "#191919",
+    "description": "TVRemotePlus PWA App.",
+    "dir": "ltr",
+    "lang": "ja-JP",
+    "related_applications": [ ],
+    "prefer_related_applications": false,
+    "icons": [
+      {
+        "src": "/files/icon/TVRemotePlus-48x48.png",
+        "type": "image/png",
+        "sizes": "48x48"
+      },
+      {
+        "src": "/files/icon/TVRemotePlus-96x96.png",
+        "type": "image/png",
+        "sizes": "96x96"
+      },
+      {
+        "src": "/files/icon/TVRemotePlus-144x144.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      },
+      {
+        "src": "/files/icon/TVRemotePlus-192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/files/icon/TVRemotePlus-256x256.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      },
+      {
+        "src": "/files/icon/TVRemotePlus-384x384.png",
+        "type": "image/png",
+        "sizes": "384x384"
+      },
+      {
+        "src": "/files/icon/TVRemotePlus-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ]
+  }
