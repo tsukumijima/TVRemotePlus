@@ -1,5 +1,5 @@
 
-# <img alt="Logo" src="logo.png" width="35%">
+# <img alt="Logo" src="logo.png" width="40%">
 
 PHP / JavaScript 製のテレビのリモート視聴ソフト（いわゆるロケフリ）です  
 YouTube やニコニコなどの動画配信サービスの UI を意識した、モバイルフレンドリーなレスポンシブ Web インターフェイスが特徴です  
