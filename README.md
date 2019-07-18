@@ -5,7 +5,7 @@ PHP / JavaScript 製のテレビのリモート視聴ソフト（いわゆるロ
 YouTube やニコニコなどの動画配信サービスの UI を意識した、モバイルフレンドリーなレスポンシブ Web インターフェイスが特徴です  
 Twitter と連携してツイートをキャプチャ付きで投稿する機能や、ニコニコ実況のコメントを表示/投稿する機能、字幕の再生機能、録画番組の検索/再生機能なども実装しています
 
-## [ダウンロードはこちら](https://github.com/TVRemotePlus/TVRemotePlus/releases)
+## [ダウンロードはこちら](https://github.com/nambuplace/TVRemotePlus/releases)
 
 ## 概要
 ![Screenshot](screenshot1.png)
