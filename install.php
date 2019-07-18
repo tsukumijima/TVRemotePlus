@@ -142,6 +142,9 @@
 	if_copy ('/LICENSE.txt', true);
 	if_copy ('/README.md', true);
 	if_copy ('/stream.php', true);
+	if_copy ('/logo.png', true);
+	if_copy ('/screenshot1.png', true);
+	if_copy ('/screenshot2.png', true);
 	if_copy ('/Twitter_Develop.md', true);
 	if_copy ('/bin/', true);
 	if_copy ('/data/', true);
