@@ -1,4 +1,5 @@
-![Logo](logo.png)
+<img alt="Logo" src="logo.png" width="50%">
+
 # 
 
 PHP / JavaScript 製のテレビのリモート視聴ソフト（いわゆるロケフリ）です  
