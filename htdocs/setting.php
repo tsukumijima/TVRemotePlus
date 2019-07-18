@@ -10,7 +10,137 @@
 	
 	// 時計
 	$clock = date("Y/m/d H:i:s");
-	
+
+	// POSTでフォームが送られてきた場合
+	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+  
+  		// POSTデータ読み込み
+		// もし存在するなら$iniの連想配列に格納
+		if ($_POST['state']) $ini['state'] = $_POST['state'];
+
+		// ストリーミングを終了させる
+		stream_stop();
+
+		// ONAirなら
+		if ($ini['state'] == "File"){
+
+			// 連想配列に格納
+			if ($_POST['filepath']) $ini['filepath'] = $_POST['filepath'];
+			if ($_POST['filetitle']) $ini['filetitle'] = $_POST['filetitle'];
+			if ($_POST['fileinfo']) $ini['fileinfo'] = $_POST['fileinfo'];
+			if ($_POST['filechannel']) $ini['filechannel'] = $_POST['filechannel'];
+			if ($_POST['filetime']) $ini['filetime'] = $_POST['filetime'];
+			if ($_POST['start_timestamp']) $ini['start_timestamp'] = $_POST['start_timestamp'];
+			if ($_POST['end_timestamp']) $ini['end_timestamp'] = $_POST['end_timestamp'];
+			if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
+			if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
+
+			// jsonからデコードして代入
+			if (file_exists($infofile)){
+				$TSfile = json_decode(file_get_contents($infofile), true);
+			} else {
+				$TSfile = array();
+			}
+
+			if (file_exists($historyfile)){
+				$history = json_decode(file_get_contents($historyfile), true);
+			} else {
+				$history = array();
+			}
+
+			// 再生履歴の数
+			$history_count = count($history);
+			// 一定の値を超えたら徐々に消す
+			if ($history_count >= $history_keep){
+				$i = 0;
+				while (count($history) >= $history_keep) {
+					unset($history[$i]);
+					$history = array_values($history); // インデックスを詰める
+					$history_count = count($history);
+					$i++;
+				}
+			}
+
+			foreach ($TSfile as $key => $value) {
+				if ($ini['filepath'] == $TSfile[$key]['file']){
+					$history[$history_count]['play'] = time();
+					$history[$history_count]['file'] = $TSfile[$key]['file'];
+					$history[$history_count]['title'] = $TSfile[$key]['title'];
+					$history[$history_count]['update'] = $TSfile[$key]['update'];
+					$history[$history_count]['thumb'] = $TSfile[$key]['thumb'];
+					$history[$history_count]['data'] = $TSfile[$key]['data'];
+					$history[$history_count]['date'] = $TSfile[$key]['date'];
+					$history[$history_count]['info'] = $TSfile[$key]['info'];
+					$history[$history_count]['channel'] = $TSfile[$key]['channel'];
+					$history[$history_count]['start'] = $TSfile[$key]['start'];
+					$history[$history_count]['end'] = $TSfile[$key]['end'];
+					$history[$history_count]['duration'] = $TSfile[$key]['duration'];
+					$history[$history_count]['start_timestamp'] = $TSfile[$key]['start_timestamp'];
+					$history[$history_count]['end_timestamp'] = $TSfile[$key]['end_timestamp'];
+				}
+			}
+
+			// 再生履歴をファイルに保存
+			file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+			// ストリーミング開始
+			stream_file($ini['filepath'], $ini['quality'], $ini['encoder']);
+
+			// 準備中用の動画を流すためにm3u8をコピー
+			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+
+		} else if ($ini['state'] == "ONAir"){
+
+			// 連想配列に格納
+			if ($_POST['channel']) $ini['channel'] = strval($_POST['channel']);
+			if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
+			if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
+			if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
+			if ($_POST['BonDriver']) $ini['BonDriver'] = $_POST['BonDriver'];
+
+			// BonDriverのデフォルトを要求されたら
+			if ($ini['BonDriver'] == 'default'){
+				if (intval($ini['channel']) >= 100){ // チャンネルの値が100より(=BSか)
+					$ini['BonDriver'] = $BonDriver_default_S;
+				} else { // 地デジなら
+					$ini['BonDriver'] = $BonDriver_default_T;
+				}
+			} else { // デフォルトでないなら
+				$ini['BonDriver'] = $BonDriver_dll[$ini['BonDriver']];
+			}
+
+			// ストリーミング開始
+			stream_start($ini['channel'], $sid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+
+			// 準備中用の動画を流すためにm3u8をコピー
+			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+
+		// Offlineなら
+		} else if ($ini['state'] == "Offline"){
+
+			// 念のためもう一回ストリーミング終了関数を起動
+			stream_stop();
+				
+			// 強制でチャンネルを0に設定する
+			$ini['channel'] = '0';
+				
+			// 配信休止中用のプレイリスト
+			copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+
+		}
+
+		// iniファイル書き込み
+		file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+		// リダイレクトが有効なら
+		if ($setting_redirect == 'true'){
+			// トップページにリダイレクト
+			header('Location: '.$BASEURL);
+			exit;
+		}
+		
+	}
+
 	// ヘッダー読み込み
 	require_once ('../header.php');
 
@@ -169,128 +299,8 @@
 
             </form>
 
-<?php
+<?php	} else { // POSTの場合 ?>
 
-		} else { // フォームからPOSTによって要求された場合
-
-			// POSTデータ読み込み
-			// もし存在するなら$iniの連想配列に格納
-			if ($_POST['state']) $ini['state'] = $_POST['state'];
-
-			// ストリーミングを終了させる
-			stream_stop();
-
-			// ONAirなら
-			if ($ini['state'] == "File"){
-
-				// 連想配列に格納
-				if ($_POST['filepath']) $ini['filepath'] = $_POST['filepath'];
-				if ($_POST['filetitle']) $ini['filetitle'] = $_POST['filetitle'];
-				if ($_POST['fileinfo']) $ini['fileinfo'] = $_POST['fileinfo'];
-				if ($_POST['filechannel']) $ini['filechannel'] = $_POST['filechannel'];
-				if ($_POST['filetime']) $ini['filetime'] = $_POST['filetime'];
-				if ($_POST['start_timestamp']) $ini['start_timestamp'] = $_POST['start_timestamp'];
-				if ($_POST['end_timestamp']) $ini['end_timestamp'] = $_POST['end_timestamp'];
-				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
-				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
-
-				// jsonからデコードして代入
-				if (file_exists($infofile)){
-					$TSfile = json_decode(file_get_contents($infofile), true);
-				} else {
-					$TSfile = array();
-				}
-
-				if (file_exists($historyfile)){
-					$history = json_decode(file_get_contents($historyfile), true);
-				} else {
-					$history = array();
-				}
-
-				// 再生履歴の数
-				$history_count = count($history);
-				// 一定の値を超えたら徐々に消す
-				if ($history_count >= $history_keep){
-					$i = 0;
-					while (count($history) >= $history_keep) {
-						unset($history[$i]);
-						$history = array_values($history); // インデックスを詰める
-						$history_count = count($history);
-						$i++;
-					}
-				}
-
-				foreach ($TSfile as $key => $value) {
-					if ($ini['filepath'] == $TSfile[$key]['file']){
-						$history[$history_count]['play'] = time();
-						$history[$history_count]['file'] = $TSfile[$key]['file'];
-						$history[$history_count]['title'] = $TSfile[$key]['title'];
-						$history[$history_count]['update'] = $TSfile[$key]['update'];
-						$history[$history_count]['thumb'] = $TSfile[$key]['thumb'];
-						$history[$history_count]['data'] = $TSfile[$key]['data'];
-						$history[$history_count]['date'] = $TSfile[$key]['date'];
-						$history[$history_count]['info'] = $TSfile[$key]['info'];
-						$history[$history_count]['channel'] = $TSfile[$key]['channel'];
-						$history[$history_count]['start'] = $TSfile[$key]['start'];
-						$history[$history_count]['end'] = $TSfile[$key]['end'];
-						$history[$history_count]['duration'] = $TSfile[$key]['duration'];
-						$history[$history_count]['start_timestamp'] = $TSfile[$key]['start_timestamp'];
-						$history[$history_count]['end_timestamp'] = $TSfile[$key]['end_timestamp'];
-					}
-				}
-
-				// 再生履歴をファイルに保存
-				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-
-				// ストリーミング開始
-				stream_file($ini['filepath'], $ini['quality'], $ini['encoder']);
-
-				// 準備中用の動画を流すためにm3u8をコピー
-				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-
-			} else if ($ini['state'] == "ONAir"){
-
-				// 連想配列に格納
-				if ($_POST['channel']) $ini['channel'] = strval($_POST['channel']);
-				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
-				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
-				if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
-				if ($_POST['BonDriver']) $ini['BonDriver'] = $_POST['BonDriver'];
-
-				// BonDriverのデフォルトを要求されたら
-				if ($ini['BonDriver'] == 'default'){
-					if (intval($ini['channel']) >= 100){ // チャンネルの値が100より(=BSか)
-						$ini['BonDriver'] = $BonDriver_default_S;
-					} else { // 地デジなら
-						$ini['BonDriver'] = $BonDriver_default_T;
-					}
-				} else { // デフォルトでないなら
-					$ini['BonDriver'] = $BonDriver_dll[$ini['BonDriver']];
-				}
-
-				// ストリーミング開始
-				stream_start($ini['channel'], $sid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
-
-				// 準備中用の動画を流すためにm3u8をコピー
-				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-
-			// Offlineなら
-			} else if ($ini['state'] == "Offline"){
-
-				// 念のためもう一回ストリーミング終了関数を起動
-				stream_stop();
-				
-				// 強制でチャンネルを0に設定する
-				$ini['channel'] = '0';
-				
-				// 配信休止中用のプレイリスト
-				copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-
-			}
-
-			// iniファイル書き込み
-			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-?>
             <div id="setting-form" class="form">
               <p>ストリーム設定を保存しました。</p>
 <?php		if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
