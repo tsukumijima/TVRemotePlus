@@ -157,7 +157,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
 1. Release から最新の TVRemotePlus をダウンロード・解凍し、**Program Files・Users以下以外**のフォルダに配置します。（例: C:\freesoft\TVRemotePlus など）
 2. 中の install.bat を実行し、インストーラー通りに進めます。
 3. 中の config.php （設定ファイル）を **UTF-8・LFが読み込めるテキストエディタ（メモ帳は出来るだけ避けて下さい）** で開き、内部の設定を自分の環境に合わせ変更します。
-4. 変更出来たら、**文字コード UTF-8・改行コード LF** で変更を保存します（ Shift-JIS 等で保存した場合、多分エラー吐きまくって動きません）。
+4. 変更出来たら、**文字コード UTF-8・改行コード LF** で変更を保存します（ Shift-JIS 等 UTF-8 以外で保存した場合、動作しなくなります）。
 5. 下の「 TwitterAPI 開発者アカウントの取得について」を参考にし、Twitter API アカウントを取得し、アプリケーションを作成します。（既に Twitter API アカウントを持っている方、ツイート投稿機能を利用しない方は適宜ステップを飛ばして下さい。）  
 その後、config.php を上の手順で開き、作成したアプリケーションのコンシューマーキー等を入力して下さい。
 6. TVRemotePlusのあるフォルダ/bin/TSTask/BonDriver/ に、いつも TVTest 等で使用している BonDriver を入れてください（ TSTask は 64bit 版です、**TVTest（32bit） を利用している場合は 64bit 版 BonDriver を調達してください**（ 32bit 版の BonDriver は 64bit ソフトでは利用できません））。
