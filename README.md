@@ -1,4 +1,4 @@
-<img alt="Logo" src="logo.png" width="50%">
+<img alt="Logo" src="logo.png" width="35%" >
 
 # 
 
