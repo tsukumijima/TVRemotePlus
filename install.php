@@ -145,6 +145,7 @@
 	if_copy ('/logo.png', true);
 	if_copy ('/screenshot1.png', true);
 	if_copy ('/screenshot2.png', true);
+	if_copy ('/screenshot3.png', true);
 	if_copy ('/Twitter_Develop.md', true);
 	if_copy ('/bin/', true);
 	if_copy ('/data/', true);
@@ -162,13 +163,13 @@
 		$opensslext_default_file = $serverroot.'/bin/Apache/conf/openssl.default.ext';
 
 		// config.default.php を config.php にコピー
-		if (file_exists(!$serverroot.'/config.php')) copy($serverroot.'/config.default.php', $serverroot.'/config.php');
+		if (!file_exists($serverroot.'/config.php')) copy($serverroot.'/config.default.php', $serverroot.'/config.php');
 		// httpd.default.conf を httpd.conf にコピー
-		if (file_exists(!$httpd_conf_file)) copy($httpd_default_file, $httpd_conf_file);
+		if (!file_exists($httpd_conf_file)) copy($httpd_default_file, $httpd_conf_file);
 		// openssl.default.cnf を openssl.cnf にコピー
-		if (file_exists(!$openssl_conf_file)) copy($openssl_default_file, $openssl_conf_file);
+		if (!file_exists($openssl_conf_file)) copy($openssl_default_file, $openssl_conf_file);
 		// openssl.default.ext を openssl.ext にコピー
-		if (file_exists(!$opensslext_conf_file)) copy($opensslext_default_file, $opensslext_conf_file);
+		if (!file_exists($opensslext_conf_file)) copy($opensslext_default_file, $opensslext_conf_file);
 
 		// 状態設定ファイルを初期化
 		$jsonfile = $serverroot.'/data/setting.json';
@@ -208,6 +209,7 @@
 		// HTTPS接続用オレオレ証明書の作成
 		echo '  HTTPS接続用の自己署名証明書を作成します。'."\n";
 		echo '  途中、入力を求められる箇所がありますが、全てEnterで飛ばしてください。'."\n";
+		echo '  途中でパスワードとかも聞かれますが、飛ばして構いません。'."\n";
 		echo '  続行するには何かキーを押してください。'."\n";
 		trim(fgets(STDIN));
 		echo "\n";
@@ -224,10 +226,11 @@
 
 		// ショートカット作成
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
-					'$lnk = $shell.CreateShortcut(\"$Home\Desktop\TVRemotePlus.lnk\"); '.
+					'$lnk = $shell.CreateShortcut(\"$Home\Desktop\TVRemotePlus - launch.lnk\"); '.
 					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
 					'$lnk.Save()';
-		exec('powershell -Command "'.$powershell.'"');
+		exec('powershell -Command "'.$powershell.'"', $opt, $return);
+		echo "\n";
 		echo '  ショートカットを作成しました。'."\n";
 
 	}
