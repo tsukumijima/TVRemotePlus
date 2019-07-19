@@ -239,12 +239,18 @@
 	echo '  インストールが完了しました。'."\n";
 	sleep(1);
 
-	echo '  セットアップはまだ終わっていません。'."\n\n";
-	echo '  config.php (設定ファイル)を UTF-8・LF で開けるテキストエディタにて開き、'."\n";
-	echo '  変更が必要な箇所を設定し、忘れずに保存してください。'."\n";
-	echo '  また、BonDriverは bin/TSTask/BonDriver/ フォルダに忘れずに入れてください。'."\n\n";
-	echo '  全て終わったら、デスクトップのショートカットから TVRemotePlus を起動し、その後'."\n";
-	echo '  ブラウザから http://'.$serverip.':'.$port.'/ にアクセスし、異常がなければ完了です。'."\n\n";
+	// 新規インストールのみの処理
+	if ($update === false){
+		echo '  セットアップはまだ終わっていません。'."\n\n";
+		echo '  config.php (設定ファイル)を UTF-8・LF で開けるテキストエディタにて開き、'."\n";
+		echo '  変更が必要な箇所を設定し、忘れずに保存してください。'."\n";
+		echo '  また、BonDriverは bin/TSTask/BonDriver/ フォルダに忘れずに入れてください。'."\n\n";
+		echo '  全て終わったら、デスクトップのショートカットから TVRemotePlus を起動し、その後'."\n";
+		echo '  ブラウザから http://'.$serverip.':'.$port.'/ にアクセスし、異常がなければ完了です。'."\n";
+		sleep(1);
+	}
+
+	echo "\n";
 	echo '  終了するには何かキーを押してください。'."\n\n";
 	trim(fgets(STDIN));
 

@@ -9,8 +9,14 @@
 	// basic 認証設定を実行
 	basicauth($basicauth, $basicauth_user, $basicauth_password);
 
-	if ($ini['state'] == "ONAir"){ // ONAirなら
+	// ONAirのみ
+	if ($ini['state'] == "ONAir"){
 		$channel = $ch[strval($ini["channel"])];
+	}
+  
+	// stream.m3u8がない場合
+	if (!file_exists($base_dir.'htdocs/stream/stream.m3u8')){
+		copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
 	}
 
 	// 時計
