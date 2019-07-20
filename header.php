@@ -132,7 +132,7 @@ $backtrace = debug_backtrace();
     <a class="nav-link" href="https://github.com/nambuplace/TVRemotePlus" target="_blank">
       <i class="fas fa-history"></i>
       <span class="nav-link-href">
-        v<?php echo $version; ?>
+        <?php echo $version; ?>
 
       </span>
     </a>

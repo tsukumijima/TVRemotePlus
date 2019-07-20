@@ -210,9 +210,6 @@ $htaccess = $base_dir.'htdocs/.htaccess';
 // .htpasswd のパス
 $htpasswd = $base_dir.'htdocs/.htpasswd';
 
-// バージョン
-$version = '1.0.0-rc1';
-
 
 // ******** 内部処理 ********
 
