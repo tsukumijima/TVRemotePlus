@@ -225,6 +225,8 @@
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
 					'$lnk = $shell.CreateShortcut(\"$Home\Desktop\TVRemotePlus - launch.lnk\"); '.
 					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
+					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
+					'$lnk.WindowStyle = 7; '.
 					'$lnk.Save()';
 		exec('powershell -Command "'.$powershell.'"', $opt, $return);
 		echo "\n";
