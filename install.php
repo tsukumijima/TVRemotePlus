@@ -140,15 +140,12 @@
 	if_copy ('/config.default.php');
 	if_copy ('/header.php', true);
 	if_copy ('/LICENSE.txt', true);
+	if_copy ('/module.php', true);
 	if_copy ('/README.md', true);
 	if_copy ('/stream.php', true);
-	if_copy ('/logo.png', true);
-	if_copy ('/screenshot1.png', true);
-	if_copy ('/screenshot2.png', true);
-	if_copy ('/screenshot3.png', true);
-	if_copy ('/Twitter_Develop.md', true);
 	if_copy ('/bin', true);
 	if_copy ('/data', true);
+	if_copy ('/docs', true);
 	if_copy ('/htdocs', true);
 
 	// 新規インストールのみの処理

@@ -1,5 +1,5 @@
 
-# <img alt="Logo" src="logo.png" width="350">
+# <img alt="Logo" src="docs/logo.png" width="350">
 
 PHP / JavaScript 製のテレビのリモート視聴ソフト（いわゆるロケフリ）です  
 YouTube やニコニコなどの動画配信サービスの UI を意識した、モバイルフレンドリーなレスポンシブ Web インターフェイスが特徴です  
@@ -8,7 +8,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
 ## [ダウンロードはこちら](https://github.com/nambuplace/TVRemotePlus/releases)
 
 ## 概要
-![Screenshot](screenshot1.png)
+![Screenshot](docs/screenshot1.png)
 
 スマホ・PC両方においての利用に最適化した使いやすいUIを求め、開発しました。  
 一応、コンセプトは「動画配信サイト風の直感的で使いやすいレスポンシブ Web UI 」です。
@@ -31,7 +31,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
 などなど…（不純が過ぎる）
 
 ## 機能
-![Screenshot](screenshot2.png)
+![Screenshot](docs/screenshot2.png)
 
 細かなものまで列挙しています。  
 （要設定）とあるものは予め設定が必要な機能です。  
@@ -168,7 +168,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
  - ウインドウがすぐに閉じてしまう場合、何らかのエラーで Web サーバーが起動できていません。
    - コマンドプロンプを開いて先程のショートカットを黒いウインドウにドロップし、エラーログを確認してください。
  - 起動する際に下のようなファイアウォール云々が出た場合、許可しておいてください。
-   - ![Screenshot](firewall.png)
+   - ![Screenshot](docs/firewall.png)
    - 基本的にはプライベートネットワークのみで構いません（ VPN 等を利用して外部からアクセスする場合は異なってくるかもしれません）。
  - サーバー PC にすでに php がインストールされていてシステム環境変数にも登録されている場合で、 TVRemotePlus の php（7.3.6）とバージョンが異なっている場合、Apache（Webサーバー）がエラーウインドウを出して正常に起動できない事があるようです。
    - 恐らくですが、既に入っている php へのパスがシステム環境変数に登録されているとそちらの php の dll を優先して読み込もうとする（？）ため、バージョン違い関連でエラーが発生している可能性があります。
@@ -179,7 +179,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
  - TSTask.exe のあるフォルダに BonDriver や .ch2ファイル を置いた場合、認識されません。
 
 ## PWAについて
-![Screenshot](screenshot3.png)
+![Screenshot](docs/screenshot3.png)
 
 PWA（ Progressive Web Apps ）とは、
 
@@ -207,7 +207,7 @@ TVRemotePlus は、PWA に対応しています。
 
 ## TwitterAPI 開発者アカウントの取得について
 長くなるため別ページにまとめています。  
-[Twitter_Develop.md](Twitter_Develop.md)
+[Twitter_Develop.md](docs/Twitter_Develop.md)
 
 ## 注意事項
  - 端末のスペックにもよりますが、基本的に処理が重たいです（コメント表示時は特に…）。コメントが多くなると固まる場合もあります…
