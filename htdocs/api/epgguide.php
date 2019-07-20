@@ -207,6 +207,8 @@
 		// 番組情報を取得
 		$epgguide['onair'][strval($key)] = getEpgguide($key, $value);
 	}
+
+	if (!isset($epgguide['onair'])) $epgguide['onair'] = array();
 	
 	$epgguide['apiname'] = 'epgguide';
 
