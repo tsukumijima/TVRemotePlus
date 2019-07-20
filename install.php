@@ -6,9 +6,25 @@
 	// ‚×[ƒXƒtƒHƒ‹ƒ_
 	$base_dir = rtrim(str_replace('\\','/',dirname(__FILE__)), '/');
 
+	// Shift-JIS •¶š‰»‚¯‘Îô(å‚ÉWin7Œü‚¯)
+	// Shift-JIS ‚Í‘‚­–Å‚Ñ‚ë
+	// ƒGƒfƒBƒ^‚Å•\¦‚ª•Ï‚É‚È‚é‚ª‹C‚É‚µ‚Ä‚Í‚¢‚¯‚È‚¢
+	function sj_str($text) {
+		$str_arr = array('\\','ƒ\\','„\\','‡\\','‰\\','Š\\','‹\\','Œ\\','\\','\\','\\','\\','‘\\','’\\','“\\','”\\','•\\','–\\','—\\',
+						'˜\\','™\\','š\\','›\\','œ\\','\\','\\','Ÿ\\','à\\','á\\','â\\','ã\\','ä\\','å\\','æ\\','ç\\','è\\','é\\','ê\\', "");
+		$text = str_replace("\\\\", "\\", $text);
+		for ($i = 0; $str_arr[$i] != ""; $i++) {
+			$text = str_replace($str_arr[$i] . "\\", mb_substr($str_arr[$i], 0, 1), $text); // æ‚É\‚ª‚Â‚¢‚Ä‚¢‚½‚çÁ‚µ‚Ä
+			$text = str_replace($str_arr[$i], $str_arr[$i] . "\\", $text); // \‚Â‚¯‚é
+		}
+		return $text;
+	}		
+
+	// ƒtƒHƒ‹ƒ_ƒRƒs[ŠÖ”
 	function dir_copy($dir_name, $new_dir){
+
 		if (!is_dir($dir_name)) {
-			copy($dir_name, $new_dir);
+			copy(sj_str($dir_name), sj_str($new_dir));
 			return true;
 		}
 		if (!is_dir($new_dir)) {
@@ -24,7 +40,7 @@
 					if (is_dir($dir_name . "/" . $file)) {
 						dir_copy($dir_name . "/" . $file, $new_dir . "/" . $file);
 					} else {
-						copy($dir_name . "/" . $file, $new_dir . "/" . $file);
+						copy(sj_str($dir_name . "/" . $file), sj_str($new_dir . "/" . $file));
 					}
 				}
 				closedir($dh);
@@ -225,8 +241,6 @@
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
 					'$lnk = $shell.CreateShortcut(\"$Home\Desktop\TVRemotePlus - launch.lnk\"); '.
 					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
-					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
-					'$lnk.WindowStyle = 7; '.
 					'$lnk.Save()';
 		exec('powershell -Command "'.$powershell.'"', $opt, $return);
 		echo "\n";
