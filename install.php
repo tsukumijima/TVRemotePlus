@@ -4,7 +4,7 @@
 	ini_set('default_charset', 'sjis-win');
 	
 	// べースフォルダ
-	$base_dir = str_replace('\\','/',dirname(__FILE__));
+	$base_dir = rtrim(str_replace('\\','/',dirname(__FILE__)), '/');
 
 	function dir_copy($dir_name, $new_dir){
 		if (!is_dir($dir_name)) {
@@ -147,9 +147,9 @@
 	if_copy ('/screenshot2.png', true);
 	if_copy ('/screenshot3.png', true);
 	if_copy ('/Twitter_Develop.md', true);
-	if_copy ('/bin/', true);
-	if_copy ('/data/', true);
-	if_copy ('/htdocs/', true);
+	if_copy ('/bin', true);
+	if_copy ('/data', true);
+	if_copy ('/htdocs', true);
 
 	// 新規インストールのみの処理
 	if ($update === false){
@@ -214,10 +214,10 @@
 		trim(fgets(STDIN));
 		echo "\n";
 
-		$cmd =  'cd '.str_replace('/', '\\', $serverroot).'\\bin\\Apache\\bin\\ && '.
-				'openssl.exe genrsa -out ..\conf\server.key 2048 && '.
-				'openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf && '.
-				'openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -signkey ..\conf\server.key -extfile ..\conf\openssl.ext';
+		$cmd =  'cd '.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\ && '.
+				'.\openssl.exe genrsa -out ..\conf\server.key 2048 && '.
+				'.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf && '.
+				'.\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -signkey ..\conf\server.key -extfile ..\conf\openssl.ext';
 		echo $cmd."\n";
 		exec($cmd);
 		copy($serverroot.'/bin/Apache/conf/server.crt', $serverroot.'/htdocs/server.crt');
