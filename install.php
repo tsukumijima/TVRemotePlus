@@ -170,6 +170,8 @@
 		// 設定ファイル
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
+		$php_conf_file = $serverroot.'/bin/php/php.ini';
+		$php_default_file = $serverroot.'/bin/php/php.default.ini';
 		$openssl_conf_file = $serverroot.'/bin/Apache/conf/openssl.cnf';
 		$openssl_default_file = $serverroot.'/bin/Apache/conf/openssl.default.cnf';
 		$opensslext_conf_file = $serverroot.'/bin/Apache/conf/openssl.ext';
@@ -191,33 +193,28 @@
 
 		// Apacheの設定ファイル
 		$httpd_conf = file_get_contents($httpd_conf_file);
-
 		// 置換
 		$httpd_conf = preg_replace("/Define SRVROOT.*/", 'Define SRVROOT "'.$serverroot.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define SRVIP.*/", 'Define SRVIP "'.$serverip.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define PORT.*/", 'Define PORT "'.$port.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define SSL_PORT.*/", 'Define SSL_PORT "'.$ssl_port.'"', $httpd_conf);
+		file_put_contents($httpd_conf_file, $httpd_conf);// 書き込み
 
-		// 書き込み
-		file_put_contents($httpd_conf_file, $httpd_conf);
+		// phpの設定ファイル
+		$php_conf = file_get_contents($php_conf_file);		
+		$php_conf = preg_replace("/extension_dir.*/", 'extension_dir = "'.str_replace('/', '\\', $serverroot).'\bin\php\ext"', $php_conf); // 置換
+		file_put_contents($php_conf_file, $php_conf);// 書き込み
 
 		// OpenSSLの設定ファイル
 		$openssl_conf = file_get_contents($openssl_conf_file);
-		
-		// 置換
-		$openssl_conf = preg_replace("/commonName_default		= .*/", 'commonName_default		= '.$serverip.'', $openssl_conf);
-
-		// 書き込み
-		file_put_contents($openssl_conf_file, $openssl_conf);
+		$openssl_conf = preg_replace("/commonName_default		= .*/", 'commonName_default		= '.$serverip.'', $openssl_conf); // 置換
+		file_put_contents($openssl_conf_file, $openssl_conf); // 書き込み
 
 		// OpenSSLの拡張設定ファイル
 		$opensslext_conf = file_get_contents($opensslext_conf_file);
+		$opensslext_conf = preg_replace("/subjectAltName = .*/", 'subjectAltName = IP:'.$serverip.'', $opensslext_conf); // 置換		
+		file_put_contents($opensslext_conf_file, $opensslext_conf); // 書き込み
 
-		// 置換
-		$opensslext_conf = preg_replace("/subjectAltName = .*/", 'subjectAltName = IP:'.$serverip.'', $opensslext_conf);
-
-		// 書き込み
-		file_put_contents($opensslext_conf_file, $opensslext_conf);
 
 		// HTTPS接続用オレオレ証明書の作成
 		echo '  HTTPS接続用の自己署名証明書を作成します。'."\n";
