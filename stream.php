@@ -7,7 +7,7 @@
 		ini_set('display_errors', 0);
 
 		// 設定読み込み
-		require_once (dirname(__FILE__)."/config.php");
+		require_once (dirname(__FILE__).'/config.php');
 
 		// 設定ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);

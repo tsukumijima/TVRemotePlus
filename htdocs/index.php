@@ -7,7 +7,7 @@
 	$ini = json_decode(file_get_contents($inifile), true);
   
 	// basic 認証設定を実行
-	basicauth($basicauth, $basicauth_user, $basicauth_password);
+	basicAuth($basicauth, $basicauth_user, $basicauth_password);
 
 	// ONAirのみ
 	if ($ini['state'] == "ONAir"){
