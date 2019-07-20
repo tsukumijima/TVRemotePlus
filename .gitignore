@@ -8,6 +8,7 @@
 /bin/Apache/conf/server.csr
 /bin/Apache/conf/server.key
 /bin/Apache/logs/*
+/bin/php/php.ini
 /bin/QSVEncC/qsv_check.html
 /bin/TSTask/BonDriver/*
 /bin/TSTask/*.log
