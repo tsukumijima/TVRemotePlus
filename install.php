@@ -244,7 +244,7 @@
 		echo '  セットアップはまだ終わっていません。'."\n\n";
 		echo '  config.php (設定ファイル)を UTF-8・LF で開けるテキストエディタにて開き、'."\n";
 		echo '  変更が必要な箇所を設定し、忘れずに保存してください。'."\n";
-		echo '  また、BonDriverは bin/TSTask/BonDriver/ フォルダに忘れずに入れてください。'."\n\n";
+		echo '  また、BonDriver・.ch2 ファイルは bin/TSTask/BonDriver/ フォルダに忘れずに入れてください。'."\n\n";
 		echo '  全て終わったら、デスクトップのショートカットから TVRemotePlus を起動し、その後'."\n";
 		echo '  ブラウザから http://'.$serverip.':'.$port.'/ にアクセスし、異常がなければ完了です。'."\n";
 		sleep(1);
