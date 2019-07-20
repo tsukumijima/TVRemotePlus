@@ -179,6 +179,8 @@
 
 		// config.default.php を config.php にコピー
 		if (!file_exists($serverroot.'/config.php')) copy($serverroot.'/config.default.php', $serverroot.'/config.php');
+		// php.default.ini を php.ini にコピー
+		if (!file_exists($php_conf_file)) copy($php_default_file, $php_conf_file);
 		// httpd.default.conf を httpd.conf にコピー
 		if (!file_exists($httpd_conf_file)) copy($httpd_default_file, $httpd_conf_file);
 		// openssl.default.cnf を openssl.cnf にコピー
@@ -238,6 +240,7 @@
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
 					'$lnk = $shell.CreateShortcut(\"$Home\Desktop\TVRemotePlus - launch.lnk\"); '.
 					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
+					'$lnk.WindowStyle = 7; '.
 					'$lnk.Save()';
 		exec('powershell -Command "'.$powershell.'"', $opt, $return);
 		echo "\n";
