@@ -171,7 +171,6 @@
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
 		$php_conf_file = $serverroot.'/bin/php/php.ini';
-		$php_default_file = $serverroot.'/bin/php/php.default.ini';
 		$openssl_conf_file = $serverroot.'/bin/Apache/conf/openssl.cnf';
 		$openssl_default_file = $serverroot.'/bin/Apache/conf/openssl.default.cnf';
 		$opensslext_conf_file = $serverroot.'/bin/Apache/conf/openssl.ext';
@@ -179,8 +178,6 @@
 
 		// config.default.php を config.php にコピー
 		if (!file_exists($serverroot.'/config.php')) copy($serverroot.'/config.default.php', $serverroot.'/config.php');
-		// php.default.ini を php.ini にコピー
-		if (!file_exists($php_conf_file)) copy($php_default_file, $php_conf_file);
 		// httpd.default.conf を httpd.conf にコピー
 		if (!file_exists($httpd_conf_file)) copy($httpd_default_file, $httpd_conf_file);
 		// openssl.default.cnf を openssl.cnf にコピー
@@ -204,7 +201,7 @@
 
 		// phpの設定ファイル
 		$php_conf = file_get_contents($php_conf_file);		
-		$php_conf = preg_replace("/extension_dir.*/", 'extension_dir = "'.str_replace('/', '\\', $serverroot).'\bin\php\ext"', $php_conf); // 置換
+		$php_conf = str_replace('extension_dir = "ext"', 'extension_dir = "'.str_replace('/', '\\', $serverroot).'\bin\php\ext"', $php_conf); // 置換
 		file_put_contents($php_conf_file, $php_conf);// 書き込み
 
 		// OpenSSLの設定ファイル
