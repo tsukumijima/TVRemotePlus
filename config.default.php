@@ -240,14 +240,12 @@ function ch2convert($ch2_file){
 
 	// 置換
 	$ch2_data = str_replace("\r\n", "\n", $ch2_data); // CR+LFからLFに変換
-	$ch2_data = str_replace("\n\n", "", $ch2_data); // 空行削除
 	$ch2_data = str_replace("; TVTest チャンネル設定ファイル\n", "", $ch2_data);
-	$ch2_data = str_replace("; 名称,チューニング空間,チャンネル,リモコン番号,サービスタイプ,サービスID,ネットワークID,TSID,状態\n", "", $ch2_data);
-	$ch2_data = str_replace("; TVTest チャンネル設定ファイル\n", "", $ch2_data);
-	$ch2_data = str_replace(";#SPACE(0,UHF)\n", "", $ch2_data);
-	$ch2_data = str_replace(";#SPACE(0,BS)\n", "", $ch2_data);
-	//$ch2_data = str_replace(";#SPACE(1,CS110)\n", "", $ch2_data);
+	$ch2_data = preg_replace("/; 名称,チューニング空間.*/", "", $ch2_data);
+	$ch2_data = str_replace(',,', ',1,', $ch2_data); // サービスタイプ欄がない場合に1として換算しておく
 	$ch2_data = preg_replace("/;#SPACE\(1\,CS110\).*$/s", "", $ch2_data); //CSチャンネルは削除
+	$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data); //余計なコメントを削除
+	$ch2_data = str_replace("\n\n", "", $ch2_data); // 空行削除
 	$ch2_data = rtrim($ch2_data);
 
 	// 改行で分割
@@ -319,10 +317,10 @@ foreach (glob($BonDriver_dir."BonDriver_*.dll") as $i => $file) {
 }
 
 // 地デジのch2があれば
-if (isset(glob($BonDriver_dir."BonDriver_*T0*.ch2")[0])){
+if (isset(glob($BonDriver_dir."BonDriver_*T*.ch2")[0])){
 
 	// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
-	$BonDriver_ch2_file_T = glob($BonDriver_dir."BonDriver_*T0*.ch2")[0];
+	$BonDriver_ch2_file_T = glob($BonDriver_dir."BonDriver_*T*.ch2")[0];
 	$BonDriver_ch2_T = ch2convert($BonDriver_ch2_file_T);
 
 	// 地デジ(T)用チャンネルをセット
@@ -343,10 +341,10 @@ if (isset(glob($BonDriver_dir."BonDriver_*T0*.ch2")[0])){
 }
 
 // BSCSのch2があれば
-if (isset(glob($BonDriver_dir."BonDriver_*S0*.ch2")[0])){
+if (isset(glob($BonDriver_dir."BonDriver_*S*.ch2")[0])){
 
 	// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
-	$BonDriver_ch2_file_S = glob($BonDriver_dir."BonDriver_*S0*.ch2")[0];
+	$BonDriver_ch2_file_S = glob($BonDriver_dir."BonDriver_*S*.ch2")[0];
 	$BonDriver_ch2_S = ch2convert($BonDriver_ch2_file_S);
 
 	// BSCS(S)用チャンネルをセット
@@ -371,4 +369,3 @@ if (isset(glob($BonDriver_dir."BonDriver_*S0*.ch2")[0])){
 // 合体させる
 $ch = $ch_T + $ch_S;
 $sid = $sid_T + $sid_S;
-
