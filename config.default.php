@@ -165,7 +165,7 @@ $tstaskcentre_path = $base_dir.'bin/TSTask/'.$tstask_exe;
 $site_title = 'TVRemotePlus';
 
 // UDP送信時の開始ポート番号
-$udp_port = 1234;
+$udp_port = 5050;
 
 // アイコンのパス
 // htdocs からのパス
