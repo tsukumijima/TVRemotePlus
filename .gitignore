@@ -10,6 +10,9 @@
 /bin/Apache/logs/*
 /bin/QSVEncC/qsv_check.html
 /bin/TSTask/BonDriver/*
+/bin/TSTask/BonDriver_TSTask.dll
+/bin/TSTask/TSTask.exe
+/bin/TSTask/TSTaskCentre.exe
 /bin/TSTask/*.log
 /data/twitter_session/*
 /data/session/*

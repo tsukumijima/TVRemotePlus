@@ -76,11 +76,11 @@
 	echo '                 TVRemotePlus　インストーラー'."\n";
 	echo ' ========================================================'."\n";
 	echo "\n";
-	echo '  TVRemotePlusのセットアップを行うインストーラーです。'."\n";
+	echo '  TVRemotePlus のセットアップを行うインストーラーです。'."\n";
 	echo '  途中でキャンセルする場合は Ctrl + C を押してください。'."\n";
 	echo "\n";
 
-	echo '  1. TVRemotePlusをインストールするフォルダを指定します。'."\n";
+	echo '  1. TVRemotePlus をインストールするフォルダを指定します。'."\n";
 	echo "\n";
 	echo '     フォルダをドラッグ&ドロップするか、ファイルパスを入力してください。'."\n";
 	echo "\n";
@@ -114,11 +114,11 @@
 		$update = false;
 		echo '  2. TVRemotePlusをインストールするPCの、ローカルIPアドレスを入力してください。'."\n";
 		echo "\n";
-		echo '     ローカルIPアドレスは、通常 192.168.x.xx のような形式の家の中用のIPアドレスです。'."\n";
-		echo '     インストーラーで検知したローカルIPアドレスは '.getHostByName(getHostName()).' です。'."\n";
-		echo '     判定が間違っている場合もあります(VPN等で複数の仮想デバイスがある場合など)。'."\n";
-		echo '     その場合、メインで利用しているローカルIPアドレスを ipconfig で調べ、入力してください。'."\n";
-		echo '     よくわからない場合は、Enterキーを押し、次に進んでください。'."\n";
+		echo '     ローカルIPアドレスは、通常 192.168.x.xx のような形式の家の中用の IP アドレスです。'."\n";
+		echo '     インストーラーで検知したローカル IP アドレスは '.getHostByName(getHostName()).' です。'."\n";
+		echo '     判定が間違っている場合もあります( VPN 等で複数の仮想デバイスがある場合など)。'."\n";
+		echo '     その場合、メインで利用しているローカル IP アドレスを ipconfig で調べ、入力してください。'."\n";
+		echo '     よくわからない場合は、Enter キーを押し、次に進んでください。'."\n";
 		echo "\n";
 		echo '     ローカルIPアドレス：';
 		// TVRemotePlusを稼働させるPC(サーバー)のローカルLAN内IP
@@ -131,10 +131,10 @@
 
 		echo '  3. 必要な場合、TVRemotePlusが利用するポートを設定して下さい。'."\n";
 		echo "\n";
-		echo '     通常は、ブラウザのURL欄から http://'.$serverip.':8000 でアクセスできます。'."\n";
+		echo '     通常は、ブラウザの URL 欄から http://'.$serverip.':8000 でアクセスできます。'."\n";
 		echo '     この 8000 の番号を変えたい場合は、ポート番号を入力してください。'."\n";
-		echo '     HTTPS接続時はポート番号が ここで設定した番号 + 100 になります。'."\n";
-		echo '     よくわからない場合は、Enterキーを押し、次に進んでください。'."\n";
+		echo '     HTTPS 接続時はポート番号が ここで設定した番号 + 100 になります。'."\n";
+		echo '     よくわからない場合は、Enter キーを押し、次に進んでください。'."\n";
 		echo "\n";
 		echo '     利用ポート番号：';
 		// TVRemotePlusを稼働させるポート
@@ -144,6 +144,21 @@
 			$port = 8000;
 		}
 		$ssl_port = $port + 100; // SSL用ポート
+		echo "\n";
+
+		echo '  4. TVTest の BonDriver は 32bit ですか？ 64bit ですか？'."\n";
+		echo "\n";
+		echo '     32bit の場合は 1 、64bit の場合は 2 と入力してください。'."\n";
+		echo '     この項目で 32bit 版・64bit版どちらの TSTask を使うかが決まります。'."\n";
+		echo '     インストール終了後、お使いの TVTest の BonDriver と ch2 ファイルを、'."\n";
+		echo '     '.$serverroot.'/bin/TSTask/BonDriver/ にコピーしてください。'."\n";
+		echo '     Enter キーで次に進む場合、自動で 32bit を選択します。'."\n";
+		echo "\n";
+		echo '     TVTest の BonDriver：';
+		// TVRemotePlusを稼働させるポート
+		$bondriver = trim(fgets(STDIN));
+		// 判定
+		if ($bondriver != 2) $bondriver = 1;
 		echo "\n";
 	}
 
@@ -184,6 +199,17 @@
 		if (!file_exists($openssl_conf_file)) copy($openssl_default_file, $openssl_conf_file);
 		// openssl.default.ext を openssl.ext にコピー
 		if (!file_exists($opensslext_conf_file)) copy($opensslext_default_file, $opensslext_conf_file);
+		
+		// TSTask のコピー
+		if ($bondriver == 2){
+			copy($serverroot.'/bin/TSTask/64bit/BonDriver_TSTask.dll', $serverroot.'/bin/TSTask/BonDriver_TSTask.dll');
+			copy($serverroot.'/bin/TSTask/64bit/TSTask.exe', $serverroot.'/bin/TSTask/TSTask.exe');
+			copy($serverroot.'/bin/TSTask/64bit/TSTaskCentre.exe', $serverroot.'/bin/TSTask/TSTaskCentre.exe');
+		} else {
+			copy($serverroot.'/bin/TSTask/32bit/BonDriver_TSTask.dll', $serverroot.'/bin/TSTask/BonDriver_TSTask.dll');
+			copy($serverroot.'/bin/TSTask/32bit/TSTask.exe', $serverroot.'/bin/TSTask/TSTask.exe');
+			copy($serverroot.'/bin/TSTask/32bit/TSTaskCentre.exe', $serverroot.'/bin/TSTask/TSTaskCentre.exe');
+		}
 
 		// 状態設定ファイルを初期化
 		$jsonfile = $serverroot.'/data/setting.json';
@@ -216,8 +242,8 @@
 
 
 		// HTTPS接続用オレオレ証明書の作成
-		echo '  HTTPS接続用の自己署名証明書を作成します。'."\n";
-		echo '  途中、入力を求められる箇所がありますが、全てEnterで飛ばしてください。'."\n";
+		echo '  HTTPS 接続用の自己署名証明書を作成します。'."\n";
+		echo '  途中、入力を求められる箇所がありますが、全て Enter で飛ばしてください。'."\n";
 		echo '  途中でパスワードとかも聞かれますが、飛ばして構いません。'."\n";
 		echo '  続行するには何かキーを押してください。'."\n";
 		trim(fgets(STDIN));
