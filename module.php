@@ -93,15 +93,15 @@ function basicAuth($basicauth, $basicauth_user, $basicauth_password){
 function initBonChannel($BonDriver_dir){
 
 	// BonDriver_dirからBonDriverを検索
-	foreach (glob($BonDriver_dir."BonDriver_*.dll") as $i => $file) {
+	foreach (glob($BonDriver_dir."[bB]on[dD]river_*.dll") as $i => $file) {
 		$BonDriver_dll[$i] = str_replace($BonDriver_dir, '', $file);
 	}
 
 	// 地デジのch2があれば
-	if (isset(glob($BonDriver_dir."BonDriver_*T*.ch2")[0])){
+	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*[tT]*.ch2")[0])){
 
 		// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
-		$BonDriver_ch2_file_T = glob($BonDriver_dir."BonDriver_*T*.ch2")[0];
+		$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_*[tT]*.ch2")[0];
 		$BonDriver_ch2_T = ch2Convert($BonDriver_ch2_file_T);
 
 		// 地デジ(T)用チャンネルをセット
@@ -122,10 +122,10 @@ function initBonChannel($BonDriver_dir){
 	}
 
 	// BSCSのch2があれば
-	if (isset(glob($BonDriver_dir."BonDriver_*S*.ch2")[0])){
+	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*[sS]*.ch2")[0])){
 
 		// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
-		$BonDriver_ch2_file_S = glob($BonDriver_dir."BonDriver_*S*.ch2")[0];
+		$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_*[sS]*.ch2")[0];
 		$BonDriver_ch2_S = ch2Convert($BonDriver_ch2_file_S);
 
 		// BSCS(S)用チャンネルをセット
@@ -151,7 +151,7 @@ function initBonChannel($BonDriver_dir){
 	$ch = $ch_T + $ch_S;
 	$sid = $sid_T + $sid_S;
 
-	return array($ch, $sid);
+	return array($BonDriver_dll, $ch, $sid);
 }
 
 

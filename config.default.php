@@ -58,6 +58,7 @@ $BonDriver_default_S = '';
 
 // 録画した TS ファイルのあるディレクトリ(フォルダ・変更必須)
 // ファイル再生の際に利用します
+// ネットワークドライブは認識できないみたいです
 // 例：$TSfile_dir = 'E:/TV-Record/';
 $TSfile_dir = '';
 
@@ -217,4 +218,4 @@ $htpasswd = $base_dir.'htdocs/.htpasswd';
 require_once (dirname(__FILE__).'/module.php');
 
 // BonDriverのチャンネルを取得
-list($ch, $sid) = initBonChannel($BonDriver_dir);
+list($BonDriver_dll, $ch, $sid) = initBonChannel($BonDriver_dir);
