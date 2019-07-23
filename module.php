@@ -96,6 +96,7 @@ function initBonChannel($BonDriver_dir){
 	foreach (glob($BonDriver_dir."[bB]on[dD]river_*.dll") as $i => $file) {
 		$BonDriver_dll[$i] = str_replace($BonDriver_dir, '', $file);
 	}
+	if (!isset($BonDriver_dll)) $BonDriver_dll = array();
 
 	// 地デジのch2があれば
 	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0])
@@ -111,6 +112,8 @@ function initBonChannel($BonDriver_dir){
 
 		} else if (isset(glob($BonDriver_dir."[bB]on[dD]river_PX*[tT]*.ch2")[0])){
 			$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_PX*[tT]*.ch2")[0];
+		} else {
+			$BonDriver_ch2_file_T = array();
 		}
 
 		$BonDriver_ch2_T = ch2Convert($BonDriver_ch2_file_T);
@@ -146,6 +149,8 @@ function initBonChannel($BonDriver_dir){
 
 		} else if (isset(glob($BonDriver_dir."[bB]on[dD]river_PX*[sS]*.ch2")[0])){
 			$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_PX*[sS]*.ch2")[0];
+		} else {
+			$BonDriver_ch2_file_S = array();
 		}
 
 		$BonDriver_ch2_S = ch2Convert($BonDriver_ch2_file_S);
