@@ -118,7 +118,7 @@ function initBonChannel($BonDriver_dir){
 		// 地デジ(T)用チャンネルをセット
 		foreach ($BonDriver_ch2_T as $key => $value) {
 			// サービス状態が1の物のみセットする
-			// あとサブチャンネルはセットしない
+			// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
 			if ($value[4] != 2 and $value[8] == 1 and !isset($ch_T[strval($value[3])])){
 				// 全角は半角に直す
 				// チャンネル名
@@ -153,7 +153,7 @@ function initBonChannel($BonDriver_dir){
 		// BSCS(S)用チャンネルをセット
 		foreach ($BonDriver_ch2_S as $key => $value) {
 			// サービス状態が1の物のみセットする
-			// あとサブチャンネルはセットしない
+			// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
 			if ($value[4] != 2 and $value[8] == 1 and !isset($ch_S[strval($value[5])])){
 				// 正規表現と人力で無理やり弾く（処理の変更でいらなくなった）
 				// and !preg_match("/1[4-8]2/", $value[5]) and !preg_match("/1[4-8]3/", $value[5]) and $value[5] != 102 and $value[5] != 104){
