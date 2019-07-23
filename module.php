@@ -98,10 +98,21 @@ function initBonChannel($BonDriver_dir){
 	}
 
 	// 地デジのch2があれば
-	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*[tT]*.ch2")[0])){
+	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0])
+		 or isset(glob($BonDriver_dir."[bB]on[dD]river_PT*[tT]*.ch2")[0])
+		 or isset(glob($BonDriver_dir."[bB]on[dD]river_PX*[tT]*.ch2")[0])){
 
 		// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
-		$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_*[tT]*.ch2")[0];
+		if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0])){
+			$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0];
+
+		} else if (isset(glob($BonDriver_dir."[bB]on[dD]river_PT*[tT]*.ch2")[0])){
+			$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_PT*[tT]*.ch2")[0];
+
+		} else if (isset(glob($BonDriver_dir."[bB]on[dD]river_PX*[tT]*.ch2")[0])){
+			$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_PX*[tT]*.ch2")[0];
+		}
+
 		$BonDriver_ch2_T = ch2Convert($BonDriver_ch2_file_T);
 
 		// 地デジ(T)用チャンネルをセット
@@ -122,10 +133,21 @@ function initBonChannel($BonDriver_dir){
 	}
 
 	// BSCSのch2があれば
-	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*[sS]*.ch2")[0])){
+	if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[sS]*.ch2")[0])
+		 or isset(glob($BonDriver_dir."[bB]on[dD]river_PT*[sS]*.ch2")[0])
+		 or isset(glob($BonDriver_dir."[bB]on[dD]river_PX*[sS]*.ch2")[0])){
 
 		// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
-		$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_*[sS]*.ch2")[0];
+		if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[sS]*.ch2")[0])){
+			$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_*_[sS]*.ch2")[0];
+
+		} else if (isset(glob($BonDriver_dir."[bB]on[dD]river_PT*[sS]*.ch2")[0])){
+			$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_PT*[sS]*.ch2")[0];
+
+		} else if (isset(glob($BonDriver_dir."[bB]on[dD]river_PX*[sS]*.ch2")[0])){
+			$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_PX*[sS]*.ch2")[0];
+		}
+
 		$BonDriver_ch2_S = ch2Convert($BonDriver_ch2_file_S);
 
 		// BSCS(S)用チャンネルをセット
