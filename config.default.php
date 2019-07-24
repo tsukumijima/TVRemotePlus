@@ -63,6 +63,7 @@ $BonDriver_default_S = '';
 $TSfile_dir = '';
 
 // EDCB の HTTP サーバ( EMWUI )の API がある URL を指定します(番組表取得で利用します・変更必須)
+// この機能を利用する場合、EDCB_Material_WebUI を導入しておいてください(APIを番組表取得で利用します)
 // http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/api/ のように指定します
 // 例：$EDCB_http_url = 'http://192.168.1.11:5510/api/';
 $EDCB_http_url = '';
