@@ -654,6 +654,14 @@ td {
     background-color: #f5f8fa;
 }
 
+#tweet-hashtag::-webkit-input-placeholder {
+    color: #80ceff;
+}
+
+#tweet-hashtag::-moz-placeholder {
+    color: #1b95e0;
+}
+
 #tweet {
     width: 100%;
     height: 50px;
