@@ -284,16 +284,39 @@
                 使用BonDriver：
                 <div class="select-wrap">
                   <select name="BonDriver">
+<?php		if (!empty($BonDriver_default_T) or !empty($BonDriver_default_S)){ ?>
                     <option value="default">デフォルト</option>
+<?php		} //括弧終了 ?>
 <?php		foreach ($BonDriver_dll as $i => $value){ //chの数だけ繰り返す ?>
                     <option value="<?php echo $i; ?>"><?php echo $value; ?></option>
 <?php		} //括弧終了 ?>
                   </select>
                 </div>
               </div>
+			  
+<?php		if (empty($BonDriver_dll) and empty($ch)){ ?>
+              <div class="form">
+                BonDriverとチャンネル設定ファイルが見つかりませんでした…<br>
+                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+              </div>
+<?php		} else if (empty($BonDriver_dll)){ ?>
+              <div class="form">
+                BonDriverが見つかりませんでした…<br>
+                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+              </div>
+<?php		} else if (empty($ch)){ ?>
+              <div class="form">
+                チャンネル設定ファイルが見つかりませんでした…<br>
+                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+              </div>
+<?php		} //括弧終了 ?>
 
               <div id="button-box">
+<?php		if (!empty($BonDriver_dll) and !empty($ch)){ ?>
                 <button class="bluebutton" type="submit"><i class="fas fa-play"></i>ストリーム開始</button>
+<?php		} else {?>
+                <button class="bluebutton" type="submit" disabled><i class="fas fa-play"></i>ストリーム開始</button>
+<?php		} //括弧終了 ?>
                 <button class="redbutton" type="button" onclick="location.href='./'"><i class="fas fa-home"></i>ホームに戻る</button>
               </div>
 

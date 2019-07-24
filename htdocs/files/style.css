@@ -1102,6 +1102,14 @@ td {
     background-color: #1d82f2;
 }
 
+.bluebutton[disabled] {
+    background-color: #8ed0f9;
+}
+
+.bluebutton[disabled]:hover {
+    background-color: #8ed0f9;
+}
+
 .redbutton {
     display: inline-block;
     margin-right: 15px;
@@ -1119,6 +1127,14 @@ td {
 
 .redbutton:hover {
     background-color: #ca0040;
+}
+
+.redbutton[disabled] {
+    background-color: #ff709e;
+}
+
+.redbutton[disabled]:hover {
+    background-color: #ff709e;
 }
 
 #footer {
