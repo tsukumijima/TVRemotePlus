@@ -30,6 +30,7 @@ $backtrace = debug_backtrace();
   <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" href="files/DPlayer.min.css">
+  <link rel="stylesheet" type="text/css" href="files/toastr.min.css">
   <link rel="stylesheet" type="text/css" href="files/style.css">
   <?php
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
@@ -41,8 +42,12 @@ $backtrace = debug_backtrace();
   <script type="text/javascript" src="files/jquery.min.js"></script>
   <script type="text/javascript" src="files/DPlayer.min.js"></script>
   <script type="text/javascript" src="files/hls.min.js"></script>
+  <script type="text/javascript" src="files/toastr.min.js"></script>
   <?php
   if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
+    echo '<script type="text/javascript" src="files/resize.js"></script>';
+  }
+  if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
     echo '<script type="text/javascript" src="files/resize.js"></script>';
   }
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ

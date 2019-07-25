@@ -33,8 +33,9 @@
   <section id="main">
     <div id="content-wrap">
       <div id="content">
-        <div id="dplayer"></div>
-        <script id="dplayer-script">
+        <div id="dplayer-box">
+          <div id="dplayer"></div>
+          <script id="dplayer-script">
 
   const dp = new DPlayer({
     container: document.getElementById('dplayer'),
@@ -74,7 +75,8 @@
   dp.seek(1);
 <?php	} //括弧終了 ?>
 
-    </script>
+          </script>
+        </div>
 
         <div id="tweet-box">
           <div id="tweet-info">
@@ -147,6 +149,7 @@
 <?php	if ($ini['state'] == "ONAir"){ ?>
             <div class="chinfo"> 
               <span id="state" style="color: #007cff;">● ON Air</span>
+              <span id="status"></span>
               <span id="channel"><?php echo $channel; ?></span>
             </div>
             <span class="livetime">
@@ -155,6 +158,7 @@
 <?php	} else if ($ini['state'] == "Offline") { ?>
             <div class="chinfo">
               <span id="state" style="color: gray;">● Offline</span>
+              <span id="status"></span>
             </div>
             <span class="livetime">
               <span id="starttime"></span><span id="to"></span><span id="endtime"></span>
@@ -162,6 +166,7 @@
 <?php	} else if ($ini['state'] == "File") { ?>
             <div class="chinfo"> 
               <span id="state" style="color: #4ECDC4;">● File</span>
+              <span id="status"></span>
               <span id="channel"><?php echo $ini['filechannel']; ?></span>
             </div>
             <span class="livetime"><?php echo $ini['filetime']; ?></span>
