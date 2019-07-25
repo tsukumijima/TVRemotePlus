@@ -3,7 +3,7 @@
 	// 各種モジュール
 
 	// バージョン
-	$version = 'v1.0.0-rc6';
+	$version = 'v1.0.0-rc7';
 
 	// 録画ファイルリストを作成
 	function fileInfo($infofile, $TSfile_dir){
