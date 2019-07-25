@@ -38,7 +38,7 @@
         dataType: "json",
         cache: false,
         success: function(data) {
-				  $("#watchnow").text(data["watchnow"] + '人が視聴中');
+	        $("#watchnow").text(data["watchnow"] + '人が視聴中');
         }
       });
       return status;
@@ -65,6 +65,18 @@
         success: function(data) {
 
           // 結果をHTMLにぶち込む
+
+          // 状態を隠しHTMLに書き出して変化してたらリロードする
+          if ((data['info']['status'] != $("#status").text()) && $("#status").text() != ''){
+            // location.reload(true);
+            // ストリームを読み込みし直す
+            var video = $('.dplayer-video-current').get(0);
+            video.src = 'stream/stream.m3u8';
+            dp.initVideo(video, 'hls');
+            dp.play();
+          }
+          $("#status").text(data['info']['status']);
+          console.log('status: ' + data['info']['status']);
           
           if (data['info']['state'] == 'ONAir'){
 
@@ -111,7 +123,7 @@
         }
       });
       return status;
-    }()),5000);
+    }()), 2000);
 
     // Zenzawatchのコードより一部改変した上で使わせて頂いています
     // 参考

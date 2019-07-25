@@ -3,6 +3,25 @@ $(function(){
   // 最初に表示させる
   sortFileinfo('fileinfo', 1);
 
+  // トーストのオプション
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-left",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "200",
+    "hideDuration": "200",
+    "timeOut": "3000",
+    "extendedTimeOut": "1000",
+    "showEasing": "linear",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+
   // データを取得して引数にあわせてソートする関数
   function sortFileinfo(json, sortnum, flg = true){
 
@@ -152,8 +171,8 @@ $(function(){
   });
 
   // リスト更新
-  $('#searchfile').click(function(event){
-    alert('更新中です…');
+  $('#searchfile').click(function(event){ 	
+    toastr.info('更新中です…');
     $('#menu-content').removeClass('open');
     $.ajax({
       url: "api/searchfile.php",
@@ -166,7 +185,7 @@ $(function(){
         $('#name-down').removeClass('search-find-selected');
         $('#play-history').removeClass('search-find-selected');
         sortFileinfo('fileinfo', 1);
-        alert('リストを更新しました。');
+        toastr.info('リストを更新しました。');
       }
     });
   });

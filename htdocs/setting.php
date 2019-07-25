@@ -149,8 +149,9 @@
   <section id="main">
     <div id="content-wrap">
       <div id="content">
-        <div id="dplayer"></div>
-        <script id="dplayer-script">
+        <div id="dplayer-box">
+          <div id="dplayer"></div>
+          <script id="dplayer-script">
 
   const dp = new DPlayer({
     container: document.getElementById('dplayer'),
@@ -190,7 +191,8 @@
   dp.seek(1);
 <?php	} //括弧終了 ?>
  
-        </script>
+          </script>
+        </div>
       </div>
 		
       <div id="sidebar">
