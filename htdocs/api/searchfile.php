@@ -4,7 +4,45 @@
 	require_once ('../../config.php');
 
 	// かなり長くなることがあるので実行時間制限をオフに
+	ignore_user_abort(true);
 	set_time_limit(0);
+
+	// jsonからデコードして代入
+	if (file_exists($infofile)){
+		$TSfile = json_decode(file_get_contents($infofile), true);
+	} else {
+		$TSfile = array();
+	}
+
+	// ブッチ要求が来たら適当に返す
+	if (isset($_GET['flush'])){
+
+		// Apache環境変数に deflate(gzip) 無効をセット
+		apache_setenv('no-gzip', '1');
+
+		// レスポンスをバッファに貯める
+		ob_start();
+
+		$json = array(
+			'apiname' => 'searchfile',
+			'status' => 'flush',
+		);
+
+		// レスポンス
+		$response = json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+		echo $response;
+
+		// ヘッダ
+		header('Content-Type: application/json; charset=utf-8');
+		header('Content-Length: '.ob_get_length());
+		header('Connection: close'); // ブッチする
+		
+		// 溜めてあった出力を解放しフラッシュする
+		ob_end_flush();
+		ob_flush();
+		flush();
+
+	}
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -70,13 +108,7 @@
 		return $duration;
 	}
 
-	// jsonからデコードして代入
-	if (file_exists($infofile)){
-		$TSfile = json_decode(file_get_contents($infofile), true);
-	} else {
-		$TSfile = array();
-	}
-
+	// ファイルを検索
 	$search = array_merge(glob($TSfile_dir.'*.ts'), glob($TSfile_dir.'*\*.ts'));
 
 	foreach ($search as $key => $value) {
@@ -165,6 +197,8 @@
 	// ファイルに保存
 	file_put_contents($infofile, $json);
 
-	// 出力
-	header('content-type: application/json; charset=utf-8');
-	echo $json;
+	// flush モードでないなら出力
+	if (!isset($_GET['flush'])){
+		header('content-type: application/json; charset=utf-8');
+		echo $json;
+	}
