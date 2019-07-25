@@ -170,7 +170,7 @@
 
 	// フォルダを作る
 	if_mkdir('/');
-	if_copy ('/config.default.php');
+	if_copy ('/config.default.php', true);
 	if_copy ('/header.php', true);
 	if_copy ('/LICENSE.txt', true);
 	if_copy ('/module.php', true);
@@ -187,7 +187,6 @@
 		// 設定ファイル
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
-		$php_conf_file = $serverroot.'/bin/php/php.ini';
 		$openssl_conf_file = $serverroot.'/bin/Apache/conf/openssl.cnf';
 		$openssl_default_file = $serverroot.'/bin/Apache/conf/openssl.default.cnf';
 		$opensslext_conf_file = $serverroot.'/bin/Apache/conf/openssl.ext';
@@ -226,11 +225,6 @@
 		$httpd_conf = preg_replace("/Define PORT.*/", 'Define PORT "'.$port.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define SSL_PORT.*/", 'Define SSL_PORT "'.$ssl_port.'"', $httpd_conf);
 		file_put_contents($httpd_conf_file, $httpd_conf);// 書き込み
-
-		// phpの設定ファイル
-		$php_conf = file_get_contents($php_conf_file);		
-		$php_conf = str_replace('extension_dir = "ext"', 'extension_dir = "'.str_replace('/', '\\', $serverroot).'\bin\php\ext"', $php_conf); // 置換
-		file_put_contents($php_conf_file, $php_conf);// 書き込み
 
 		// OpenSSLの設定ファイル
 		$openssl_conf = file_get_contents($openssl_conf_file);
