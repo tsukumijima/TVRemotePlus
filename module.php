@@ -3,30 +3,7 @@
 	// 各種モジュール
 
 	// バージョン
-	$version = 'v1.0.0-rc7';
-
-	// 録画ファイルリストを作成
-	function fileInfo($infofile, $TSfile_dir){
-
-		// jsonからデコードして代入
-		if (file_exists($infofile)){
-			$TSfile = json_decode(file_get_contents($infofile), true);
-		} else {
-			return;
-		}
-
-		// ファイル検索
-		$search = array_merge(glob($TSfile_dir.'*.ts'), glob($TSfile_dir.'*\*.ts'));
-
-		// ファイルが増減していたら searchfile.php でサムネイルの作成とかやっておいてもらう
-		if (count($TSfile) !== count($search)){
-
-			// リクエストを投げる
-			//file_get_contents('http://'.basename($_SERVER["HTTP_HOST"], $_SERVER["SERVER_PORT"]).'8000/api/searchfile.php?flush');
-		}
-
-		return;
-	}
+	$version = 'v1.0.0-rc8';
 
 	// Windows用非同期コマンド実行関数
 	function win_exec($cmd){

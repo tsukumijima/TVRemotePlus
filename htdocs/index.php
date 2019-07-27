@@ -8,9 +8,6 @@
   
 	// basic 認証設定を実行
   basicAuth($basicauth, $basicauth_user, $basicauth_password);
-  
-  // ファイルリスト作成を実行
-	fileinfo($infofile, $TSfile_dir);
 
 	// ONAirのみ
 	if ($ini['state'] == "ONAir"){
