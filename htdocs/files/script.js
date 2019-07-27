@@ -454,7 +454,7 @@
       var subtitles = video.textTracks[1].activeCues;
 
       // 字幕オンなら
-      if (video.textTracks[1].mode = 'showing' && video.textTracks[1].cues.length){
+      if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length){
 
         var subtitle_html = '<div class="video-subtitle-box">\n';
         for(var i = (subtitles.length - 1); i >= 0; i--){
@@ -520,7 +520,7 @@
       }
 
       // 字幕オンなら
-      if (video.textTracks[1].mode = 'showing' && video.textTracks[1].cues.length){
+      if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length){
 
         var subtitle_html = '<div class="video-subtitle-box">\n';
         for(var i = (subtitles.length - 1); i >= 0; i--){
