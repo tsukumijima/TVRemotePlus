@@ -98,15 +98,13 @@
 			if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
 			if ($_POST['BonDriver']) $ini['BonDriver'] = $_POST['BonDriver'];
 
-			// BonDriverのデフォルトを要求されたら
-			if ($ini['BonDriver'] == 'default'){
+			// BonDriverのデフォルトを要求される or 何故かBonDriverが空
+			if ($ini['BonDriver'] == 'default' or empty($ini['BonDriver'])){
 				if (intval($ini['channel']) >= 100){ // チャンネルの値が100より(=BSか)
 					$ini['BonDriver'] = $BonDriver_default_S;
 				} else { // 地デジなら
 					$ini['BonDriver'] = $BonDriver_default_T;
 				}
-			} else { // デフォルトでないなら
-				$ini['BonDriver'] = $BonDriver_dll[$ini['BonDriver']];
 			}
 
 			// ストリーミング開始
@@ -290,7 +288,7 @@
                     <option value="default">デフォルト</option>
 <?php		} //括弧終了 ?>
 <?php		foreach ($BonDriver_dll as $i => $value){ //chの数だけ繰り返す ?>
-                    <option value="<?php echo $i; ?>"><?php echo $value; ?></option>
+                    <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
 <?php		} //括弧終了 ?>
                   </select>
                 </div>

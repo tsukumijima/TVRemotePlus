@@ -224,7 +224,7 @@
 		stream_stop();
 
 		// TSTask.exeを起動する
-		win_exec('start /min '.$tstask_path.' /min /xclient- /udp /port '.$udp_port.' /chspace 0 /sid '.$sid.' /d '.$BonDriver.' /sendservice 1');
+		win_exec('start /min '.$tstask_path.' /min /xclient- /udp /port '.$udp_port.' /sid '.$sid.' /d '.$BonDriver.' /sendservice 1');
 
 		// 変換コマンド切り替え
 		switch ($encoder) {

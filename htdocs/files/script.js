@@ -134,10 +134,10 @@
       scale = 1;
       if ($(window).width() < 500){ // スマホ用分岐
         fontsize = 19;
-        subtitle_fontsize = 50;
+        subtitle_fontsize = 55;
       } else {
         fontsize = 29;
-        subtitle_fontsize = 120;
+        subtitle_fontsize = 125;
       }
       const data =
         (`<svg xmlns='http://www.w3.org/2000/svg' width='${width*scale}' height='${height*scale}'>

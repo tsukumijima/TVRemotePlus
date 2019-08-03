@@ -3,7 +3,7 @@
 	// 各種モジュール
 
 	// バージョン
-	$version = 'v1.0.0-rc8';
+	$version = 'v1.0.0-rc9';
 
 	// Windows用非同期コマンド実行関数
 	function win_exec($cmd){
