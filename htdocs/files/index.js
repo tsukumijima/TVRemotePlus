@@ -62,16 +62,23 @@
                     console.log('For:' + i + ' DrawComment:' + danmaku['text'] + ' Color:' + danmaku['color'] + ' Type:' + danmaku['type']);
   
                     // 分と秒を計算
-                    var videotime = document.getElementsByClassName('dplayer-video-current')[0].currentTime;
-                    ss = Math.floor(videotime % 60);
-                    mm = Math.floor(videotime / 60);
-                    if (ss < 10) {
-                      ss = "0" + ss;
+                    // var videotime = document.getElementsByClassName('dplayer-video-current')[0].currentTime;
+                    // mm = Math.floor(videotime / 60);
+                    // ss = Math.floor(videotime % 60);
+                    var now = new Date();
+                    var hour = now.getHours(); // 時
+                    var min = now.getMinutes(); // 分
+                    var sec = now.getSeconds(); // 秒
+                    if (hour < 10) {
+                      hour = "0" + hour;
                     }
-                    if (mm < 10) {
-                      mm = "0" + mm;
+                    if (min < 10) {
+                      min = "0" + min;
                     }
-                    var time = mm + ':' + ss;
+                    if (sec < 10) {
+                      sec = "0" + sec;
+                    }
+                    var time = hour + ':' + min + ':' + sec;
 
                       // コメントをウインドウに出す
                       $('#comment-draw-box').append('<tr><td class="time">' + time + '</td><td class="comment">' + danmaku['text'] +'</td></tr>');

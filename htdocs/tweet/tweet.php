@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../../config.php');
+	// モジュール読み込み
+	require_once ('../../module.php');
 	
 	ini_set('display_errors', 0);
 

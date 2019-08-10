@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../config.php');
+	// モジュール読み込み
+	require_once ('../module.php');
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -99,7 +99,7 @@
   </section>
 
   <section id="footer">
-    <?php echo $site_title; ?>
+    <?php echo $site_title.' '.$version; ?>
     
   </section>
 </body>

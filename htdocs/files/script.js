@@ -56,7 +56,7 @@
       $('html').removeClass('open');
     });
 
-      // 番組情報を取得
+    // 番組情報を取得
     setInterval((function status(){
       $.ajax({
         url: "api/epgguide.php",
@@ -66,14 +66,33 @@
 
           // 結果をHTMLにぶち込む
 
+          // 高さフラグ
+          if ($('.broadcast-title-ch1').text() == ''){
+            var flg = true;
+          } else {
+            var flg = false;
+          }
+
           // 状態を隠しHTMLに書き出して変化してたらリロードする
           if ((data['info']['status'] != $("#status").text()) && $("#status").text() != ''){
-            // location.reload(true);
-            // ストリームを読み込みし直す
-            var video = $('.dplayer-video-current').get(0);
-            video.src = 'stream/stream.m3u8';
-            dp.initVideo(video, 'hls');
-            dp.play();
+
+            // stateが同じの場合のみ読み込みし直し
+            if (($('#state').val() == data['info']['state']) &&
+              (data['info']['state'] == 'ONAir' || (data['info']['state'] == 'File' && data['info']['status'] == 'onair'))){
+
+              // ストリームを読み込みし直す
+              var paused = dp.video.paused;
+              dp.video.src = 'stream/stream.m3u8';
+              dp.initVideo(dp.video, 'hls');
+              if (!paused){
+                dp.play();
+              } else {
+                dp.pause();
+              }
+            // それ以外は諸々問題があるので一旦リロード
+            } else {
+              //location.reload(true);
+            }
           }
           $("#status").text(data['info']['status']);
           console.log('status: ' + data['info']['status']);
@@ -98,27 +117,54 @@
             $("#state").text('● ON Air');
             $("#state").css('color','#007cff');
           } else if (data['info']['state'] == 'Offline') {
-            $("#state").text('● Offline');
-            $("#state").css('color','gray');
+            $('#state').text('● Offline');
+            $('#state').css('color','gray');
           }
+          $('#state').val(data['info']['state']);
 
           // progressbarの割合を計算して代入
           var percent = ((Math.floor(Date.now() / 1000) - data['play']['timestamp']) / data['play']['duration']) * 100;
           $('#progress').width(percent + '%');
 
           Object.keys(data['onair']).forEach(function(key){
-            $('#broadcast-ikioi-ch' + key).html(data['onair'][key]['ikioi']);
-            $('#broadcast-start-ch' + key).html(data['onair'][key]['starttime']);
-            $('#broadcast-to-ch' + key).html(data['onair'][key]['to']);
-            $('#broadcast-end-ch' + key).html(data['onair'][key]['endtime']);
-            $('#broadcast-title-ch' + key).html(data['onair'][key]['program_name']);
-            $('#broadcast-next-start-ch' + key).html(data['onair'][key]['next_starttime']);
-            $('#broadcast-next-to-ch' + key).html(data['onair'][key]['to']);
-            $('#broadcast-next-end-ch' + key).html(data['onair'][key]['next_endtime']);
-            $('#broadcast-next-title-ch' + key).html(data['onair'][key]['next_program_name']);
+
+            if (data['onair'][key]['ch'] < 40){
+              var slice = -2
+            } else {
+              var slice = -3
+            }
+
+
+            var html = '<div class="broadcast-content broadcast-ch' + key + '">' +
+                       '  <div class="broadcast-channel-box">' +
+                       '    <div class="broadcast-channel">Ch: ' + ('0000000000' + data['onair'][key]['ch']).slice(slice) + '</div>' +
+                       '    <div class="broadcast-name-box">' +
+                       '      <div class="broadcast-name">' + data['onair'][key]['channel'] + '</div>' +
+                       '      <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch' + key + '">' + data['onair'][key]['ikioi'] + '</span></div>' +
+                       '    </div>' +
+                       '    </div>' +
+                       '    <div class="broadcast-title">' +
+                       '      <span class="broadcast-start-ch' + key + '">' + data['onair'][key]['starttime'] + '</span>' +
+                       '      <span class="broadcast-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
+                       '      <span class="broadcast-end-ch' + key + '">' + data['onair'][key]['endtime'] + '</span>' +
+                       '      <span class="broadcast-title-ch' + key + '">' + data['onair'][key]['program_name'] + '</span>' +
+                       '    </div>' +
+                       '    <div class="broadcast-next">' +
+                       '      <span class="broadcast-next-start-ch' + key + '">' + data['onair'][key]['next_starttime'] + '</span>' +
+                       '      <span class="broadcast-next-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
+                       '      <span class="broadcast-next-end-ch' + key + '">' + data['onair'][key]['next_endtime'] + '</span>' +
+                       '      <span class="broadcast-next-title-ch' + key + '">' + data['onair'][key]['next_program_name'] + '</span>' +
+                       '    </div>' +
+                       '</div>';
+            console.log(html)
+            document.getElementsByClassName('broadcast-ch' + key)[0].innerHTML = html;
+
             var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
-            $('#progress-ch' + key).width(percent + '%');
+            $('.progress-ch' + key).width(percent + '%');
           });
+
+          // 高さ調整
+          if (flg) $('.swiper-wrapper').eq(1).css('height', $('.broadcast-nav.swiper-slide').height() + 'px');
 
         }
       });

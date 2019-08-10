@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../../config.php');
+	// モジュール読み込み
+	require_once ('../../module.php');
 
 	// セッションのファイル数を返す関数
 	function getActiveCount() {
