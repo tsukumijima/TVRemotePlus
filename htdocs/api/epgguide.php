@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../../config.php');
+	// モジュール読み込み
+	require_once ('../../module.php');
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -40,11 +40,11 @@
 	}
 
 	// 番組情報を取得する関数
-	function getEpgguide($ch_, $sid){
+	function getEpgguide($ch_, $sid, $tsid){
 		global $ini,$ch,$EDCB_http_url,$jkchannels;
 		
 		// 番組表API読み込み
-		$epg = simplexml_load_file($EDCB_http_url.'EnumEventInfo?onair=&sid='.$sid);
+		$epg = simplexml_load_file($EDCB_http_url.'EnumEventInfo?onair=&sid='.$sid.'&tsid='.$tsid);
 
 		// チャンネル名
 		if (isset($epg->items->eventinfo[0]->service_name)){
@@ -134,7 +134,8 @@
 		}
 
 		return array(
-			'ch' => $ch_,
+			'ch' => intval($ch_),
+			'tsid' => intval($tsid),
 			'channel' => $channel,
 			'ikioi'=> $ikioi,
 			'timestamp' => $starttimestamp, 
@@ -176,7 +177,7 @@
 	if ($ini["state"] == "ONAir"){
 
 		// 番組情報を取得
-		$epgguide['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']]);
+		$epgguide['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']]);
 
 		// チャンネル名が取得出来なかったら代入
 		if ($epgguide['play']['channel'] == 'チャンネル名を取得できませんでした'){
@@ -187,6 +188,7 @@
 
 		$epgguide['play'] = array(
 			'ch' => 0,
+			'tsid' => 0,
 			'channel' => '',
 			'timestamp' => '', 
 			'duration' => '', 
@@ -205,7 +207,7 @@
 
 	foreach ($sid as $key => $value) {
 		// 番組情報を取得
-		$epgguide['onair'][strval($key)] = getEpgguide($key, $value);
+		$epgguide['onair'][strval($key)] = getEpgguide($key, $value, $tsid[strval($key)]);
 	}
 
 	if (!isset($epgguide['onair'])) $epgguide['onair'] = array();

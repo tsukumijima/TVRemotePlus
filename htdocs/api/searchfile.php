@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../../config.php');
+	// モジュール読み込み
+	require_once ('../../module.php');
 
 	// かなり長くなることがあるので実行時間制限をオフに
 	ignore_user_abort(true);

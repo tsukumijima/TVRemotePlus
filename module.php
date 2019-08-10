@@ -1,9 +1,16 @@
 <?php 
 
-	// 各種モジュール
-
 	// バージョン
-	$version = 'v1.0.0-rc9';
+	$version = 'v1.0.0-rc10';
+
+	// 設定読み込み
+	require_once (dirname(__FILE__).'/config.php');
+
+	// BonDriverのチャンネルを取得
+	list($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, $sid, $sid_T, $sid_S, $sid_CS, $tsid, $tsid_T, $tsid_S, $tsid_CS) = initBonChannel($BonDriver_dir);
+
+	
+	// 各種モジュール
 
 	// Windows用非同期コマンド実行関数
 	function win_exec($cmd){
@@ -22,7 +29,7 @@
 	}
 
 	// ch2を整形して連想配列化する関数
-	function ch2Convert($ch2_file){
+	function ch2Convert($ch2_file, $csflg = false){
 
 		// ch2を取得
 		$ch2_rawdata = removeBOM(file_get_contents($ch2_file));
@@ -42,8 +49,13 @@
 		$ch2_data = str_replace("; TVTest チャンネル設定ファイル\n", "", $ch2_data);
 		$ch2_data = preg_replace("/; 名称,チューニング空間.*/", "", $ch2_data);
 		$ch2_data = str_replace(',,', ',1,', $ch2_data); // サービスタイプ欄がない場合に1として換算しておく
-		$ch2_data = preg_replace("/;#SPACE\(1\,CS110\).*$/s", "", $ch2_data); //CSチャンネルは削除
-		$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data); //余計なコメントを削除
+		if (!$csflg){
+			$ch2_data = preg_replace("/;#SPACE\(1\,CS110\).*$/s", "", $ch2_data); //CSチャンネルは削除
+			$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data); //余計なコメントを削除
+		} else {
+			$ch2_data = preg_replace("/;#SPACE\(0\,BS\).*;#SPACE\(1\,CS110\)/s", "", $ch2_data); //BSチャンネルは削除
+			$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data); //余計なコメントを削除
+		}
 		$ch2_data = str_replace("\n\n", "", $ch2_data); // 空行削除
 		$ch2_data = rtrim($ch2_data);
 
@@ -177,11 +189,14 @@
 					$ch_T[strval($value[3])] = mb_convert_kana($value[0], 'asv');
 					// サービスID(SID)
 					$sid_T[strval($value[3])] = mb_convert_kana($value[5], 'asv');
+					// トランスポートストリームID(TSID)
+					$tsid_T[strval($value[3])] = mb_convert_kana($value[7], 'asv');
 				}
 			}
 		} else {
 			$ch_T = array();
 			$sid_T = array();
+			$tsid_T = array();
 		}
 
 		// BSCSのch2があれば
@@ -232,8 +247,9 @@
 			}
 
 			$BonDriver_ch2_S = ch2Convert($BonDriver_ch2_file_S);
+			$BonDriver_ch2_CS = ch2Convert($BonDriver_ch2_file_S, true);
 
-			// BSCS(S)用チャンネルをセット
+			// BS用チャンネルをセット
 			foreach ($BonDriver_ch2_S as $key => $value) {
 				// サービス状態が1の物のみセットする
 				// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
@@ -245,18 +261,52 @@
 					$ch_S[strval($value[5])] = mb_convert_kana($value[0], 'asv');
 					// サービスID(SID)
 					$sid_S[strval($value[5])] = mb_convert_kana($value[5], 'asv');
+					// トランスポートストリームID(TSID)
+					$tsid_S[strval($value[5])] = mb_convert_kana($value[7], 'asv');
 				}
 			}
+
+			// CS用チャンネルをセット
+			foreach ($BonDriver_ch2_CS as $key => $value) {
+				// サービス状態が1の物のみセットする
+				// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
+				if ($value[4] != 2 and $value[8] == 1 and !isset($ch_CS[strval($value[5])])){
+					// 全角は半角に直す
+					// BS-TBSとQVCバッティング問題
+					if (intval($value[5]) !== 161){
+						// チャンネル名
+						$ch_CS[strval($value[5])] = mb_convert_kana($value[0], 'asv');
+						// サービスID(SID)
+						$sid_CS[strval($value[5])] = mb_convert_kana($value[5], 'asv');
+						// トランスポートストリームID(TSID)
+						$tsid_CS[strval($value[5])] = mb_convert_kana($value[7], 'asv');
+					// QVCのみ
+					} else {
+						// チャンネル名
+						$ch_CS['161cs'] = mb_convert_kana($value[0], 'asv');
+						// サービスID(SID)
+						$sid_CS['161cs'] = mb_convert_kana($value[5], 'asv');
+						// トランスポートストリームID(TSID)
+						$tsid_CS['161cs'] = mb_convert_kana($value[7], 'asv');
+					}
+				}
+			}
+
 		} else {
 			$ch_S = array();
+			$ch_CS = array();
 			$sid_S = array();
+			$sid_CS = array();
+			$tsid_S = array();
+			$tsid_CS = array();
 		}
 
 		// 合体させる
-		$ch = $ch_T + $ch_S;
-		$sid = $sid_T + $sid_S;
+		$ch = $ch_T + $ch_S + $ch_CS;
+		$sid = $sid_T + $sid_S + $sid_CS;
+		$tsid = $tsid_T + $tsid_S + $tsid_CS;
 
-		return array($BonDriver_dll, $ch, $sid);
+		return array($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, $sid, $sid_T, $sid_S, $sid_CS, $tsid, $tsid_T, $tsid_S, $tsid_CS);
 	}
 
 

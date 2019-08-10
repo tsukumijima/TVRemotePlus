@@ -6,8 +6,8 @@
 		ini_set('log_errors', 0);
 		ini_set('display_errors', 0);
 
-		// 設定読み込み
-		require_once (dirname(__FILE__).'/config.php');
+		// モジュール読み込み
+		require_once (dirname(__FILE__).'/module.php');
 
 		// 設定ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
@@ -128,11 +128,11 @@
 		
 	}
 
-	// 設定読み込み
-	require_once (dirname(__FILE__)."/config.php");
+	// モジュール読み込み
+	require_once (dirname(__FILE__).'/module.php');
 
-	function stream_start($ch, $sid, $BonDriver, $quality, $encoder, $subtitle){
-		global $udp_port, $ffmpeg_path, $qsvencc_path, $tstask_path, $segment_folder;
+	function stream_start($ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
 		
 		// 設定
 
@@ -224,7 +224,7 @@
 		stream_stop();
 
 		// TSTask.exeを起動する
-		win_exec('start /min '.$tstask_path.' /min /xclient- /udp /port '.$udp_port.' /sid '.$sid.' /d '.$BonDriver.' /sendservice 1');
+		win_exec('start /min '.$tstask_path.' /min /xclient- /udp /port '.$udp_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1');
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
@@ -237,13 +237,13 @@
 					$subtitle_ffmpeg_cmd.
 					' -f hls'.
 					' -hls_segment_type mpegts'.
-					' -hls_time 1'.
-					' -hls_list_size 3'.
+					' -hls_time '.$hlslive_time.
+					' -hls_list_size '.$hlslive_list.
 					' -hls_allow_cache 0'.
 					' -hls_flags delete_segments'.
 					' -hls_segment_filename stream-'.date('mdHi').'_%05d.ts'.
 					' -threads auto'.
-					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.' -g 30'.
+					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.' -g '.($hlslive_time * 30).
 					' -acodec aac -ar '.$samplerate.' -ab '.$ab.' -ac 2'.
 					' -flags +loop+global_header'.
 					' -movflags +faststart'.
@@ -258,8 +258,8 @@
 					' -i '.$receive.
 					' --avsync forcecfr'.
 					' --avqsv'.
-					' -m hls_time:1 --gop-len 30'.
-					' -m hls_list_size:3'.
+					' -m hls_time:'.$hlslive_time.' --gop-len '.($hlslive_time * 30).
+					' -m hls_list_size:'.$hlslive_list.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
@@ -282,7 +282,7 @@
 	}
 
 	function stream_file($filepath, $quality, $encoder){
-		global $ffmpeg_path, $qsvencc_path, $segment_folder;
+		global $ffmpeg_path, $qsvencc_path, $segment_folder, $hlsfile_time;
 		
 		// 設定
 		
@@ -365,12 +365,12 @@
 					' -map 0 -ignore_unknown'.
 					' -f hls'.
 					' -hls_segment_type mpegts'.
-					' -hls_time 5'.
+					' -hls_time '.$hlsfile_time.
 					' -hls_list_size 0'.
 					' -hls_allow_cache 0'.
 					' -hls_segment_filename stream-'.date('mdHi').'_%05d.ts'.
 					' -threads auto'.
-					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.' -g 150'.
+					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.' -g '.($hlsfile_time * 30).
 					' -acodec aac -ar '.$samplerate.' -ab '.$ab.' -ac 2'.
 					' -flags +loop+global_header'.
 					' -movflags +faststart'.
@@ -385,7 +385,7 @@
 					' -i "'.$filepath.'"'.
 					' --avsync forcecfr'.
 					' --avqsv'.
-					' -m hls_time:5 --gop-len 150'.
+					' -m hls_time:'.$hlsfile_time.' --gop-len '.($hlsfile_time * 30).
 					' -m hls_list_size:0'.
 					' -m hls_allow_cache:0'.
 					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.

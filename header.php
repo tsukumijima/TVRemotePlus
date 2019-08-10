@@ -1,12 +1,12 @@
 <?php
 
-// 設定読み込み
-require_once (dirname(__FILE__)."/config.php");
+	// モジュール読み込み
+	require_once (dirname(__FILE__).'/module.php');
 
-// iniファイル読み込み
-$ini = json_decode(file_get_contents($inifile), true);
+	// iniファイル読み込み
+	$ini = json_decode(file_get_contents($inifile), true);
 
-$backtrace = debug_backtrace();
+	$backtrace = debug_backtrace();
 
 ?>
 
@@ -32,36 +32,41 @@ $backtrace = debug_backtrace();
   <link rel="stylesheet" type="text/css" href="files/DPlayer.min.css">
   <link rel="stylesheet" type="text/css" href="files/toastr.min.css">
   <link rel="stylesheet" type="text/css" href="files/style.css">
-  <?php
-  if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
-    echo '<link rel="stylesheet" type="text/css" href="files/watch.css">';
+<?php
+  if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
+    echo '  <link rel="stylesheet" type="text/css" href="files/swiper.min.css">'."\n";
   } // 括弧終了
-  ?>
+  if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
+    echo '  <link rel="stylesheet" type="text/css" href="files/watch.css">'."\n";
+  } // 括弧終了
+?>
   <!-- Script -->
   <script async type="text/javascript"  src="files/pwacompat.min.js"></script>
   <script type="text/javascript" src="files/jquery.min.js"></script>
   <script type="text/javascript" src="files/DPlayer.min.js"></script>
   <script type="text/javascript" src="files/hls.min.js"></script>
   <script type="text/javascript" src="files/toastr.min.js"></script>
-  <?php
+<?php
   if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
-    echo '<script type="text/javascript" src="files/resize.js"></script>';
+    echo '  <script type="text/javascript" src="files/resize.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="files/swiper.min.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="files/slider.js"></script>'."\n";
   }
   if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
-    echo '<script type="text/javascript" src="files/resize.js"></script>';
+    echo '  <script type="text/javascript" src="files/resize.js"></script>'."\n";
   }
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
-    echo '<script type="text/javascript" src="files/watch.js"></script>';
+    echo '  <script type="text/javascript" src="files/watch.js"></script>'."\n";
   } else if ($ini['state'] == 'ONAir'){
-    echo '<script type="text/javascript" src="files/script.js"></script>';
-    echo '<script type="text/javascript" src="files/index.js"></script>';
+    echo '  <script type="text/javascript" src="files/script.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="files/index.js"></script>'."\n";
   } else if ($ini['state'] == 'Offline'){
-    echo '<script type="text/javascript" src="files/script.js"></script>';
+    echo '  <script type="text/javascript" src="files/script.js"></script>'."\n";
   } else if ($ini['state'] == 'File'){
-    echo '<script type="text/javascript" src="files/script.js"></script>';
-    echo '<script type="text/javascript" src="files/file.js"></script>';
+    echo '  <script type="text/javascript" src="files/script.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="files/file.js"></script>'."\n";
   } // 括弧終了
-  ?>
+?>
 
   <script>
     window.addEventListener('load', function() {
@@ -134,7 +139,7 @@ $backtrace = debug_backtrace();
       <i class="fas fa-cog"></i>
       <span class="nav-link-href">設定</span>
     </a>
-    <a class="nav-link" href="https://github.com/nambuplace/TVRemotePlus/releases" target="_blank">
+    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">
       <i class="fas fa-history"></i>
       <span class="nav-link-href">
         <?php echo $version; ?>

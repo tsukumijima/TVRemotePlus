@@ -5,7 +5,7 @@ PHP / JavaScript 製のテレビのリモート視聴ソフト（いわゆるロ
 YouTube やニコニコなどの動画配信サービスの UI を意識した、モバイルフレンドリーなレスポンシブ Web インターフェイスが特徴です  
 Twitter と連携してツイートをキャプチャ付きで投稿する機能や、ニコニコ実況のコメントを表示/投稿する機能、字幕の再生機能、録画番組の検索/再生機能なども実装しています
 
-## [ダウンロードはこちら](https://github.com/nambuplace/TVRemotePlus/releases)
+## [ダウンロードはこちら](https://github.com/tsukumijima/TVRemotePlus/releases)
 
 ## 概要
 ![Screenshot](docs/screenshot1.png)
@@ -128,7 +128,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
   - DPlayer を利用したコメントの表示
     - DPlayer は OSS の JS 製多機能動画プレイヤーです
       - TVRemotePlus 向けに諸々かなり改造を加えた上でお借りしています
-      - [こちらのリポジトリ](https://github.com/nambuplace/DPlayer)に置いてあります
+      - [こちらのリポジトリ](https://github.com/tsukumijima/DPlayer)に置いてあります
   - DPlayer を利用したコメントの表示・非表示の切り替え
   - DPlayer を利用したコメントの透明度の切り替え
   - ニコニコ実況の勢いの表示
@@ -162,12 +162,12 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
    - BonDriver の TVTest 用チャンネル設定ファイル（.ch2）が TSTask で必要なためです。
    - また、BonDriver も TVTest と同じものを利用できます。
    - （ないとは思いますが）チャンネルスキャンをしていない場合は、必ずしておいてください。
-   - 動作確認済みのアーカイブは [こちら](https://www.nambuplace.net/files/TVTest-0.10.0fix.zip) よりどうぞ。
+   - 動作確認済みのアーカイブは [こちら](https://github.com/tsukumijima/TS-Soft-Built/raw/master/TVTest-0.10.0-190808.zip) よりどうぞ。
  - **EDCB + EDCB_Material_WebUI**
    - 番組表の取得に利用します（なくても動作しますが、番組情報が取得できません）。
    - EDCB に加え、[EDCB_Material_WebUI](https://github.com/EMWUI/EDCB_Material_WebUI) を導入しておいてください（素の EDCB だけでは動きません）
    - この他、config.php にて EDCB_Matrial_WebUI の動作しているアドレスを設定する必要があります。
-   - 動作確認済みのアーカイブは [こちら](https://www.nambuplace.net/files/EDCB-190709.zip) よりどうぞ。
+   - 動作確認済みのアーカイブ（ EDCB_Material_WebUI 同梱済み）は [こちら](https://github.com/tsukumijima/TS-Soft-Built/raw/master/EDCB-190721.zip) よりどうぞ。
 
 ### インストール & セットアップ
 
@@ -337,7 +337,7 @@ TVRemotePlus は、PWA に対応しています。
 
 また、このソフトを利用して起こったいかなる不利益も、当方は一切の責任を負いかねます。あくまで自己責任にて利用してください。  
 改変・再配布等はお好きにどうぞ（改変ソースは個人的に取り入れる事があります）。  
-Issue か Twitter @Mc_204_1003 にて不具合報告などは受け付けておきます。
+Issue か 5ch のロケフリスレ にて不具合報告などは受け付けておきます。
 
 ## License
 [MIT Licence](LICENSE.txt)

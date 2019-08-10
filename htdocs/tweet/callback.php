@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../../config.php');
+	// モジュール読み込み
+	require_once ('../../module.php');
 
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');

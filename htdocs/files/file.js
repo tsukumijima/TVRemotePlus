@@ -4,6 +4,9 @@
     // スマホ以外のみ発動（スマホだと動作が遅くなるため）
     if ($(window).width() > 768){
 
+      // コメント一覧の時間欄のwidthを調整
+      $('#comment-time').css('width', '62px');
+
       $.ajax({
         url: 'api/jkapi.php/v3/?id=TVRemotePlus',
         dataType: 'json',
@@ -24,7 +27,7 @@
               if (mm < 10) mm = "0" + mm;
               var time = mm + ':' + ss;            
 
-              html += '<tr><td class="time">' + time + '</td>'
+              html += '<tr><td class="time" style="width: 62px;">' + time + '</td>'
                     + '<td class="comment">' + data["data"][i][4].toString() +'</td></tr>';
             }
 

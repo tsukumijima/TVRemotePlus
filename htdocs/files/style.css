@@ -1,6 +1,6 @@
 
 body {
-    font-family: 'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     background-color: #EEEEEE;
     margin: 0px;
 }
@@ -239,23 +239,26 @@ tr {
 }
 
 th {
-    padding: 8px 12px;
+    padding: 8px 12px !important;
 }
 
 td {
-    padding: 3px 12px;
     overflow-wrap: break-all;
     word-wrap: break-all;
     word-break: break-all;
 }
 
 .time {
-    width: 46px;
+    width: 84px;
+    padding: 3px 10px;
     border-right: 1px solid #e5e8ea;
+    box-sizing: border-box;
 }
 
 .comment {
     width: calc(100% - 46px);
+    padding: 3px 12px;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
@@ -662,7 +665,7 @@ td {
     margin: 0px;
     padding: 0px;
     padding-bottom: 4px;
-    font-family:'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 105%;
     color: #1b95e0;
     outline: none;
@@ -684,7 +687,7 @@ td {
     margin: 0px;
     padding: 0px;
     padding-top: 4px;
-    font-family:'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 105%;
     resize: none;
     outline: none;
@@ -776,7 +779,7 @@ td {
     width: 10%;
     margin-left: 10px;
     font-weight: bold;
-    font-family:'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     color: #ffffff;
     outline: none;
     border-radius: 4px;
@@ -857,7 +860,7 @@ td {
 
 #channel {
   margin-left: 3px;
-  color: #FF5000;
+  color: #fb4343;
   display: inline-block;
 }
 
@@ -973,8 +976,39 @@ td {
 }
 
 #information {
-    padding-top: 1%;
+    padding-top: 10px;
     padding-bottom: 15px;
+}
+
+#broadcast-tab {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.broadcast-button {
+    width: calc(100% / 3) !important;
+    color: #333;
+    padding: 15px 20px;
+    border-bottom: 5px solid #DDDDDD;
+    cursor: pointer;
+    list-style: none;
+    text-align: center;
+    box-sizing: border-box;
+    line-height: 100%;
+    transition: ease 0.3s !important;
+}
+
+@media screen and (min-width: 500px){
+    .broadcast-button:hover {
+        background: #F5F5F5;
+    }
+}
+
+.swiper-slide-thumb-active {
+    color: #007cff;
+    border-bottom: 5px solid #007cff;
 }
 
 #next-channel {
@@ -1031,7 +1065,7 @@ td {
     display: flex;
     width: 81%;
     flex-direction: column;
-    font-family: 'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     padding-left: 20px;
     color: rgba(0,0,0,.87);
 }
@@ -1039,6 +1073,25 @@ td {
 .broadcast-name-box {
     display: flex;
     align-items: center;
+}
+
+.broadcast-channel-box {
+    display: flex;
+}
+
+.broadcast-channel {
+    display: block;
+    margin-right: 10px;
+    font-size: 125%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 500px){
+    .broadcast-channel {
+        display: none;
+    }
 }
 
 .broadcast-name {
@@ -1116,7 +1169,7 @@ td {
     margin-right: 15px;
     padding: 0.5em 1em;
     font-weight: bold;
-    font-family:'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     color: #ffffff;
     outline: none;
     border-radius: 4px;
@@ -1143,7 +1196,7 @@ td {
     margin-right: 15px;
     padding: 0.5em 1em;
     font-weight: bold;
-    font-family:'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';;
     color: #ffffff;
     outline: none;
     border-radius: 4px;

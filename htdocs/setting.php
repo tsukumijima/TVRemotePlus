@@ -1,7 +1,7 @@
 <?php
 
-	// 設定読み込み
-	require_once ('../config.php');
+	// モジュール読み込み
+	require_once ('../module.php');
 	require_once ('../stream.php');
 
 	// 設定ファイル読み込み
@@ -100,7 +100,7 @@
 
 			// BonDriverのデフォルトを要求される or 何故かBonDriverが空
 			if ($ini['BonDriver'] == 'default' or empty($ini['BonDriver'])){
-				if (intval($ini['channel']) >= 100){ // チャンネルの値が100より(=BSか)
+				if (intval($ini['channel']) >= 100 or intval($ini['channel']) == 55){ // チャンネルの値が100より(=BSか)
 					$ini['BonDriver'] = $BonDriver_default_S;
 				} else { // 地デジなら
 					$ini['BonDriver'] = $BonDriver_default_T;
@@ -108,7 +108,7 @@
 			}
 
 			// ストリーミング開始
-			stream_start($ini['channel'], $sid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+			stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
 			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
@@ -200,7 +200,7 @@
           </div>
           <div id="comment-box">
             <table id="comment-draw-box-header">
-              <tr><th class="time">時間</th><th class="comment">コメント</th></tr>
+              <tr><th id="comment-time" class="time">時間</th><th class="comment">コメント</th></tr>
             <table id="comment-draw-box">
             </table>
           </div>
@@ -362,7 +362,7 @@
   </section>
 	
   <section id="footer">
-    <?php echo $site_title; ?>
+    <?php echo $site_title.' '.$version; ?>
 
   </section>
 </body>
