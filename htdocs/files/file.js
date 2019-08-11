@@ -27,7 +27,7 @@
               if (mm < 10) mm = "0" + mm;
               var time = mm + ':' + ss;            
 
-              html += '<tr><td class="time" style="width: 62px;">' + time + '</td>'
+              html += '<tr class="comment-file"><td class="time" style="width: 62px;" value="' + videotime+ '">' + time + '</td>'
                     + '<td class="comment">' + data["data"][i][4].toString() +'</td></tr>';
             }
 
@@ -38,6 +38,18 @@
           }
         }
       });
+
+      // 時間クリック時にその再生位置に飛ぶやつ
+      $(document).on('click', '.comment-file', function(){
+        // durationよりも大きい場合
+        if ($(this).find('.time').attr('value') > dp.video.duration){
+          dp.video.currentTime = dp.video.duration;
+        // 通常
+        } else {
+          dp.video.currentTime = $(this).find('.time').attr('value');
+        }
+      });
+
     }
 
     // progressbar関連

@@ -3,8 +3,8 @@
 	// コマンドラインからの場合
 	if (isset($argc) and isset($argv)){
 
-		ini_set('log_errors', 0);
-		ini_set('display_errors', 0);
+		//ini_set('log_errors', 0);
+		//ini_set('display_errors', 0);
 
 		// モジュール読み込み
 		require_once (dirname(__FILE__).'/module.php');
@@ -14,7 +14,7 @@
 
 		echo "\n";
 		echo ' ---------------------------------------------------'."\n";
-		echo '           TVRemotePlus-Cmdline ver.'.$version."\n";
+		echo '           TVRemotePlus-Cmdline '.$version."\n";
 		echo ' ---------------------------------------------------'."\n";
 
 		if ($argc < 2){
@@ -70,7 +70,8 @@
 			// ストリーム開始
 			echo '   Starting stream...'."\n\n";
 			echo '   Channel:   '.$ini['channel']."\n";
-			echo '   Sid:       '.$sid[$ini['channel']]."\n";
+			echo '   sid:       '.$sid[$ini['channel']]."\n";
+			echo '   tsid:      '.$tsid[$ini['channel']]."\n";
 			echo '   Quality  : '.$ini['quality']."\n";
 			echo '   Encoder  : '.$ini['encoder']."\n";
 			echo '   Subtitle : '.$ini['subtitle']."\n";
@@ -78,7 +79,7 @@
 			echo ' ---------------------------------------------------'."\n";
 			echo "\n";
 
-			stream_start($ini['channel'], $sid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+			stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
 			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
@@ -405,7 +406,7 @@
 	}
 
 	function stream_stop(){
-		global $ffmpeg_exe, $qsvencc_exe, $tstask_exe, $tstaskcentre_exe, $segment_folder;
+		global $ffmpeg_exe, $qsvencc_exe, $tstask_exe, $tstaskcentre_exe, $segment_folder, $TSTask_shutdown;
 		
 		// ffmpegを終了する
 		win_exec('taskkill /F /IM '.$ffmpeg_exe);
@@ -414,12 +415,16 @@
 		win_exec('taskkill /F /IM '.$qsvencc_exe);
 		
 		// TSTaskを終了する
-		win_exec('taskkill /IM '.$tstask_exe);
+		if ($TSTask_shutdown == 'true'){ // 強制終了
+			win_exec('taskkill /F /IM '.$tstask_exe);
+		} else { // 通常終了
+			win_exec('taskkill /IM '.$tstask_exe);
+		}
 		
 		// TSTaskCentreを終了する
-		// win_exec('taskkill /F /IM '.$tstaskcentre_exe);
+		// win_exec('taskkill /IM '.$tstaskcentre_exe);
 		
-		// 前のTSを消す
+		// フォルダ内のTSを削除
 		win_exec('pushd "'.$segment_folder.'" && del *.ts /S');
 	}
 

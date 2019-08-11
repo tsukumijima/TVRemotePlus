@@ -48,27 +48,27 @@ $(function(){
   
         switch (sortnum){
           case 1:
-            fileinfo.sort(function(a, b) {
+            fileinfo['data'].sort(function(a, b) {
               return (a.start_timestamp > b.start_timestamp) ? -1 : 1;
             });
             break;
           case 2:
-            fileinfo.sort(function(a, b) {
+            fileinfo['data'].sort(function(a, b) {
               return (a.start_timestamp < b.start_timestamp) ? -1 : 1;
             });
             break;
           case 3:
-            fileinfo.sort(function(a, b) {
+            fileinfo['data'].sort(function(a, b) {
               return (a.title < b.title) ? -1 : 1;
             });
             break;
           case 4:
-            fileinfo.sort(function(a, b) {
+            fileinfo['data'].sort(function(a, b) {
               return (a.title > b.title) ? -1 : 1;
             });
             break;
           case 5:
-            fileinfo.sort(function(a, b) {
+            fileinfo['data'].sort(function(a, b) {
               return (a.play > b.play) ? -1 : 1;
             });
             break;
@@ -93,21 +93,21 @@ $(function(){
         for (var i = $('.search-file-box').length; i < length; i++){
           html += 
             '<div class="search-file-box">' + "\n"
-          + '  <img class="search-file-thumb" src="files/thumb/' + fileinfo[i]['thumb'] + '">' + "\n"
+          + '  <img class="search-file-thumb" src="files/thumb/' + fileinfo['data'][i]['thumb'] + '">' + "\n"
           + '  <div class="search-file-content">' + "\n"
-          + '    <div class="search-file-path">' + fileinfo[i]['file'] + '</div>' + "\n"
-          + '    <div class="start_timestamp">' + fileinfo[i]['start_timestamp'] + '</div>' + "\n"
-          + '    <div class="end_timestamp">' + fileinfo[i]['end_timestamp'] + '</div>' + "\n"
-          + '    <div class="search-file-title">' + fileinfo[i]['title'] + '</div>' + "\n"
+          + '    <div class="search-file-path">' + fileinfo['data'][i]['file'] + '</div>' + "\n"
+          + '    <div class="start_timestamp">' + fileinfo['data'][i]['start_timestamp'] + '</div>' + "\n"
+          + '    <div class="end_timestamp">' + fileinfo['data'][i]['end_timestamp'] + '</div>' + "\n"
+          + '    <div class="search-file-title">' + fileinfo['data'][i]['title'] + '</div>' + "\n"
           + '    <div class="search-file-info">' + "\n"
-          + '      <span class="search-file-channel">' + fileinfo[i]['channel'] + '</span>' + "\n"
+          + '      <span class="search-file-channel">' + fileinfo['data'][i]['channel'] + '</span>' + "\n"
           + '      <div class="search-file-time">'
-          + '        <span>' + fileinfo[i]['date'] + '</span>' + "\n"
-          + '        <span>' + fileinfo[i]['start'] + '～' + fileinfo[i]['end'] + '(' + fileinfo[i]['duration'] + '分)</span>' + "\n"
+          + '        <span>' + fileinfo['data'][i]['date'] + '</span>' + "\n"
+          + '        <span>' + fileinfo['data'][i]['start'] + '～' + fileinfo['data'][i]['end'] + '(' + fileinfo['data'][i]['duration'] + '分)</span>' + "\n"
           + '      </div>' + "\n"
           + '    </div>' + "\n"
           + '    <div class="search-file-description">' + "\n"
-          + '      ' + fileinfo[i]['info'] + "\n"
+          + '      ' + fileinfo['data'][i]['info'] + "\n"
           + '    </div>' + "\n"
           + '  </div>' + "\n"
           + '</div>'; + "\n";
@@ -172,7 +172,7 @@ $(function(){
 
   // リスト更新
   $('#searchfile').click(function(event){ 	
-    toastr.info('更新中です…');
+    toastr.info('リストを更新しています…');
     $('#menu-content').removeClass('open');
     $.ajax({
       url: "api/searchfile.php",

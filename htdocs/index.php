@@ -196,20 +196,16 @@
 
                 <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_T as $i => $value){ // 地デジchの数だけ繰り返す ?>
-                  <form class="broadcast-wrap" action="./setting.php" method="post">
+                  <form class="broadcast-wrap" method="post">
 
                     <input type="hidden" name="state" value="ONAir">
-                    <input type="hidden" name="channel" value="<?php echo $i; ?>">
-                    <input type="hidden" name="quality" value="<?php echo $quality_default; ?>">
-                    <input type="hidden" name="encoder" value="<?php echo $encoder_default; ?>">
-                    <input type="hidden" name="subtitle" value="<?php echo $subtitle_default; ?>">
-                    <input type="hidden" name="BonDriver" value="default">
+                    <div class="broadcast-channel-id"><?php echo $i; ?></div>
 
-                    <button type="submit" class="broadcast">
+                    <button type="button" class="broadcast">
                       <i class="broadcast-img material-icons">tv</i>
                       <div class="broadcast-content broadcast-ch<?php echo $i; ?>">
                         <div class="broadcast-channel-box">
-                          <div class="broadcast-channel">Ch: <?php echo sprintf('%02d', $i); ?></div>
+                          <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%02d', $i); ?></div>
                           <div class="broadcast-name-box">
                             <div class="broadcast-name"><?php echo $value; ?></div>
                             <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
@@ -219,7 +215,7 @@
                           <span class="broadcast-start-ch<?php echo $i; ?>"></span>
                           <span class="broadcast-to-ch<?php echo $i; ?>"></span>
                           <span class="broadcast-end-ch<?php echo $i; ?>"></span>
-                          <span class="broadcast-title-ch<?php echo $i; ?>"></span>
+                          <span class="broadcast-title-id broadcast-title-ch<?php echo $i; ?>"></span>
                         </div>
                         <div class="broadcast-next">
                           <span class="broadcast-next-start-ch<?php echo $i; ?>"></span>
@@ -231,7 +227,7 @@
                     </button>
                     
                     <div class="progressbar">
-                      <div id="progress-ch<?php echo $i; ?>" class="progress"></div>
+                      <div class="progress progress-ch<?php echo $i; ?>"></div>
                     </div>
 
                   </form>
@@ -240,20 +236,16 @@
 
                 <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_S as $i => $value){ // BSchの数だけ繰り返す ?>
-                  <form class="broadcast-wrap" action="./setting.php" method="post">
+                  <form class="broadcast-wrap" method="post">
 
                     <input type="hidden" name="state" value="ONAir">
-                    <input type="hidden" name="channel" value="<?php echo $i; ?>">
-                    <input type="hidden" name="quality" value="<?php echo $quality_default; ?>">
-                    <input type="hidden" name="encoder" value="<?php echo $encoder_default; ?>">
-                    <input type="hidden" name="subtitle" value="<?php echo $subtitle_default; ?>">
-                    <input type="hidden" name="BonDriver" value="default">
+                    <div class="broadcast-channel-id"><?php echo $i; ?></div>
 
-                    <button type="submit" class="broadcast">
+                    <button type="button" class="broadcast">
                       <i class="broadcast-img material-icons">tv</i>
                       <div class="broadcast-content broadcast-ch<?php echo $i; ?>">
                         <div class="broadcast-channel-box">
-                          <div class="broadcast-channel">Ch: <?php echo sprintf('%03d', $i); ?></div>
+                          <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%03d', $i); ?></div>
                           <div class="broadcast-name-box">
                             <div class="broadcast-name"><?php echo $value; ?></div>
                             <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
@@ -263,7 +255,7 @@
                           <span class="broadcast-start-ch<?php echo $i; ?>"></span>
                           <span class="broadcast-to-ch<?php echo $i; ?>"></span>
                           <span class="broadcast-end-ch<?php echo $i; ?>"></span>
-                          <span class="broadcast-title-ch<?php echo $i; ?>"></span>
+                          <span class="broadcast-title-id broadcast-title-ch<?php echo $i; ?>"></span>
                         </div>
                         <div class="broadcast-next">
                           <span class="broadcast-next-start-ch<?php echo $i; ?>"></span>
@@ -275,7 +267,7 @@
                     </button>
                     
                     <div class="progressbar">
-                      <div id="progress-ch<?php echo $i; ?>" class="progress"></div>
+                      <div class="progress progress-ch<?php echo $i; ?>"></div>
                     </div>
 
                   </form>
@@ -284,20 +276,16 @@
 
                 <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_CS as $i => $value){ // CSchの数だけ繰り返す ?>
-                  <form class="broadcast-wrap" action="./setting.php" method="post">
+                  <form class="broadcast-wrap" method="post">
 
                     <input type="hidden" name="state" value="ONAir">
-                    <input type="hidden" name="channel" value="<?php echo $i; ?>">
-                    <input type="hidden" name="quality" value="<?php echo $quality_default; ?>">
-                    <input type="hidden" name="encoder" value="<?php echo $encoder_default; ?>">
-                    <input type="hidden" name="subtitle" value="<?php echo $subtitle_default; ?>">
-                    <input type="hidden" name="BonDriver" value="default">
+                    <div class="broadcast-channel-id"><?php echo $i; ?></div>
 
-                    <button type="submit" class="broadcast">
+                    <button type="button" class="broadcast">
                       <i class="broadcast-img material-icons">tv</i>
                       <div class="broadcast-content broadcast-ch<?php echo $i; ?>">
                         <div class="broadcast-channel-box">
-                          <div class="broadcast-channel">Ch: <?php echo sprintf('%03d', $i); ?></div>
+                          <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%03d', $i); ?></div>
                           <div class="broadcast-name-box">
                             <div class="broadcast-name"><?php echo $value; ?></div>
                             <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
@@ -307,7 +295,7 @@
                           <span class="broadcast-start-ch<?php echo $i; ?>"></span>
                           <span class="broadcast-to-ch<?php echo $i; ?>"></span>
                           <span class="broadcast-end-ch<?php echo $i; ?>"></span>
-                          <span class="broadcast-title-ch<?php echo $i; ?>"></span>
+                          <span class="broadcast-title-id broadcast-title-ch<?php echo $i; ?>"></span>
                         </div>
                         <div class="broadcast-next">
                           <span class="broadcast-next-start-ch<?php echo $i; ?>"></span>
@@ -319,7 +307,7 @@
                     </button>
                     
                     <div class="progressbar">
-                      <div id="progress-ch<?php echo $i; ?>" class="progress"></div>
+                      <div class="progress progress-ch<?php echo $i; ?>"></div>
                     </div>
 
                   </form>
@@ -329,9 +317,95 @@
               </div>
             </div>
           </div>
+
+          <div id="broadcast-stream-box">
+            <div id="broadcast-stream-title"></div>
+            <div id="broadcast-stream-info"></div>
+            <form id="setting-form" action="./setting.php" method="post">
+              <input type="hidden" name="state" value="ONAir">
+              <input id="broadcast-stream-channel" type="hidden" name="channel" value="">
+
+              <div class="setchannel form">
+                動画の画質：
+                <div class="select-wrap">
+                  <select name="quality">
+                    <option value="<?php echo $quality_default; ?>">デフォルト</option>
+                    <option value="1080p">1080p (1920×1080)</option>
+                    <option value="810p">810p (1440×810)</option>
+                    <option value="720p">720p (1280×720)</option>
+                    <option value="540p">540p (960×540)</option>
+                    <option value="360p">360p (640×360)</option>
+                    <option value="240p">240p (426×240)</option>
+                  </select>
+                </div>
+              </div>
+							
+              <div class="setencoder form">
+                エンコード：
+                <div class="select-wrap">
+                  <select name="encoder">
+                    <option value="<?php echo $encoder_default; ?>">デフォルト</option>
+                    <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
+                    <option value="QSVEnc">QSVEnc (ハードウェアエンコーダー)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="setsubtitle form">
+                字幕データ：
+                <div class="select-wrap">
+                  <select name="subtitle">
+                    <option value="<?php echo $subtitle_default; ?>">デフォルト</option>
+                    <option value="true">字幕オン</option>
+                    <option value="false">字幕オフ</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="setBonDriver form">
+                使用BonDriver：
+                <div class="select-wrap">
+                  <select name="BonDriver">
+<?php		if (!empty($BonDriver_default_T) or !empty($BonDriver_default_S)){ ?>
+                    <option value="default">デフォルト</option>
+<?php		} //括弧終了 ?>
+<?php		foreach ($BonDriver_dll as $i => $value){ //chの数だけ繰り返す ?>
+                    <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+<?php		} //括弧終了 ?>
+                  </select>
+                </div>
+              </div>
+			  
+<?php		if (empty($BonDriver_dll) and empty($ch)){ ?>
+              <div class="form">
+                BonDriverとチャンネル設定ファイルが見つかりませんでした…<br>
+                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+              </div>
+<?php		} else if (empty($BonDriver_dll)){ ?>
+              <div class="form">
+                BonDriverが見つかりませんでした…<br>
+                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+              </div>
+<?php		} else if (empty($ch)){ ?>
+              <div class="form">
+                チャンネル設定ファイルが見つかりませんでした…<br>
+                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+              </div>
+<?php		} //括弧終了 ?>
+
+              <div id="button-box" class="broadcast-button-box">
+<?php		if (!empty($BonDriver_dll) and !empty($ch)){ ?>
+                <button class="bluebutton" type="submit"><i class="fas fa-play"></i>ストリーム開始</button>
+<?php		} else {?>
+                <button class="bluebutton" type="submit" disabled><i class="fas fa-play"></i>ストリーム開始</button>
+<?php		} //括弧終了 ?>
+                <button class="redbutton" type="button"><i class="fas fa-times"></i>キャンセル</button>
+              </div>
+
+            </form>
+          </div>
         </div>
       </div>
-
   </section>
 
   <section id="footer">
