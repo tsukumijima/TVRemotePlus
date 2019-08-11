@@ -129,9 +129,6 @@
               // ON Air
               $("#state").text('● ON Air');
               $("#state").css('color','#007cff');
-
-              console.log('DOM')
-
             }
 
           } else if (data['info']['state'] == 'Offline') {
