@@ -2,7 +2,7 @@
 
     // ウインドウサイズ
     $(window).on('load resize',function() {
-      console.log('resize');
+      // console.log('resize');
       // 1024px以上
       if ($(window).width() > 1024){
         // ウィンドウを読み込んだ時、リサイズされた時に発動
@@ -18,8 +18,8 @@
             break;
           }
           result = (width * WindowHeight) / height;
-          console.log('width: ' + width);
-          console.log('result: ' + result);
+          // console.log('width: ' + width);
+          // console.log('result: ' + result);
           $('section').css('max-width', result + 'px');
         }
       }

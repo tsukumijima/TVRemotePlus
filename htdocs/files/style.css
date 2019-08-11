@@ -255,6 +255,10 @@ td {
     box-sizing: border-box;
 }
 
+.comment-file {
+    cursor: pointer;
+}
+
 .comment {
     width: calc(100% - 46px);
     padding: 3px 12px;
@@ -456,7 +460,7 @@ td {
 
 @media screen and (max-width : 768px){
     html.open {
-        position: fixed;
+        position: relative !important;
         width: 100%;
         height: 100%;
     }
@@ -1088,6 +1092,10 @@ td {
     text-overflow: ellipsis;
 }
 
+.broadcast-channel-id {
+    display: none;
+}
+
 @media screen and (max-width: 500px){
     .broadcast-channel {
         display: none;
@@ -1126,6 +1134,66 @@ td {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+
+#broadcast-stream-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 400;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
+    visibility: hidden;
+    opacity: 0;
+    width: 95%;
+    max-width: 500px;
+    height: 340px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    font-size: 110%;
+}
+
+#broadcast-stream-box.open {
+    transition-delay: 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+#broadcast-stream-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+#broadcast-stream-info {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    color: gray;
+    margin-top: 5px;
+}
+
+.form {
+    font-size: 90% !important;
+}
+
+.broadcast-button-box {
+    position: absolute !important;
+    right: 0px !important;
+    bottom: 0px !important;
+}
+
+@media screen and (max-width : 500px){
+    #broadcast-stream-box {
+        height: 400px;
+    }
 }
 
 #setting-title {

@@ -3,6 +3,9 @@
 	// モジュール読み込み
 	require_once ('../../module.php');
 
+	// 設定ファイル読み込み
+	$ini = json_decode(file_get_contents($inifile), true);
+
 	// セッションのファイル数を返す関数
 	function getActiveCount() {
 		$path = session_save_path();
@@ -20,9 +23,8 @@
 	}
 
 	// セッションの有効期限
-	// 秒数は定期的にアクセスする秒数より短い必要がある
-	ini_set('session.gc_maxlifetime', 4);
-	ini_set('session.cookie_lifetime', 4);
+	ini_set('session.gc_maxlifetime', 10);
+	ini_set('session.cookie_lifetime', 10);
 
 	// セッションを確実に破棄する
 	ini_set('session.gc_probability', 1);  // 分子(デフォルト:1)
@@ -41,8 +43,23 @@
 	// 現在の視聴数を取得する
 	$watchnow = getActiveCount();
 
+	// ついでにストリーム状態を判定する
+	if ($ini["state"] == "ONAir" or $ini["state"] == "File"){
+		$standby = file_get_contents($standby_m3u8);
+		$stream = file_get_contents($segment_folder.'stream.m3u8');
+		if ($standby == $stream){
+			$status = 'standby';
+		} else {
+			$status = 'onair';
+		}
+	} else {
+		$status = 'offline';
+	}
+
 	$json = array(
 		'apiname' => 'watchnow',
+		'state' => $ini['state'],
+		'status' => $status,
 		'watchnow' => $watchnow,
 	);
 

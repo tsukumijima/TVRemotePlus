@@ -11,6 +11,7 @@
         $("#tweet-status").html('<a id="tweet-login" href="tweet/auth.php">ログイン</a>');
     }
 
+    // リサイズ時の実行
     $(window).on('load resize', function(){
 
       // スマホ・タブレットならplaceholder書き換え
@@ -27,6 +28,20 @@
       }
       
     });
+
+    // メニュー開閉
+    $('#nav-open').click(function(event){
+      $('#nav-close').addClass('open');
+      $('#nav-content').addClass('open');
+      $('html').addClass('open');
+    });
+
+    $('#nav-close').click(function(event){
+      $('#nav-close').removeClass('open');
+      $('#nav-content').removeClass('open');
+      $('#broadcast-stream-box').removeClass('open');
+      $('html').removeClass('open');
+    });
     
 	  // clock()を1000ミリ秒ごと(毎秒)に実行する
     setInterval(clock, 1000);
@@ -38,23 +53,39 @@
         dataType: "json",
         cache: false,
         success: function(data) {
-	        $("#watchnow").text(data["watchnow"] + '人が視聴中');
+
+          // 視聴数を表示
+          $("#watchnow").text(data["watchnow"] + '人が視聴中');
+          
+          // 状態を隠しHTMLに書き出して変化してたらリロードする
+          if ((data['status'] != $("#status").text()) && $("#status").text() != ''){
+
+            // stateが同じの場合のみ読み込みし直し
+            if (($('#state').val() == data['state']) &&
+              (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
+
+              // ストリームを読み込みし直す
+              var paused = dp.video.paused;
+              dp.video.src = 'stream/stream.m3u8';
+              dp.initVideo(dp.video, 'hls');
+              if (!paused){
+                dp.play();
+              } else {
+                dp.pause();
+              }
+            // それ以外は諸々問題があるので一旦リロード
+            } else {
+              location.reload(true);
+            }
+          }
+          $("#status").text(data['status']);
+          console.log('status: ' + data['status']);
         }
+
       });
       return status;
-    }()),5000);
+    }()),1000);
 
-    $('#nav-open').click(function(event){
-      $('#nav-close').addClass('open');
-      $('#nav-content').addClass('open');
-      $('html').addClass('open');
-    });
-
-    $('#nav-close').click(function(event){
-      $('#nav-close').removeClass('open');
-      $('#nav-content').removeClass('open');
-      $('html').removeClass('open');
-    });
 
     // 番組情報を取得
     setInterval((function status(){
@@ -72,95 +103,92 @@
           } else {
             var flg = false;
           }
-
-          // 状態を隠しHTMLに書き出して変化してたらリロードする
-          if ((data['info']['status'] != $("#status").text()) && $("#status").text() != ''){
-
-            // stateが同じの場合のみ読み込みし直し
-            if (($('#state').val() == data['info']['state']) &&
-              (data['info']['state'] == 'ONAir' || (data['info']['state'] == 'File' && data['info']['status'] == 'onair'))){
-
-              // ストリームを読み込みし直す
-              var paused = dp.video.paused;
-              dp.video.src = 'stream/stream.m3u8';
-              dp.initVideo(dp.video, 'hls');
-              if (!paused){
-                dp.play();
-              } else {
-                dp.pause();
-              }
-            // それ以外は諸々問題があるので一旦リロード
-            } else {
-              //location.reload(true);
-            }
-          }
-          $("#status").text(data['info']['status']);
-          console.log('status: ' + data['info']['status']);
           
           if (data['info']['state'] == 'ONAir'){
 
-            // 現在の番組
-            $("#starttime").text(data['play']['starttime']);
-            $("#to").text(data['play']['to']);
-            $("#endtime").text(data['play']['endtime']);
-            $("#channel").text(data['play']['channel']);
-            $("#program_name").html(data['play']['program_name']);
-            $("#program_info").html(data['play']['program_info']);
-          
-            // 次の番組
-            $("#next_starttime").text(data['play']['next_starttime']);
-            $("#next_to").text(data['play']['to']);
-            $("#next_endtime").text(data['play']['next_endtime']);
-            $("#next_program_name").html(data['play']['next_program_name']);
-            $("#next_program_info").html(data['play']['next_program_info']);
+            // 変化がある場合のみ書き換え
+            if (document.getElementById('starttime').innerHTML != data['play']['starttime'] ||
+                document.getElementById('program_name').innerHTML != data['play']['program_name'] ||
+                document.getElementById('channel').innerHTML != data['play']['channel']){
 
-            $("#state").text('● ON Air');
-            $("#state").css('color','#007cff');
+              // 現在の番組
+              $("#starttime").text(data['play']['starttime']);
+              $("#to").text(data['play']['to']);
+              $("#endtime").text(data['play']['endtime']);
+              $("#channel").text(data['play']['channel']);
+              $("#program_name").html(data['play']['program_name']);
+              $("#program_info").html(data['play']['program_info']);
+          
+              // 次の番組
+              $("#next_starttime").text(data['play']['next_starttime']);
+              $("#next_to").text(data['play']['to']);
+              $("#next_endtime").text(data['play']['next_endtime']);
+              $("#next_program_name").html(data['play']['next_program_name']);
+              $("#next_program_info").html(data['play']['next_program_info']);
+
+              // ON Air
+              $("#state").text('● ON Air');
+              $("#state").css('color','#007cff');
+
+              console.log('DOM')
+
+            }
+
           } else if (data['info']['state'] == 'Offline') {
+
+            // Offline
             $('#state').text('● Offline');
             $('#state').css('color','gray');
+
           }
+
+          // stateを記録しておく
           $('#state').val(data['info']['state']);
 
           // progressbarの割合を計算して代入
           var percent = ((Math.floor(Date.now() / 1000) - data['play']['timestamp']) / data['play']['duration']) * 100;
-          $('#progress').width(percent + '%');
+          document.getElementById('progress').style.width = percent + '%';
 
+          // チャンネルごとに実行
           Object.keys(data['onair']).forEach(function(key){
 
-            if (data['onair'][key]['ch'] < 40){
-              var slice = -2
-            } else {
-              var slice = -3
+            // 変化がある場合のみ書き換え
+            // てか特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
+            if (document.getElementsByClassName('broadcast-start-ch' + key)[0].innerHTML != data['onair'][key]['starttime'] ||
+                document.getElementsByClassName('broadcast-title-ch' + key)[0].innerHTML != data['onair'][key]['program_name']){
+
+              // 書き換え用html
+              var html = '  <div class="broadcast-channel-box">' +
+                        '    <div class="broadcast-channel broadcast-channel-ch' + key + '">' + $('.broadcast-channel-ch' + key).html() + '</div>' +
+                        '    <div class="broadcast-name-box">' +
+                        '      <div class="broadcast-name">' + data['onair'][key]['channel'] + '</div>' +
+                        '      <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch' + key + '"></span></div>' +
+                        '    </div>' +
+                        '  </div>' +
+                        '  <div class="broadcast-title">' +
+                        '    <span class="broadcast-start-ch' + key + '">' + data['onair'][key]['starttime'] + '</span>' +
+                        '    <span class="broadcast-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
+                        '    <span class="broadcast-end-ch' + key + '">' + data['onair'][key]['endtime'] + '</span>' +
+                        '    <span class="broadcast-title-id broadcast-title-ch' + key + '">' + data['onair'][key]['program_name'] + '</span>' +
+                        '  </div>' +
+                        '  <div class="broadcast-next">' +
+                        '    <span class="broadcast-next-start-ch' + key + '">' + data['onair'][key]['next_starttime'] + '</span>' +
+                        '    <span class="broadcast-next-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
+                        '    <span class="broadcast-next-end-ch' + key + '">' + data['onair'][key]['next_endtime'] + '</span>' +
+                        '    <span class="broadcast-next-title-ch' + key + '">' + data['onair'][key]['next_program_name'] + '</span>' +
+                        '  </div>';
+
+              // 番組情報を書き換え
+              document.getElementsByClassName('broadcast-ch' + key)[0].innerHTML = html;
             }
 
+            // 実況勢いは毎回書き換え
+            document.getElementsByClassName('broadcast-ikioi-ch' + key)[0].innerHTML = data['onair'][key]['ikioi'];
 
-            var html = '<div class="broadcast-content broadcast-ch' + key + '">' +
-                       '  <div class="broadcast-channel-box">' +
-                       '    <div class="broadcast-channel">Ch: ' + ('0000000000' + data['onair'][key]['ch']).slice(slice) + '</div>' +
-                       '    <div class="broadcast-name-box">' +
-                       '      <div class="broadcast-name">' + data['onair'][key]['channel'] + '</div>' +
-                       '      <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch' + key + '">' + data['onair'][key]['ikioi'] + '</span></div>' +
-                       '    </div>' +
-                       '    </div>' +
-                       '    <div class="broadcast-title">' +
-                       '      <span class="broadcast-start-ch' + key + '">' + data['onair'][key]['starttime'] + '</span>' +
-                       '      <span class="broadcast-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
-                       '      <span class="broadcast-end-ch' + key + '">' + data['onair'][key]['endtime'] + '</span>' +
-                       '      <span class="broadcast-title-ch' + key + '">' + data['onair'][key]['program_name'] + '</span>' +
-                       '    </div>' +
-                       '    <div class="broadcast-next">' +
-                       '      <span class="broadcast-next-start-ch' + key + '">' + data['onair'][key]['next_starttime'] + '</span>' +
-                       '      <span class="broadcast-next-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
-                       '      <span class="broadcast-next-end-ch' + key + '">' + data['onair'][key]['next_endtime'] + '</span>' +
-                       '      <span class="broadcast-next-title-ch' + key + '">' + data['onair'][key]['next_program_name'] + '</span>' +
-                       '    </div>' +
-                       '</div>';
-            console.log(html)
-            document.getElementsByClassName('broadcast-ch' + key)[0].innerHTML = html;
-
+            // プログレスバー
             var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
-            $('.progress-ch' + key).width(percent + '%');
+            document.getElementsByClassName('progress-ch' + key)[0].style.width = percent + '%';
+
           });
 
           // 高さ調整
@@ -169,7 +197,7 @@
         }
       });
       return status;
-    }()), 2000);
+    }()), 5000);
 
     // Zenzawatchのコードより一部改変した上で使わせて頂いています
     // 参考

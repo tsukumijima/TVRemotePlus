@@ -48,18 +48,14 @@
   <script type="text/javascript" src="files/toastr.min.js"></script>
 <?php
   if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
-    echo '  <script type="text/javascript" src="files/resize.js"></script>'."\n";
     echo '  <script type="text/javascript" src="files/swiper.min.js"></script>'."\n";
-    echo '  <script type="text/javascript" src="files/slider.js"></script>'."\n";
-  }
-  if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
-    echo '  <script type="text/javascript" src="files/resize.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="files/index.js"></script>'."\n";
   }
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
     echo '  <script type="text/javascript" src="files/watch.js"></script>'."\n";
   } else if ($ini['state'] == 'ONAir'){
     echo '  <script type="text/javascript" src="files/script.js"></script>'."\n";
-    echo '  <script type="text/javascript" src="files/index.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="files/onair.js"></script>'."\n";
   } else if ($ini['state'] == 'Offline'){
     echo '  <script type="text/javascript" src="files/script.js"></script>'."\n";
   } else if ($ini['state'] == 'File'){
@@ -115,10 +111,6 @@
     <a class="nav-link" href="./">
       <i class="fas fa-home"></i>
       <span class="nav-link-href">ホーム</span>
-    </a>
-    <a class="nav-link" href="./setting.php">
-      <i class="far fa-play-circle"></i>
-      <span class="nav-link-href">ストリーム開始</span>
     </a>
     <form method="post" name="quickstop" action="./setting.php">
       <input type="hidden" name="state" value="Offline">

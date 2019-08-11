@@ -44,7 +44,7 @@
 		global $ini,$ch,$EDCB_http_url,$jkchannels;
 		
 		// 番組表API読み込み
-		$epg = simplexml_load_file($EDCB_http_url.'EnumEventInfo?onair=&sid='.$sid.'&tsid='.$tsid);
+		$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&sid='.$sid.'&tsid='.$tsid);
 
 		// チャンネル名
 		if (isset($epg->items->eventinfo[0]->service_name)){

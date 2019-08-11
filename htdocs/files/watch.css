@@ -59,10 +59,15 @@ section {
     height: 20px;
     margin-right: auto;
     padding: 5px 6px;
+    font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 110%;
     outline: none;
-    border: 0px;
+    border: 1px solid #dfe1e5;
     border-radius: 2px;
+}
+
+#search-find-form:focus {
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
 }
 
 #search-find-toggle {
@@ -126,7 +131,7 @@ section {
     display: flex;
     width: 70%;
     flex-direction: column;
-    font-family:'Arial','メイリオ';
+    font-family: 'Segoe UI','Arial','メイリオ';
     padding-left: 15px;
 }
 
