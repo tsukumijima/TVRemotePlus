@@ -35,9 +35,10 @@ $quality_default = '810p'; // 1080p・810p・720p・540p・360p・240P から選
 
 // デフォルトのエンコーダー
 // ffmpeg が通常のエンコーダー(ソフトウェアエンコード)、
-// QSVEnc がハードウェアエンコーダーです
-// ( QSVEnc の方が CPU を消費しない・エンコードが早いのでオススメですが、Intel 製の一部の CPU しか使えません)
-$encoder_default = 'QSVEnc'; // ffmpeg・QSVEnc から選択
+// QSVEnc・NVEncC がハードウェアエンコーダーです
+// ( QSVEnc・NVEncC の方が CPU を消費しない・エンコードが早いのでオススメですが、
+// QSVEnc は Intel 製の一部の CPU・NVEnc は nvidia 製の GPU 環境しか使えません)
+$encoder_default = 'QSVEnc'; // ffmpeg・QSVEnc・NVEncC から選択
 
 // デフォルトで字幕データをストリームに含めるか(含める… true 含めない… false )
 // 字幕データを配信するストリームに含めると、字幕をプレイヤー側で表示出来るようになります
@@ -56,17 +57,21 @@ $BonDriver_default_T = '';
 // 例：$BonDriver_default_S = 'BonDriver_Spinel_PX_Q3PE4_S0.dll';
 $BonDriver_default_S = '';
 
-// 録画した TS ファイルのあるディレクトリ(フォルダ・変更必須)
+// 録画ファイルのあるフォルダ (変更必須)
 // ファイル再生の際に利用します
 // ネットワークドライブは認識できないみたいです
 // 例：$TSfile_dir = 'E:/TV-Record/';
 $TSfile_dir = '';
 
-// EDCB の HTTP サーバ( EMWUI )の API がある URL を指定します(番組表取得で利用します・変更必須)
+// EDCB Material WebUI (EMWUI) の API がある URL を指定します (番組表取得で利用します・変更必須)
 // この機能を利用する場合、EDCB_Material_WebUI を導入しておいてください(APIを番組表取得で利用します)
 // http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/api/ のように指定します
 // 例：$EDCB_http_url = 'http://192.168.1.11:5510/api/';
 $EDCB_http_url = '';
+
+// 配信休止中…・配信準備中… の動画の音楽を消すかどうか
+// (音楽を消す… true 音楽を流す(消さない)… false )
+$silent = 'true';
 
 // 再生履歴を何件まで保持するか
 // デフォルトは10件です
@@ -76,11 +81,11 @@ $history_keep = 10;
 // ***** ニコニコ実況関連設定 *****
 // ニコニコのメールアドレスとパスワードは、ニコニコ実況への投稿・過去ログの取得に必須です
 
-// ニコニコにログインする際のメールアドレス(変更必須)
+// ニコニコにログインする際のメールアドレス (変更必須)
 // 例：$nicologin_mail = 'example@gmail.com';
 $nicologin_mail = '';
 
-// ニコニコにログインする際のパスワード(変更必須)
+// ニコニコにログインする際のパスワード (変更必須)
 // 例：$nicologin_password = '12345678';
 $nicologin_password = '';
 
@@ -96,7 +101,7 @@ $tweet_time = 60;
 // 削除するなら true 、削除しない( htdocs/tweet/upload/ フォルダに保存する)なら false です
 $tweet_delete = 'false';
 
-// ベースとなるURL($_SERVER["HTTP_HOST"] はIPアドレスを自動で判定する・基本はデフォルトのままでOK)
+// ベースとなる URL ($_SERVER["HTTP_HOST"] は IP アドレスを自動で判定する・基本はデフォルトのままでOK)
 $BASEURL = $scheme.$_SERVER["HTTP_HOST"].'/';
 
 
@@ -111,7 +116,7 @@ $CONSUMER_KEY =  '';
 // 例：$CONSUMER_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 $CONSUMER_SECRET = '';
 
-// コールバックURLを指定(変更する必要はありません)
+// コールバック URL を指定(変更する必要はありません)
 $OAUTH_CALLBACK = $BASEURL.'tweet/callback.php';
 
 
@@ -178,6 +183,10 @@ $ffmpeg_path = $base_dir.'bin/'.$ffmpeg_exe;
 $qsvencc_exe = 'QSVEncC64.exe';
 $qsvencc_path =  $base_dir.'bin/QSVEncC/'.$qsvencc_exe;
 
+// NVEncC の名前とパス
+$nvencc_exe = 'NVEncC64.exe';
+$nvencc_path =  $base_dir.'bin/NVEncC/'.$nvencc_exe;
+
 // TSTask の名前とパス
 $tstask_exe = 'TSTask.exe';
 $tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
@@ -194,7 +203,7 @@ $site_title = 'TVRemotePlus';
 
 // アイコンのパス
 // htdocs からのパス
-$icon_file = 'files/TVRemotePlus.svg';
+$icon_file = '/files/TVRemotePlus.svg';
 
 // BonDriver のあるディレクトリ(フォルダ)
 // デフォルトは TSTaskのあるフォルダ/BonDriver/ フォルダです
@@ -225,9 +234,11 @@ $tweet_time_file = $base_dir.'data/tweet_time.dat';
 
 // オフライン時の m3u8 のパス
 $offline_m3u8 = $base_dir.'data/offline.m3u8';
+$offline_silent_m3u8 = $base_dir.'data/offline_silent.m3u8';
 
 // スタンバイ時の m3u8 のパス
 $standby_m3u8 = $base_dir.'data/standby.m3u8';
+$standby_silent_m3u8 = $base_dir.'data/standby_silent.m3u8';
 
 // .htaccess のパス
 $htaccess = $base_dir.'htdocs/.htaccess';

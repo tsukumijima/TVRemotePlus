@@ -487,9 +487,9 @@ td {
     position: fixed;
     right: 3vw;
     top: 44px;
-    width: 165px;
+    width: 200px;
     background-color: #FFFFFF;
-    border-radius: 2px;
+    border-radius: 10px;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),
                 0 3px 1px -2px rgba(0,0,0,.2),
                 0 1px 5px 0 rgba(0,0,0,.12);
@@ -497,6 +497,7 @@ td {
     transition: opacity 0.2s, visibility 0.2s ease-out;
     opacity: 0;
     visibility: hidden;
+    display: none;
 }
 
 #menu-content.open {
@@ -575,13 +576,12 @@ td {
 }
 
 #tweet-box.open {
-    position: absolute;
+    position: fixed;
     background-color: #FFFFFF;
     bottom: 0px;
     transition-delay: 0s;
     opacity: 1.0;
     visibility: visible;
-    height: 136px;
 }
 
 #tweet-close {
@@ -984,11 +984,20 @@ td {
     padding-bottom: 15px;
 }
 
+.error {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #e8004a;
+    font-size: 105%;
+    font-weight: bold;
+}
+
 #broadcast-tab {
     display: flex;
     padding: 0;
     margin: 0;
     margin-bottom: 15px;
+    user-select: none;
 }
 
 .broadcast-button {
@@ -1253,10 +1262,12 @@ td {
 
 .bluebutton[disabled] {
     background-color: #8ed0f9;
+    cursor: auto;
 }
 
 .bluebutton[disabled]:hover {
     background-color: #8ed0f9;
+    cursor: auto;
 }
 
 .redbutton {
@@ -1280,10 +1291,12 @@ td {
 
 .redbutton[disabled] {
     background-color: #ff709e;
+    cursor: auto;
 }
 
 .redbutton[disabled]:hover {
     background-color: #ff709e;
+    cursor: auto;
 }
 
 #footer {

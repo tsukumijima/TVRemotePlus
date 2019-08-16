@@ -111,9 +111,23 @@ section {
     padding: 20px;
 }
 
+#search-info {
+    font-size: 105%;
+    font-weight: bold;
+}
+
+.error {
+    margin-top: 0px !important;
+    margin-bottom: 10px !important;
+}
+
+.error-text {
+    color: #e8004a;
+}
+
 .search-file-box {
     display: flex;
-    margin-top: 16px;
+    margin-bottom: 16px;
     cursor: pointer;
 }
 
@@ -373,7 +387,7 @@ section {
     }
 
     .search-file-box {
-        margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     .search-file-thumb {
@@ -398,7 +412,7 @@ section {
 @media screen and (max-width : 500px){
 
     #search-box {
-        padding: 100px 15px 15px 15px;
+        padding: 125px 15px 15px 15px;
     }
 
     #search-find-link-box {

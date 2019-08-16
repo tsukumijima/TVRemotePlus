@@ -45,38 +45,40 @@
 			if (file_exists($historyfile)){
 				$history = json_decode(file_get_contents($historyfile), true);
 			} else {
-				$history = array();
+				$history = array(
+          'data' => array()
+        );
 			}
 
 			// 再生履歴の数
-			$history_count = count($history);
+			$history_count = count($history['data']);
 			// 一定の値を超えたら徐々に消す
 			if ($history_count >= $history_keep){
 				$i = 0;
-				while (count($history) >= $history_keep) {
-					unset($history[$i]);
-					$history = array_values($history); // インデックスを詰める
-					$history_count = count($history);
+				while (count($history['data']) >= $history_keep) {
+					unset($history['data'][$i]);
+					$history = array_values($history['data']); // インデックスを詰める
+					$history_count = count($history['data']);
 					$i++;
 				}
 			}
 
 			foreach ($TSfile as $key => $value) {
-				if ($ini['filepath'] == $TSfile[$key]['file']){
-					$history[$history_count]['play'] = time();
-					$history[$history_count]['file'] = $TSfile[$key]['file'];
-					$history[$history_count]['title'] = $TSfile[$key]['title'];
-					$history[$history_count]['update'] = $TSfile[$key]['update'];
-					$history[$history_count]['thumb'] = $TSfile[$key]['thumb'];
-					$history[$history_count]['data'] = $TSfile[$key]['data'];
-					$history[$history_count]['date'] = $TSfile[$key]['date'];
-					$history[$history_count]['info'] = $TSfile[$key]['info'];
-					$history[$history_count]['channel'] = $TSfile[$key]['channel'];
-					$history[$history_count]['start'] = $TSfile[$key]['start'];
-					$history[$history_count]['end'] = $TSfile[$key]['end'];
-					$history[$history_count]['duration'] = $TSfile[$key]['duration'];
-					$history[$history_count]['start_timestamp'] = $TSfile[$key]['start_timestamp'];
-					$history[$history_count]['end_timestamp'] = $TSfile[$key]['end_timestamp'];
+				if ($ini['filepath'] == $TSfile['data'][$key]['file']){
+					$history['data'][$history_count]['play'] = time();
+					$history['data'][$history_count]['file'] = $TSfile['data'][$key]['file'];
+					$history['data'][$history_count]['title'] = $TSfile['data'][$key]['title'];
+					$history['data'][$history_count]['update'] = $TSfile['data'][$key]['update'];
+					$history['data'][$history_count]['thumb'] = $TSfile['data'][$key]['thumb'];
+					$history['data'][$history_count]['data'] = $TSfile['data'][$key]['data'];
+					$history['data'][$history_count]['date'] = $TSfile['data'][$key]['date'];
+					$history['data'][$history_count]['info'] = $TSfile['data'][$key]['info'];
+					$history['data'][$history_count]['channel'] = $TSfile['data'][$key]['channel'];
+					$history['data'][$history_count]['start'] = $TSfile['data'][$key]['start'];
+					$history['data'][$history_count]['end'] = $TSfile['data'][$key]['end'];
+					$history['data'][$history_count]['duration'] = $TSfile['data'][$key]['duration'];
+					$history['data'][$history_count]['start_timestamp'] = $TSfile['data'][$key]['start_timestamp'];
+					$history['data'][$history_count]['end_timestamp'] = $TSfile['data'][$key]['end_timestamp'];
 				}
 			}
 
@@ -87,7 +89,11 @@
 			stream_file($ini['filepath'], $ini['quality'], $ini['encoder']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
-			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			if ($silent == 'true'){
+				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			} else {
+				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			}
 
 		} else if ($ini['state'] == "ONAir"){
 
@@ -111,7 +117,11 @@
 			stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
-			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			if ($silent == 'true'){
+				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			} else {
+				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			}
 
 		// Offlineなら
 		} else if ($ini['state'] == "Offline"){
@@ -123,7 +133,11 @@
 			$ini['channel'] = '0';
 				
 			// 配信休止中用のプレイリスト
-			copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			if ($silent == 'true'){
+				copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			} else {
+				copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			}
 
 		}
 
@@ -164,14 +178,14 @@
     theme: '#007cff',
     // 読み込むm3u8を指定する
     video: {
-      url: 'stream/stream.m3u8',
+      url: '/stream/stream.m3u8',
       type: 'hls'
     },
     // 読み込むdanmaku(コメント)
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
-      api: 'api/jkapi.php/',
+      api: '/api/jkapi.php/',
       bottom: '40%',
       unlimited: true
     },
@@ -201,6 +215,7 @@
           <div id="comment-box">
             <table id="comment-draw-box-header">
               <tr><th id="comment-time" class="time">時間</th><th class="comment">コメント</th></tr>
+            </table>
             <table id="comment-draw-box">
             </table>
           </div>
@@ -229,7 +244,7 @@
 
 <?php	if ($_SERVER["REQUEST_METHOD"] != "POST"){ // ブラウザからHTMLページを要求された場合 ?>
 
-            <form id="setting-form" action="./setting.php" method="post">
+            <form id="setting-form" action="./setting/" method="post">
               <input type="hidden" name="state" value="ONAir">
 
               <div class="setchannel form">
@@ -265,6 +280,7 @@
                     <option value="<?php echo $encoder_default; ?>">デフォルト</option>
                     <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                     <option value="QSVEnc">QSVEnc (ハードウェアエンコーダー)</option>
+                    <option value="NVEnc">NVEnc (ハードウェアエンコーダー)</option>
                   </select>
                 </div>
               </div>
@@ -350,7 +366,7 @@
 <?php		} //括弧終了 ?>
               <div id="button-box">
                 <button class="redbutton" type="button" onclick="location.href='./'"><i class="fas fa-home"></i>ホームに戻る</button>
-                <button class="bluebutton" type="button" onclick="location.href='./setting.php'"><i class="fas fa-cog"></i>設定に戻る</button>
+                <button class="bluebutton" type="button" onclick="location.href='./setting/'"><i class="fas fa-cog"></i>設定に戻る</button>
               </div>
             </div>
             

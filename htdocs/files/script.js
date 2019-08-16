@@ -28,20 +28,6 @@
       }
       
     });
-
-    // メニュー開閉
-    $('#nav-open').click(function(event){
-      $('#nav-close').addClass('open');
-      $('#nav-content').addClass('open');
-      $('html').addClass('open');
-    });
-
-    $('#nav-close').click(function(event){
-      $('#nav-close').removeClass('open');
-      $('#nav-content').removeClass('open');
-      $('#broadcast-stream-box').removeClass('open');
-      $('html').removeClass('open');
-    });
     
 	  // clock()を1000ミリ秒ごと(毎秒)に実行する
     setInterval(clock, 1000);
@@ -49,7 +35,7 @@
     setInterval((function status(){
       // 10秒おきに視聴中カウントAPIを叩く
       $.ajax({
-        url: "api/watchnow.php",
+        url: "/api/watchnow.php",
         dataType: "json",
         cache: false,
         success: function(data) {
@@ -69,15 +55,31 @@
               dp.video.src = 'stream/stream.m3u8';
               dp.initVideo(dp.video, 'hls');
               if (!paused){
-                dp.play();
+                dp.video.play();
               } else {
-                dp.pause();
+                dp.video.pause();
               }
+
             // それ以外は諸々問題があるので一旦リロード
             } else {
               location.reload(true);
             }
           }
+
+          if (data['status'] == 'failed'){
+            $.ajax({
+              url: './setting/',
+              type: 'post',
+              data: {
+                'state': 'Offline'
+              },
+              cache: false,
+              success: function(data) {
+              }
+            });
+            toastr.error('ストリーム開始に失敗しました…');
+          }
+
           $("#status").text(data['status']);
           console.log('status: ' + data['status']);
         }
@@ -90,7 +92,7 @@
     // 番組情報を取得
     setInterval((function status(){
       $.ajax({
-        url: "api/epgguide.php",
+        url: "/api/epgguide.php",
         dataType: "json",
         cache: false,
         success: function(data) {
@@ -158,7 +160,7 @@
               var html = '  <div class="broadcast-channel-box">' +
                         '    <div class="broadcast-channel broadcast-channel-ch' + key + '">' + $('.broadcast-channel-ch' + key).html() + '</div>' +
                         '    <div class="broadcast-name-box">' +
-                        '      <div class="broadcast-name">' + data['onair'][key]['channel'] + '</div>' +
+                        '      <div class="broadcast-name broadcast-name-ch' + key + '">' + $('.broadcast-name-ch' + key).html() + '</div>' +
                         '      <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch' + key + '"></span></div>' +
                         '    </div>' +
                         '  </div>' +
