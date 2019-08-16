@@ -248,12 +248,13 @@
 		$cmd =  'cd '.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\ && '.
 				'.\openssl.exe genrsa -out ..\conf\server.key 2048 && '.
 				'.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf && '.
-				'.\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -signkey ..\conf\server.key -extfile ..\conf\openssl.ext';
-		echo $cmd."\n";
-		exec($cmd);
+				'.\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -days 3650 -signkey ..\conf\server.key -extfile ..\conf\openssl.ext';
+
+		exec($cmd, $opt1, $return1);
 		copy($serverroot.'/bin/Apache/conf/server.crt', $serverroot.'/htdocs/server.crt');
 		echo "\n";
-		echo '  HTTPS接続用の自己署名証明書を作成しました。'."\n";
+		if ($return1 == 0) echo '  HTTPS接続用の自己署名証明書を作成しました。'."\n";
+		else echo '  HTTPS接続用の自己署名証明書の作成に失敗しました…'."\n";
 
 		// ショートカット作成
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
@@ -261,9 +262,10 @@
 					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
 					'$lnk.WindowStyle = 7; '.
 					'$lnk.Save()';
-		exec('powershell -Command "'.$powershell.'"', $opt, $return);
+		exec('powershell -Command "'.$powershell.'"', $opt2, $return2);
 		echo "\n";
-		echo '  ショートカットを作成しました。'."\n";
+		if ($return2 == 0) echo '  ショートカットを作成しました。'."\n";
+		else echo '  ショートカットの作成に失敗しました…'."\n";
 
 	}
 

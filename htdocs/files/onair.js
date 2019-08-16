@@ -20,7 +20,7 @@
     // コメント取得
     setInterval((function status(){
         $.ajax({
-          url: "api/jkapi.php?res=" + res,
+          url: "/api/jkapi.php?res=" + res,
           dataType: "json",
           cache: false,
           success: function(data) {

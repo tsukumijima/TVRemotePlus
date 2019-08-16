@@ -47,14 +47,14 @@
     theme: '#007cff',
     // 読み込むm3u8を指定する
     video: {
-      url: 'stream/stream.m3u8',
+      url: '/stream/stream.m3u8',
       type: 'hls'
     },
     // 読み込むdanmaku(コメント)
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
-      api: 'api/jkapi.php/',
+      api: '/api/jkapi.php/',
       bottom: '40%',
       unlimited: true
     },
@@ -106,6 +106,7 @@
           <div id="comment-box">
             <table id="comment-draw-box-header">
               <tr><th id="comment-time" class="time">時間</th><th class="comment">コメント</th></tr>
+            </table>
             <table id="comment-draw-box">
             </table>
           </div>
@@ -183,6 +184,29 @@
 
           <div id="information">
 
+<?php		if (empty($BonDriver_dll) and empty($ch)){ // エラーを吐く ?>
+            <div class="error">
+              BonDriverとチャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
+              ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+            </div>
+<?php		} else if (empty($BonDriver_dll)){ ?>
+            <div class="error">
+              BonDriverが見つからないため、ストリームを開始できません。<br>
+              ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+            </div>
+<?php		} else if (empty($ch)){ ?>
+            <div class="error">
+              チャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
+              ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+            </div>
+<?php		} //括弧終了 ?>
+<?php		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'/EnumEventInfo')){ // EMWUI ?>
+        <div class="error">
+          EDCB Material WebUI の API がある URL が正しく設定されていないため、番組情報が表示できません。<br>
+          config.php の「EDCB Material WebUI (EMWUI) の API がある URL」が正しく設定されているかどうか、確認してください。<br>
+        </div>
+<?php		} //括弧終了 ?>
+
             <div id="broadcast-tab-box" class="swiper-container">
               <div id="broadcast-tab" class="swiper-wrapper">
                 <div class="broadcast-button swiper-slide">地デジ</div>
@@ -207,7 +231,7 @@
                         <div class="broadcast-channel-box">
                           <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%02d', $i); ?></div>
                           <div class="broadcast-name-box">
-                            <div class="broadcast-name"><?php echo $value; ?></div>
+                            <div class="broadcast-name broadcast-name-ch<?php echo $i; ?>"><?php echo $value; ?></div>
                             <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
                           </div>
                         </div>
@@ -247,7 +271,7 @@
                         <div class="broadcast-channel-box">
                           <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%03d', $i); ?></div>
                           <div class="broadcast-name-box">
-                            <div class="broadcast-name"><?php echo $value; ?></div>
+                            <div class="broadcast-name broadcast-name-ch<?php echo $i; ?>"><?php echo $value; ?></div>
                             <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
                           </div>
                         </div>
@@ -287,7 +311,7 @@
                         <div class="broadcast-channel-box">
                           <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%03d', $i); ?></div>
                           <div class="broadcast-name-box">
-                            <div class="broadcast-name"><?php echo $value; ?></div>
+                            <div class="broadcast-name broadcast-name-ch<?php echo $i; ?>"><?php echo $value; ?></div>
                             <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
                           </div>
                         </div>
@@ -321,7 +345,7 @@
           <div id="broadcast-stream-box">
             <div id="broadcast-stream-title"></div>
             <div id="broadcast-stream-info"></div>
-            <form id="setting-form" action="./setting.php" method="post">
+            <form id="setting-form" action="./setting/" method="post">
               <input type="hidden" name="state" value="ONAir">
               <input id="broadcast-stream-channel" type="hidden" name="channel" value="">
 
@@ -329,7 +353,7 @@
                 動画の画質：
                 <div class="select-wrap">
                   <select name="quality">
-                    <option value="<?php echo $quality_default; ?>">デフォルト</option>
+                    <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
                     <option value="1080p">1080p (1920×1080)</option>
                     <option value="810p">810p (1440×810)</option>
                     <option value="720p">720p (1280×720)</option>
@@ -344,9 +368,10 @@
                 エンコード：
                 <div class="select-wrap">
                   <select name="encoder">
-                    <option value="<?php echo $encoder_default; ?>">デフォルト</option>
+                    <option value="<?php echo $encoder_default; ?>">デフォルト (<?php echo $encoder_default; ?>)</option>
                     <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                     <option value="QSVEnc">QSVEnc (ハードウェアエンコーダー)</option>
+                    <option value="NVEnc">NVEnc (ハードウェアエンコーダー)</option>
                   </select>
                 </div>
               </div>
@@ -355,7 +380,11 @@
                 字幕データ：
                 <div class="select-wrap">
                   <select name="subtitle">
-                    <option value="<?php echo $subtitle_default; ?>">デフォルト</option>
+<?php		if ($subtitle_default == 'true'){ ?>
+                    <option value="<?php echo $subtitle_default; ?>">デフォルト (字幕オン)</option>
+<?php		} else { ?>
+                    <option value="<?php echo $subtitle_default; ?>">デフォルト (字幕オフ)</option>
+<?php		} //括弧終了 ?>
                     <option value="true">字幕オン</option>
                     <option value="false">字幕オフ</option>
                   </select>
@@ -367,7 +396,7 @@
                 <div class="select-wrap">
                   <select name="BonDriver">
 <?php		if (!empty($BonDriver_default_T) or !empty($BonDriver_default_S)){ ?>
-                    <option value="default">デフォルト</option>
+                    <option value="default">デフォルトのBonDriver</option>
 <?php		} //括弧終了 ?>
 <?php		foreach ($BonDriver_dll as $i => $value){ //chの数だけ繰り返す ?>
                     <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
@@ -375,23 +404,6 @@
                   </select>
                 </div>
               </div>
-			  
-<?php		if (empty($BonDriver_dll) and empty($ch)){ ?>
-              <div class="form">
-                BonDriverとチャンネル設定ファイルが見つかりませんでした…<br>
-                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
-              </div>
-<?php		} else if (empty($BonDriver_dll)){ ?>
-              <div class="form">
-                BonDriverが見つかりませんでした…<br>
-                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
-              </div>
-<?php		} else if (empty($ch)){ ?>
-              <div class="form">
-                チャンネル設定ファイルが見つかりませんでした…<br>
-                ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
-              </div>
-<?php		} //括弧終了 ?>
 
               <div id="button-box" class="broadcast-button-box">
 <?php		if (!empty($BonDriver_dll) and !empty($ch)){ ?>

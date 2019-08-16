@@ -45,13 +45,26 @@
 
 	// ついでにストリーム状態を判定する
 	if ($ini["state"] == "ONAir" or $ini["state"] == "File"){
-		$standby = file_get_contents($standby_m3u8);
+
+		// 比較元のm3u8
+		if ($silent == 'true') $standby = file_get_contents($standby_silent_m3u8);
+		else $standby = file_get_contents($standby_m3u8);
+		// 比較先のm3u8
 		$stream = file_get_contents($segment_folder.'stream.m3u8');
-		if ($standby == $stream){
+		// 比較先のm3u8の更新日時
+		$modified = filemtime($segment_folder.'stream.m3u8');
+
+		// m3u8が30秒経っても更新されない
+		if ($standby == $stream and time() - $modified > 30){
+			$status = 'failed';
+		// m3u8が更新されていない
+		} else if ($standby == $stream){
 			$status = 'standby';
+		// m3u8が更新されている
 		} else {
 			$status = 'onair';
 		}
+
 	} else {
 		$status = 'offline';
 	}

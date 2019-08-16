@@ -82,7 +82,11 @@
 			stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
-			copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			if ($silent == 'true'){
+				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			} else {
+				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			}
 
 			// iniファイル書き込み
 			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
@@ -107,7 +111,11 @@
 			stream_stop();
 
 			// 配信休止中用のプレイリスト
-			copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			if ($silent == 'true'){
+				copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			} else {
+				copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			}
 
 			// iniファイル書き込み
 			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
@@ -133,7 +141,7 @@
 	require_once (dirname(__FILE__).'/module.php');
 
 	function stream_start($ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
-		global $udp_port, $ffmpeg_path, $qsvencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
 		
 		// 設定
 
@@ -142,22 +150,29 @@
 
 		// 字幕切り替え
 		switch ($subtitle) {
+
 			case 'true':
 				$subtitle_ffmpeg_cmd = ' -map 0 -ignore_unknown';
 				$subtitle_qsvencc_cmd = ' --sub-copy asdata';
-				break;
+				$subtitle_nvencc_cmd = ' --sub-copy asdata';
+			break;
+
 			case 'false':
 				$subtitle_ffmpeg_cmd = '';
 				$subtitle_qsvencc_cmd = '';
-				break;
+				$subtitle_nvencc_cmd = '';
+			break;
+
 			default:
 				$subtitle_ffmpeg_cmd = '';
 				$subtitle_qsvencc_cmd = '';
-				break;
+				$subtitle_nvencc_cmd = '';
+			break;
 		}
 
 		// 画質切り替え
 		switch ($quality) {
+
 			case '1080p':
 				$width = 1920; // 動画の横幅
 				$height = 1080; // 動画の高さ
@@ -166,7 +181,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '810p':
 				$width = 1440; // 動画の横幅
@@ -176,7 +191,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '720p':
 				$width = 1280; // 動画の横幅
@@ -186,7 +201,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '540p':
 				$width = 960; // 動画の横幅
@@ -196,7 +211,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '360p':
 				$width = 640; // 動画の横幅
@@ -206,7 +221,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '240p':
 				$width = 426; // 動画の横幅
@@ -216,7 +231,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 		}
 
 		// 内部処理
@@ -229,6 +244,7 @@
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
+
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
@@ -236,7 +252,7 @@
 					' -dual_mono_mode main'.
 					' -i '.$receive.
 					$subtitle_ffmpeg_cmd.
-					' -f hls'.
+					' -f hls -preset veryfast'.
 					' -hls_segment_type mpegts'.
 					' -hls_time '.$hlslive_time.
 					' -hls_list_size '.$hlslive_list.
@@ -250,7 +266,7 @@
 					' -movflags +faststart'.
 					' -r '.$fps.' -aspect 16:9'.
 					' stream.m3u8';
-				break;
+			break;
 
 			case 'QSVEnc':
 
@@ -271,7 +287,28 @@
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
 					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff'.
 					' -o stream.m3u8';
-				break;
+			break;
+
+			case 'NVEnc':
+
+				// NVEnc用コマンド
+				$stream_cmd = 'start /min '.$nvencc_path.
+					' -i '.$receive.
+					' --avsync forcecfr'.
+					' --avcuvid'.
+					' -m hls_time:'.$hlslive_time.' --gop-len '.($hlslive_time * 30).
+					' -m hls_list_size:'.$hlslive_list.
+					' -m hls_allow_cache:0'.
+					' -m hls_flags:delete_segments'.
+					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' --output-thread 0'.
+					$subtitle_nvencc_cmd.
+					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
+					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
+					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
+					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff'.
+					' -o stream.m3u8';
+			break;
 		}
 
 		// 前のTSを消してからストリームを開始させる
@@ -283,7 +320,7 @@
 	}
 
 	function stream_file($filepath, $quality, $encoder){
-		global $ffmpeg_path, $qsvencc_path, $segment_folder, $hlsfile_time;
+		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $segment_folder, $hlsfile_time;
 		
 		// 設定
 		
@@ -297,7 +334,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '810p':
 				$width = 1440; // 動画の横幅
@@ -307,7 +344,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '720p':
 				$width = 1280; // 動画の横幅
@@ -317,7 +354,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '540p':
 				$width = 960; // 動画の横幅
@@ -327,7 +364,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '360p':
 				$width = 640; // 動画の横幅
@@ -337,7 +374,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 
 			case '240p':
 				$width = 426; // 動画の横幅
@@ -347,7 +384,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
-				break;
+			break;
 		}
 
 		// 内部処理
@@ -357,6 +394,7 @@
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
+
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
@@ -364,7 +402,7 @@
 					' -dual_mono_mode main'.
 					' -i "'.$filepath.'"'.
 					' -map 0 -ignore_unknown'.
-					' -f hls'.
+					' -f hls -preset veryfast'.
 					' -hls_segment_type mpegts'.
 					' -hls_time '.$hlsfile_time.
 					' -hls_list_size 0'.
@@ -377,7 +415,7 @@
 					' -movflags +faststart'.
 					' -r '.$fps.' -aspect 16:9'.
 					' stream.m3u8';
-				break;
+			break;
 
 			case 'QSVEnc':
 
@@ -397,7 +435,27 @@
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
 					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff'.
 					' -o stream.m3u8';
-				break;
+			break;
+			
+			case 'NVEnc':
+
+				// NVEnc用コマンド
+				$stream_cmd = 'start /min '.$nvencc_path.
+					' -i "'.$filepath.'"'.
+					' --avsync forcecfr'.
+					' --avcuvid'.
+					' -m hls_time:'.$hlsfile_time.' --gop-len '.($hlsfile_time * 30).
+					' -m hls_list_size:0'.
+					' -m hls_allow_cache:0'.
+					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' --output-thread 0'.
+					' --sub-copy asdata'.
+					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
+					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
+					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
+					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff'.
+					' -o stream.m3u8';
+			break;
 		}
 
 		// 前のTSを消してからストリームを開始させる
@@ -406,13 +464,16 @@
 	}
 
 	function stream_stop(){
-		global $ffmpeg_exe, $qsvencc_exe, $tstask_exe, $tstaskcentre_exe, $segment_folder, $TSTask_shutdown;
+		global $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $tstask_exe, $tstaskcentre_exe, $segment_folder, $TSTask_shutdown;
 		
 		// ffmpegを終了する
 		win_exec('taskkill /F /IM '.$ffmpeg_exe);
 		
 		// QSVEncCを終了する
 		win_exec('taskkill /F /IM '.$qsvencc_exe);
+		
+		// NVEncCを終了する
+		win_exec('taskkill /F /IM '.$nvencc_exe);
 		
 		// TSTaskを終了する
 		if ($TSTask_shutdown == 'true'){ // 強制終了

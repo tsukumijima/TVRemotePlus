@@ -44,6 +44,25 @@
 
 	}
 
+	// リセット要求が来たら適当にリセット
+	if (isset($_GET['reset'])){
+
+		// jsonを削除
+		@unlink($infofile);
+		@unlink($historyfile);
+
+		$json = array(
+			'apiname' => 'searchfile',
+			'status' => 'reset',
+		);
+
+		// レスポンス
+		$response = json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+		echo $response;
+
+		exit;
+	}
+
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
@@ -141,8 +160,8 @@
 			$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', $fileinfo[4])); // 取得した番組名の方が正確なので修正
 			$TSfile['data'][$key]['data'] = $md5.'.json'; // ファイル情報jsonのパス
 			$TSfile['data'][$key]['date'] = $fileinfo[0]; // 録画日付
-			$TSfile['data'][$key]['info'] = str_replace('　', ' ', $fileinfo[5]); // 番組情報
-			$TSfile['data'][$key]['channel'] = str_replace('　', ' ', $fileinfo[3]); //チャンネル名
+			$TSfile['data'][$key]['info'] = str_replace('　', ' ', mb_convert_kana($fileinfo[5], 'asv')); // 番組情報
+			$TSfile['data'][$key]['channel'] = str_replace('　', ' ', mb_convert_kana($fileinfo[3], 'asv')); //チャンネル名
 			$TSfile['data'][$key]['start'] = substr($fileinfo[1], 0, strlen($fileinfo[1])-3); // 番組の開始時刻
 			$TSfile['data'][$key]['end'] = end_calc($fileinfo[1], duration_calc($fileinfo[2])); // 番組の終了時刻
 			$TSfile['data'][$key]['duration'] = duration_calc($fileinfo[2]); // ファイルの時間を算出
@@ -180,8 +199,8 @@
 				$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', $fileinfo[4])); // 取得した番組名の方が正確なので修正
 				$TSfile['data'][$key]['data'] = $md5.'.json'; // ファイル情報jsonのパス
 				$TSfile['data'][$key]['date'] = $fileinfo[0]; // 録画日付
-				$TSfile['data'][$key]['info'] = str_replace('　', ' ', $fileinfo[5]); // 番組情報
-				$TSfile['data'][$key]['channel'] = str_replace('　', ' ', $fileinfo[3]); //チャンネル名
+				$TSfile['data'][$key]['info'] = str_replace('　', ' ', mb_convert_kana($fileinfo[5], 'asv')); // 番組情報
+				$TSfile['data'][$key]['channel'] = str_replace('　', ' ', mb_convert_kana($fileinfo[3], 'asv')); //チャンネル名
 				$TSfile['data'][$key]['start'] = substr($fileinfo[1], 0, strlen($fileinfo[1])-3); // 番組の開始時刻
 				$TSfile['data'][$key]['end'] = end_calc($fileinfo[1], duration_calc($fileinfo[2])); // 番組の終了時刻
 				$TSfile['data'][$key]['duration'] = duration_calc($fileinfo[2]); // ファイルの時間を算出

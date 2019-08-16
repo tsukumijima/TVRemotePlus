@@ -46,12 +46,22 @@
       </div>
 
       <div id="search-box">
+<?php		if (empty($TSfile_dir) or !file_exists($TSfile_dir)){ // エラーを吐く ?>
+        <div class="error">
+          録画ファイルのあるフォルダが正しく設定されていません。<br>
+          config.php の「録画ファイルのあるフォルダ」が正しく設定されているかどうか、確認してください。<br>
+        </div>
+<?php		} //括弧終了 ?>
+        <div id="search-info">
+        </div>
+        <div id="search-list">
+        </div>
       </div>
 
       <div id="search-stream-box">
         <div id="search-stream-title"></div>
         <div id="search-stream-info"></div>
-        <form id="setting-form" action="./setting.php" method="post">
+        <form id="setting-form" action="./setting/" method="post">
 
           <input type="hidden" name="state" value="File">
           <input id="stream-filepath" type="hidden" name="filepath" value="">
@@ -66,7 +76,7 @@
             動画の画質：
             <div class="select-wrap">
             	<select name="quality">
-                <option value="<?php echo $quality_default; ?>">デフォルト</option>
+                <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
       	        <option value="1080p">1080p (1920×1080)</option>
       	        <option value="810p">810p (1440×810)</option>
               	<option value="720p">720p (1280×720)</option>
@@ -81,9 +91,10 @@
             エンコード：
             <div class="select-wrap">
          	    <select name="encoder">
-        	      <option value="<?php echo $encoder_default; ?>">デフォルト</option>
+                <option value="<?php echo $encoder_default; ?>">デフォルト (<?php echo $encoder_default; ?>)</option>
             	  <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
             	  <option value="QSVEnc">QSVEnc (ハードウェアエンコーダー)</option>
+                <option value="NVEnc">NVEnc (ハードウェアエンコーダー)</option>
         	    </select>
         	  </div>
         	</div>
