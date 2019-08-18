@@ -170,7 +170,7 @@ Twitter と連携してツイートをキャプチャ付きで投稿する機能
  - **EDCB + EDCB_Material_WebUI**
    - 番組表の取得に利用します（なくても動作しますが、番組情報が取得できません）。
    - EDCB に加え、[EDCB_Material_WebUI](https://github.com/EMWUI/EDCB_Material_WebUI) を導入しておいてください（素の EDCB だけでは動きません）
-   - この他、config.php にて EDCB_Matrial_WebUI の動作しているアドレスを設定する必要があります。
+   - この他、config.php にて EDCB_Matrial_WebUI の API が動作している URL を設定する必要があります。
    - 動作確認済みのアーカイブ（ EDCB_Material_WebUI 同梱済み）は [こちら](https://github.com/tsukumijima/TS-Soft-Built/raw/master/EDCB-190721.zip) よりどうぞ。
 
 ### インストール & セットアップ
