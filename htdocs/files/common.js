@@ -24,14 +24,27 @@ $(function(){
   // サブメニューとサブメニューボタン以外クリックでサブメニューを引っ込める
   $(document).click(function(event) {
     if (!$(event.target).closest('#menubutton').length && !$(event.target).closest('#menu-content').length){
-      $('#menu-content').animate({height: 'toggle'}, 150);
+      $('#menu-content').animate({height: 'hide'}, 150);
       $('#menu-content').removeClass('open');
+    }
+  });
+
+  // パスワード開閉
+  $('.password-box-input').click(function(){
+    $('.password-box-input').toggleClass('fa-eye');
+    $('.password-box-input').toggleClass('fa-eye-slash');
+    var input = $(this).prev("input");
+    // type切替
+    if (input.attr("type") == "password") {
+        input.attr("type", "text");
+    } else {
+        input.attr("type", "password");
     }
   });
 
   // トーストのオプション
   toastr.options = {
-    "closeButton": true,
+    "closeButton": false,
     "debug": false,
     "newestOnTop": false,
     "progressBar": false,

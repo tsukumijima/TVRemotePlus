@@ -268,9 +268,9 @@
 					' stream.m3u8';
 			break;
 
-			case 'QSVEnc':
+			case 'QSVEncC':
 
-				// QSVEnc用コマンド
+				// QSVEncC用コマンド
 				$stream_cmd = 'start /min '.$qsvencc_path.
 					' -i '.$receive.
 					' --avsync forcecfr'.
@@ -289,9 +289,9 @@
 					' -o stream.m3u8';
 			break;
 
-			case 'NVEnc':
+			case 'NVEncC':
 
-				// NVEnc用コマンド
+				// NVEncC用コマンド
 				$stream_cmd = 'start /min '.$nvencc_path.
 					' -i '.$receive.
 					' --avsync forcecfr'.
@@ -417,9 +417,9 @@
 					' stream.m3u8';
 			break;
 
-			case 'QSVEnc':
+			case 'QSVEncC':
 
-				// QSVEnc用コマンド
+				// QSVEncC用コマンド
 				$stream_cmd = 'start /min '.$qsvencc_path.
 					' -i "'.$filepath.'"'.
 					' --avsync forcecfr'.
@@ -437,9 +437,9 @@
 					' -o stream.m3u8';
 			break;
 			
-			case 'NVEnc':
+			case 'NVEncC':
 
-				// NVEnc用コマンド
+				// NVEncC用コマンド
 				$stream_cmd = 'start /min '.$nvencc_path.
 					' -i "'.$filepath.'"'.
 					' --avsync forcecfr'.

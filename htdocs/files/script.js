@@ -62,7 +62,11 @@
 
             // それ以外は諸々問題があるので一旦リロード
             } else {
-              location.reload(true);
+              if (data['status'] == 'failed'){
+                location.reload(true);
+              } else {
+                setTimeout('location.reload(true)', 5000);
+              }
             }
           }
 
@@ -77,7 +81,7 @@
               success: function(data) {
               }
             });
-            toastr.error('ストリーム開始に失敗しました…');
+            toastr.error('ストリームの開始に失敗しました…');
           }
 
           $("#status").text(data['status']);

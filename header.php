@@ -17,7 +17,7 @@
 <?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ ?>
   <title>ファイル再生 - <?php echo $site_title; ?></title>
 <?php } else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ ?>
-  <title>ストリーム開始 - <?php echo $site_title; ?></title>
+  <title>設定 - <?php echo $site_title; ?></title>
   <?php } else { ?>
   <title><?php echo $site_title; ?></title>
 <?php } // 括弧終了 ?>
@@ -39,6 +39,9 @@
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
     echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css">'."\n";
   } // 括弧終了
+  if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
+    echo '  <link rel="stylesheet" type="text/css" href="/files/setting.css">'."\n";
+  } // 括弧終了
 ?>
   <!-- Script -->
   <script async type="text/javascript"  src="/files/pwacompat.min.js"></script>
@@ -46,6 +49,8 @@
   <script type="text/javascript" src="/files/DPlayer.min.js"></script>
   <script type="text/javascript" src="/files/hls.min.js"></script>
   <script type="text/javascript" src="/files/toastr.min.js"></script>
+  <script type="text/javascript" src="/files/push.min.js"></script>
+  <script type="text/javascript" src="/files/js.cookie.min.js"></script>
   <script type="text/javascript" src="/files/common.js"></script>
 <?php
   if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
@@ -54,6 +59,7 @@
   }
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
     echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
+  } else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
   } else if ($ini['state'] == 'ONAir'){
     echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
     echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
@@ -68,7 +74,7 @@
   <script>
     window.addEventListener('load', function() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register("/serviceWorker.js");
+            navigator.serviceWorker.register("/files/serviceworker.js");
         }
     });
   </script>
@@ -76,6 +82,7 @@
 </head>
 
 <body>
+
   <nav id="top">
     <div id="nav-drawer">
       <div id="nav-open">
@@ -85,13 +92,13 @@
     <div id="logo">
       <a href="/"><img src="<?php echo $icon_file; ?>"></a>
     </div>
+<?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
     <div id="menubutton">
       <i class="material-icons">more_vert</i>
     </div>
+<?php } // 括弧終了 ?>
   </nav>
-  <?php
-  if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
-  ?>
+<?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
@@ -105,9 +112,7 @@
       </div>
     </div>
   </nav>
-  <?php
-  } // 括弧終了
-  ?>
+<?php } // 括弧終了 ?>
 
   <nav id="nav-content">
     <div class="nav-logo">
@@ -117,7 +122,7 @@
       <i class="fas fa-home"></i>
       <span class="nav-link-href">ホーム</span>
     </a>
-    <form method="post" name="quickstop" action="./setting/">
+    <form method="post" name="quickstop" action="/setting/">
       <input type="hidden" name="state" value="Offline">
       <a class="nav-link" href="javascript:quickstop.submit()">
         <i class="far fa-stop-circle"></i>
@@ -132,7 +137,7 @@
       <i class="fab fa-twitter"></i>
       <span class="nav-link-href">Twitter ログイン</span>
     </a>
-    <a class="nav-link">
+    <a class="nav-link" href="/setting/">
       <i class="fas fa-cog"></i>
       <span class="nav-link-href">設定</span>
     </a>
@@ -143,6 +148,7 @@
 
       </span>
     </a>
-
   </nav>
   <div id="nav-close"></div>
+  
+  <section id="main">
