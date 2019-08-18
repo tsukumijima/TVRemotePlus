@@ -1,0 +1,354 @@
+
+/* setting.php only */
+
+#top {
+    position: fixed;
+}
+
+#main {
+    min-height: 85.7vh;
+    margin-top: 54px;
+    box-shadow: 0px 0px 6px 3px #e0e0e0;
+}
+
+#setting {
+    padding: 20px 50px 15px 50px;
+    font-size: 120%;
+}
+
+#setting a {
+    display: inline-block;
+    text-decoration: none;
+}
+
+#setting i {
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+div {
+    margin: 0;
+    font-size: 95%;
+}
+
+p {
+    margin: 0;
+    margin-left: 20px;
+    margin-bottom: 12px;
+    margin-right: 20px;
+    font-size: 90%;
+}
+
+@media screen and (max-width: 500px){
+    #setting {
+        padding: 15px 10px 10px 10px;
+        font-size: 120%;
+    }
+}
+
+h2 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #272727;
+    font-size: 24px;
+    border-bottom: solid 3px #272727;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    position: relative;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+h2:before {
+    content:  '';
+    width: 85%;
+    height: 3px;
+    background-color: #4ECDC4;
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+}
+
+h2 div {
+    margin: 0;
+    margin-left: auto;
+}
+
+h3 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #272727;
+    font-size: 20px;
+    border-bottom: solid 3px #272727;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    position: relative;
+    font-weight: bold;
+    line-height: 0.6;
+}
+
+h3:before {
+    content:  '';
+    width: 85%;
+    height: 3px;
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+}
+
+h3.blue:before {
+    background-color: #007cff;
+}
+
+h3.red:before {
+    background-color: #ca0040;
+}
+
+h3.green {
+    line-height: normal;
+}
+
+h3.green:before {
+    background-color: #4bd8a2;
+}
+
+h4 {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    color: #272727;
+    font-size: 17px;
+    border-bottom: solid 3px #272727;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    position: relative;
+    font-weight: bold;
+}
+
+h4:before {
+    content:  '';
+    width: 85%;
+    height: 3px;
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+}
+
+#setting h3 div {
+    margin: 0;
+    margin-left: auto;
+}
+
+.setting-form-wrap {
+    margin-bottom: 30px;
+}
+
+.setting-form {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    margin-bottom: 12px;
+    margin-right: 20px;
+}
+
+.setting-form span {
+    display: inline-block;
+    width: 90%;
+    margin-right: auto;
+}
+
+.setting-content {
+    margin-right: auto;
+    width: 66%;
+}
+
+.large {
+    width: 85%;
+} 
+
+.setting-form p {
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    line-height: 1.4;
+}
+
+.select-wrap {
+    font-size: 14px;
+    width: 30%;
+}
+
+select {
+    width: 100%;
+}
+
+.download {
+    display: inline-block;
+    font-size: 250%;
+    color: #4bd8a2;
+    cursor: pointer;
+    transition: ease 0.1s;
+}
+
+.download i {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+.download:hover {
+    color: #41b98b;
+}
+
+.text-box {
+    display: inline-block;
+    width: 30%;
+    outline: none;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+    background: none transparent;
+    vertical-align: middle;
+    font-size: 16px;
+    color: inherit;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 35px;
+    padding: 6px 12px;
+    border: 1.5px solid #dddddd;
+    box-sizing: border-box;
+    color: #333333;
+    border-radius: 3px;
+}
+
+.password-box-wrap {
+    position: relative;
+    display: inline-block;
+    width: 30%;
+}
+
+.password-box-input {
+    z-index: 1;
+    position: absolute;
+    right: 15px;
+    top: 0;
+    height: 35px;
+    margin: 0 !important;
+    line-height: 39px;
+    color: #7F878C;
+    cursor: pointer;
+}
+
+.password-box {
+    width: 100%;
+    outline: none;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+    background: none transparent;
+    vertical-align: middle;
+    font-size: 16px;
+    color: inherit;
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 35px;
+    padding: 6px 12px;
+    border: 1.5px solid #dddddd;
+    box-sizing: border-box;
+    color: #333333;
+    border-radius: 3px;
+}
+
+@media screen and (max-width: 768px){
+    .setting-form span {
+        width: 75%;
+    }
+    input[type="text"], input[type="number"], input[type="password"] {
+        width: 100%;
+        margin-left: 0px;
+    }
+    .setting-input {
+        flex-direction: column;
+        align-items: start;
+    }
+    .select-wrap {
+        width: 100%;
+        margin-left: 0px;
+    }
+    .setting-content {
+        width: 100%;
+    }
+    .password-box-wrap {
+        width: 100%;
+        margin-left: 0px;
+    }
+    .setting-form p {
+        margin-bottom: 10px;
+    }
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 56px;
+    height: 28px;
+}
+
+.toggle-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.toggle-label {
+    width: 56px;
+    height: 28px;
+    background: #ccc;
+    position: relative;
+    display: inline-block;
+    border-radius: 46px;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.toggle-label:after {
+    content: '';
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: #4bd8a2;
+}
+
+.toggle-input:checked + .toggle-label:after{
+    left: 28px;
+}
+

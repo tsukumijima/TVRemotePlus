@@ -1,17 +1,20 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../module.php');
+  require_once ('../module.php');
+  
+  // ヘッダー読み込み
+  require_once ('../header.php');
+  
+  echo '    <pre id="debug">';
 
 	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
-
-	// ヘッダー読み込み
-	require_once ('../header.php');
+  $ini = json_decode(file_get_contents($inifile), true);
+  
+  echo '</pre>';
 
 ?>
 
-  <section id="main">
     <div id="search-wrap">
       <div id="search-find-box">
       <div id="search-find-wrap">
@@ -61,7 +64,7 @@
       <div id="search-stream-box">
         <div id="search-stream-title"></div>
         <div id="search-stream-info"></div>
-        <form id="setting-form" action="./setting/" method="post">
+        <form id="setting-form" action="/setting/" method="post">
 
           <input type="hidden" name="state" value="File">
           <input id="stream-filepath" type="hidden" name="filepath" value="">
@@ -93,8 +96,8 @@
          	    <select name="encoder">
                 <option value="<?php echo $encoder_default; ?>">デフォルト (<?php echo $encoder_default; ?>)</option>
             	  <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
-            	  <option value="QSVEnc">QSVEnc (ハードウェアエンコーダー)</option>
-                <option value="NVEnc">NVEnc (ハードウェアエンコーダー)</option>
+            	  <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
+                <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
         	    </select>
         	  </div>
         	</div>

@@ -8,7 +8,7 @@ section {
 #search-wrap {
     display: flex;
     box-sizing: border-box;
-    min-height: 86vh;
+    min-height: 85.7vh;
 }
 
 #search-find-box {
@@ -112,6 +112,7 @@ section {
 }
 
 #search-info {
+    padding-bottom: 15px;
     font-size: 105%;
     font-weight: bold;
 }

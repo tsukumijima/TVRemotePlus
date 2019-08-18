@@ -155,7 +155,7 @@ $(function(){
         $('#name-down').removeClass('search-find-selected');
         $('#play-history').removeClass('search-find-selected');
         sortFileinfo('fileinfo', 1);
-        toastr.info('リストを更新しました。');
+        toastr.success('リストを更新しました。');
       }
     });
   });
@@ -170,7 +170,7 @@ $(function(){
       cache: false,
       success: function(data) {
         sortFileinfo('fileinfo', 1);
-        toastr.info('リストをリセットしました。');
+        toastr.success('リストをリセットしました。');
       }
     });
   });

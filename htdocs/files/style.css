@@ -29,6 +29,22 @@ input[type="button"]::focus {
     outline-offset: -2px;
 }
 
+pre {
+    margin: 0;
+    padding: 20px 50px;
+}
+
+pre:empty {
+    padding: 0;
+}
+
+@media screen and (max-width: 500px){
+    pre {
+        padding: 15px 10px;
+        overflow-x: scroll;
+    }
+}
+
 .mark {
     position: relative;
     border: 1px solid #C51162;
@@ -94,7 +110,7 @@ select:-moz-focusring {
     content: "\f078";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-    line-height: 43px;
+    line-height: 39px;
     color: #7F878C;
     pointer-events: none;
 }
@@ -131,6 +147,12 @@ img.emoji {
   width: 1em;
   margin: 0 .05em 0 .1em;
   vertical-align: -0.1em;
+}
+
+#toast-container>:hover {
+    -moz-box-shadow: 0 0 0px #000 !important;
+    -webkit-box-shadow: 0 0 0px #000 !important;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7) !important;
 }
 
 section {
@@ -1205,26 +1227,6 @@ td {
     }
 }
 
-#setting-title {
-    font-size: 90%;  
-}
-
-#setting-subtitle {
-    margin-left: 3px;
-    color: #FF5000;
-    display: inline-block;    
-}
-
-#setting {
-    padding-top: 5px;
-    font-size: 120%;
-}
-
-#setting a {
-    display: inline-block;
-    text-decoration: none;
-}
-
 .form {
     margin-top: 15px;
     margin-bottom: 15px;
@@ -1238,7 +1240,8 @@ td {
 }
 
 #button-box i {
-    margin-right: 10px;
+    margin-left: 0px !important;
+    margin-right: 10px !important;
 }
 
 .bluebutton {

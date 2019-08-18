@@ -1,4 +1,6 @@
 Options -Indexes
+ErrorDocument 400 /files/error/400.php
+ErrorDocument 401 /files/error/401.php
 ErrorDocument 403 /files/error/403.php
 ErrorDocument 404 /files/error/404.php
 ErrorDocument 500 /files/error/500.php
@@ -16,4 +18,6 @@ RewriteRule ^(.*)/$ $1.php
 Header add Pragma "no-cache"
 Header set Cache-Control no-cache
 </Files>
+
+
 

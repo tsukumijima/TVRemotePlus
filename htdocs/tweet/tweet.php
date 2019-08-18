@@ -80,7 +80,7 @@
 				if(is_uploaded_file($_FILES['picture']['tmp_name'])){ //うｐしたはずの画像が存在するなら
 
 					// アップロード処理
-					$picture = 'upload/Capture_'.date('Ymd-his').'.jpg'; //うｐするファイルパス
+					$picture = $tweet_upload.'/Capture_'.date('Ymd-his').'.jpg'; //うｐするファイルパス
 					
 					if (move_uploaded_file($_FILES['picture']['tmp_name'], $picture)){
 						// 一旦アップロードディレクトリに保存してTwitterに画像をアップロード

@@ -17,14 +17,14 @@ http_response_code(403);
   <meta charset="UTF-8">
   <title>403 Forbidden</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="refresh" content="3; URL='../../'" />
+  <meta http-equiv="refresh" content="3; URL='/'" />
 </head>
 <body>
   <h2>403 Forbidden</h2>
   <p>
     アクセスが禁止されています。<br>
     3秒後に自動でトップページに遷移します。<br>
-    遷移しない場合、<a href="../../">こちら</a>をクリックしてください。<br>
+    遷移しない場合、<a href="/">こちら</a>をクリックしてください。<br>
   </p>
 </body>
 </html>
