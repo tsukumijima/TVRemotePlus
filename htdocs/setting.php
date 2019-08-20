@@ -183,7 +183,7 @@
               <div class="setting-content large">
                 <span>https アクセス用の自己署名証明書をダウンロード</span>
                 <p>
-                  PWA(Progressive Web Apps) 機能を利用する場合は、https でのアクセスが必須です<br>
+                  PWA (Progressive Web Apps) 機能を利用する場合は、https でのアクセスが必須です<br>
                   そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
                   右(もしくは下)のダウンロードボタンから、server.crt をダウンロードしてください<br>
                   なお、「この種類のファイルはコンピュータに損害を与える可能性が～」とか出てくる場合がありますが、安全なので「保存」をクリックします<br>
@@ -370,7 +370,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>ライブ再生時にデフォルトで字幕をストリームに含めるか</span>
+                <span>ライブ再生時にデフォルトで字幕をストリームに含める</span>
                 <p>
                   この設定をオンにすると、ライブ再生時に字幕を表示出来るようになります<br>
                   ただし、まれにエラーを吐いてストリームが開始出来ない場合があったり、
@@ -435,7 +435,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>配信休止中・配信準備中時の動画の音楽を消すかどうか</span>
+                <span>配信休止中・配信準備中時の動画の音楽を消す</span>
                 <p>
                   毎回音楽が流れて鬱陶しい場合はオンにしてください<br>
                 </p>
@@ -458,6 +458,23 @@
                 </p>
               </div>
               <input class="text-box" name="history_keep" type="number" min="1" max="100"  value="<?php echo $history_keep; ?>" />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>TVRemotePlus のアップデートを確認する</span>
+                <p>
+                鬱陶しい場合・TVRemotePlusの読み込みが遅い場合はオフにしてください<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+<?php	if ($update_confirm == 'true'){ ?>
+                <input id="update_confirm" name="update_confirm" class="toggle-input" type="checkbox" checked />
+<?php	} else { ?>
+                <input id="update_confirm" name="update_confirm" class="toggle-input" type="checkbox" />
+<?php	} // 括弧終了 ?>
+                <label for="update_confirm" class="toggle-label"></label>
+              </div>
             </div>
 
             <h4><i class="fas fa-comment-alt"></i>ニコニコ実況</h4>
@@ -513,7 +530,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>画像付きツイートを投稿した際に一度アップロードした画像を削除するかどうか</span>
+                <span>画像付きツイートを投稿した際に一度アップロードした画像を削除する</span>
                 <p>
                   削除する場合はオン、削除しない場合はオフです<br>
                   アップロードした画像を削除しない場合、画像付きツイートをした際の画像は (TVRemotePlusをインストールしたフォルダ)\htdocs\tweet\upload\ に保存されています<br>
@@ -555,7 +572,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>Basic 認証を利用するかどうか</span>
+                <span>Basic 認証を利用する</span>
                 <p>
                   利用する場合はオン、利用しない場合はオフです<br>
                   おまけ機能みたいなものなので、一部の機能が動かないこともあるかもしれません<br>
@@ -600,7 +617,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>ストリーム開始設定後の画面を表示せずに再生画面へリダイレクトするか</span>
+                <span>ストリーム開始設定後の画面を表示せずに再生画面へリダイレクトする</span>
                 <p>
                   リダイレクトする場合はオン、リダイレクトしない場合はオフです<br>
                   ストリーム開始が失敗する時などにオフに設定してデバッグするための機能です、基本的にオンで良いと思います<br>
@@ -667,7 +684,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>TSTask を強制終了させるかどうか</span>
+                <span>TSTask を強制終了させる</span>
                 <p>
                   一部の環境にて TSTask がうまく終了しない場合のみオンにしてください<br>
                   強制終了させると TSTask・TSTaskCentre の動作がおかしくなる場合があるので、できるだけオフにしておく事をおすすめします<br>

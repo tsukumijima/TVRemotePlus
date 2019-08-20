@@ -19,7 +19,7 @@ $(function(){
   });
 
   $('.redbutton').click(function(){
-    toastr.success('環境設定を保存しません(実装中です)。');
+    toastr.success('実装中です…');
   });
 
 });
