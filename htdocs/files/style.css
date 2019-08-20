@@ -155,6 +155,16 @@ img.emoji {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.7) !important;
 }
 
+.toast-message {
+    font-size: 16px;
+}
+
+@media (max-width: 480px) and (min-width: 241px){
+    #toast-container>div {
+        padding: 15px 15px 15px 50px;
+    }
+}
+
 section {
     max-width: 1250px;
     height: 100%;
@@ -279,6 +289,10 @@ td {
 
 .comment-file {
     cursor: pointer;
+}
+
+.comment-file:hover {
+    color: #007cff;
 }
 
 .comment {
@@ -738,6 +752,21 @@ td {
     margin-left: 10px;
     text-align: center;
     display: block;
+}
+
+#tweet-etc div {
+    display: inline-block;
+}
+
+#tweet-etc div[data-balloon]:after {
+    background: rgba(29, 161, 242, 0.8) !important;
+    transition: all 0.15s ease-out 0.15s;
+}
+
+@media screen and (max-width: 1024px){
+    #tweet-etc div[data-balloon]:after {
+        display: none;
+    }
 }
 
 #tweet-picture {

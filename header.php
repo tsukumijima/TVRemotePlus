@@ -60,6 +60,7 @@
   if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
     echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
   } else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
+    echo '  <script type="text/javascript" src="/files/setting.js"></script>'."\n";
   } else if ($ini['state'] == 'ONAir'){
     echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
     echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
@@ -74,7 +75,7 @@
   <script>
     window.addEventListener('load', function() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register("/files/serviceworker.js");
+            navigator.serviceWorker.register("/serviceworker.js");
         }
     });
   </script>

@@ -1,7 +1,7 @@
 <?php 
 
 	// バージョン
-	$version = 'v1.0.0-rc13';
+	$version = 'v1.0.0-rc14';
 
 	// 設定読み込み
 	require_once (dirname(__FILE__).'/config.php');

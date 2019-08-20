@@ -89,9 +89,15 @@
               <textarea id="tweet" name="tweet" placeholder="ツイート (Ctrl+Enterで送信)"></textarea>
             </div>
             <div id="tweet-etc">
-              <img id="tweet-picture" src="files/picture.svg">
-              <img id="tweet-picture-comment" src="files/comment.svg">
-              <img id="tweet-reset" src="files/reset.svg">
+              <div data-balloon="キャプチャ (Alt+1)" data-balloon-pos="up">
+                <img id="tweet-picture" src="files/picture.svg">
+              </div>
+              <div data-balloon="コメント付きでキャプチャ (Alt+2)" data-balloon-pos="up">
+                <img id="tweet-picture-comment" src="files/comment.svg">
+              </div>
+              <div data-balloon="リセット (Alt+3)" data-balloon-pos="up">
+                <img id="tweet-reset" src="files/reset.svg">
+              </div>
               <span id="tweet-num">140</span>
             </div>
             <button id="tweet-submit" class="disabled" disabled>ツイート</button>
@@ -348,7 +354,7 @@
           <div id="broadcast-stream-box">
             <div id="broadcast-stream-title"></div>
             <div id="broadcast-stream-info"></div>
-            <form id="setting-form" action="./setting/" method="post">
+            <form id="setting-form" action="/setting/" method="post">
               <input type="hidden" name="state" value="ONAir">
               <input id="broadcast-stream-channel" type="hidden" name="channel" value="">
 
