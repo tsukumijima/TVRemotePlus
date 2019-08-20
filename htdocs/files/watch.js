@@ -262,6 +262,11 @@ $(function(){
     $('#nav-close').toggleClass('open');
     $('#search-stream-box').toggleClass('open');
     $('html').toggleClass('open');
+    // ワンクリックでストリーム開始する場合
+    if (settings['onclick_stream']){
+      $('#search-stream-box').hide();
+      $('.bluebutton').click();
+    }
   });
 
   // キャンセル

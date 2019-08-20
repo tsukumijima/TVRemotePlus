@@ -63,7 +63,6 @@
 				while (count($history['data']) >= $history_keep) {
 					unset($history['data'][$i]);
 					$history['data'] = array_values($history['data']); // インデックスを詰める
-          var_dump($history);
 					$history_count = count($history['data']);
 					$i++;
 				}
@@ -172,7 +171,8 @@
           </h2>
 
           <p>
-            ※この設定画面は今の所モックアップです。保存しても反映されません。
+            ※環境設定は今の所モックアップです。保存しても反映されません。<br>
+            個人設定は一応反映出来るようにしました<br>
           </p>
 
           <div class="setting-form-wrap">
@@ -223,21 +223,31 @@
               </div>
             </h3>
 
+            <p>個人設定はブラウザ・端末ごとに反映されます。</p>
+
             <h4><i class="fas fa-eye"></i>表示</h4>
 
             <div class="setting-form">
               <span>Twitter 投稿フォーム</span>
               <div class="toggle-switch">
-                <input id="toggle1" class="toggle-input" type='checkbox' checked />
-                <label for="toggle1" class="toggle-label"></label>
+<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['twitter_show'] == false){ ?>
+                <input id="twitter_show" class="toggle-input" type="checkbox" />
+<?php	} else { ?>
+                <input id="twitter_show" class="toggle-input" type="checkbox" checked />
+<?php	} // 括弧終了 ?>
+                <label for="twitter_show" class="toggle-label"></label>
               </div>
             </div>
 
             <div class="setting-form">
               <span>コメント一覧</span>
               <div class="toggle-switch">
-                <input id="toggle2" class="toggle-input" type='checkbox' checked />
-                <label for="toggle2" class="toggle-label"></label>
+<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_show'] == false){ ?>
+                <input id="comment_show" class="toggle-input" type="checkbox" />
+<?php	} else { ?>
+                <input id="comment_show" class="toggle-input" type="checkbox" checked />
+<?php	} // 括弧終了 ?>
+                <label for="comment_show" class="toggle-label"></label>
               </div>
             </div>
 
@@ -246,8 +256,12 @@
             <div class="setting-form">
               <span>デフォルト設定を使いワンクリックでストリームを開始する</span>
               <div class="toggle-switch">
-                <input id="toggle3" class="toggle-input" type='checkbox' />
-                <label for="toggle3" class="toggle-label"></label>
+<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['onclick_stream'] == true){ ?>
+                <input id="onclick_stream" class="toggle-input" type="checkbox" checked />
+<?php	} else { ?>
+                <input id="onclick_stream" class="toggle-input" type="checkbox" />
+<?php	} // 括弧終了 ?>
+                <label for="onclick_stream" class="toggle-label"></label>
               </div>
             </div>
 
@@ -263,6 +277,8 @@
                 </button>
               </div>
             </h3>
+
+            <p>環境設定は全てのブラウザ・端末に反映されます。</p>
 
             <h4><i class="fas fa-toolbox"></i>デフォルト</h4>
 
@@ -365,9 +381,9 @@
               </div>
               <div class="toggle-switch">
 <?php	if ($subtitle_default == 'true'){ ?>
-                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type='checkbox' checked />
+                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" checked />
 <?php	} else { ?>
-                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type='checkbox' />
+                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" />
 <?php	} // 括弧終了 ?>
                 <label for="subtitle_default" class="toggle-label"></label>
               </div>
@@ -426,9 +442,9 @@
               </div>
               <div class="toggle-switch">
 <?php	if ($silent == 'true'){ ?>
-                <input id="silent" name="silent" class="toggle-input" type='checkbox' checked />
+                <input id="silent" name="silent" class="toggle-input" type="checkbox" checked />
 <?php	} else { ?>
-                <input id="silent" name="silent" class="toggle-input" type='checkbox' />
+                <input id="silent" name="silent" class="toggle-input" type="checkbox" />
 <?php	} // 括弧終了 ?>
                 <label for="silent" class="toggle-label"></label>
               </div>
@@ -505,9 +521,9 @@
               </div>
               <div class="toggle-switch">
 <?php	if ($tweet_delete  == 'true'){ ?>
-                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type='checkbox' checked />
+                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type="checkbox" checked />
 <?php	} else { ?>
-                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type='checkbox' />
+                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type="checkbox" />
 <?php	} // 括弧終了 ?>
                 <label for="tweet_delete" class="toggle-label"></label>
               </div>
@@ -547,9 +563,9 @@
               </div>
               <div class="toggle-switch">
 <?php	if ($basicauth == 'true'){ ?>
-                <input id="basicauth" name="basicauth" class="toggle-input" type='checkbox' checked />
+                <input id="basicauth" name="basicauth" class="toggle-input" type="checkbox" checked />
 <?php	} else { ?>
-                <input id="basicauth" name="basicauth" class="toggle-input" type='checkbox' />
+                <input id="basicauth" name="basicauth" class="toggle-input" type="checkbox" />
 <?php	} // 括弧終了 ?>
                 <label for="basicauth" class="toggle-label"></label>
               </div>
@@ -592,9 +608,9 @@
               </div>
               <div class="toggle-switch">
 <?php	if ($setting_redirect == 'true'){ ?>
-                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type='checkbox' checked />
+                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type="checkbox" checked />
 <?php	} else { ?>
-                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type='checkbox' />
+                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type="checkbox" />
 <?php	} // 括弧終了 ?>
                 <label for="setting_redirect" class="toggle-label"></label>
               </div>
@@ -659,9 +675,9 @@
               </div>
               <div class="toggle-switch">
 <?php	if ($TSTask_shutdown == 'true'){ ?>
-                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type='checkbox' checked />
+                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type="checkbox" checked />
 <?php	} else { ?>
-                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type='checkbox' />
+                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type="checkbox" />
 <?php	} // 括弧終了 ?>
                 <label for="TSTask_shutdown" class="toggle-label"></label>
               </div>

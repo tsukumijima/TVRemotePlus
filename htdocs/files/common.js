@@ -42,6 +42,12 @@ $(function(){
     }
   });
 
+  // 個人設定読み込み
+  settings = {twitter_show:true, comment_show:true, onclick_stream:false};
+  if (Cookies.get('settings') != undefined){
+    settings = JSON.parse(Cookies.get('settings'));
+  }
+
   // トーストのオプション
   toastr.options = {
     "closeButton": false,
