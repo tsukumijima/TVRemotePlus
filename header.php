@@ -31,6 +31,7 @@
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" href="/files/DPlayer.min.css">
   <link rel="stylesheet" type="text/css" href="/files/toastr.min.css">
+  <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
   <link rel="stylesheet" type="text/css" href="/files/style.css">
 <?php
   if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
@@ -142,8 +143,23 @@
       <i class="fas fa-cog"></i>
       <span class="nav-link-href">設定</span>
     </a>
-    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">
-      <i class="fas fa-history"></i>
+<?php
+	if ($update_confirm == 'true'){
+		$update = file_get_contents('https://raw.githubusercontent.com/tsukumijima/TVRemotePlus/master/data/version.txt');
+		// 取得したバージョンと現在のバージョンが違う場合のみ
+		if ($update != $version){
+			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank" '.
+						'aria-label="アップデートがあります ('.$update.')" data-balloon-pos="up">';
+			echo '      <i class="fas fa-history" style="color: #e8004a;"></i>';
+		} else {
+			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">';
+			echo '      <i class="fas fa-history"></i>';
+		}
+	} else {
+		echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">';
+		echo '      <i class="fas fa-history"></i>';
+	}
+?>
       <span class="nav-link-href">
         <?php echo $version; ?>
 
