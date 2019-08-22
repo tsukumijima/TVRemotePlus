@@ -205,7 +205,7 @@
                   https アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も https でアクセスする事をお勧めします<br>
                 </p>
               </div>
-              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:8100/">
+              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo ($http_port + 100); ?>/">
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -631,6 +631,19 @@
 <?php	} // 括弧終了 ?>
                 <label for="setting_redirect" class="toggle-label"></label>
               </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>TVRemotePlus の HTTP 用ポート番号</span>
+                <p>
+                  インストール時にポートを変更した場合のみ変更してください (デフォルトは 8000 です・事情のない限り変更はおすすめしません)<br>
+                  この設定は TVRemotePlus の内部でのみ使用されます<br>
+                  この設定を変更しても、Apache Web サーバー側の設定は変更されません<br>
+                  HTTPS アクセス用ポートは ここで設定したポート + 100 になります (デフォルトは 8100 です)<br>
+                </p>
+              </div>
+              <input class="text-box" name="http_port" type="number" min="1" max="40000"  value="<?php echo $http_port; ?>" />
             </div>
 
             <div class="setting-form setting-input">

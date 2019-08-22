@@ -130,11 +130,11 @@ section {
     display: flex;
     margin-bottom: 16px;
     cursor: pointer;
+    transition: 0.15s ease-in-out;
 }
 
 .search-file-box:hover {
     background-color: #F5F5F5;
-    transition: 0.15s ease-in-out;
 }
 
 .search-file-thumb {

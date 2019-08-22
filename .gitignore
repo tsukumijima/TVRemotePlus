@@ -20,6 +20,8 @@
 /data/nico.cookie
 /data/setting.json
 /data/tweet_time.dat
+/cast/cast.json
+/cast/scan.json
 /htdocs/server.crt
 /htdocs/files/info/*
 /htdocs/files/thumb/*

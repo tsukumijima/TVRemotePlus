@@ -549,8 +549,10 @@ td {
 .menu-link {
     padding: 0px 16px;
     height: 48px;
-    line-height: 48px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    user-select: none;
 }
 
 .menu-link:hover {
@@ -1090,6 +1092,7 @@ td {
 .broadcast-wrap {
     padding-top: 10px;
     cursor: pointer;
+    transition: 0.15s ease-in-out;
 }
 
 .broadcast {
@@ -1111,7 +1114,6 @@ td {
 
 .broadcast-wrap:hover {
     background-color: #F5F5F5;
-    transition: 0.15s ease-in-out;
 }
 
 .broadcast-img {
@@ -1248,6 +1250,98 @@ td {
     position: absolute !important;
     right: 0px !important;
     bottom: 0px !important;
+}
+
+#chromecast-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 400;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
+    visibility: hidden;
+    opacity: 0;
+    width: 95%;
+    max-width: 500px;
+    height: 230px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    font-size: 110%;
+}
+
+#chromecast-box.open {
+    transition-delay: 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+#chromecast-title-box {
+    display: inline-flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 95%;
+    margin-bottom: 10px;
+}
+
+#chromecast-title {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#chromecast-device-box {
+    height: 110px;
+    overflow-y: scroll;
+}
+
+#chromecast-device-box i {
+    font-size: 130%;
+}
+
+#chromecast-device-box::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: #FFFFFF;
+}
+#chromecast-device-box::-webkit-scrollbar-corner {
+    background: #FFFFFF;
+}
+#chromecast-device-box::-webkit-scrollbar-thumb {
+    background: #B2BEC2;
+}
+
+.chromecast-device {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 15px 20px 10px 20px;
+    border-bottom: 1px solid #999999;
+    transition: 0.15s ease-in-out;
+    font-size: 120%;
+    cursor: pointer;
+}
+
+.chromecast-device:hover {
+    background-color: #F5F5F5;
+}
+
+.chromecast-name-box {
+    display: flex;
+    flex-direction: column;
+    margin-left: 25px;
+}
+
+.chromecast-name {
+    margin-bottom: 5px;
+    line-height: 100%;
+}
+
+.chromecast-type {
+    font-size: 85%;
+    color: rgba(0,0,0,.54);
 }
 
 @media screen and (max-width : 500px){

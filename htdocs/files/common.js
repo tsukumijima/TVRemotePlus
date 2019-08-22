@@ -12,6 +12,7 @@ $(function(){
     $('#nav-content').removeClass('open');
     $('#broadcast-stream-box').removeClass('open');
     $('#search-stream-box').removeClass('open');
+    $('#chromecast-box').removeClass('open');
     $('html').removeClass('open');
   });
 

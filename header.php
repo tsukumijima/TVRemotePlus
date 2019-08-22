@@ -27,7 +27,7 @@
   <!-- Style -->
   <link rel="manifest" href="/manifest.json">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.10.1/css/all.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" href="/files/DPlayer.min.css">
   <link rel="stylesheet" type="text/css" href="/files/toastr.min.css">
@@ -94,12 +94,30 @@
     <div id="logo">
       <a href="/"><img src="<?php echo $icon_file; ?>"></a>
     </div>
-<?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
+<?php if (strpos($backtrace[0]["file"], 'index.php') !== false or strpos($backtrace[0]["file"], 'watch.php') !== false){ // index.php・watch.phpのみ ?>
     <div id="menubutton">
       <i class="material-icons">more_vert</i>
     </div>
 <?php } // 括弧終了 ?>
   </nav>
+<?php if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
+
+  <nav id="menu-content">
+    <div id="menu-link-wrap">
+      <div id="cast-toggle" class="menu-link" aria-label="ChromeCastを使ってテレビで再生できます" data-balloon-pos="up">
+        <svg style="width: 21px;" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="chromecast" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-chromecast fa-w-16">
+          <path fill="currentColor" d="M447.83 64H64a42.72 42.72 0 0 0-42.72 42.72v63.92H64v-63.92h383.83v298.56H298.64V448H448a42.72 42.72 0 0 0 42.72-42.72V106.72A42.72 42.72 0 0 0 448 64zM21.28 383.58v63.92h63.91a63.91 63.91 0 0 0-63.91-63.92zm0-85.28V341a106.63 106.63 0 0 1 106.64 106.66v.34h42.72a149.19 149.19 0 0 0-149-149.36h-.33zm0-85.27v42.72c106-.1 192 85.75 192.08 191.75v.5h42.72c-.46-129.46-105.34-234.27-234.8-234.64z" class="">
+          </path>
+        </svg>
+        <span class="menu-link-href">キャストを開始</span>
+      </div>
+      <div id="cast-scan" class="menu-link" aria-label="キャストするChromeCastをスキャンします" data-balloon-pos="up">
+        <i class="fas fa-sync-alt"></i>
+        <span class="menu-link-href">デバイスをスキャン</span>
+      </div>
+    </div>
+  </nav>
+<?php } // 括弧終了 ?>
 <?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
 
   <nav id="menu-content">
