@@ -4,7 +4,11 @@
 	require_once (dirname(__FILE__).'/config.php');
 
 	// BonDriverのチャンネルを取得
-	list($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, $sid, $sid_T, $sid_S, $sid_CS, $tsid, $tsid_T, $tsid_S, $tsid_CS) = initBonChannel($BonDriver_dir);
+	list($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+						 $sid, $sid_T, $sid_S, $sid_CS, // SID
+						 $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+						 $tsid, $tsid_T, $tsid_S, $tsid_CS) //TSID
+						 = initBonChannel($BonDriver_dir);
 	
 	// 各種モジュール
 
@@ -187,6 +191,8 @@
 						$ch_T[strval($value[3])] = mb_convert_kana($value[0], 'asv');
 						// サービスID(SID)
 						$sid_T[strval($value[3])] = mb_convert_kana($value[5], 'asv');
+						// ネットワークID(NID・ONID)
+						$onid_T[strval($value[3])] = mb_convert_kana($value[6], 'asv');
 						// トランスポートストリームID(TSID)
 						$tsid_T[strval($value[3])] = mb_convert_kana($value[7], 'asv');
 					// 衝突した場合
@@ -195,6 +201,8 @@
 						$ch_T[strval($value[3] + 10)] = mb_convert_kana($value[0], 'asv');
 						// サービスID(SID)
 						$sid_T[strval($value[3] + 10)] = mb_convert_kana($value[5], 'asv');
+						// ネットワークID(NID・ONID)
+						$onid_T[strval($value[3] + 10)] = mb_convert_kana($value[6], 'asv');
 						// トランスポートストリームID(TSID)
 						$tsid_T[strval($value[3] + 10)] = mb_convert_kana($value[7], 'asv');
 					}
@@ -203,6 +211,7 @@
 		} else {
 			$ch_T = array();
 			$sid_T = array();
+			$onid_T = array();
 			$tsid_T = array();
 		}
 
@@ -268,6 +277,8 @@
 					$ch_S[strval($value[5])] = mb_convert_kana($value[0], 'asv');
 					// サービスID(SID)
 					$sid_S[strval($value[5])] = mb_convert_kana($value[5], 'asv');
+					// ネットワークID(NID・ONID)
+					$onid_S[strval($value[5])] = mb_convert_kana($value[6], 'asv');
 					// トランスポートストリームID(TSID)
 					$tsid_S[strval($value[5])] = mb_convert_kana($value[7], 'asv');
 				}
@@ -285,6 +296,8 @@
 						$ch_CS[strval($value[5])] = mb_convert_kana($value[0], 'asv');
 						// サービスID(SID)
 						$sid_CS[strval($value[5])] = mb_convert_kana($value[5], 'asv');
+						// ネットワークID(NID・ONID)
+						$onid_CS[strval($value[5])] = mb_convert_kana($value[6], 'asv');
 						// トランスポートストリームID(TSID)
 						$tsid_CS[strval($value[5])] = mb_convert_kana($value[7], 'asv');
 					// QVCのみ
@@ -293,6 +306,8 @@
 						$ch_CS['161cs'] = mb_convert_kana($value[0], 'asv');
 						// サービスID(SID)
 						$sid_CS['161cs'] = mb_convert_kana($value[5], 'asv');
+						// ネットワークID(NID・ONID)
+						$onid_CS['161cs'] = mb_convert_kana($value[6], 'asv');
 						// トランスポートストリームID(TSID)
 						$tsid_CS['161cs'] = mb_convert_kana($value[7], 'asv');
 					}
@@ -304,6 +319,8 @@
 			$ch_CS = array();
 			$sid_S = array();
 			$sid_CS = array();
+			$onid_S = array();
+			$onid_CS = array();
 			$tsid_S = array();
 			$tsid_CS = array();
 		}
@@ -311,9 +328,43 @@
 		// 合体させる
 		$ch = $ch_T + $ch_S + $ch_CS;
 		$sid = $sid_T + $sid_S + $sid_CS;
+		$onid = $onid_T + $onid_S + $onid_CS;
 		$tsid = $tsid_T + $tsid_S + $tsid_CS;
 
-		return array($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, $sid, $sid_T, $sid_S, $sid_CS, $tsid, $tsid_T, $tsid_S, $tsid_CS);
+		return array($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+									 $sid, $sid_T, $sid_S, $sid_CS, // ONID(NID)
+									 $onid, $onid_T, $onid_S, $onid_CS, // SID
+									 $tsid, $tsid_T, $tsid_S, $tsid_CS); // TSID
 	}
 
+	// ニコニコ実況IDをチャンネル名から取得する関数
+	function getJKchannel($channel){
+		global $base_dir;
+
+		// ch_sid.txtを改行ごとに区切って配列にする
+		$ch_sid = explode("\n", file_get_contents($base_dir.'data/ch_sid.txt'));
+
+		// 配列を回す
+		foreach ($ch_sid as $key => $value) {
+
+			// Tabで区切る
+			$ch_sid[$key] = explode('	', $value);
+
+			// 抽出したチャンネル名
+			$jkch = mb_convert_kana($ch_sid[$key][4], 'asv');
+
+			// 正規表現パターン
+			mb_regex_encoding("UTF-8");
+			$match = "{".$jkch."[0-9]}u";
+			$match2 = "{".preg_quote(mb_substr($jkch, 0, 5))."[0-9]".preg_quote(mb_substr($jkch, 5, 3))."}u"; // NHK総合用パターン
+			$match3 = "{".preg_quote(mb_substr($jkch, 0, 6))."[0-9]".preg_quote(mb_substr($jkch, 6, 3))."}u"; // NHKEテレ用パターン
+
+			// チャンネル名が一致したら
+			if ($channel == $jkch or preg_match($match, $channel) or preg_match($match2, $channel) or preg_match($match3, $channel)){
+			//if ($channel == $jkch){
+				// 実況IDを返す
+				return $ch_sid[$key][0];
+			}
+		}
+	}
 
