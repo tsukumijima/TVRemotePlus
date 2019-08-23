@@ -1,7 +1,7 @@
 <?php
 
 	// モジュール読み込み
-	require_once (dirname(__FILE__).'/module.php');
+	require_once (dirname(__FILE__).'/config.php');
 
 	// iniファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);

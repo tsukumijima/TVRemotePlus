@@ -1,13 +1,13 @@
 <?php
+  
+	// ヘッダー読み込み
+	require_once ('../header.php');
+  
+	echo '    <pre id="debug">';
 
 	// モジュール読み込み
 	require_once ('../module.php');
-  require_once ('../stream.php');
-  
-  // ヘッダー読み込み
-  require_once ('../header.php');
-  
-  echo '    <pre id="debug">';
+	require_once ('../stream.php');
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
