@@ -175,6 +175,7 @@
 	if_copy ('/LICENSE.txt', true);
 	if_copy ('/module.php', true);
 	if_copy ('/README.md', true);
+	if_copy ('/require.php', true);
 	if_copy ('/stream.php', true);
 	if_copy ('/bin', true);
 	if_copy ('/data', true);
@@ -185,6 +186,7 @@
 	if ($update === false){
 
 		// 設定ファイル
+		$tvrp_conf_file = $serverroot.'/config.php';
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
 		$openssl_conf_file = $serverroot.'/bin/Apache/conf/openssl.cnf';
@@ -216,6 +218,11 @@
 		$jsonfile = $serverroot.'/data/setting.json';
 		$json = array('state' => 'Offline');
 		if (!file_exists($jsonfile)) file_put_contents($jsonfile, json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+		// TVRemotePlusの設定ファイル
+		$tvrp_conf = file_get_contents($tvrp_conf_file);
+		$tvrp_conf = preg_replace('/\$http_port =.*/', '$http_port = '.$port.';', $tvrp_conf); // 置換
+		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
 
 		// Apacheの設定ファイル
 		$httpd_conf = file_get_contents($httpd_conf_file);

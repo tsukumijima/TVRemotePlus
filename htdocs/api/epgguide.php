@@ -8,43 +8,12 @@
 	
 	ini_set('display_errors', 0);
 
-	// ニコニコ実況IDをチャンネル名から取得する関数
-	function getJKchannel($channel){
-		global $base_dir;
-
-		// ch_sid.txtを改行ごとに区切って配列にする
-		$ch_sid = explode("\n", file_get_contents($base_dir.'data/ch_sid.txt'));
-
-		// 配列を回す
-		foreach ($ch_sid as $key => $value) {
-
-			// Tabで区切る
-			$ch_sid[$key] = explode('	', $value);
-
-			// 抽出したチャンネル名
-			$jkch = mb_convert_kana($ch_sid[$key][4], 'asv');
-
-			// 正規表現パターン
-			mb_regex_encoding("UTF-8");
-			$match = "{".$jkch."[0-9]}u";
-			$match2 = "{".preg_quote(mb_substr($jkch, 0, 5))."[0-9]".preg_quote(mb_substr($jkch, 5, 3))."}u"; // NHK総合用パターン
-			$match3 = "{".preg_quote(mb_substr($jkch, 0, 6))."[0-9]".preg_quote(mb_substr($jkch, 6, 3))."}u"; // NHKEテレ用パターン
-
-			// チャンネル名が一致したら
-			if ($channel == $jkch or preg_match($match, $channel) or preg_match($match2, $channel) or preg_match($match3, $channel)){
-			//if ($channel == $jkch){
-				// 実況IDを返す
-				return $ch_sid[$key][0];
-			}
-		}
-	}
-
 	// 番組情報を取得する関数
-	function getEpgguide($ch_, $sid, $tsid){
+	function getEpgguide($ch_, $sid, $onid, $tsid){
 		global $ini,$ch,$EDCB_http_url,$jkchannels;
 		
 		// 番組表API読み込み
-		$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&sid='.$sid.'&tsid='.$tsid);
+		$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
 
 		// チャンネル名
 		if (isset($epg->items->eventinfo[0]->service_name)){
@@ -68,13 +37,21 @@
 			//文字列に変換してさらに半角に変換して改行をbrにする
 			$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'asv')); 
 		} else {
-			$program_name = '番組情報を取得できませんでした';
+			if (isset($epg->items->eventinfo[0]->service_name)){
+				$program_name = '放送休止';
+			} else {
+				$program_name = '番組情報を取得できませんでした';
+			}
 		}
 		if (isset($epg->items->eventinfo[0]->event_text)){
 			//文字列に変換してさらに半角に変換して改行をbrにする
 			$program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_text), 'asv'));
 		} else {
-			$program_info = '番組情報を取得できませんでした';
+			if (isset($epg->items->eventinfo[0]->service_name)){
+				$program_info = '放送休止';
+			} else {
+				$program_info = '番組情報を取得できませんでした';
+			}
 		}
 
 		// 次の番組
@@ -92,13 +69,21 @@
 			//文字列に変換してさらに半角に変換して改行をbrにする
 			$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv')); 
 		} else {
-			$next_program_name = '番組情報を取得できませんでした';
+			if (isset($epg->items->eventinfo[1]->service_name)){
+				$$next_program_name = '放送休止';
+			} else {
+				$$next_program_name = '番組情報を取得できませんでした';
+			}
 		}
 		if (isset($epg->items->eventinfo[1]->event_text)){
 			//文字列に変換してさらに半角に変換して改行をbrにする
 			$next_program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_text), 'asv'));
 		} else {
-			$next_program_info = '番組情報を取得できませんでした';
+			if (isset($epg->items->eventinfo[1]->service_name)){
+				$next_program_info = '放送休止';
+			} else {
+				$next_program_info = '番組情報を取得できませんでした';
+			}
 		}
 
 		// 開始/終了時間の解析
@@ -177,7 +162,7 @@
 	if ($ini["state"] == "ONAir"){
 
 		// 番組情報を取得
-		$epgguide['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']]);
+		$epgguide['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']], $onid[$ini['channel']], $tsid[$ini['channel']]);
 
 		// チャンネル名が取得出来なかったら代入
 		if ($epgguide['play']['channel'] == 'チャンネル名を取得できませんでした'){
@@ -207,7 +192,7 @@
 
 	foreach ($sid as $key => $value) {
 		// 番組情報を取得
-		$epgguide['onair'][strval($key)] = getEpgguide($key, $value, $tsid[strval($key)]);
+		$epgguide['onair'][strval($key)] = getEpgguide($key, $value, $onid[strval($key)], $tsid[strval($key)]);
 	}
 
 	if (!isset($epgguide['onair'])) $epgguide['onair'] = array();

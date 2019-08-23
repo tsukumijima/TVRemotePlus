@@ -113,37 +113,6 @@
 		return array($jkthread, $jkthread_info);
 	}
 
-	// ニコニコ実況IDをチャンネル名から取得する関数
-	function getJKchannel($channel){
-		global $base_dir;
-
-		// ch_sid.txtを改行ごとに区切って配列にする
-		$ch_sid = explode("\n", file_get_contents($base_dir.'data/ch_sid.txt'));
-
-		// 配列を回す
-		foreach ($ch_sid as $key => $value) {
-
-			// Tabで区切る
-			$ch_sid[$key] = explode('	', $value);
-
-			// 抽出したチャンネル名
-			$jkch = mb_convert_kana($ch_sid[$key][4], 'asv');
-
-			// 正規表現パターン
-			mb_regex_encoding("UTF-8");
-			$match = "{".$jkch."[0-9]}u";
-			$match2 = "{".preg_quote(mb_substr($jkch, 0, 5))."[0-9]".preg_quote(mb_substr($jkch, 5, 3))."}u"; // NHK総合用パターン
-			$match3 = "{".preg_quote(mb_substr($jkch, 0, 6))."[0-9]".preg_quote(mb_substr($jkch, 6, 3))."}u"; // NHKEテレ用パターン
-
-			// チャンネル名が一致したら
-			if ($channel == $jkch or preg_match($match, $channel) or preg_match($match2, $channel) or preg_match($match3, $channel)){
-			//if ($channel == $jkch){
-				// 実況IDを返す
-				return $ch_sid[$key][0];
-			}
-		}
-	}
-
 	// 位置を解析して数値にする関数
 	function getPosition($option){
 
