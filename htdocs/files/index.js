@@ -15,6 +15,17 @@
       dp.focus = true;
     });
 
+    $.ajax({
+      url: '/api/chromecast.php',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        if (data['status'] == 'play'){
+          $('#cast-toggle > .menu-link-href').text('キャストを終了');
+        }
+      }
+    });
+
     // ウインドウサイズ
     $(window).on('load resize', function(){
 

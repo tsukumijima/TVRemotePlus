@@ -138,6 +138,7 @@
 			$cast_ = json_decode(file_get_contents($castfile), true);
 			// 再生が開始されたらbreak
 			if ($cast_['status'] == 'play'){
+				$cast['status'] = 'play';
 				$json['status'] = 'play';
 				break;
 			}
@@ -145,6 +146,8 @@
 			// 30秒待っても起動しない場合は終了してbreak
 			if ($i > 60){
 				$cast['cmd'] = 'stop';
+				$cast['cast'] = false;
+				$cast['status'] = 'failed';
 				$json['status'] = 'failed';
 				break;
 			}
