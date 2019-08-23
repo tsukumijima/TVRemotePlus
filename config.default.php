@@ -15,6 +15,9 @@ if (empty($_SERVER["HTTPS"])){
 	$scheme = 'https://';
 }
 
+// TVRemotePlus 内で利用する変数を読み込み
+require_once (dirname(__FILE__).'/require.php');
+
 // ↓↓↓↓↓ ここから編集箇所 ↓↓↓↓↓
 
 

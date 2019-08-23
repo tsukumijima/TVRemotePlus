@@ -313,6 +313,7 @@
 
 		// 前のTSを消してからストリームを開始させる
 		win_exec('pushd "'.$segment_folder.'" && del *.ts /S && '.$stream_cmd);
+		// echo $stream_cmd.'<br>';
 		// exec($stream_cmd.' > C:\freesoft\Apache2\htdocs\log.txt');
 
 		$ini['channel'] = $ch;

@@ -1,15 +1,15 @@
 <?php
-
+  
+	// ヘッダー読み込み
+	require_once ('../header.php');
+  
+	echo '    <pre id="debug">';
+  
 	// モジュール読み込み
-  require_once ('../module.php');
-  
-  // ヘッダー読み込み
-  require_once ('../header.php');
-  
-  echo '    <pre id="debug">';
+	require_once ('../module.php');
 
 	// 設定ファイル読み込み
-  $ini = json_decode(file_get_contents($inifile), true);
+	$ini = json_decode(file_get_contents($inifile), true);
 
 	// basic 認証設定を実行
 	basicAuth($basicauth, $basicauth_user, $basicauth_password);
@@ -27,7 +27,7 @@
 	// 時計
 	$clock = date("Y/m/d H:i:s");
   
-  echo '</pre>';
+	echo '</pre>';
 
 ?>
 
