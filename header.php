@@ -14,13 +14,13 @@
 <html lang="ja">
 
 <head>
-<?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ ?>
+<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ ?>
   <title>ファイル再生 - <?php echo $site_title; ?></title>
-<?php } else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ ?>
+<?php	} else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ ?>
   <title>設定 - <?php echo $site_title; ?></title>
-  <?php } else { ?>
+<?php	} else { ?>
   <title><?php echo $site_title; ?></title>
-<?php } // 括弧終了 ?>
+<?php	} // 括弧終了 ?>
   <meta charset="UTF-8">
   <meta name="theme-color" content="#191919">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -34,15 +34,15 @@
   <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
   <link rel="stylesheet" type="text/css" href="/files/style.css">
 <?php
-  if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
-    echo '  <link rel="stylesheet" type="text/css" href="/files/swiper.min.css">'."\n";
-  } // 括弧終了
-  if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
-    echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css">'."\n";
-  } // 括弧終了
-  if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
-    echo '  <link rel="stylesheet" type="text/css" href="/files/setting.css">'."\n";
-  } // 括弧終了
+	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
+		echo '  <link rel="stylesheet" type="text/css" href="/files/swiper.min.css">'."\n";
+	}
+	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
+		echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css">'."\n";
+	}
+	if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
+		echo '  <link rel="stylesheet" type="text/css" href="/files/setting.css">'."\n";
+	}
 ?>
   <!-- Script -->
   <script async type="text/javascript"  src="/files/pwacompat.min.js"></script>
@@ -54,23 +54,20 @@
   <script type="text/javascript" src="/files/js.cookie.min.js"></script>
   <script type="text/javascript" src="/files/common.js"></script>
 <?php
-  if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
-    echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
-    echo '  <script type="text/javascript" src="/files/index.js"></script>'."\n";
-  }
-  if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
-    echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
-  } else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
-    echo '  <script type="text/javascript" src="/files/setting.js"></script>'."\n";
-  } else if ($ini['state'] == 'ONAir'){
-    echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
-    echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
-  } else if ($ini['state'] == 'Offline'){
-    echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
-  } else if ($ini['state'] == 'File'){
-    echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
-    echo '  <script type="text/javascript" src="/files/file.js"></script>'."\n";
-  } // 括弧終了
+	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
+		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/index.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
+	}
+	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
+		echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
+	} else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
+		echo '  <script type="text/javascript" src="/files/setting.js"></script>'."\n";
+	} else if ($ini['state'] == 'ONAir'){
+		echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
+	} else if ($ini['state'] == 'File'){
+		echo '  <script type="text/javascript" src="/files/file.js"></script>'."\n";
+	}
 ?>
 
   <script>
@@ -94,13 +91,13 @@
     <div id="logo">
       <a href="/"><img src="<?php echo $icon_file; ?>"></a>
     </div>
-<?php if (strpos($backtrace[0]["file"], 'index.php') !== false or strpos($backtrace[0]["file"], 'watch.php') !== false){ // index.php・watch.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false or strpos($backtrace[0]["file"], 'watch.php') !== false){ // index.php・watch.phpのみ ?>
     <div id="menubutton">
       <i class="material-icons">more_vert</i>
     </div>
-<?php } // 括弧終了 ?>
+<?php	} // 括弧終了 ?>
   </nav>
-<?php if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
@@ -117,8 +114,8 @@
       </div>
     </div>
   </nav>
-<?php } // 括弧終了 ?>
-<?php if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
+<?php	} // 括弧終了 ?>
+<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
@@ -132,7 +129,7 @@
       </div>
     </div>
   </nav>
-<?php } // 括弧終了 ?>
+<?php	} // 括弧終了 ?>
 
   <nav id="nav-content">
     <div class="nav-logo">
@@ -167,7 +164,7 @@
 		// 取得したバージョンと現在のバージョンが違う場合のみ
 		if ($update != $version){
 			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank" '.
-						'aria-label="アップデートがあります ('.$update.')" data-balloon-pos="up">'."\n";
+						'aria-label="アップデートがあります (version '.str_replace('v', '', $update).')" data-balloon-pos="up">'."\n";
 			echo '      <i class="fas fa-history" style="color: #e8004a;"></i>'."\n";
 		} else {
 			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">'."\n";
@@ -179,7 +176,7 @@
 	}
 ?>
       <span class="nav-link-href">
-        <?php echo $version; ?>
+        version <?php echo str_replace('v', '', $version); ?>
 
       </span>
     </a>

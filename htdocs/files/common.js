@@ -66,7 +66,13 @@ $(function(){
 
   // 一番上まで戻る
   $('#scroll').click(function(){
-    $('html, body').animate({ scrollTop: 0 }, 700);
+    
+    var topPos = $(window).scrollTop();
+    
+    if (topPos > 400) {
+      $('html, body').animate({ scrollTop: 0 }, 700);
+    }
+
   });
 
   // トーストのオプション

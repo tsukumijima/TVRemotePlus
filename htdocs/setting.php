@@ -175,6 +175,11 @@
 				} else {
 					$set = '\''.strval($value).'\'';
 				}
+
+				// バックスラッシュ(\)を見つけたらスラッシュに変換
+				if (strpos($set, '\\') !== false){
+					$set = str_replace('\\', '/', $set);
+				}
 				
 				// config.php を書き換え
 				$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
@@ -248,7 +253,7 @@
             <h3 class="blue">
               <i class="fas fa-user-cog"></i>個人設定
               <div id="button-box">
-                <button class="bluebutton" type="button">
+                <button class="bluebutton" type="submit">
                   <i class="fas fa-save"></i>保存する
                 </button>
               </div>
@@ -305,7 +310,7 @@
             <h3 class="red">
               <i class="fas fa-tools"></i>環境設定
               <div id="button-box">
-                <button class="redbutton" type="button">
+                <button class="redbutton" type="submit">
                   <i class="fas fa-save"></i>保存する
                 </button>
               </div>
@@ -383,7 +388,7 @@
                 </p>
               </div>
               <div class="select-wrap">
-                <select name="encoder_default">
+                <select name="encoder_default" required>
 <?php	if ($encoder_default == 'ffmpeg'){ ?>
                   <option value="ffmpeg" selected>ffmpeg (ソフトウェアエンコーダー)</option>
                   <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
@@ -429,9 +434,20 @@
                 <p>
                   デフォルトで利用する BonDriver (地デジ用) です<br>
                   うまく再生出来ない場合、BonDriver_Spinel などを利用すると安定して視聴できる場合があります<br>
+                  Spinel を導入している場合は BonDriver_Spinel を利用することをおすすめします<br>
                 </p>
               </div>
-              <input class="text-box" name="BonDriver_default_T" type="text" required value="<?php echo $BonDriver_default_T; ?>" placeholder="BonDriver_○○_T0.dll" />
+              <div class="select-wrap">
+                <select name="BonDriver_default_T" required>
+<?php		foreach ($BonDriver_dll_T as $i => $value){ //chの数だけ繰り返す ?>
+<?php			if ($value == $BonDriver_default_T){ ?>
+                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
+<?php			} else { ?>
+                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+<?php			} //括弧終了 ?>
+<?php		} //括弧終了 ?>
+                </select>
+              </div>
             </div>
 
             <div class="setting-form setting-input">
@@ -440,9 +456,20 @@
                 <p>
                   デフォルトで利用する BonDriver (BS・CS用) です<br>
                   うまく再生出来ない場合、BonDriver_Spinel などを利用すると安定して視聴できる場合があります<br>
+                  Spinel を導入している場合は BonDriver_Spinel を利用することをおすすめします<br>
                 </p>
               </div>
-              <input class="text-box" name="BonDriver_default_S" type="text" required value="<?php echo $BonDriver_default_S; ?>" placeholder="BonDriver_○○_S0.dll" />
+              <div class="select-wrap">
+                <select name="BonDriver_default_S" required>
+<?php		foreach ($BonDriver_dll_S as $i => $value){ //chの数だけ繰り返す ?>
+<?php			if ($value == $BonDriver_default_S){ ?>
+                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
+<?php			} else { ?>
+                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+<?php			} //括弧終了 ?>
+<?php		} //括弧終了 ?>
+                </select>
+              </div>
             </div>
 
             <div class="setting-form setting-input">
@@ -453,7 +480,7 @@
                   ネットワークドライブ内のフォルダは認識できないかもしれません<br>
                 </p>
               </div>
-              <input class="text-box" name="TSfile_dir" type="text" required value="<?php echo $TSfile_dir; ?>" placeholder="E:/TV-Record/" />
+              <input class="text-box" name="TSfile_dir" type="text" value="<?php echo $TSfile_dir; ?>" placeholder="E:/TV-Record/" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -464,7 +491,7 @@
                   この機能を利用する場合、予め EDCB_Material_WebUI を導入しておいてください<br>
                 </p>
               </div>
-              <input class="text-box" name="EDCB_http_url" type="text" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.1.11:5510/api/" />
+              <input class="text-box" name="EDCB_http_url" type="url" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/api/" />
             </div>
 
             <div class="setting-form setting-input">
@@ -493,7 +520,7 @@
                   新規インストール時のデフォルトは10件です<br>
                 </p>
               </div>
-              <input class="text-box" name="history_keep" type="number" min="1" max="100"  value="<?php echo $history_keep; ?>" />
+              <input class="text-box" name="history_keep" type="number" min="1" max="100"  value="<?php echo $history_keep; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -521,9 +548,11 @@
                 <span>ニコニコにログインする際のメールアドレス</span>
                 <p>
                   ニコニコ実況への投稿・ファイル再生時の過去ログの取得に必須です<br>
+                  利用する場合、予めニコニコアカウントを作成しておく必要があります<br>
+                  設定しなくても生放送のコメントは取得できますが、コメント投稿・過去ログの取得はできません<br>
                 </p>
               </div>
-              <input class="text-box" name="nicologin_mail" type="text" value="<?php echo $nicologin_mail; ?>" placeholder="example@gmail.com" />
+              <input class="text-box" name="nicologin_mail" type="email" value="<?php echo $nicologin_mail; ?>" placeholder="example@gmail.com" />
             </div>
 
             <div class="setting-form setting-input">
@@ -531,6 +560,8 @@
                 <span>ニコニコにログインする際のパスワード</span>
                 <p>
                   ニコニコ実況への投稿・ファイル再生時の過去ログの取得に必須です<br>
+                  利用する場合、予めニコニコアカウントを作成しておく必要があります<br>
+                  設定しなくても生放送のコメントは取得できますが、コメント投稿・過去ログの取得はできません<br>
                 </p>
               </div>
               <div class="password-box-wrap">
@@ -551,7 +582,7 @@
                   鬱陶しいのであれば0(秒)に設定すればオフになります<br>
                 </p>
               </div>
-              <input class="text-box" name="tweet_time" type="number" min="0" max="120"  value="<?php echo $tweet_time; ?>" />
+              <input class="text-box" name="tweet_time" type="number" min="0" max="120"  value="<?php echo $tweet_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -562,7 +593,7 @@
                 ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、適宜録画用 HDD 内のフォルダを指定しておくのも良いと思います<br>
                 </p>
               </div>
-              <input class="text-box" name="tweet_upload" type="text" value="<?php echo $tweet_upload; ?>" placeholder="E:/TV-Capture/" />
+              <input class="text-box" name="tweet_upload" type="text" value="<?php echo $tweet_upload; ?>" placeholder="E:/TV-Capture/" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -592,7 +623,7 @@
                 コンシューマーキーは25文字のランダムな英数字です<br>
                 </p>
               </div>
-              <input class="text-box" name="CONSUMER_KEY" type="text" value="<?php echo $CONSUMER_KEY; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXX" />
+              <input class="text-box" name="CONSUMER_KEY" type="text" pattern="[A-Za-z0-9]{25}" value="<?php echo $CONSUMER_KEY; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXX" />
             </div>
 
             <div class="setting-form setting-input">
@@ -603,7 +634,7 @@
                 コンシューマーシークレットは50文字のランダムな英数字です<br>
                 </p>
               </div>
-              <input class="text-box" name="CONSUMER_SECRET" type="text" value="<?php echo $CONSUMER_SECRET; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
+              <input class="text-box" name="CONSUMER_SECRET" type="text" pattern="[A-Za-z0-9]{50}" value="<?php echo $CONSUMER_SECRET; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
             </div>
             
             <h4><i class="fas fa-lock"></i>Basic 認証</h4>
@@ -632,10 +663,10 @@
                 <span>Basic 認証のユーザー名</span>
                 <p>
                   Basic 認証で TVRemotePlus にログインする時のユーザー名を設定します<br>
-                  Basic 認証を利用する場合は必ず設定してください<br>
+                  デフォルトは user ですが、Basic 認証を利用する場合はできるだけ変更してください<br>
                 </p>
               </div>
-              <input class="text-box" name="basicauth_user" type="text" value="<?php echo $basicauth_user; ?>" placeholder="user" />
+              <input class="text-box" name="basicauth_user" type="text" value="<?php echo $basicauth_user; ?>" placeholder="user" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -643,11 +674,11 @@
                 <span>Basic 認証のパスワード</span>
                 <p>
                   Basic 認証で TVRemotePlus にログインする時のパスワードを設定します<br>
-                  Basic 認証を利用する場合は必ず設定してください<br>
+                  デフォルトは 12345678 ですが、Basic 認証を利用する場合はできるだけ変更してください<br>
                 </p>
               </div>
               <div class="password-box-wrap">
-                <input class="password-box" name="basicauth_password" type="password" value="<?php echo $basicauth_password; ?>" placeholder="12345678" />
+                <input class="password-box" name="basicauth_password" type="password" value="<?php echo $basicauth_password; ?>" placeholder="12345678" required />
                 <i class="password-box-input fas fa-eye"></i>
               </div>
             </div>
@@ -683,7 +714,7 @@
                   HTTPS アクセス用ポートは ここで設定したポート + 100 になります (デフォルトは 8100 です)<br>
                 </p>
               </div>
-              <input class="text-box" name="http_port" type="number" min="1" max="40000"  value="<?php echo $http_port; ?>" />
+              <input class="text-box" name="http_port" type="number" min="1" max="40000"  value="<?php echo $http_port; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -695,7 +726,7 @@
                   その場合は、UDP送信ポートを空いているポートに変更してください<br>
                 </p>
               </div>
-              <input class="text-box" name="udp_port" type="number" min="1" max="40000"  value="<?php echo $udp_port; ?>" />
+              <input class="text-box" name="udp_port" type="number" min="1" max="40000"  value="<?php echo $udp_port; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -707,7 +738,7 @@
                   新規インストール時のデフォルトは 1(秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlslive_time" type="number" min="1" max="60"  value="<?php echo $hlslive_time; ?>" />
+              <input class="text-box" name="hlslive_time" type="number" min="1" max="60"  value="<?php echo $hlslive_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -719,7 +750,7 @@
                   新規インストール時のデフォルトは 5(秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlsfile_time" type="number" min="1" max="60"  value="<?php echo $hlsfile_time; ?>" />
+              <input class="text-box" name="hlsfile_time" type="number" min="1" max="60"  value="<?php echo $hlsfile_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -732,7 +763,7 @@
                   新規インストール時のデフォルトは 3(個) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlslive_list" type="number" min="1" max="60"  value="<?php echo $hlslive_list; ?>" />
+              <input class="text-box" name="hlslive_list" type="number" min="1" max="60"  value="<?php echo $hlslive_list; ?>" required />
             </div>
 
             <div class="setting-form setting-input">

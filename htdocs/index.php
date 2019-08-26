@@ -157,7 +157,11 @@
           <div class="chinfo"> 
             <span id="state" style="color: #007cff;" value="<?php echo $ini['state']; ?>">● ON Air</span>
             <span id="status"></span>
-            <span id="channel"><?php echo $channel; ?></span>
+<?php		if ($ini['channel'] < 55){ ?>
+            <span id="channel">Ch.<?php echo sprintf('%02d', $ini['channel']).' '.$channel; ?></span>
+<?php		} else { //括弧終了 ?>
+            <span id="channel">Ch.<?php echo sprintf('%03d', $ini['channel']).' '.$channel; ?></span>
+<?php		} //括弧終了 ?>
           </div>
           <span class="livetime">
             <span id="starttime"></span><span id="to"></span><span id="endtime"></span>
@@ -212,7 +216,7 @@
 <?php		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'/EnumEventInfo')){ // EMWUI ?>
       <div class="error">
         EDCB Material WebUI の API がある URL が正しく設定されていないため、番組情報が表示できません。<br>
-        config.php の「EDCB Material WebUI (EMWUI) の API がある URL」が正しく設定されているかどうか、確認してください。<br>
+        設定ページの「EDCB Material WebUI (EMWUI) の API がある URL」が正しく設定されているかどうか、確認してください。<br>
       </div>
 <?php		} //括弧終了 ?>
 
@@ -402,12 +406,22 @@
 
             <div class="setBonDriver form">
               使用BonDriver：
-              <div class="select-wrap">
+              <div id="broadcast-BonDriver-T" class="select-wrap">
                 <select name="BonDriver">
-<?php		if (!empty($BonDriver_default_T) or !empty($BonDriver_default_S)){ ?>
+<?php		if (!empty($BonDriver_default_T)){ ?>
                   <option value="default">デフォルトのBonDriver</option>
 <?php		} //括弧終了 ?>
-<?php		foreach ($BonDriver_dll as $i => $value){ //chの数だけ繰り返す ?>
+<?php		foreach ($BonDriver_dll_T as $i => $value){ //chの数だけ繰り返す ?>
+                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+<?php		} //括弧終了 ?>
+                </select>
+              </div>
+              <div id="broadcast-BonDriver-S" class="select-wrap">
+                <select name="BonDriver">
+<?php		if (!empty($BonDriver_default_S)){ ?>
+                  <option value="default">デフォルトのBonDriver</option>
+<?php		} //括弧終了 ?>
+<?php		foreach ($BonDriver_dll_S as $i => $value){ //chの数だけ繰り返す ?>
                   <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
 <?php		} //括弧終了 ?>
                 </select>

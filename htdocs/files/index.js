@@ -1,5 +1,7 @@
   $(function(){
 
+    // 生放送・ファイル再生共通その2 (script.jsが肥大化したためこっちに)
+
     // 個人設定を反映
     if (!settings['twitter_show']){
       $('#tweet-box').hide();
@@ -8,12 +10,6 @@
       $('#sidebar').hide();
       $('#content').width('100%');
     }
-
-    // focusを常にオンにする
-    dp.focus = true;
-    $(document).click(function(){
-      dp.focus = true;
-    });
 
     $.ajax({
       url: '/api/chromecast.php',
@@ -64,45 +60,25 @@
           $('section').css('max-width', result + 'px');
 
         }
-
-        // スライダー関係
-        var galleryThumbs = new Swiper('#broadcast-tab-box', {
-          slidesPerView: 'auto',
-          watchSlidesVisibility: true,
-          watchSlidesProgress: true,
-          slideActiveClass: 'swiper-slide-active'
-        });
-        galleryThumbs.on('tap', function () {
-          var current = galleryTop.activeIndex;
-          galleryThumbs.slideTo(current, 500, true);
-        });
-        var galleryTop = new Swiper('#broadcast-box', {
-          autoHeight: true,
-          thumbs: {
-            swiper: galleryThumbs
-          }
-        });
-      
-      // スマホ
-      } else {
-        // スライダー関係
-        var galleryThumbs = new Swiper('#broadcast-tab-box', {
-          slidesPerView: 'auto',
-          watchSlidesVisibility: true,
-          watchSlidesProgress: true,
-          slideActiveClass: 'swiper-slide-active'
-        });
-        galleryThumbs.on('tap', function () {
-          var current = galleryTop.activeIndex;
-          galleryThumbs.slideTo(current, 500, true);
-        });
-        var galleryTop = new Swiper('#broadcast-box', {
-          autoHeight: true,
-          thumbs: {
-            swiper: galleryThumbs
-          }
-        });
       }
+
+      // スライダー関係
+      var galleryThumbs = new Swiper('#broadcast-tab-box', {
+        slidesPerView: 'auto',
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        slideActiveClass: 'swiper-slide-active'
+      });
+      galleryThumbs.on('tap', function () {
+        var current = galleryTop.activeIndex;
+        galleryThumbs.slideTo(current, 500, true);
+      });
+      var galleryTop = new Swiper('#broadcast-box', {
+        autoHeight: true,
+        thumbs: {
+          swiper: galleryThumbs
+        }
+      });
 
     });
 
@@ -111,6 +87,19 @@
       $('#broadcast-stream-title').html($(this).find('.broadcast-channel').html() + ' ' + $(this).find('.broadcast-name').html());
       $('#broadcast-stream-info').html($(this).find('.broadcast-title-id').html());
       $('#broadcast-stream-channel').val($(this).find('.broadcast-channel-id').text());
+      // 地デジ・BSCS判定
+      if ($(this).find('.broadcast-channel-id').text() < 55){
+        $('#broadcast-BonDriver-T').show();
+        $('#broadcast-BonDriver-T').find('select').prop('disabled', false);
+        $('#broadcast-BonDriver-S').hide();
+        $('#broadcast-BonDriver-S').find('select').prop('disabled', true);
+      } else {
+        $('#broadcast-BonDriver-S').show();
+        $('#broadcast-BonDriver-S').find('select').prop('disabled', false);
+        $('#broadcast-BonDriver-T').hide();
+        $('#broadcast-BonDriver-T').find('select').prop('disabled', true);
+      }
+      // 開閉
       $('#nav-close').toggleClass('open');
       $('#broadcast-stream-box').toggleClass('open');
       $('html').toggleClass('open');

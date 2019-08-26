@@ -90,7 +90,7 @@
 <?php	if (empty($TSfile_dir) or !file_exists($TSfile_dir)){ // エラーを吐く ?>
         <div class="error">
           録画ファイルのあるフォルダが正しく設定されていません。<br>
-          config.php の「録画ファイルのあるフォルダ」が正しく設定されているかどうか、確認してください。<br>
+          設定ページの「録画ファイルのあるフォルダ」が正しく設定されているかどうか、確認してください。<br>
         </div>
 <?php	} //括弧終了 ?>
         <div id="search-info">

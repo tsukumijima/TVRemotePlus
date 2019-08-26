@@ -57,6 +57,9 @@
 		// m3u8が30秒経っても更新されない
 		if ($standby == $stream and time() - $modified > 30){
 			$status = 'failed';
+		// 再生始まったけど更新が止まってしまった
+		} else if ($ini["state"] == "ONAir" and time() - $modified > 20){
+			$status = 'restart';
 		// m3u8が更新されていない
 		} else if ($standby == $stream){
 			$status = 'standby';

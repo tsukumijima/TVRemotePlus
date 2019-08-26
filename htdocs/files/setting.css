@@ -214,7 +214,8 @@ select {
     text-overflow: '';
     background: none transparent;
     vertical-align: middle;
-    font-size: 16px;
+    font-size: 15px;
+    font-family: 'Segoe UI','Arial','メイリオ';
     color: inherit;
     -webkit-appearance: button;
     -moz-appearance: button;
@@ -257,7 +258,8 @@ select {
     text-overflow: '';
     background: none transparent;
     vertical-align: middle;
-    font-size: 16px;
+    font-size: 15px;
+    font-family: 'Segoe UI','Arial','メイリオ';
     color: inherit;
     -webkit-appearance: button;
     -moz-appearance: button;
