@@ -279,7 +279,7 @@ select {
     .setting-form span {
         width: 75%;
     }
-    input[type="text"], input[type="number"], input[type="password"] {
+    input[type="text"], input[type="number"], input[type="url"], input[type="email"], input[type="password"] {
         width: 100%;
         margin-left: 0px;
     }
@@ -320,6 +320,7 @@ select {
     opacity: 0;
     margin: 0;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent; 
 }
 
 .toggle-label {
@@ -331,6 +332,7 @@ select {
     border-radius: 46px;
     transition: 0.2s;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; 
 }
 
 .toggle-label:after {
