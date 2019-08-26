@@ -86,6 +86,7 @@ section {
     box-sizing: border-box;
     align-items: center;
     cursor: pointer;
+    user-select: none;
 }
 
 .search-find-link:hover{

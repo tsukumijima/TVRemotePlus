@@ -241,6 +241,7 @@ select {
     position: absolute;
     right: 15px;
     top: 0;
+    width: 20px;
     height: 35px;
     margin: 0 !important;
     line-height: 39px;

@@ -1,8 +1,8 @@
 <?php
-  
+
 	// ヘッダー読み込み
 	require_once ('../header.php');
-  
+
 	echo '    <pre id="debug">';
 
 	// モジュール読み込み
@@ -18,147 +18,177 @@
 
 	// POSTでフォームが送られてきた場合
 	if ($_SERVER["REQUEST_METHOD"] == "POST"){
-  
-  		// POSTデータ読み込み
+
+		// POSTデータ読み込み
 		// もし存在するなら$iniの連想配列に格納
-		if ($_POST['state']) $ini['state'] = $_POST['state'];
+		if (isset($_POST['state'])) $ini['state'] = $_POST['state'];
 
-		// ストリーミングを終了させる
-		stream_stop();
+		if (!isset($_POST['setting-env'])){
 
-		// ONAirなら
-		if ($ini['state'] == "File"){
+			// 通常のストリーム開始処理
 
-			// 連想配列に格納
-			if ($_POST['filepath']) $ini['filepath'] = $_POST['filepath'];
-			if ($_POST['filetitle']) $ini['filetitle'] = $_POST['filetitle'];
-			if ($_POST['fileinfo']) $ini['fileinfo'] = $_POST['fileinfo'];
-			if ($_POST['filechannel']) $ini['filechannel'] = $_POST['filechannel'];
-			if ($_POST['filetime']) $ini['filetime'] = $_POST['filetime'];
-			if ($_POST['start_timestamp']) $ini['start_timestamp'] = $_POST['start_timestamp'];
-			if ($_POST['end_timestamp']) $ini['end_timestamp'] = $_POST['end_timestamp'];
-			if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
-			if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
-
-			// jsonからデコードして代入
-			if (file_exists($infofile)){
-				$TSfile = json_decode(file_get_contents($infofile), true);
-			} else {
-				$TSfile = array();
-      }
-
-			if (file_exists($historyfile)){
-				$history = json_decode(file_get_contents($historyfile), true);
-			} else {
-				$history = array(
-          'data' => array()
-        );
-			}
-
-			// 再生履歴の数
-			$history_count = count($history['data']);
-			// 一定の値を超えたら1つずつ消す
-			if ($history_count >= $history_keep){
-				$i = 0;
-				while (count($history['data']) >= $history_keep) {
-					unset($history['data'][$i]);
-					$history['data'] = array_values($history['data']); // インデックスを詰める
-					$history_count = count($history['data']);
-					$i++;
-				}
-      }
-
-			foreach ($TSfile['data'] as $key => $value) {
-				if ($ini['filepath'] == $TSfile['data'][$key]['file']){
-					$history['data'][$history_count]['play'] = time();
-					$history['data'][$history_count]['file'] = $TSfile['data'][$key]['file'];
-					$history['data'][$history_count]['title'] = $TSfile['data'][$key]['title'];
-					$history['data'][$history_count]['update'] = $TSfile['data'][$key]['update'];
-					$history['data'][$history_count]['thumb'] = $TSfile['data'][$key]['thumb'];
-					$history['data'][$history_count]['data'] = $TSfile['data'][$key]['data'];
-					$history['data'][$history_count]['date'] = $TSfile['data'][$key]['date'];
-					$history['data'][$history_count]['info'] = $TSfile['data'][$key]['info'];
-					$history['data'][$history_count]['channel'] = $TSfile['data'][$key]['channel'];
-					$history['data'][$history_count]['start'] = $TSfile['data'][$key]['start'];
-					$history['data'][$history_count]['end'] = $TSfile['data'][$key]['end'];
-					$history['data'][$history_count]['duration'] = $TSfile['data'][$key]['duration'];
-					$history['data'][$history_count]['start_timestamp'] = $TSfile['data'][$key]['start_timestamp'];
-					$history['data'][$history_count]['end_timestamp'] = $TSfile['data'][$key]['end_timestamp'];
-				}
-			}
-
-			// 再生履歴をファイルに保存
-			file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-
-			// ストリーミング開始
-			stream_file($ini['filepath'], $ini['quality'], $ini['encoder']);
-
-			// 準備中用の動画を流すためにm3u8をコピー
-			if ($silent == 'true'){
-				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-			} else {
-				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-			}
-
-		} else if ($ini['state'] == "ONAir"){
-
-			// 連想配列に格納
-			if ($_POST['channel']) $ini['channel'] = strval($_POST['channel']);
-			if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
-			if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
-			if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
-			if ($_POST['BonDriver']) $ini['BonDriver'] = $_POST['BonDriver'];
-
-			// BonDriverのデフォルトを要求される or 何故かBonDriverが空
-			if ($ini['BonDriver'] == 'default' or empty($ini['BonDriver'])){
-				if (intval($ini['channel']) >= 100 or intval($ini['channel']) == 55){ // チャンネルの値が100より(=BSか)
-					$ini['BonDriver'] = $BonDriver_default_S;
-				} else { // 地デジなら
-					$ini['BonDriver'] = $BonDriver_default_T;
-				}
-			}
-
-			// ストリーミング開始
-			stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
-
-			// 準備中用の動画を流すためにm3u8をコピー
-			if ($silent == 'true'){
-				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-			} else {
-				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-			}
-
-		// Offlineなら
-		} else if ($ini['state'] == "Offline"){
-
-			// 念のためもう一回ストリーミング終了関数を起動
+			// ストリームを終了させる
 			stream_stop();
-				
-			// 強制でチャンネルを0に設定する
-			$ini['channel'] = '0';
-				
-			// 配信休止中用のプレイリスト
-			if ($silent == 'true'){
-				copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-			} else {
-				copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+
+			// ONAirなら
+			if ($ini['state'] == "File"){
+
+				// 連想配列に格納
+				if ($_POST['filepath']) $ini['filepath'] = $_POST['filepath'];
+				if ($_POST['filetitle']) $ini['filetitle'] = $_POST['filetitle'];
+				if ($_POST['fileinfo']) $ini['fileinfo'] = $_POST['fileinfo'];
+				if ($_POST['filechannel']) $ini['filechannel'] = $_POST['filechannel'];
+				if ($_POST['filetime']) $ini['filetime'] = $_POST['filetime'];
+				if ($_POST['start_timestamp']) $ini['start_timestamp'] = $_POST['start_timestamp'];
+				if ($_POST['end_timestamp']) $ini['end_timestamp'] = $_POST['end_timestamp'];
+				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
+				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
+
+				// jsonからデコードして代入
+				if (file_exists($infofile)){
+					$TSfile = json_decode(file_get_contents($infofile), true);
+				} else {
+					$TSfile = array();
+				}
+
+				if (file_exists($historyfile)){
+					$history = json_decode(file_get_contents($historyfile), true);
+				} else {
+					$history = array(
+						'data' => array()
+					);
+				}
+
+				// 再生履歴の数
+				$history_count = count($history['data']);
+				// 一定の値を超えたら1つずつ消す
+				if ($history_count >= $history_keep){
+					$i = 0;
+					while (count($history['data']) >= $history_keep) {
+						unset($history['data'][$i]);
+						$history['data'] = array_values($history['data']); // インデックスを詰める
+						$history_count = count($history['data']);
+						$i++;
+					}
+				}
+
+				foreach ($TSfile['data'] as $key => $value) {
+					if ($ini['filepath'] == $TSfile['data'][$key]['file']){
+						$history['data'][$history_count]['play'] = time();
+						$history['data'][$history_count]['file'] = $TSfile['data'][$key]['file'];
+						$history['data'][$history_count]['title'] = $TSfile['data'][$key]['title'];
+						$history['data'][$history_count]['update'] = $TSfile['data'][$key]['update'];
+						$history['data'][$history_count]['thumb'] = $TSfile['data'][$key]['thumb'];
+						$history['data'][$history_count]['data'] = $TSfile['data'][$key]['data'];
+						$history['data'][$history_count]['date'] = $TSfile['data'][$key]['date'];
+						$history['data'][$history_count]['info'] = $TSfile['data'][$key]['info'];
+						$history['data'][$history_count]['channel'] = $TSfile['data'][$key]['channel'];
+						$history['data'][$history_count]['start'] = $TSfile['data'][$key]['start'];
+						$history['data'][$history_count]['end'] = $TSfile['data'][$key]['end'];
+						$history['data'][$history_count]['duration'] = $TSfile['data'][$key]['duration'];
+						$history['data'][$history_count]['start_timestamp'] = $TSfile['data'][$key]['start_timestamp'];
+						$history['data'][$history_count]['end_timestamp'] = $TSfile['data'][$key]['end_timestamp'];
+					}
+				}
+
+				// 再生履歴をファイルに保存
+				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+				// ストリーミング開始
+				stream_file($ini['filepath'], $ini['quality'], $ini['encoder']);
+
+				// 準備中用の動画を流すためにm3u8をコピー
+				if ($silent == 'true'){
+					copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				} else {
+					copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				}
+
+			} else if ($ini['state'] == "ONAir"){
+
+				// 連想配列に格納
+				if ($_POST['channel']) $ini['channel'] = strval($_POST['channel']);
+				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
+				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
+				if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
+				if ($_POST['BonDriver']) $ini['BonDriver'] = $_POST['BonDriver'];
+
+				// BonDriverのデフォルトを要求される or 何故かBonDriverが空
+				if ($ini['BonDriver'] == 'default' or empty($ini['BonDriver'])){
+					if (intval($ini['channel']) >= 100 or intval($ini['channel']) == 55){ // チャンネルの値が100より(=BSか)
+						$ini['BonDriver'] = $BonDriver_default_S;
+					} else { // 地デジなら
+						$ini['BonDriver'] = $BonDriver_default_T;
+					}
+				}
+
+				// ストリーミング開始
+				stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+
+				// 準備中用の動画を流すためにm3u8をコピー
+				if ($silent == 'true'){
+					copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				} else {
+					copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				}
+
+			// Offlineなら
+			} else if ($ini['state'] == "Offline"){
+
+				// 念のためもう一回ストリーミング終了関数を起動
+				stream_stop();
+					
+				// 強制でチャンネルを0に設定する
+				$ini['channel'] = '0';
+					
+				// 配信休止中用のプレイリスト
+				if ($silent == 'true'){
+					copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				} else {
+					copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				}
+
 			}
 
-		}
+			// iniファイル書き込み
+			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
-		// iniファイル書き込み
-		file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			// リダイレクトが有効なら
+			if ($setting_redirect == 'true'){
+				// トップページにリダイレクト
+				header('Location: '.$BASEURL);
+				exit;
+			}
 
-		// リダイレクトが有効なら
-		if ($setting_redirect == 'true'){
-			// トップページにリダイレクト
-			header('Location: '.$BASEURL);
-			exit;
+		// 環境設定を保存する
+		} else {
+			
+			// ファイル読み込み
+			$tvrp_conf = file_get_contents($tvrp_conf_file);
+
+			// 配列で回す
+			foreach ($_POST as $key => $value) {
+
+				// 数値化できるものは数値に変換しておく
+				if (is_numeric($value)){
+					$set = intval($value);
+				} else {
+					$set = '\''.strval($value).'\'';
+				}
+				
+				// config.php を書き換え
+				$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+
+			}
+			
+			// ファイル書き込み
+			file_put_contents($tvrp_conf_file, $tvrp_conf);
+
 		}
 		
-  }
-  
-  echo '</pre>';
+	}
+
+	echo '</pre>';
 
 ?>
 
@@ -171,8 +201,7 @@
           </h2>
 
           <p>
-            ※環境設定は今の所モックアップです。保存しても反映されません。<br>
-            個人設定は一応反映出来るようにしました<br>
+            TVRemotePlus の設定を Web 上から行えます。<br>
           </p>
 
           <div class="setting-form-wrap">
@@ -212,7 +241,9 @@
             
           </div>
           
-          <div class="setting-form-wrap">
+          <form id="setting-user" class="setting-form-wrap">
+
+            <input type="hidden" name="setting-user" value="true" />
 
             <h3 class="blue">
               <i class="fas fa-user-cog"></i>個人設定
@@ -231,9 +262,9 @@
               <span>Twitter 投稿フォーム</span>
               <div class="toggle-switch">
 <?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['twitter_show'] == false){ ?>
-                <input id="twitter_show" class="toggle-input" type="checkbox" />
+                <input id="twitter_show" class="toggle-input" type="checkbox" value="true" />
 <?php	} else { ?>
-                <input id="twitter_show" class="toggle-input" type="checkbox" checked />
+                <input id="twitter_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} // 括弧終了 ?>
                 <label for="twitter_show" class="toggle-label"></label>
               </div>
@@ -243,9 +274,9 @@
               <span>コメント一覧</span>
               <div class="toggle-switch">
 <?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_show'] == false){ ?>
-                <input id="comment_show" class="toggle-input" type="checkbox" />
+                <input id="comment_show" class="toggle-input" type="checkbox" value="true" />
 <?php	} else { ?>
-                <input id="comment_show" class="toggle-input" type="checkbox" checked />
+                <input id="comment_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} // 括弧終了 ?>
                 <label for="comment_show" class="toggle-label"></label>
               </div>
@@ -257,17 +288,19 @@
               <span>デフォルト設定を使いワンクリックでストリームを開始する</span>
               <div class="toggle-switch">
 <?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['onclick_stream'] == true){ ?>
-                <input id="onclick_stream" class="toggle-input" type="checkbox" checked />
+                <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="onclick_stream" class="toggle-input" type="checkbox" />
+                <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="onclick_stream" class="toggle-label"></label>
               </div>
             </div>
 
-          </div>
+          </form>
 
-          <div class="setting-form-wrap">
+          <form id="setting-env" class="setting-form-wrap">
+          
+            <input type="hidden" name="setting-env" value="true" />
 
             <h3 class="red">
               <i class="fas fa-tools"></i>環境設定
@@ -380,10 +413,11 @@
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="subtitle_default" value="false" />
 <?php	if ($subtitle_default == 'true'){ ?>
-                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" checked />
+                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" />
+                <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="subtitle_default" class="toggle-label"></label>
               </div>
@@ -437,14 +471,16 @@
               <div class="setting-content">
                 <span>配信休止中・配信準備中時の動画の音楽を消す</span>
                 <p>
+                  消す場合はオン、消さない(流す)場合はオフです<br>
                   毎回音楽が流れて鬱陶しい場合はオンにしてください<br>
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="silent" value="false" />
 <?php	if ($silent == 'true'){ ?>
-                <input id="silent" name="silent" class="toggle-input" type="checkbox" checked />
+                <input id="silent" name="silent" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="silent" name="silent" class="toggle-input" type="checkbox" />
+                <input id="silent" name="silent" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="silent" class="toggle-label"></label>
               </div>
@@ -468,10 +504,11 @@
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="update_confirm" value="false" />
 <?php	if ($update_confirm == 'true'){ ?>
-                <input id="update_confirm" name="update_confirm" class="toggle-input" type="checkbox" checked />
+                <input id="update_confirm" name="update_confirm" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="update_confirm" name="update_confirm" class="toggle-input" type="checkbox" />
+                <input id="update_confirm" name="update_confirm" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="update_confirm" class="toggle-label"></label>
               </div>
@@ -533,14 +570,15 @@
                 <span>画像付きツイートを投稿した際に一度アップロードした画像を削除する</span>
                 <p>
                   削除する場合はオン、削除しない場合はオフです<br>
-                  アップロードした画像を削除しない場合、画像付きツイートをした際の画像は (TVRemotePlusをインストールしたフォルダ)\htdocs\tweet\upload\ に保存されています<br>
+                  アップロードした画像を削除しない場合、画像は上で設定したフォルダに保存されます<br>
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="tweet_delete" value="false" />
 <?php	if ($tweet_delete  == 'true'){ ?>
-                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type="checkbox" checked />
+                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type="checkbox" />
+                <input id="tweet_delete" name="tweet_delete" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="tweet_delete" class="toggle-label"></label>
               </div>
@@ -579,10 +617,11 @@
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="basicauth" value="false" />
 <?php	if ($basicauth == 'true'){ ?>
-                <input id="basicauth" name="basicauth" class="toggle-input" type="checkbox" checked />
+                <input id="basicauth" name="basicauth" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="basicauth" name="basicauth" class="toggle-input" type="checkbox" />
+                <input id="basicauth" name="basicauth" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="basicauth" class="toggle-label"></label>
               </div>
@@ -624,10 +663,11 @@
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="setting_redirect" value="false" />
 <?php	if ($setting_redirect == 'true'){ ?>
-                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type="checkbox" checked />
+                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type="checkbox" />
+                <input id="setting_redirect" name="setting_redirect" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="setting_redirect" class="toggle-label"></label>
               </div>
@@ -692,7 +732,7 @@
                   新規インストール時のデフォルトは 3(個) です<br>
                 </p>
               </div>
-              <input class="text-box" name="$hlslive_list" type="number" min="1" max="60"  value="<?php echo $hlslive_list; ?>" />
+              <input class="text-box" name="hlslive_list" type="number" min="1" max="60"  value="<?php echo $hlslive_list; ?>" />
             </div>
 
             <div class="setting-form setting-input">
@@ -704,16 +744,17 @@
                 </p>
               </div>
               <div class="toggle-switch">
+                <input type="hidden" name="TSTask_shutdown" value="false" />
 <?php	if ($TSTask_shutdown == 'true'){ ?>
-                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type="checkbox" checked />
+                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type="checkbox" />
+                <input id="TSTask_shutdown" name="TSTask_shutdown" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="TSTask_shutdown" class="toggle-label"></label>
               </div>
             </div>
 
-          </div>
+          </form>
 
 <?php	} else { // POSTの場合 ?>
 
@@ -721,47 +762,61 @@
             <i class="fas fa-cog"></i>設定
           </h2>
 
-<?php		if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
+<?php		if (!isset($_POST['setting-env'])){ ?>
+<?php			if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
           <h3 class="blue">
             <i class="fas fa-video"></i>ストリーム開始
-<?php		} else { ?>
+<?php			} else { ?>
           <h3 class="red">
             <i class="fas fa-video"></i>ストリーム終了
-<?php		} //括弧終了 ?>
+<?php			} //括弧終了 ?>
           </h3>
 
           <div class="setting-form-wrap">
             <p>ストリーム設定を保存しました。</p>
-<?php		if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
+<?php			if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
             <p>
               ストリームを開始します。<br>
               なお、ストリームの起動には数秒かかります。<br>
               再生が開始されない場合、数秒待ってからリロードしてみて下さい。<br>
             </p>
-<?php		} else { ?>
+<?php			} else { ?>
             <p>ストリーミングを終了します。</p>
-<?php		} //括弧終了 ?>
+<?php			} //括弧終了 ?>
             <p>稼働状態：<?php echo $ini['state']; ?></p>
-<?php		if ($ini['state'] == "ONAir"){ ?>
+<?php			if ($ini['state'] == "ONAir"){ ?>
             <p>チャンネル：<?php echo $ch[$ini['channel']]; ?></p>
             <p>動画の画質：<?php echo $ini['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
             <p>字幕の表示：<?php echo $ini['subtitle']; ?></p>
             <p>使用BonDriver：<?php echo $ini['BonDriver']; ?></p>
 
-<?php		} else if ($ini['state'] == "File"){ ?>
+<?php			} else if ($ini['state'] == "File"){ ?>
             <p>タイトル：<?php echo $ini['filetitle']; ?></p>
             <p>動画の画質：<?php echo $ini['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
+<?php			} //括弧終了 ?>
+          
+<?php		} else { ?>
+          <div class="setting-form-wrap">
+            <p>環境設定を保存しました。</p>
+<?php			foreach ($_POST as $key => $value) { ?>
+            <p><?php echo $key; ?>：<?php echo $value; ?></p>
+<?php			} //括弧終了 ?>
+
 <?php		} //括弧終了 ?>
             <div id="button-box">
               <button class="redbutton" type="button" onclick="location.href='/'"><i class="fas fa-home"></i>ホームに戻る</button>
             </div>
           </div>
-          
-<?php		} //括弧終了 ?>
+
+<?php	} //括弧終了 ?>
         </div>
       </div>
+    </div>
+
+    <div id="scroll">
+      <i class="fas fa-arrow-up"></i>
     </div>
 
   </section>

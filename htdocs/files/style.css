@@ -32,16 +32,32 @@ input[type="button"]::focus {
 pre {
     margin: 0;
     padding: 20px 50px;
+    overflow: auto;
 }
 
 pre:empty {
     padding: 0;
 }
 
+
+@media screen and (min-width: 500px){
+    pre::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background: #B2BEC2;
+    }
+    pre::-webkit-scrollbar-corner {
+        background: #B2BEC2;
+    }
+    pre::-webkit-scrollbar-thumb {    width: 8px;
+        height: 8px;
+        background: #657586;
+    }
+}
+
 @media screen and (max-width: 500px){
     pre {
         padding: 15px 10px;
-        overflow-x: scroll;
     }
 }
 
@@ -58,6 +74,31 @@ pre:empty {
     border-radius: 3px;
     bottom: 1.3px;
     z-index: 1;
+}
+
+#scroll {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 25px;
+    bottom: 30px;
+    width: 62px;
+    height: 62px;
+    opacity: 0;
+    font-size: 31px;
+    color: #FFFFFF;
+    background-color: #4ECDC4;
+    transition: 0.2s ease-in-out;
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+#scroll:hover {
+    background-color: #46b2aa;
 }
 
 select {
