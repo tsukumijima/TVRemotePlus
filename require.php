@@ -50,6 +50,9 @@ $BonDriver_dir = $base_dir.'bin/TSTask/BonDriver/';
 // HDD など別のドライブに変更したい場合は、Windows のシンボリックリンク機能を利用して下さい
 $segment_folder = $base_dir.'htdocs/stream/';
 
+// config.php のパス
+$tvrp_conf_file = $base_dir.'config.php';
+
 // ファイル情報保存ファイルのパス
 $infofile = $base_dir.'htdocs/files/fileinfo.json';
 

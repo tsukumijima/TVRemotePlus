@@ -50,6 +50,7 @@
 		// jsonを削除
 		@unlink($infofile);
 		@unlink($historyfile);
+		@exec('del '.str_replace('/', '\\', $base_dir).'htdocs\files\info\*.json');
 
 		$json = array(
 			'apiname' => 'searchfile',

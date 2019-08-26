@@ -167,15 +167,15 @@
 		// 取得したバージョンと現在のバージョンが違う場合のみ
 		if ($update != $version){
 			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank" '.
-						'aria-label="アップデートがあります ('.$update.')" data-balloon-pos="up">';
-			echo '      <i class="fas fa-history" style="color: #e8004a;"></i>';
+						'aria-label="アップデートがあります ('.$update.')" data-balloon-pos="up">'."\n";
+			echo '      <i class="fas fa-history" style="color: #e8004a;"></i>'."\n";
 		} else {
-			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">';
-			echo '      <i class="fas fa-history"></i>';
+			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">'."\n";
+			echo '      <i class="fas fa-history"></i>'."\n";
 		}
 	} else {
-		echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">';
-		echo '      <i class="fas fa-history"></i>';
+		echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank">'."\n";
+		echo '      <i class="fas fa-history"></i>'."\n";
 	}
 ?>
       <span class="nav-link-href">

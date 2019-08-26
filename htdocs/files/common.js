@@ -49,6 +49,26 @@ $(function(){
     settings = JSON.parse(Cookies.get('settings'));
   }
 
+  // 上までスクロールで戻る
+  $(window).scroll(function() {
+
+    // スクロール位置を取得
+    var topPos = $(this).scrollTop();
+
+    // 表示・非表示
+    if (topPos > 400) {
+      $('#scroll').css('opacity', '1');
+    } else {
+      $('#scroll').css('opacity', '0');
+    }
+
+  });
+
+  // 一番上まで戻る
+  $('#scroll').click(function(){
+    $('html, body').animate({ scrollTop: 0 }, 700);
+  });
+
   // トーストのオプション
   toastr.options = {
     "closeButton": false,

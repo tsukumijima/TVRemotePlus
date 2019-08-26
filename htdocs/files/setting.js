@@ -1,4 +1,3 @@
-
 $(function(){
 
   // 個人設定を反映
@@ -19,7 +18,18 @@ $(function(){
   });
 
   $('.redbutton').click(function(){
-    toastr.success('実装中です…');
+
+    // フォーム送信
+    $.ajax({
+      url: '/setting/',
+      type: 'post',
+      data: $('#setting-env').serialize(),
+      cache: false,
+      success: function(data) {
+        toastr.success('環境設定を保存しました。');
+      }
+    });
+
   });
 
 });
