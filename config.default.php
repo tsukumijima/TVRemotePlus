@@ -137,13 +137,11 @@ $OAUTH_CALLBACK = $BASEURL.'tweet/callback.php';
 // basic 認証を利用するかどうか(利用する… true 利用しない… false )
 $basicauth = 'false';
 
-// basic 認証の際のユーザー名(変更必須)
-// 例：$basicauth_user = 'user';
-$basicauth_user = '';
+// basic 認証の際のユーザー名 (利用する場合はできるだけ変更してください)
+$basicauth_user = 'user';
 
-// basic 認証の際のパスワード(変更必須)
-// 例：$basicauth_password = '12345678';
-$basicauth_password = '';
+// basic 認証の際のパスワード(利用する場合はできるだけ変更してください)
+$basicauth_password = '12345678';
 
 
 // ***** その他の設定 *****

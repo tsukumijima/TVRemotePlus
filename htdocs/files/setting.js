@@ -6,7 +6,10 @@ $(function(){
   if (settings['comment_show']) $('#comment_show').prop('checked', true);
   else $('#comment_show').prop('checked', false)
 
-  $('.bluebutton').click(function(){
+  $('#setting-user').submit(function(event){
+
+    event.preventDefault();
+
     var settings = {};
     settings['twitter_show'] = $('#twitter_show').prop('checked');
     settings['comment_show'] = $('#comment_show').prop('checked');
@@ -15,9 +18,12 @@ $(function(){
     var json = JSON.stringify(settings);
     Cookies.set('settings', json);
     toastr.success('個人設定を保存しました。');
+
   });
 
-  $('.redbutton').click(function(){
+  $('#setting-env').submit(function(event){
+
+    event.preventDefault();
 
     // フォーム送信
     $.ajax({

@@ -4,11 +4,12 @@
 	require_once (dirname(__FILE__).'/config.php');
 
 	// BonDriverのチャンネルを取得
-	list($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
-						 $sid, $sid_T, $sid_S, $sid_CS, // SID
-						 $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
-						 $tsid, $tsid_T, $tsid_S, $tsid_CS) //TSID
-						 = initBonChannel($BonDriver_dir);
+	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
+		 $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+		 $sid, $sid_T, $sid_S, $sid_CS, // SID
+		 $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+		 $tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
+		 = initBonChannel($BonDriver_dir);
 	
 	// 各種モジュール
 
@@ -129,6 +130,21 @@
 			$BonDriver_dll[$i] = str_replace($BonDriver_dir, '', $file);
 		}
 		if (!isset($BonDriver_dll)) $BonDriver_dll = array();
+	
+		// BonDriver_dirから地デジ用BonDriverを検索
+		$search_T = array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[tT].dll"), glob($BonDriver_dir."[bB]on[dD]river_*[tT][0-9].dll"));
+		foreach ($search_T as $i => $file) {
+			$BonDriver_dll_T[$i] = str_replace($BonDriver_dir, '', $file);
+		}
+		if (!isset($BonDriver_dll_T)) $BonDriver_dll_T = array();
+
+		// BonDriver_dirからBSCS用BonDriverを検索
+		$search_S = array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[sS].dll"), glob($BonDriver_dir."[bB]on[dD]river_*[sS][0-9].dll"));
+		foreach ($search_S as $i => $file) {
+			$BonDriver_dll_S[$i] = str_replace($BonDriver_dir, '', $file);
+		}
+		if (!isset($BonDriver_dll_S)) $BonDriver_dll_S = array();
+
 
 		// 地デジのch2があれば
 		if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0])
@@ -142,7 +158,7 @@
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_ProxySplitter_PT*[tT]*.ch2")[0])
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_ProxySplitter_PX*[tT]*.ch2")[0])){
 
-			// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
+			// BonDriver_dirからBonDriverのチャンネル設定ファイルを検索
 			if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0])){
 				$BonDriver_ch2_file_T = glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0];
 
@@ -227,7 +243,7 @@
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_ProxySplitter_PT*[sS]*.ch2")[0])
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_ProxySplitter_PX*[sS]*.ch2")[0])){
 
-			// BonDriver_DirからBonDriverのチャンネル設定ファイルを検索
+			// BonDriver_dirからBonDriverのチャンネル設定ファイルを検索
 			if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[sS]*.ch2")[0])){
 			$BonDriver_ch2_file_S = glob($BonDriver_dir."[bB]on[dD]river_*_[sS]*.ch2")[0];
 
@@ -331,10 +347,11 @@
 		$onid = $onid_T + $onid_S + $onid_CS;
 		$tsid = $tsid_T + $tsid_S + $tsid_CS;
 
-		return array($BonDriver_dll, $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
-									 $sid, $sid_T, $sid_S, $sid_CS, // ONID(NID)
-									 $onid, $onid_T, $onid_S, $onid_CS, // SID
-									 $tsid, $tsid_T, $tsid_S, $tsid_CS); // TSID
+		return array($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
+					 $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+					 $sid, $sid_T, $sid_S, $sid_CS, // SID
+					 $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+					 $tsid, $tsid_T, $tsid_S, $tsid_CS); // TSID
 	}
 
 	// ニコニコ実況IDをチャンネル名から取得する関数

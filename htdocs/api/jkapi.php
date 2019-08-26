@@ -134,17 +134,17 @@
 	function getColor($option){
 
 		if (strpos($option, 'red') !== false){
-			$color = "#FF0000";
+			$color = "#E54256";
 		} else if (strpos($option, 'pink') !== false){
 			$color = "#FF8080";
 		} else if (strpos($option, 'orange') !== false){
 			$color = "#FFC000";
 		} else if (strpos($option, 'yellow') !== false){
-			$color = "#FFFF00";
+			$color = "#FFE133";
 		} else if (strpos($option, 'green') !== false){
 			$color = "#64DD17";
 		} else if (strpos($option, 'cyan') !== false){
-			$color = "#00CCFF";
+			$color = "#39CCFF";
 		} else if (strpos($option, 'blue') !== false){
 			$color = "#0000FF";
 		} else if (strpos($option, 'purple') !== false){

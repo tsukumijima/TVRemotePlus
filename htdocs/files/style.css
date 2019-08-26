@@ -92,13 +92,16 @@ pre:empty {
     background-color: #4ECDC4;
     transition: 0.2s ease-in-out;
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    -webkit-tap-highlight-color: transparent;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 1000;
+    z-index: 150;
 }
 
-#scroll:hover {
-    background-color: #46b2aa;
+@media screen and (min-width: 1024px){
+    #scroll:hover {
+        background-color: #46b2aa;
+    }
 }
 
 select {
@@ -110,6 +113,7 @@ select {
     background: none transparent;
     vertical-align: middle;
     font-size: inherit;
+    font-family: 'Segoe UI','Arial','メイリオ';
     color: inherit;
     -webkit-appearance: button;
     -moz-appearance: button;

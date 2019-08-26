@@ -32,8 +32,8 @@
 	  // clock()を1000ミリ秒ごと(毎秒)に実行する
     setInterval(clock, 1000);
 
+    // 視聴数カウント & ストリーム状態把握
     setInterval((function status(){
-      // 10秒おきに視聴中カウントAPIを叩く
       $.ajax({
         url: "/api/watchnow.php",
         dataType: "json",
@@ -42,35 +42,9 @@
 
           // 視聴数を表示
           $("#watchnow").text(data["watchnow"] + '人が視聴中');
-          
-          // 状態を隠しHTMLに書き出して変化してたらリロードする
-          if ((data['status'] != $("#status").text()) && $("#status").text() != ''){
-
-            // stateが同じの場合のみ読み込みし直し
-            if (($('#state').val() == data['state']) &&
-              (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
-
-              // ストリームを読み込みし直す
-              var paused = dp.video.paused;
-              dp.video.src = 'stream/stream.m3u8';
-              dp.initVideo(dp.video, 'hls');
-              if (!paused){
-                dp.video.play();
-              } else {
-                dp.video.pause();
-              }
-
-            // それ以外は諸々問題があるので一旦リロード
-            } else {
-              if (data['status'] == 'failed'){
-                location.reload(true);
-              } else {
-                setTimeout('location.reload(true)', 5000);
-              }
-            }
-          }
 
           if (data['status'] == 'failed'){
+            toastr.error('ストリームの開始に失敗しました…');
             $.ajax({
               url: './setting/',
               type: 'post',
@@ -79,9 +53,64 @@
               },
               cache: false,
               success: function(data) {
+                toastr.info('ストリームを終了します。');
               }
             });
-            toastr.error('ストリームの開始に失敗しました…');
+          }
+
+          if (data['status'] == 'restart'){
+            toastr.warning('ストリームが途中で中断しました…');
+            $.ajax({
+              url: './setting/',
+              type: 'post',
+              data: {
+                'state': 'ONAir',
+                'restart': 'true'
+              },
+              cache: false,
+              success: function(data) {
+                var paused = dp.video.paused;
+                dp.video.src = 'stream/stream.m3u8';
+                dp.initVideo(dp.video, 'hls');
+                if (!paused){
+                  dp.video.play();
+                } else {
+                  dp.video.pause();
+                }
+                toastr.info('ストリームを再起動しています…');
+              }
+            });
+          }
+          
+          // 状態を隠しHTMLに書き出して変化してたらリロードする
+          if ((data['status'] != $("#status").text()) && $("#status").text() != ''){
+
+            // stateが同じの場合のみ読み込みし直し
+            if (($('#state').val() == data['state']) &&
+              (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
+
+              if (data['status'] == 'failed' || data['status'] != 'restart'){
+
+                // ストリームを読み込みし直す
+                var paused = dp.video.paused;
+                dp.video.src = 'stream/stream.m3u8';
+                dp.initVideo(dp.video, 'hls');
+                if (!paused){
+                  dp.video.play();
+                } else {
+                  dp.video.pause();
+                }
+
+              }
+
+            // それ以外は諸々問題があるので一旦リロード
+            } else {
+              if (data['status'] == 'failed'){
+                setTimeout('location.reload(true)', 3000);
+              } else {
+                location.reload(true);
+              }
+            }
           }
 
           $("#status").text(data['status']);
@@ -121,7 +150,11 @@
               $("#starttime").text(data['play']['starttime']);
               $("#to").text(data['play']['to']);
               $("#endtime").text(data['play']['endtime']);
-              $("#channel").text(data['play']['channel']);
+              if (data['play']['ch'] < 55){
+                $("#channel").text('Ch.' + zeroPadding(data['play']['ch'], 2) + ' ' + data['play']['channel']);
+              } else {
+                $("#channel").text('Ch.' + zeroPadding(data['play']['ch'], 3) + ' ' + data['play']['channel']);
+              }
               $("#program_name").html(data['play']['program_name']);
               $("#program_info").html(data['play']['program_info']);
           
@@ -628,6 +661,11 @@
       });
     }
 
+    // 0埋めする関数
+    function zeroPadding(num, length){
+      return ('0000000000' + num).slice(-length);
+    }
+
   	// 時計のメインとなる関数
 	  function clock(){
 		  // 曜日を表す各文字列の配列
@@ -750,6 +788,7 @@
       return arr;
     }
 
+    // スマホの場合にTwitterだけ下にフロート表示
     $('#tweet').focusin(function(event) {
       if ($(window).width() <= 500){
         $('#top').hide();
