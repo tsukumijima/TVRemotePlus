@@ -110,6 +110,11 @@
 
           // 1つずつだと遅すぎるため一気に出す
           $('#search-list').append(html).hide().fadeIn(500);
+          
+          // 検索キーワードがあるなら上までスクロール
+          if (text !== undefined && text !== '' && fileinfo.length == length){
+            $('html, body').animate({ scrollTop: 0 }, 700);
+          }
 
         // 1件も見つからなかった場合
         } else {
