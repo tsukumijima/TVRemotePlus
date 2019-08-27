@@ -15,7 +15,7 @@
 	if (file_exists($infofile)){
 		$TSfile = json_decode(file_get_contents($infofile), true);
 	} else {
-		$TSfile = array();
+		$TSfile['data'] = array();
 	}
 
 	echo '</pre>';

@@ -26,7 +26,7 @@ $nvencc_path =  $base_dir.'bin/NVEncC/'.$nvencc_exe;
 $tstask_exe = 'TSTask.exe';
 $tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
 $tstaskcentre_exe = 'TSTaskCentre.exe';
-$tstaskcentre_path = $base_dir.'bin/TSTask/'.$tstask_exe;
+$tstaskcentre_path = $base_dir.'bin/TSTask/'.$tstaskcentre_exe;
 
 
 // ***** その他の設定 *****

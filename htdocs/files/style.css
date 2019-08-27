@@ -327,7 +327,7 @@ td {
 
 .time {
     width: 84px;
-    padding: 3px 10px;
+    padding: 3px 0px;
     border-right: 1px solid #e5e8ea;
     box-sizing: border-box;
 }

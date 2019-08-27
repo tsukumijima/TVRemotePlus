@@ -83,7 +83,7 @@
 	echo '  1. TVRemotePlus をインストールするフォルダを指定します。'."\n";
 	echo "\n";
 	echo '     フォルダをドラッグ&ドロップするか、ファイルパスを入力してください。'."\n";
-	echo '     なお、Users・Program Files 以下と、日本語が含まれるパスは、'."\n";
+	echo '     なお、Users・Program Files 以下と、日本語(全角)が含まれるパスは、'."\n";
 	echo '     動作しなくなる原因となるため、避けてください。'."\n";
 	echo "\n";
 	echo '     インストールするフォルダ：';
@@ -106,14 +106,23 @@
 
 	// フォルダが存在する場合アップデート
 	if (file_exists($serverroot) and file_exists($serverroot.'/config.php')){
-		$update = true;
 		echo '     既に指定されたフォルダにインストールされていると判定しました。'."\n";
 		echo '     アップデートモードでインストールします。'."\n";
+		echo '     このままアップデートモードでインストールするには 1 を、'."\n";
+		echo '     全て新規インストールする場合は 2 を入力してください。'."\n";
 		echo "\n";
+		echo '     インストール：';
+		$update_flg = trim(fgets(STDIN));
+		// 判定
+		if ($update_flg == 1) $update = true;
+		else $update = false;
+	} else {	
+		$update = false;
+	}
+
 
 	// 新規インストールの場合はIPとポートを訊く
-	} else {
-		$update = false;
+	if ($update === false){
 		echo '  2. TVRemotePlusをインストールするPCの、ローカルIPアドレスを入力してください。'."\n";
 		echo "\n";
 		echo '     ローカルIPアドレスは、通常 192.168.x.xx のような形式の家の中用の IP アドレスです。'."\n";
@@ -157,10 +166,21 @@
 		echo '     Enter キーで次に進む場合、自動で 32bit を選択します。'."\n";
 		echo "\n";
 		echo '     TVTest の BonDriver：';
-		// TVRemotePlusを稼働させるポート
+		// TVTestのBonDriver
 		$bondriver = trim(fgets(STDIN));
 		// 判定
 		if ($bondriver != 2) $bondriver = 1;
+		echo "\n";
+
+		echo '  5. 録画ファイルのあるフォルダを指定します。'."\n";
+		echo "\n";
+		echo '     フォルダをドラッグ&ドロップするか、ファイルパスを入力してください。'."\n";
+		echo '     なお、日本語(全角文字)が含まれるパスとネットワークドライブ上のフォルダは、'."\n";
+		echo '     動作しなくなる原因となるため、避けてください。'."\n";
+		echo "\n";
+		echo '     インストールするフォルダ：';
+		// 録画ファイルのあるフォルダ
+		$TSfile_dir = trim(fgets(STDIN));
 		echo "\n";
 	}
 
@@ -178,6 +198,7 @@
 	if_copy ('/require.php', true);
 	if_copy ('/stream.php', true);
 	if_copy ('/bin', true);
+	if_copy ('/cast', true);
 	if_copy ('/data', true);
 	if_copy ('/docs', true);
 	if_copy ('/htdocs', true);
@@ -221,7 +242,8 @@
 
 		// TVRemotePlusの設定ファイル
 		$tvrp_conf = file_get_contents($tvrp_conf_file);
-		$tvrp_conf = preg_replace('/\$http_port =.*/', '$http_port = '.$port.';', $tvrp_conf); // 置換
+		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = '.$TSfile_dir.';', $tvrp_conf); // 置換
+		$tvrp_conf = preg_replace('/^\$http_port =.*/m', '$http_port = '.$port.';', $tvrp_conf); // 置換
 		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
 
 		// Apacheの設定ファイル
@@ -283,10 +305,12 @@
 	// 新規インストールのみの処理
 	if ($update === false){
 		echo '  セットアップはまだ終わっていません。'."\n\n";
-		echo '  BonDriver・.ch2 ファイルは bin/TSTask/BonDriver/ フォルダに忘れずに入れてください。'."\n\n";
+		echo '  BonDriver と.ch2 ファイルは '.$serverroot .'/bin/TSTask/BonDriver/ に忘れずに入れてください。'."\n\n";
 		echo '  終わったら、デスクトップのショートカットから TVRemotePlus を起動し、その後'."\n";
 		echo '  ブラウザから http://'.$serverip.':'.$port.'/ にアクセスします。'."\n";
 		echo '  その後、≡ サイドメニュー → 設定 → 環境設定 から必要な箇所を設定してください。'."\n";
+		echo '  PWA 機能を使用する場合は、予め端末に設定ページからダウンロードできる自己署名証明書を'."\n";
+		echo '  インストールした上で、 https://'.$serverip.':'.$ssl_port.'/ にアクセスしてください。'."\n";
 		sleep(1);
 	}
 

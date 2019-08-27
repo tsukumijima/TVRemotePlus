@@ -78,7 +78,7 @@
                     var time = hour + ':' + min + ':' + sec;
 
                       // コメントをウインドウに出す
-                      $('#comment-draw-box').append('<tr><td class="time">' + time + '</td><td class="comment">' + danmaku['text'] +'</td></tr>');
+                      $('#comment-draw-box').append('<tr><td class="time" align="center">' + time + '</td><td class="comment">' + danmaku['text'] +'</td></tr>');
   
                       // コメント描画
                       dp.danmaku.draw(danmaku);
