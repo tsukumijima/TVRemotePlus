@@ -1,5 +1,11 @@
 <?php
 
+	// Apache環境変数に deflate(gzip) 無効をセット
+	apache_setenv('no-gzip', '1');
+
+	// レスポンスをバッファに貯める
+	ob_start();
+
 	// ヘッダー読み込み
 	require_once ('../header.php');
 
@@ -11,46 +17,9 @@
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
-	$search = array_merge(glob($TSfile_dir.'*.ts'), glob($TSfile_dir.'*\*.ts'));
-	if (file_exists($infofile)){
-		$TSfile = json_decode(file_get_contents($infofile), true);
-	} else {
-		$TSfile['data'] = array();
-	}
-
 	echo '</pre>';
 
-	// ファイルリストに記録されたファイル数と異なる場合
-	if (count($search) != count($TSfile['data'])){
-
 ?>
-
-
-    <script type="text/javascript">
-
-  $(function(){
-
-    // リストを更新
-    toastr.info('リストを更新しています…');
-    $.ajax({
-      url: "/api/searchfile.php",
-      dataType: "json",
-      cache: false,
-      success: function(data) {
-        $('#rec-new').addClass('search-find-selected');
-        $('#rec-old').removeClass('search-find-selected');
-        $('#name-up').removeClass('search-find-selected');
-        $('#name-down').removeClass('search-find-selected');
-        $('#play-history').removeClass('search-find-selected');
-        sortFileinfo('fileinfo', 1);
-        toastr.success('リストを更新しました。');
-      }
-    });
-  
-  });
-
-    </script>
-<?php	} // 括弧終了 ?>
 
 
     <div id="search-wrap">
@@ -159,6 +128,52 @@
     <?php echo $site_title.' '.$version; ?>
     
   </section>
+
+<?php
+
+	// 溜めてあった出力を解放しフラッシュする
+	ob_end_flush();
+	ob_flush();
+	flush();
+
+	// 3階層まで調べる
+	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'));
+	if (file_exists($infofile)){
+		$TSfile = json_decode(file_get_contents($infofile), true);
+	} else {
+		$TSfile['data'] = array();
+	}
+
+	// ファイルリストに記録されたファイル数と異なる場合
+	if (count($search) != count($TSfile['data'])){
+
+?>
+
+    <script type="text/javascript">
+
+  $(function(){
+
+    // リストを更新
+    toastr.info('リストを更新しています…');
+    $.ajax({
+      url: "/api/searchfile.php",
+      dataType: "json",
+      cache: false,
+      success: function(data) {
+        $('#rec-new').addClass('search-find-selected');
+        $('#rec-old').removeClass('search-find-selected');
+        $('#name-up').removeClass('search-find-selected');
+        $('#name-down').removeClass('search-find-selected');
+        $('#play-history').removeClass('search-find-selected');
+        sortFileinfo('fileinfo', 1);
+        toastr.success('リストを更新しました。');
+      }
+    });
+  
+  });
+
+    </script>
+<?php	} // 括弧終了 ?>
 </body>
 
 </html>

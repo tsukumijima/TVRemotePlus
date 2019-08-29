@@ -41,12 +41,14 @@
         success: function(data) {
 
           // 視聴数を表示
-          $("#watchnow").text(data["watchnow"] + '人が視聴中');
+          document.getElementById('watchnow').textContent = data["watchnow"] + '人が視聴中';
 
-          if (data['status'] == 'failed'){
+          var status = document.getElementById('status').textContent;
+
+          if (data['status'] == 'failed' && status != 'failed'){
             toastr.error('ストリームの開始に失敗しました…');
             $.ajax({
-              url: './setting/',
+              url: '/setting/',
               type: 'post',
               data: {
                 'state': 'Offline'
@@ -58,10 +60,10 @@
             });
           }
 
-          if (data['status'] == 'restart'){
+          if (data['status'] == 'restart' && status != 'restart'){
             toastr.warning('ストリームが途中で中断しました…');
             $.ajax({
-              url: './setting/',
+              url: '/setting/',
               type: 'post',
               data: {
                 'state': 'ONAir',
@@ -83,10 +85,10 @@
           }
           
           // 状態を隠しHTMLに書き出して変化してたらリロードする
-          if ((data['status'] != $("#status").text()) && $("#status").text() != ''){
+          if ((data['status'] != status) && status != ''){
 
             // stateが同じの場合のみ読み込みし直し
-            if (($('#state').val() == data['state']) &&
+            if ((document.getElementById('state').value == data['state']) &&
               (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
 
               if (data['status'] == 'failed' || data['status'] != 'restart'){
@@ -113,7 +115,7 @@
             }
           }
 
-          $("#status").text(data['status']);
+          document.getElementById('status').textContent = data['status'];
           console.log('status: ' + data['status']);
         }
 
@@ -150,10 +152,11 @@
               $("#starttime").text(data['play']['starttime']);
               $("#to").text(data['play']['to']);
               $("#endtime").text(data['play']['endtime']);
+              
               if (data['play']['ch'] < 55){
-                $("#channel").text('Ch.' + zeroPadding(data['play']['ch'], 2) + ' ' + data['play']['channel']);
+                $("#channel").text('Ch: ' + zeroPadding(data['play']['ch'], 2) + ' ' + data['play']['channel']);
               } else {
-                $("#channel").text('Ch.' + zeroPadding(data['play']['ch'], 3) + ' ' + data['play']['channel']);
+                $("#channel").text('Ch: ' + zeroPadding(data['play']['ch'], 3) + ' ' + data['play']['channel']);
               }
               $("#program_name").html(data['play']['program_name']);
               $("#program_info").html(data['play']['program_info']);
@@ -179,7 +182,7 @@
           }
 
           // stateを記録しておく
-          $('#state').val(data['info']['state']);
+          document.getElementById('state').value = data['info']['state'];
 
           // progressbarの割合を計算して代入
           var percent = ((Math.floor(Date.now() / 1000) - data['play']['timestamp']) / data['play']['duration']) * 100;

@@ -33,6 +33,7 @@ echo "\n".'  Chromecast Init.'."\n\n";
 
 $cc->DMP->play("http://".$argv[1].":".$http_port."/stream/stream.m3u8", "BUFFERED", "application/vnd.apple.mpegurl", true, 0);
 $cc->DMP->UnMute();
+$cc->DMP->pause();
 
 // 通知
 $cast = json_decode(file_get_contents(dirname(__FILE__).'/cast.json'), true);
@@ -42,7 +43,7 @@ file_put_contents(dirname(__FILE__).'/cast.json', json_encode($cast, JSON_UNESCA
 echo '  Chromecast Play.'."\n\n";
 
 while(true){
-	usleep(500);
+	usleep(5);
 	set_time_limit(0);
 	$cc->pingpong();
 	if (isset($cmd)){
@@ -69,6 +70,7 @@ while(true){
 		// シーク
 		if ($cmd['cmd'] == 'seek'){
 			$cc->DMP->seek($cmd['arg']);
+			$cc->DMP->pause();
 			echo '  Chromecast Seek '.$cmd['arg'].'.'."\n\n";
 		}
 
@@ -92,7 +94,6 @@ while(true){
 
 		// 停止(終了)
 		if ($cmd['cmd'] == 'stop'){
-			$cc->DMP->Mute();
 			$cc->DMP->Stop();
 			$cc->disconnect();
 			echo '  Chromecast Stop.'."\n\n";

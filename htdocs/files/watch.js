@@ -30,7 +30,7 @@
               return a.title.match(regexp);
             }
           );
-          $('#search-info').html(fileinfo.length + '件ヒットしました。').hide().fadeIn(500);
+          $('#search-info').html(fileinfo.length + '件ヒットしました。').hide().delay(200).velocity('fadeIn', 500);
         }
 
         //console.log(fileinfo);
@@ -109,16 +109,16 @@
           }
 
           // 1つずつだと遅すぎるため一気に出す
-          $('#search-list').append(html).hide().fadeIn(500);
+          $('#search-list').append(html).hide().delay(200).velocity('fadeIn', 500);
           
           // 検索キーワードがあるなら上までスクロール
           if (text !== undefined && text !== '' && fileinfo.length == length){
-            $('html, body').animate({ scrollTop: 0 }, 700);
+            $('html, body').velocity('scroll', 700);
           }
 
         // 1件も見つからなかった場合
         } else {
-          $('#search-info').html('<span class="error-text">一致する録画ファイルが見つかりませんでした…</span>').hide().fadeIn(500);
+          $('#search-info').html('<span class="error-text">一致する録画ファイルが見つかりませんでした…</span>').hide().delay(200).velocity('fadeIn', 500);
         }
 
       },
@@ -130,7 +130,7 @@
         // もっと見るを消す
         $("#search-more-box").remove();
         // エラー吐く
-        $('#search-info').html('録画ファイルリストがありません。右上の︙メニュー →「リストを更新」から作成してください。').hide().fadeIn(500);
+        $('#search-info').html('録画ファイルリストがありません。右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
       }
     });
   }
@@ -148,7 +148,7 @@
     // リストを更新
     $('#list-update').click(function(event){ 	
       toastr.info('リストを更新しています…');
-      $('#menu-content').animate({height: 'toggle'}, 150);
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
       $.ajax({
         url: "/api/searchfile.php",
@@ -168,7 +168,7 @@
 
     // リストをリセット
     $('#list-reset').click(function(event){ 	
-      $('#menu-content').animate({height: 'toggle'}, 150);
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
       $.ajax({
         url: "/api/searchfile.php?reset",

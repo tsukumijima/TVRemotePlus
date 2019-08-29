@@ -158,9 +158,9 @@
             <span id="state" style="color: #007cff;" value="<?php echo $ini['state']; ?>">● ON Air</span>
             <span id="status"></span>
 <?php		if ($ini['channel'] < 55){ ?>
-            <span id="channel">Ch.<?php echo sprintf('%02d', $ini['channel']).' '.$channel; ?></span>
+            <span id="channel">Ch: <?php echo sprintf('%02d', $ini['channel']).' '.$channel; ?></span>
 <?php		} else { //括弧終了 ?>
-            <span id="channel">Ch.<?php echo sprintf('%03d', $ini['channel']).' '.$channel; ?></span>
+            <span id="channel">Ch: <?php echo sprintf('%03d', $ini['channel']).' '.$channel; ?></span>
 <?php		} //括弧終了 ?>
           </div>
           <span class="livetime">

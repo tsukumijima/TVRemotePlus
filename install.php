@@ -116,6 +116,7 @@
 		// 判定
 		if ($update_flg == 1) $update = true;
 		else $update = false;
+		echo "\n";
 	} else {	
 		$update = false;
 	}
@@ -178,10 +179,23 @@
 		echo '     なお、日本語(全角文字)が含まれるパスとネットワークドライブ上のフォルダは、'."\n";
 		echo '     動作しなくなる原因となるため、避けてください。'."\n";
 		echo "\n";
-		echo '     インストールするフォルダ：';
+		echo '     録画ファイルのあるフォルダ：';
 		// 録画ファイルのあるフォルダ
 		$TSfile_dir = trim(fgets(STDIN));
 		echo "\n";
+		// 空だったら
+		if (empty($TSfile_dir)){
+			while(empty($TSfile_dir)){
+				echo '     入力欄が空です。もう一度入力してください。'."\n";
+				echo "\n";
+				echo '     録画ファイルのあるフォルダ：';
+				$TSfile_dir = trim(fgets(STDIN));
+				echo "\n";
+			}
+		}
+		// 置換
+		$TSfile_dir = str_replace('\\', '/', $TSfile_dir);
+		$TSfile_dir = rtrim($TSfile_dir, '/').'/';
 	}
 
 	echo '  インストールを開始します。'."\n";
@@ -191,11 +205,13 @@
 	// フォルダを作る
 	if_mkdir('/');
 	if_copy ('/config.default.php', true);
+	if_copy ('/createcert.bat', true);
 	if_copy ('/header.php', true);
 	if_copy ('/LICENSE.txt', true);
 	if_copy ('/module.php', true);
 	if_copy ('/README.md', true);
 	if_copy ('/require.php', true);
+	if_copy ('/stream.bat', true);
 	if_copy ('/stream.php', true);
 	if_copy ('/bin', true);
 	if_copy ('/cast', true);
@@ -242,7 +258,7 @@
 
 		// TVRemotePlusの設定ファイル
 		$tvrp_conf = file_get_contents($tvrp_conf_file);
-		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = '.$TSfile_dir.';', $tvrp_conf); // 置換
+		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.$TSfile_dir.'\';', $tvrp_conf); // 置換
 		$tvrp_conf = preg_replace('/^\$http_port =.*/m', '$http_port = '.$port.';', $tvrp_conf); // 置換
 		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
 
@@ -282,6 +298,7 @@
 		exec($cmd, $opt1, $return1);
 		copy($serverroot.'/bin/Apache/conf/server.crt', $serverroot.'/htdocs/server.crt');
 		echo "\n";
+		echo "\n";
 		if ($return1 == 0) echo '  HTTPS接続用の自己署名証明書を作成しました。'."\n";
 		else echo '  HTTPS接続用の自己署名証明書の作成に失敗しました…'."\n";
 
@@ -299,7 +316,9 @@
 	}
 
 	echo "\n";
+	echo "\n";
 	echo '  インストールが完了しました。'."\n";
+	echo "\n";
 	sleep(1);
 
 	// 新規インストールのみの処理
@@ -308,7 +327,7 @@
 		echo '  BonDriver と.ch2 ファイルは '.$serverroot .'/bin/TSTask/BonDriver/ に忘れずに入れてください。'."\n\n";
 		echo '  終わったら、デスクトップのショートカットから TVRemotePlus を起動し、その後'."\n";
 		echo '  ブラウザから http://'.$serverip.':'.$port.'/ にアクセスします。'."\n";
-		echo '  その後、≡ サイドメニュー → 設定 → 環境設定 から必要な箇所を設定してください。'."\n";
+		echo '  その後、≡ サイドメニュー → 設定 → 環境設定 から必要な箇所を設定してください。'."\n\n";
 		echo '  PWA 機能を使用する場合は、予め端末に設定ページからダウンロードできる自己署名証明書を'."\n";
 		echo '  インストールした上で、 https://'.$serverip.':'.$ssl_port.'/ にアクセスしてください。'."\n";
 		sleep(1);
