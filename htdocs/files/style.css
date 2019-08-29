@@ -1,5 +1,12 @@
 
+html {
+    transform: none !important;
+    will-change: 'auto';
+}
+
 body {
+    transform: none !important;
+    will-change: 'auto';
     font-family: 'Segoe UI','Arial','メイリオ';
     background-color: #EEEEEE;
     margin: 0px;
@@ -87,6 +94,7 @@ pre:empty {
     width: 62px;
     height: 62px;
     opacity: 0;
+    visibility: hidden;
     font-size: 31px;
     color: #FFFFFF;
     background-color: #4ECDC4;
@@ -457,14 +465,15 @@ td {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 300; /*最前面に*/
-    width: 90%; /*右側に隙間を作る（閉じるカバーを表示）*/
-    max-width: 260px; /*最大幅*/
+    z-index: 300;
+    width: 90%;
+    max-width: 260px;
     height: 130%;
     background-color: #272727;
-    transition: 0.3s cubic-bezier(.4,0,.4,1); /*滑らかに表示*/
     -webkit-transform: translateX(-105%);
-    transform: translateX(-105%); /*左に隠しておく*/
+    transform: translateX(-105%);
+    transition: transform 0.3s cubic-bezier(.4,0,.4,1);
+    will-change: transform;
 }
 
 #nav-content::-webkit-scrollbar {
@@ -534,8 +543,8 @@ td {
 }
 
 #nav-content.open {
-    -webkit-transform: translateX(0%);
-    transform: translateX(0%); /*中身を表示（右へスライド）*/
+    -webkit-transform: none;
+    transform: none;
     box-shadow: 6px 0 25px rgba(0,0,0,.15);
 }
 
@@ -1254,7 +1263,7 @@ td {
     margin: auto;
     padding: 20px;
     box-sizing: border-box;
-    transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
+    transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
     opacity: 0;
     width: 95%;
@@ -1263,6 +1272,7 @@ td {
     background-color: #FFFFFF;
     border-radius: 5px;
     font-size: 110%;
+    will-change: opacity;
 }
 
 #broadcast-stream-box.open {
@@ -1307,7 +1317,7 @@ td {
     margin: auto;
     padding: 20px;
     box-sizing: border-box;
-    transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
+    transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
     opacity: 0;
     width: 95%;
@@ -1316,6 +1326,7 @@ td {
     background-color: #FFFFFF;
     border-radius: 5px;
     font-size: 110%;
+    will-change: opacity;
 }
 
 #chromecast-box.open {

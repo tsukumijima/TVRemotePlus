@@ -21,7 +21,7 @@
 		apache_setenv('no-gzip', '1');
 
 		// レスポンスをバッファに貯める
-		ob_start();
+		ob_start('mb_output_handler');
 
 		$json = array(
 			'apiname' => 'searchfile',
@@ -129,7 +129,7 @@
 	}
 
 	// ファイルを検索
-	$search = array_merge(glob($TSfile_dir.'*.ts'), glob($TSfile_dir.'*\*.ts'));
+	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'));
 
 	foreach ($search as $key => $value) {
 		$TSfile['data'][$key]['file'] = $value; // パス含めたファイル名

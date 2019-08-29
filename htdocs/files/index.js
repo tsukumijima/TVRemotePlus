@@ -1,6 +1,10 @@
-  $(function(){
+  
+  // 生放送・ファイル再生共通その2 (script.jsが肥大化したためこっちに)
 
-    // 生放送・ファイル再生共通その2 (script.jsが肥大化したためこっちに)
+  // document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style>#main { opacity: 0; }</style>');
+
+  // ロード時に発火
+  $(window).on('load', function(){
 
     // 個人設定を反映
     if (!settings['twitter_show']){
@@ -11,6 +15,75 @@
       $('#content').width('100%');
     }
 
+  });
+
+  // ロード時 & リサイズ時に発火
+  $(window).on('load resize', function(event){
+
+    if (event.type == 'load'){
+      // フェード
+      // $('#main').delay(100).velocity('fadeIn', 500);
+    }
+
+    // console.log('resize');
+    // 1024px以上
+    if ($(window).width() > 1024){
+
+      // ウィンドウを読み込んだ時・リサイズされた時に発動
+      // 何故か上手くいかないので8回繰り返す
+      // 正直どうなってるのか自分でもわからない
+      var result = 0; // 初期化
+
+      while (true){
+        var WindowHeight = $(window).height() - $('#top').height();
+        var width = $('section').width();
+
+        // Twitter非表示時
+        if (!settings['twitter_show']){
+          var height= $('#dplayer').width() * (9 / 16);
+        } else {
+          var height= $('#dplayer').width() * (9 / 16) + 136; // $('#tweet-box').height()
+        }
+
+        // 同じならループを抜ける
+        if (result == (width * WindowHeight) / height) break;
+
+        // widthが変なとき用
+        if (width < ($(window).width() / 2)){
+          $('section').css('max-width', '1250px');
+          break;
+        }
+
+        result = (width * WindowHeight) / height;
+        // console.log('width: ' + width);
+        // console.log('result: ' + result);
+        $('section').css('max-width', result + 'px');
+
+      }
+    }
+
+    // スライダー関係
+    var galleryThumbs = new Swiper('#broadcast-tab-box', {
+      slidesPerView: 'auto',
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+      slideActiveClass: 'swiper-slide-active'
+    });
+    galleryThumbs.on('tap', function () {
+      var current = galleryTop.activeIndex;
+      galleryThumbs.slideTo(current, 500, true);
+    });
+    var galleryTop = new Swiper('#broadcast-box', {
+      autoHeight: true,
+      thumbs: {
+        swiper: galleryThumbs
+      }
+    });
+
+  });
+  
+  $(function(){
+
     $.ajax({
       url: '/api/chromecast.php',
       dataType: 'json',
@@ -20,66 +93,6 @@
           $('#cast-toggle > .menu-link-href').text('キャストを終了');
         }
       }
-    });
-
-    // ウインドウサイズ
-    $(window).on('load resize', function(){
-
-      // console.log('resize');
-      // 1024px以上
-      if ($(window).width() > 1024){
-
-        // ウィンドウを読み込んだ時・リサイズされた時に発動
-        // 何故か上手くいかないので8回繰り返す
-        // 正直どうなってるのか自分でもわからない
-        var result = 0; // 初期化
-
-        while (true){
-          var WindowHeight = $(window).height() - $('#top').height();
-          var width = $('section').width();
-
-          // Twitter非表示時
-          if (!settings['twitter_show']){
-            var height= $('#dplayer').width() * (9 / 16);
-          } else {
-            var height= $('#dplayer').width() * (9 / 16) + 136; // $('#tweet-box').height()
-          }
-
-          // 同じならループを抜ける
-          if (result == (width * WindowHeight) / height) break;
-
-          // widthが変なとき用
-          if (width < ($(window).width() / 2)){
-            $('section').css('max-width', '1250px');
-            break;
-          }
-
-          result = (width * WindowHeight) / height;
-          // console.log('width: ' + width);
-          // console.log('result: ' + result);
-          $('section').css('max-width', result + 'px');
-
-        }
-      }
-
-      // スライダー関係
-      var galleryThumbs = new Swiper('#broadcast-tab-box', {
-        slidesPerView: 'auto',
-        watchSlidesVisibility: true,
-        watchSlidesProgress: true,
-        slideActiveClass: 'swiper-slide-active'
-      });
-      galleryThumbs.on('tap', function () {
-        var current = galleryTop.activeIndex;
-        galleryThumbs.slideTo(current, 500, true);
-      });
-      var galleryTop = new Swiper('#broadcast-box', {
-        autoHeight: true,
-        thumbs: {
-          swiper: galleryThumbs
-        }
-      });
-
     });
 
     // 再生開始ボックス
@@ -124,7 +137,7 @@
       // キャスト開始
       if ($('#cast-toggle > .menu-link-href').text() == 'キャストを開始'){
 
-        $('#menu-content').animate({height: 'toggle'}, 150);
+        $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
         $('#menu-content').removeClass('open');
         $('#nav-close').toggleClass('open');
         $('#chromecast-box').toggleClass('open');
@@ -160,7 +173,7 @@
       // キャスト終了
       } else if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
         
-        $('#menu-content').animate({height: 'toggle'}, 150);
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
         $('#menu-content').removeClass('open');
 
         $.ajax({
@@ -201,10 +214,9 @@
               dataType: 'json',
               cache: false,
               success: function(data) {
+                dp.video.muted = true;
               }
             });
-            dp.video.muted = true;
-            dp.play();
 
             if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
@@ -238,6 +250,7 @@
                   dataType: 'json',
                   cache: false,
                   success: function(data) {
+                    dp.pause();
                   }
                 });
             });
@@ -253,7 +266,7 @@
     });
 
     $('#cast-scan').click(function(){
-      $('#menu-content').animate({height: 'toggle'}, 150);
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
       toastr.info('スキャンしています…');
       $.ajax({

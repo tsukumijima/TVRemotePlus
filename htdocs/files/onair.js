@@ -29,33 +29,45 @@
             res = data["last_res"];
             last_res = data["res"];
   
-            // console.log('―― GetComment postres:' + last_res + ' getres:' + res + ' ――');
-            // console.log(data['danmaku']);
+            // console.log('―― GetComment postres:' + last_res + ' getres:' + res + ' draw:' + (res - last_res) + ' ――');
+            // console.log(data['data']);
   
             if (data["ikioi"] !== null){
               // 実況勢いを表示
-              $("#ikioi").text('実況勢い: ' + data["ikioi"]);
+              document.getElementById('ikioi').textContent = '実況勢い: ' + data['ikioi'];
             }
 
             // 5秒後に実行(コメント遅延分)
             wait(5).done(function(){
   
-              if (data["data"] != null && data["data"][0]){ //data["data"] があれば(nullでなければ)
+              if (data['data'] != null && data['data'][0]){ //data['data'] があれば(nullでなければ)
+
+                // コメントを無制限に表示 がオンの場合は全て流す
+                // オフの場合は一度に最大8個のみ
+                if (document.getElementsByClassName('dplayer-danunlimit-setting-input')[0].checked){
+                  var length = data['data'].length;
+                } else {
+                  if (data['data'].length > 8){
+                    var length = 8;
+                  } else {
+                    var length = data['data'].length;
+                  }
+                }
   
-                for (i = 0; i <= data["data"].length-1; i++){
+                for (i = 0; i < length; i++){
   
                   // 代入する際にきちんと文字型とか数値型とかに変換してないとうまく代入できない
-                  danmaku['text'] = data["data"][i][4].toString();
-                  danmaku['color'] =　data["data"][i][2].toString();
+                  danmaku['text'] = data['data'][i][4].toString();
+                  danmaku['color'] =　data['data'][i][2].toString();
   
                   if (danmaku['text'] !== ''){ // 空でないなら
   
                     // 表示タイプを解析
-                    if (data["data"][i][1] == 0){
+                    if (data['data'][i][1] == 0){
                       danmaku['type'] = 0;
-                    } else if (data["data"][i][1] == 1){
+                    } else if (data['data'][i][1] == 1){
                       danmaku['type'] = 1;
-                    } else if (data["data"][i][1] == 2){
+                    } else if (data['data'][i][1] == 2){
                       danmaku['type'] = 2;
                     }
   
@@ -77,17 +89,23 @@
                     }
                     var time = hour + ':' + min + ':' + sec;
 
-                      // コメントをウインドウに出す
-                      $('#comment-draw-box').append('<tr><td class="time" align="center">' + time + '</td><td class="comment">' + danmaku['text'] +'</td></tr>');
-  
-                      // コメント描画
-                      dp.danmaku.draw(danmaku);
-                  
+                    // コメントをウインドウに出す
+                    // 768px 以上のみ
+                    if (document.body.clientWidth > 768){
+                      document.getElementById('comment-draw-box').insertAdjacentHTML('beforeend', '<tr><td class="time" align="center">' + time + '</td><td class="comment">' + danmaku['text'] +'</td></tr>');
                     }
-                  }
 
-                // アニメーション
-                $('#comment-draw-box').animate({scrollTop:$('#comment-draw-box')[0].scrollHeight}, 0.5);
+                    // コメント描画
+                    dp.danmaku.draw(danmaku);
+                
+                  }
+                }
+
+                // コメント欄を下にアニメーション
+                // 768px 以上のみ
+                if (document.body.clientWidth > 768){
+                  $('#comment-draw-box').velocity('scroll', { container: $("#comment-draw-box"), duration: 0.5, offset: $('#comment-draw-box')[0].scrollHeight});
+                }
               }
             });
           }

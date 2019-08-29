@@ -147,6 +147,11 @@
 
 
 		// 地デジのch2があれば
+		if (isset(array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[tT].ch2"), glob($BonDriver_dir."[bB]on[dD]river_*[tT][0-9].ch2"))[0])){
+			// 全部書かなくてもこれ一発で行けそう
+			$BonDriver_ch2_file_T = array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[tT].ch2"), glob($BonDriver_dir."[bB]on[dD]river_*[tT][0-9].ch2"))[0];
+
+		/* // 古い方(念のためコメントアウト)
 		if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[tT]*.ch2")[0])
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_*-[tT]*.ch2")[0])
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_PT*[tT]*.ch2")[0])
@@ -192,6 +197,7 @@
 			} else {
 				$BonDriver_ch2_file_T = array();
 			}
+			*/
 
 			$BonDriver_ch2_T = ch2Convert($BonDriver_ch2_file_T);
 
@@ -232,6 +238,11 @@
 		}
 
 		// BSCSのch2があれば
+		if (isset(array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[sS].ch2"), glob($BonDriver_dir."[bB]on[dD]river_*[sS][0-9].ch2"))[0])){
+			// 全部書かなくてもこれ一発で行けそう
+			$BonDriver_ch2_file_S = array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[sS].ch2"), glob($BonDriver_dir."[bB]on[dD]river_*[sS][0-9].ch2"))[0];
+
+		/* // 古い方(念のためコメントアウト)
 		if (isset(glob($BonDriver_dir."[bB]on[dD]river_*_[sS]*.ch2")[0])
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_*-[sS]*.ch2")[0])
 			 or isset(glob($BonDriver_dir."[bB]on[dD]river_PT*[sS]*.ch2")[0])
@@ -277,6 +288,7 @@
 			} else {
 				$BonDriver_ch2_file_S = array();
 			}
+			*/
 
 			$BonDriver_ch2_S = ch2Convert($BonDriver_ch2_file_S);
 			$BonDriver_ch2_CS = ch2Convert($BonDriver_ch2_file_S, true);
@@ -286,8 +298,6 @@
 				// サービス状態が1の物のみセットする
 				// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
 				if ($value[4] != 2 and $value[8] == 1 and !isset($ch_S[strval($value[5])])){
-					// 正規表現と人力で無理やり弾く（処理の変更でいらなくなった）
-					// and !preg_match("/1[4-8]2/", $value[5]) and !preg_match("/1[4-8]3/", $value[5]) and $value[5] != 102 and $value[5] != 104){
 					// 全角は半角に直す
 					// チャンネル名
 					$ch_S[strval($value[5])] = mb_convert_kana($value[0], 'asv');
@@ -378,7 +388,6 @@
 
 			// チャンネル名が一致したら
 			if ($channel == $jkch or preg_match($match, $channel) or preg_match($match2, $channel) or preg_match($match3, $channel)){
-			//if ($channel == $jkch){
 				// 実況IDを返す
 				return $ch_sid[$key][0];
 			}

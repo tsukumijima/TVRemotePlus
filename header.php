@@ -52,6 +52,7 @@
   <script type="text/javascript" src="/files/toastr.min.js"></script>
   <script type="text/javascript" src="/files/push.min.js"></script>
   <script type="text/javascript" src="/files/js.cookie.min.js"></script>
+  <script type="text/javascript" src="/files/velocity.min.js"></script>
   <script type="text/javascript" src="/files/common.js"></script>
 <?php
 	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ

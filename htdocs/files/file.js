@@ -2,7 +2,7 @@
 
     // コメントを取得してコメント一覧画面にコメントを流し込む
     // スマホ以外のみ発動（スマホだと動作が遅くなるため）
-    if ($(window).width() > 768){
+    if (document.body.clientWidth > 768){
 
       // コメント一覧の時間欄のwidthを調整
       $('#comment-time').css('width', '62px');
@@ -32,7 +32,7 @@
             }
 
             // コメントを一気にコメント一覧に挿入
-            // 1つずつだと遅すぎるため一気に、さらにスピード重視であえてJavaScriptで実装しています
+            // 1つずつだと遅すぎるため一気に、さらにスピード重視であえてJavaScriptで実装
             document.getElementById('comment-draw-box').innerHTML = html;
 
           }
@@ -57,7 +57,7 @@
       // progressbarの割合を計算して代入
       var video = $('.dplayer-video-current').get(0);
       var percent = (video.currentTime / video.duration) * 100;
-      $('#progress').width(percent + '%');
+      document.getElementById('progress').style.width = percent + '%';
     });
 
   });

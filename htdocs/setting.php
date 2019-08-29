@@ -23,7 +23,8 @@
 		// もし存在するなら$iniの連想配列に格納
 		if (isset($_POST['state'])) $ini['state'] = $_POST['state'];
 
-		if (!isset($_POST['setting-env'])){
+		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or 
+			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream.m3u8') > 20)){
 
 			// 通常のストリーム開始処理
 
@@ -161,7 +162,7 @@
 			}
 
 		// 環境設定を保存する
-		} else {
+		} else if (isset($_POST['setting-env'])){
 			
 			// ファイル読み込み
 			$tvrp_conf = file_get_contents($tvrp_conf_file);
