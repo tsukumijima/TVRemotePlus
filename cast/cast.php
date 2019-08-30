@@ -33,7 +33,6 @@ echo "\n".'  Chromecast Init.'."\n\n";
 
 $cc->DMP->play("http://".$argv[1].":".$http_port."/stream/stream.m3u8", "BUFFERED", "application/vnd.apple.mpegurl", true, 0);
 $cc->DMP->UnMute();
-$cc->DMP->pause();
 
 // 通知
 $cast = json_decode(file_get_contents(dirname(__FILE__).'/cast.json'), true);
@@ -70,6 +69,7 @@ while(true){
 		// シーク
 		if ($cmd['cmd'] == 'seek'){
 			$cc->DMP->seek($cmd['arg']);
+			$cc->DMP->pause();
 			$cc->DMP->pause();
 			echo '  Chromecast Seek '.$cmd['arg'].'.'."\n\n";
 		}
