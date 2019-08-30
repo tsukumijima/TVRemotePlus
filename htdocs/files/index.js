@@ -3,26 +3,22 @@
 
   // document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style>#main { opacity: 0; }</style>');
 
-  // ロード時に発火
-  $(window).on('load', function(){
-
-    // 個人設定を反映
-    if (!settings['twitter_show']){
-      $('#tweet-box').hide();
-    }
-    if (!settings['comment_show']){
-      $('#sidebar').hide();
-      $('#content').width('100%');
-    }
-
-  });
-
   // ロード時 & リサイズ時に発火
   $(window).on('load resize', function(event){
 
     if (event.type == 'load'){
+
       // フェード
       // $('#main').delay(100).velocity('fadeIn', 500);
+
+      // 個人設定を反映
+      if (!settings['twitter_show']){
+        $('#tweet-box').hide();
+      }
+      if (!settings['comment_show']){
+        $('#sidebar').hide();
+        $('#content').width('100%');
+      }
     }
 
     // console.log('resize');
@@ -91,6 +87,13 @@
       success: function(data) {
         if (data['status'] == 'play'){
           $('#cast-toggle > .menu-link-href').text('キャストを終了');
+          setTimeout(function(){
+            var state = document.getElementById('state').value;
+            if (state == 'File'){
+              dp.pause();
+            }
+            chromecast(state);
+          }, 1500);
         }
       }
     });
@@ -134,7 +137,7 @@
     // キャスト関連
     $('#cast-toggle').click(function(){
 
-      // キャスト開始
+      // キャスト画面
       if ($('#cast-toggle > .menu-link-href').text() == 'キャストを開始'){
 
         $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
@@ -190,8 +193,12 @@
 
     });
 
+    // キャスト開始
     $('body').on('click','.chromecast-device',function(){
-      dp.pause();
+      var state = document.getElementById('state').value;
+      if (state == 'File'){
+        dp.pause();
+      }
       $('#nav-close').removeClass('open');
       $('#chromecast-box').removeClass('open');
       $('html').removeClass('open');
@@ -206,56 +213,9 @@
           if (data['status'] == 'play'){
 
             $('#cast-toggle > .menu-link-href').text('キャストを終了');
-            toastr.success('キャストを開始しました。');
 
-            // 再生系処理 
-            $.ajax({
-              url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
-              dataType: 'json',
-              cache: false,
-              success: function(data) {
-                dp.video.muted = true;
-              }
-            });
-
-            if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
-
-              // 再生・一時停止・シーク
-              $('.dplayer-video-current').on('play', function(){
-
-                $.ajax({
-                  url: '/api/chromecast.php?cmd=restart',
-                  dataType: 'json',
-                  cache: false,
-                  success: function(data) {
-                  }
-                });
-              });
-
-              $('.dplayer-video-current').on('pause', function(){
-
-                  $.ajax({
-                    url: '/api/chromecast.php?cmd=pause',
-                    dataType: 'json',
-                    cache: false,
-                    success: function(data) {
-                    }
-                  });
-              });
-
-              $('.dplayer-video-current').on('seeked', function(){
-
-                $.ajax({
-                  url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
-                  dataType: 'json',
-                  cache: false,
-                  success: function(data) {
-                    dp.pause();
-                  }
-                });
-            });
-
-            }
+            // 操作系は関数に投げる
+            chromecast(state);
 
           } else {
             toastr.error('キャストの開始に失敗しました…');
@@ -289,5 +249,89 @@
       });
 
     });
+
+    // Chromecast の操作関連をまとめた関数
+    function chromecast(state){
+
+      setTimeout(function(){
+        toastr.success('キャストを開始しました。');
+      }, 1000);
+
+      // ファイル再生のみ
+      if (state == 'File'){
+
+        // 再生系処理 
+        $.ajax({
+          url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            dp.video.muted = true;
+          }
+        });
+
+      } else {
+        dp.video.muted = true;
+      }
+
+      if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
+
+        // 再生・一時停止・シーク
+        $('.dplayer-video-current').on('play', function(){
+
+          $.ajax({
+            url: '/api/chromecast.php?cmd=restart',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+            }
+          });
+        });
+
+        $('.dplayer-video-current').on('pause', function(){
+
+          // ファイル再生のみ
+          if (state == 'File'){
+
+            $.ajax({
+              url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
+              dataType: 'json',
+              cache: false,
+              success: function(data) {
+              }
+            });
+
+          } else {
+
+            $.ajax({
+              url: '/api/chromecast.php?cmd=pause',
+              dataType: 'json',
+              cache: false,
+              success: function(data) {
+                dp.pause();
+              }
+            });
+
+          }
+        });
+
+        // ファイル再生のみ
+        if (state == 'File'){
+
+          $('.dplayer-video-current').on('seeked', function(){
+
+            $.ajax({
+              url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
+              dataType: 'json',
+              cache: false,
+              success: function(data) {
+                dp.pause();
+              }
+            });
+          });
+        }
+
+      }
+    }
 
   });

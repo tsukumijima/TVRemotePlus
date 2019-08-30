@@ -17,7 +17,6 @@
  - V6プラスを契約している環境では、ポート解放が出来ない場合があります。
    - VPS を契約した上で OpenVPN サーバーを VPS に建て、TVRemotePlus のサーバ PC と VPN で接続し、VPS をリバースプロキシにすることも出来ます（難易度高）
  - リバースプロキシを利用せず直接 TVRemotePlus のサーバー PC を外部に公開することも出来るとは思いますが、外部からの攻撃に常に晒される事になるためお勧めしません
- - nginx は触った事がないためよくわかりません… 各自で Apache のものを参考に設定してください（丸投げ・誰か教えていただければ追記します）
 
 ## Apache の場合
 ここでは https://example.com/tvrp/ でアクセス出来るようにします（お好みで tvrp の部分を書き換えてください）。  
@@ -70,3 +69,44 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
       </Location>
     </VirtualHost>
     </IfModule>
+
+## nginx の場合
+ここでは https://example.com/tvrp/ でアクセス出来るようにします（お好みで tvrp の部分を書き換えてください）。  
+TVRemotePlus のポートはデフォルトの 8000・8100 としています（変更している場合は適宜書き換えてください）。  
+https://example.com/ でアクセスする場合は、location /tvrp/ { の括弧と sub_filter がついている書き換え関連の項目を適宜コメントアウトしてください。  
+予め、前述のように Let's Encrypt でアクセス出来る事が前提です。  
+
+    server {
+        listen  443 ssl;
+        server_name  example.com;
+    
+        ssl_certificate     (Let's Encrypt で作成した example.com の HTTPS 用証明書へのパス);
+        ssl_certificate_key (Let's Encrypt で作成した example.com の HTTPS 用暗号鍵へのパス);
+      
+        location /tvrp/ {
+            sub_filter_once off;
+            sub_filter_types text/plain text/css text/xml application/json application/javascript;
+          
+            sub_filter "http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/" "https://example.com/tvrp/";
+            sub_filter "https://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8100/" "https://example.com/tvrp/";
+            sub_filter "/api/chromecast" "/tvrp/api/chromecast"
+            sub_filter "/api/epgguide" "/tvrp/api/epgguide"
+            sub_filter "/api/jkapi" "/tvrp/api/jkapi"
+            sub_filter "/api/searchfile" "/tvrp/api/searchfile"
+            sub_filter "/api/watchnow" "/tvrp/api/watchnow"
+            sub_filter "/files/" "/tvrp/files/";
+            sub_filter "/stream/" "/tvrp/stream/";
+            sub_filter "/tweet/" "/tvrp/tweet/"
+            sub_filter "/setting/" "/tvrp/setting/"
+            sub_filter "/watch/" "/tvrp/watch/"
+            sub_filter '"start_url": "/"' '"start_url": "/tvrp/"';
+            sub_filter 'href="/"' 'href="/tvrp/"';
+            sub_filter "URL='/'" "URL='/tvrp/'"
+            sub_filter "/serviceWorker.js" "/tvrp/serviceWorker.js";
+            sub_filter "Cookies.set('settings', json)" "Cookies.set('settings', json, {path: '/tvrp/'})";
+          
+            proxy_cookie_path / /tvrp/;
+            proxy_set_header Accept-Encoding "";
+            proxy_pass http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/;
+        }
+    }
