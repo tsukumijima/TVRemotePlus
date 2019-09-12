@@ -44,6 +44,7 @@
 				if ($_POST['end_timestamp']) $ini['end_timestamp'] = $_POST['end_timestamp'];
 				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
 				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
+				if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
 
 				// jsonからデコードして代入
 				if (file_exists($infofile)){
@@ -96,7 +97,7 @@
 				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 				// ストリーミング開始
-				stream_file($ini['filepath'], $ini['quality'], $ini['encoder']);
+				stream_file($ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 				// 準備中用の動画を流すためにm3u8をコピー
 				if ($silent == 'true'){
@@ -291,6 +292,31 @@
 
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
 
+            <div class="setting-form setting-select">
+              <span>コメントのフォントサイズ</span>
+              <div class="select-wrap">
+                <select id="comment_size" required>
+<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_size'] == '42'){ ?>
+                  <option value="42" selected>大きめ</option>
+                  <option value="35">ふつう</option>
+                  <option value="28">小さめ</option>
+<?php	} else if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_size'] == '35'){ ?>
+                  <option value="42">大きめ</option>
+                  <option value="35" selected>ふつう</option>
+                  <option value="28">小さめ</option>
+<?php	} else if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_size'] == '28'){ ?>
+                  <option value="42">大きめ</option>
+                  <option value="35">ふつう</option>
+                  <option value="28" selected>小さめ</option>
+<?php	} else { ?>
+                  <option value="42">大きめ</option>
+                  <option value="35" selected>ふつう</option>
+                  <option value="28">小さめ</option>
+<?php	} // 括弧終了 ?>
+                </select>
+              </div>
+            </div>
+
             <div class="setting-form">
               <span>デフォルト設定を使いワンクリックでストリームを開始する</span>
               <div class="toggle-switch">
@@ -416,7 +442,6 @@
                   ただし、まれにエラーを吐いてストリームが開始出来ない場合があったり、
                   字幕の無い番組やCMに入った等のタイミングで一部のセグメントのエンコードが遅れ、ストリームがカクつく場合もあります<br>
                   字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオフにして、字幕付きで見たい時だけオンにすることをおすすめします<br>
-                  また、ファイル再生時は常に字幕データをストリームに含んだ状態で配信されます<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -427,6 +452,27 @@
                 <input id="subtitle_default" name="subtitle_default" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="subtitle_default" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>ファイル再生時にデフォルトで字幕をストリームに含める</span>
+                <p>
+                  この設定をオンにすると、ファイル再生時に字幕を表示出来るようになります<br>
+                  ファイル再生時は、基本的にライブ再生時のようなエンコードの問題は起こりません<br>
+                  ただ、ごく稀に字幕付きでエンコードした事で途中でエンコードが失敗する事もあったため、念の為設定出来るようにしています<br>
+                  字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオフにして、 デフォルトはオンにして、問題が起きたときのみオフにすることをおすすめします<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="subtitle_file_default" value="false" />
+<?php	if ($subtitle_file_default == 'true'){ ?>
+                <input id="subtitle_file_default" name="subtitle_file_default" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="subtitle_file_default" name="subtitle_file_default" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="subtitle_file_default" class="toggle-label"></label>
               </div>
             </div>
 
@@ -490,7 +536,9 @@
                 <span>EDCB Material WebUI (EMWUI) の API がある URL</span>
                 <p>
                   番組表取得などで利用します<br>
-                  この機能を利用する場合、予め EDCB_Material_WebUI を導入しておいてください<br>
+                  この機能を利用する場合、予め EDCB Material WebUI を導入しておいてください<br>
+                  TVRock 等を利用している場合、TVRemoteViewer_vb 2.93m（再うｐ版）を導入し TVRemoteViewer_vb の URL（例：http://192.168.x.xx:40003/ ）
+                  を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
               <input class="text-box" name="EDCB_http_url" type="url" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/api/" />

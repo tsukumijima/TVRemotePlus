@@ -1,8 +1,10 @@
-  $(function(){
+
+  // ロード時 & リサイズ時に発火
+  $(window).on('load resize', function(event){
 
     // コメントを取得してコメント一覧画面にコメントを流し込む
     // スマホ以外のみ発動（スマホだと動作が遅くなるため）
-    if (document.body.clientWidth > 768){
+    if (document.body.clientWidth > 768 && document.getElementById('comment-draw-box').innerHTML == ''){
 
       // コメント一覧の時間欄のwidthを調整
       $('#comment-time').css('width', '62px');
@@ -51,6 +53,11 @@
       });
 
     }
+
+  });
+  
+
+  $(function(){
 
     // progressbar関連
     $('.dplayer-video-current').on('timeupdate',function(){

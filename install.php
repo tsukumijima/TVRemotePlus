@@ -176,8 +176,6 @@
 		echo '  5. 録画ファイルのあるフォルダを指定します。'."\n";
 		echo "\n";
 		echo '     フォルダをドラッグ&ドロップするか、ファイルパスを入力してください。'."\n";
-		echo '     なお、日本語(全角文字)が含まれるパスとネットワークドライブ上のフォルダは、'."\n";
-		echo '     動作しなくなる原因となるため、避けてください。'."\n";
 		echo "\n";
 		echo '     録画ファイルのあるフォルダ：';
 		// 録画ファイルのあるフォルダ
@@ -243,12 +241,12 @@
 		// TSTask のコピー
 		if ($bondriver == 2){
 			copy($serverroot.'/bin/TSTask/64bit/BonDriver_TSTask.dll', $serverroot.'/bin/TSTask/BonDriver_TSTask.dll');
-			copy($serverroot.'/bin/TSTask/64bit/TSTask.exe', $serverroot.'/bin/TSTask/TSTask.exe');
-			copy($serverroot.'/bin/TSTask/64bit/TSTaskCentre.exe', $serverroot.'/bin/TSTask/TSTaskCentre.exe');
+			copy($serverroot.'/bin/TSTask/64bit/TSTask.exe', $serverroot.'/bin/TSTask/TSTask-tvrp.exe');
+			copy($serverroot.'/bin/TSTask/64bit/TSTaskCentre.exe', $serverroot.'/bin/TSTask/TSTaskCentre-tvrp.exe');
 		} else {
 			copy($serverroot.'/bin/TSTask/32bit/BonDriver_TSTask.dll', $serverroot.'/bin/TSTask/BonDriver_TSTask.dll');
-			copy($serverroot.'/bin/TSTask/32bit/TSTask.exe', $serverroot.'/bin/TSTask/TSTask.exe');
-			copy($serverroot.'/bin/TSTask/32bit/TSTaskCentre.exe', $serverroot.'/bin/TSTask/TSTaskCentre.exe');
+			copy($serverroot.'/bin/TSTask/32bit/TSTask.exe', $serverroot.'/bin/TSTask/TSTask-tvrp.exe');
+			copy($serverroot.'/bin/TSTask/32bit/TSTaskCentre.exe', $serverroot.'/bin/TSTask/TSTaskCentre-tvrp.exe');
 		}
 
 		// 状態設定ファイルを初期化
@@ -258,7 +256,7 @@
 
 		// TVRemotePlusの設定ファイル
 		$tvrp_conf = file_get_contents($tvrp_conf_file);
-		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.$TSfile_dir.'\';', $tvrp_conf); // 置換
+		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.mb_convert_encoding($TSfile_dir, 'UTF-8', 'SJIS, SJIS-WIN').'\';', $tvrp_conf); // 置換
 		$tvrp_conf = preg_replace('/^\$http_port =.*/m', '$http_port = '.$port.';', $tvrp_conf); // 置換
 		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
 

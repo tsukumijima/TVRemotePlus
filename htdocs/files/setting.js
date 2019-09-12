@@ -24,10 +24,11 @@
       var settings = {};
       settings['twitter_show'] = $('#twitter_show').prop('checked');
       settings['comment_show'] = $('#comment_show').prop('checked');
+      settings['comment_size'] = $('#comment_size').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');
       console.log(settings);
       var json = JSON.stringify(settings);
-      Cookies.set('settings', json);
+      Cookies.set('settings', json, { expires: 365 });
       toastr.success('個人設定を保存しました。');
 
     });

@@ -3,6 +3,10 @@
 	// モジュール読み込み
 	require_once ('../../module.php');
 
+	// かなり長くなることがあるので実行時間制限をオフに
+	ignore_user_abort(true);
+	set_time_limit(0);
+
 	// iniファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 	if (file_exists($commentfile)){
@@ -203,125 +207,162 @@
 		parse_str($getflv, $getflv_param);
 
 		// 実況勢いを取得する
-		$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
+		@$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
 
-		// 実況勢いを先に取得しておいたデータから見つけて代入
-		foreach ($jkchannels->channel as $i => $value) {
-			if (strval($value->id) == $channel){ // 地デジのチャンネル番号が一致したら
-				$ikioi = intval($value->thread->force); // 勢いを代入
-			}
-		}
-		// 地デジで取得できなかったら
-		if (!isset($ikioi)){
-			foreach ($jkchannels->bs_channel as $i => $value) {
-				if (strval($value->id) == $channel){ // BSのチャンネル番号が一致したら
+		if ($jkchannels){
+
+			// 実況勢いを先に取得しておいたデータから見つけて代入
+			foreach ($jkchannels->channel as $i => $value) {
+				if (strval($value->id) == $channel){ // 地デジのチャンネル番号が一致したら
 					$ikioi = intval($value->thread->force); // 勢いを代入
 				}
 			}
-		}
-		// BSでも取得できなかったら空にしておく
-		if (!isset($ikioi)){
-			$ikioi = '';
-		}
+			// 地デジで取得できなかったら
+			if (!isset($ikioi)){
+				foreach ($jkchannels->bs_channel as $i => $value) {
+					if (strval($value->id) == $channel){ // BSのチャンネル番号が一致したら
+						$ikioi = intval($value->thread->force); // 勢いを代入
+					}
+				}
+			}
+			// BSでも取得できなかったら空にしておく
+			if (!isset($ikioi)){
+				$ikioi = '';
+			}
 
-		if (!isset($_GET['res'])){ //resパラメータがないなら
+			if (!isset($_GET['res'])){ //resパラメータがないなら
 
-			// コメントサーバのresを取得するURL
-			$jkthread_res_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
+				// コメントサーバのresを取得するURL
+				$jkthread_res_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
+
+				// XMLでAPIを叩く
+				$jkthread_xml = simplexml_load_file($jkthread_res_URL);
+
+				// APIを解析
+				list($jkthread_res, $jkthread_res_info) = call_user_func("getJKthread", $jkthread_xml);
+
+				if (isset($jkthread_res_info['last_res'])){ //last_resがあれば代入
+					$last_res = $jkthread_res_info['last_res'];
+				} else { //なかったら0にしとく
+					$last_res = 0;
+				}
+
+			} else { //resパラメータがあるなら
+				$last_res = intval($_GET['res']); //そのまま代入
+			}
+
+			$last_res_request = $last_res + 1; //リクエストする時にlast_resがそのままだとコメが重複するので+1する
+			
+			// コメントサーバから実況を取得するURL
+			$jkthread_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
+							'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
 
 			// XMLでAPIを叩く
-			$jkthread_xml = simplexml_load_file($jkthread_res_URL);
+			$jkthread_xml = simplexml_load_file($jkthread_URL);
 
 			// APIを解析
-			list($jkthread_res, $jkthread_res_info) = call_user_func("getJKthread", $jkthread_xml);
+			list($jkthread, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);
 
-			if (isset($jkthread_res_info['last_res'])){ //last_resがあれば代入
-				$last_res = $jkthread_res_info['last_res'];
-			} else { //なかったら0にしとく
-				$last_res = 0;
-			}
+			// jkthreadから取得したres
+			$res = intval($jkthread_info['last_res']);
 
-		} else { //resパラメータがあるなら
-			$last_res = intval($_GET['res']); //そのまま代入
-		}
+			// まずresのパラメータが存在していて
+			// かつresが空でなくて
+			// かつ受け取ったresがAPIのresと同じだったら(新しいコメがなかったら)
+			if (isset($_GET['res']) and !$_GET['res'] == '' and $res != $last_res){
 
-		$last_res_request = $last_res + 1; //リクエストする時にlast_resがそのままだとコメが重複するので+1する
-		
-		// コメントサーバから実況を取得するURL
-		$jkthread_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
-						'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
+				// $jkthread をDPlayer用 danmaku 形式に変換する
+				for ($i = 0; $i < count($jkthread); $i++) { 
 
-		// XMLでAPIを叩く
-		$jkthread_xml = simplexml_load_file($jkthread_URL);
-
-		// APIを解析
-		list($jkthread, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);
-
-		// jkthreadから取得したres
-		$res = intval($jkthread_info['last_res']);
-
-		// まずresのパラメータが存在していて
-		// かつresが空でなくて
-		// かつ受け取ったresがAPIのresと同じだったら(新しいコメがなかったら)
-		if (isset($_GET['res']) and !$_GET['res'] == '' and $res != $last_res){
-
-			// $jkthread をDPlayer用 danmaku 形式に変換する
-			for ($i = 0; $i < count($jkthread); $i++) { 
-
-				// last_commentとコメント内容が同じ&フラグ立ってない場合
-				if (isset($comment_ini['last_comment'])){ // 空になっちゃってる場合があるので分岐
-					if (($jkthread[$i]['content'] == $comment_ini['last_comment']) and ($comment_ini['last_comment_read'] == 'noread')){
-						$jkthread[$i]['content'] = ''; // 空にする
-						$comment_ini['last_comment_read'] = 'readed'; //フラグをtrueに
+					// last_commentとコメント内容が同じ&フラグ立ってない場合
+					if (isset($comment_ini['last_comment'])){ // 空になっちゃってる場合があるので分岐
+						if (($jkthread[$i]['content'] == $comment_ini['last_comment']) and ($comment_ini['last_comment_read'] == 'noread')){
+							$jkthread[$i]['content'] = ''; // 空にする
+							$comment_ini['last_comment_read'] = 'readed'; //フラグをtrueに
+						}
+					} else { // 空だったら再設定しておく
+						$comment_ini['last_comment'] = ' ';
+						$comment_ini['last_comment_read'] = 'noread';
 					}
-				} else { // 空だったら再設定しておく
-					$comment_ini['last_comment'] = ' ';
-					$comment_ini['last_comment_read'] = 'noread';
+
+					// iniファイル書き込み
+					file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+					// オプションを解析する
+					if (isset($jkthread[$i]['mail'])){ //空でないなら
+						$option = str_replace('184', '', $jkthread[$i]['mail']);
+					} else {
+						$option = '';
+					}
+
+					// 位置を取得
+					$position = getPosition($option);
+					
+					// 色を取得
+					$color = getColor($option);
+
+					$danmaku[$i] = array(
+						'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
+						$position, // 場所(上・スクロール・下)をインポート
+						$color, // 色をインポート
+						$jkthread[$i]['user_id'], //ユーザーIDをインポート
+						$jkthread[$i]['content'], //コメントをインポート
+					);
 				}
 
-				// iniファイル書き込み
-				file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-
-				// オプションを解析する
-				if (isset($jkthread[$i]['mail'])){ //空でないなら
-					$option = str_replace('184', '', $jkthread[$i]['mail']);
-				} else {
-					$option = '';
-				}
-
-				// 位置を取得
-				$position = getPosition($option);
-				
-				// 色を取得
-				$color = getColor($option);
-
-				$danmaku[$i] = array(
-					'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
-					$position, // 場所(上・スクロール・下)をインポート
-					$color, // 色をインポート
-					$jkthread[$i]['user_id'], //ユーザーIDをインポート
-					$jkthread[$i]['content'], //コメントをインポート
-				);
+			} else { //そうでなかったらdanmakuをnullにする
+				$danmaku[0] = null;
 			}
 
-		} else { //そうでなかったらdanmakuをnullにする
-			$danmaku[0] = null;
-		}
+			// 出力JSON
+			$json = array(
+				'apiname' => 'jkapi',
+				'type' => 'read',
+				'ikioi' => $ikioi,
+				'channel' => 'jk'.$channel,
+				'res' => $last_res,
+				'last_res' => $res,
+				'jkthread_url'=> $jkthread_URL,
+				//'jkthread' => $jkthread,
+				'code' => 0,
+				'version' => 3,
+				'data' => $danmaku,
+			);
 
-		// 出力JSON
-		$json = array(
-			'apiname' => 'jkapi',
-			'type' => 'read',
-			'ikioi' => $ikioi,
-			'channel' => 'jk'.$channel,
-			'res' => $last_res,
-			'last_res' => $res,
-			'jkthread_url'=> $jkthread_URL,
-			//'jkthread' => $jkthread,
-			'code' => 0,
-			'version' => 3,
-			'data' => $danmaku,
-		);
+		// エラー発生時
+		} else {
+
+			// HTTPステータスコードを判定
+			$context = stream_context_create(array(
+				'http' => array('ignore_errors' => true)
+			));
+			$response = file_get_contents('http://jk.nicovideo.jp/api/v2_app/getchannels/', false, $context);
+
+			if (isset($http_response_header[0])){
+				if (strpos($http_response_header[0], '500')){
+					$error = 'ニコニコ実況に問題が発生しています';
+				} else if (strpos($http_response_header[0], '502')){
+					$error = 'ニコニコ実況が落ちている可能性があります';
+				} else if (strpos($http_response_header[0], '503')){
+					$error = 'メンテナンス中です';
+				} else {
+					$error = 'ニコニコ実況に問題が発生しています';
+				}
+			} else {
+				$error = '不明なエラーが発生しています';
+			}
+
+			// 出力JSON
+			$json = array(
+				'apiname' => 'jkapi',
+				'type' => 'read',
+				'ikioi' => $error,
+				'error' => $error,
+				'channel' => 'jk'.$channel,
+				'code' => 0,
+				'version' => 3,
+			);
+		}
 
 	// コメントの送信
 	} else if ($_SERVER["REQUEST_METHOD"] == "POST" and $ini['state'] == 'ONAir'){ //POSTでアクセスがあった&生放送なら
@@ -501,7 +542,7 @@
 				$waybackkey = str_replace('waybackkey=', '', nicologin($waybackkey_URL, false)); //ログインクッキーを渡す
 
 
-				// ニコニコの謎仕様で、過去ログは取得を終える時間から巻き戻して1000件分しか取得できないため
+				// ニコニコの謎仕様で過去ログは取得を終える時間から巻き戻して1000件分しか取得できないため
 				// whileで繰り返して$whenが放送開始時刻の前になるまで取得する
 
 				// 取得終了時間　ここから巻き戻して1000件ずつ取得

@@ -21,9 +21,9 @@
 ## Apache の場合
 ここでは https://example.com/tvrp/ でアクセス出来るようにします（お好みで tvrp の部分を書き換えてください）。  
 TVRemotePlus のポートはデフォルトの 8000・8100 としています（変更している場合は適宜書き換えてください）。  
-https://example.com/ でアクセスする場合は、<Location /tvrp/></Location> と RequestHeader unset Accept-Encoding から下の書き換え関連の項目を適宜コメントアウトしてください。
+https://example.com/ でアクセスする場合は、<Location /tvrp/></Location> と RequestHeader unset Accept-Encoding から下の書き換え関連の項目を適宜コメントアウトしてください。  
+予め、前述のように Let's Encrypt でアクセス出来る事が前提です。
 
-予め、前述のように Let's Encrypt でアクセス出来る事が前提です。  
 この他、mod_proxy mod_proxy_http mod_headers mod_substitute（いずれも Apache の拡張機能）を利用します。  
 Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、  
 その他の環境であれば　httpd.conf のコメントアウトを適宜解除するなどして、拡張機能を予め有効化しておいてください。
@@ -89,19 +89,19 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
           
             sub_filter "http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/" "https://example.com/tvrp/";
             sub_filter "https://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8100/" "https://example.com/tvrp/";
-            sub_filter "/api/chromecast" "/tvrp/api/chromecast"
-            sub_filter "/api/epgguide" "/tvrp/api/epgguide"
-            sub_filter "/api/jkapi" "/tvrp/api/jkapi"
-            sub_filter "/api/searchfile" "/tvrp/api/searchfile"
-            sub_filter "/api/watchnow" "/tvrp/api/watchnow"
+            sub_filter "/api/chromecast" "/tvrp/api/chromecast";
+            sub_filter "/api/epgguide" "/tvrp/api/epgguide";
+            sub_filter "/api/jkapi" "/tvrp/api/jkapi";
+            sub_filter "/api/searchfile" "/tvrp/api/searchfile";
+            sub_filter "/api/watchnow" "/tvrp/api/watchnow";
             sub_filter "/files/" "/tvrp/files/";
             sub_filter "/stream/" "/tvrp/stream/";
-            sub_filter "/tweet/" "/tvrp/tweet/"
-            sub_filter "/setting/" "/tvrp/setting/"
-            sub_filter "/watch/" "/tvrp/watch/"
+            sub_filter "/tweet/" "/tvrp/tweet/";
+            sub_filter "/setting/" "/tvrp/setting/";
+            sub_filter "/watch/" "/tvrp/watch/";
             sub_filter '"start_url": "/"' '"start_url": "/tvrp/"';
             sub_filter 'href="/"' 'href="/tvrp/"';
-            sub_filter "URL='/'" "URL='/tvrp/'"
+            sub_filter "URL='/'" "URL='/tvrp/'";
             sub_filter "/serviceWorker.js" "/tvrp/serviceWorker.js";
             sub_filter "Cookies.set('settings', json)" "Cookies.set('settings', json, {path: '/tvrp/'})";
           

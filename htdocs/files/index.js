@@ -4,9 +4,9 @@
   // document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style>#main { opacity: 0; }</style>');
 
   // ロード時 & リサイズ時に発火
-  $(window).on('load resize', function(event){
+  $(window).on('DOMContentLoaded resize', function(event){
 
-    if (event.type == 'load'){
+    if (event.type == 'DOMContentLoaded'){
 
       // フェード
       // $('#main').delay(100).velocity('fadeIn', 500);
@@ -23,7 +23,7 @@
 
     // console.log('resize');
     // 1024px以上
-    if ($(window).width() > 1024){
+    if (document.body.clientWidth > 1024){
 
       // ウィンドウを読み込んだ時・リサイズされた時に発動
       // 何故か上手くいかないので8回繰り返す
@@ -116,14 +116,19 @@
         $('#broadcast-BonDriver-T').find('select').prop('disabled', true);
       }
       // 開閉
-      $('#nav-close').toggleClass('open');
-      $('#broadcast-stream-box').toggleClass('open');
-      $('html').toggleClass('open');
+      $('#nav-close').addClass('open');
+      $('#broadcast-stream-box').addClass('open');
+      $('html').addClass('open');
       // ワンクリックでストリーム開始する場合
       if (settings['onclick_stream']){
         $('#broadcast-stream-box').hide();
         $('.bluebutton').click();
       }
+    });
+
+    // 再生開始
+    $('.bluebutton').click(function(){
+      $('.bluebutton').addClass('disabled');
     });
 
     // キャンセル
@@ -166,6 +171,16 @@
                             '  </div>' +
                             '</div>';
             });
+
+            // 空ならメッセージを入れる
+            if (html == ''){
+
+              // htmlを生成
+              html = html + '<div class="error">' +
+                            '  キャストするデバイスがありません。<br>' +
+                            '  右上の︙メニューから、デバイスをスキャンしてください。<br>' +
+                            '</div>';
+            }
 
             // 一気に代入
             document.getElementById('chromecast-device-box').innerHTML = html;

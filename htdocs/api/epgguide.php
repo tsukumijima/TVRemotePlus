@@ -10,7 +10,7 @@
 
 	// 番組情報を取得する関数
 	function getEpgguide($ch_, $sid, $onid, $tsid){
-		global $ini,$ch,$EDCB_http_url,$jkchannels;
+		global $ini, $ch, $EDCB_http_url, $jkchannels;
 		
 		// 番組表API読み込み
 		$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
@@ -70,9 +70,9 @@
 			$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv')); 
 		} else {
 			if (isset($epg->items->eventinfo[1]->service_name)){
-				$$next_program_name = '放送休止';
+				$next_program_name = '放送休止';
 			} else {
-				$$next_program_name = '番組情報を取得できませんでした';
+				$next_program_name = '番組情報を取得できませんでした';
 			}
 		}
 		if (isset($epg->items->eventinfo[1]->event_text)){
@@ -99,17 +99,19 @@
 		// 実況IDを取得する
 		$jkch = getJKchannel($ch[$ch_]);
 		
-		// 実況勢いを先に取得しておいたデータから見つけて代入
-		foreach ($jkchannels->channel as $i => $value) {
-			if (strval($value->id) == $jkch){ // 地デジのチャンネル番号が一致したら
-				$ikioi = intval($value->thread->force); // 勢いを代入
-			}
-		}
-		// 地デジで取得できなかったら
-		if (!isset($ikioi)){
-			foreach ($jkchannels->bs_channel as $i => $value) {
-				if (strval($value->id) == $jkch){ // BSのチャンネル番号が一致したら
+		if (!empty($jkchannels)){
+			// 実況勢いを先に取得しておいたデータから見つけて代入
+			foreach ($jkchannels->channel as $i => $value) {
+				if (strval($value->id) == $jkch){ // 地デジのチャンネル番号が一致したら
 					$ikioi = intval($value->thread->force); // 勢いを代入
+				}
+			}
+			// 地デジで取得できなかったら
+			if (!isset($ikioi)){
+				foreach ($jkchannels->bs_channel as $i => $value) {
+					if (strval($value->id) == $jkch){ // BSのチャンネル番号が一致したら
+						$ikioi = intval($value->thread->force); // 勢いを代入
+					}
 				}
 			}
 		}
@@ -138,7 +140,10 @@
 	}
 
 	// 実況勢いを取得してパースしておく
-	$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
+	@$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
+	if (!$jkchannels){
+		$jkchannels = array();
+	}
 
 	// ついでにストリーム状態を判定する
 	if ($ini["state"] == "ONAir" or $ini["state"] == "File"){

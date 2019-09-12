@@ -8,6 +8,8 @@
       cache: false,
       success: function(data) {
 
+        // 透明にする
+        $('#search-list').css('opacity', 0);
         // 中身を空にしてリセットする
         $('#search-info').empty();
         if (flg == true){
@@ -113,7 +115,7 @@
           
           // 検索キーワードがあるなら上までスクロール
           if (text !== undefined && text !== '' && fileinfo.length == length){
-            $('html, body').velocity('scroll', 700);
+            $('html, body').velocity('scroll', { duration: 700, offset: -54 });
           }
 
         // 1件も見つからなかった場合
@@ -274,6 +276,11 @@
         $('.bluebutton').click();
       }
     });
+
+    // 再生開始
+    $('.bluebutton').click(function(){
+      $('.bluebutton').addClass('disabled');
+    });    
 
     // キャンセル
     $('.redbutton').click(function(event){

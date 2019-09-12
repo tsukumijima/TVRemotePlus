@@ -13,6 +13,8 @@
 /bin/TSTask/BonDriver_TSTask.dll
 /bin/TSTask/TSTask.exe
 /bin/TSTask/TSTaskCentre.exe
+/bin/TSTask/WinSCard.dll
+/bin/TSTask/WinSCard.ini
 /bin/TSTask/*.log
 /data/twitter_session/*
 /data/session/*

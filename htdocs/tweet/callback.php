@@ -11,8 +11,8 @@
 	session_name('twitter_session');
 
 	// セッション有効期限
-	ini_set('session.gc_maxlifetime', 604800); //一週間
-	ini_set('session.cookie_lifetime', 604800); //一週間
+	ini_set('session.gc_maxlifetime', 7776000); // 3ヶ月
+	ini_set('session.cookie_lifetime', 7776000); // 3ヶ月
 
 	// セッション開始
 	session_start();

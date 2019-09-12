@@ -7,25 +7,25 @@
 // ***** 各種exeファイルのパス設定 *****
 
 // rplsinfo の名前とパス
-$rplsinfo_exe =  'rplsinfo.exe';
+$rplsinfo_exe =  'rplsinfo-tvrp.exe';
 $rplsinfo_path =  $base_dir.'bin/'.$rplsinfo_exe;
 
 // ffmpeg の名前とパス
-$ffmpeg_exe =  'ffmpeg.exe';
+$ffmpeg_exe =  'ffmpeg-tvrp.exe';
 $ffmpeg_path = $base_dir.'bin/'.$ffmpeg_exe;
 
 // QSVEncC の名前とパス
-$qsvencc_exe = 'QSVEncC64.exe';
+$qsvencc_exe = 'QSVEncC64-tvrp.exe';
 $qsvencc_path =  $base_dir.'bin/QSVEncC/'.$qsvencc_exe;
 
 // NVEncC の名前とパス
-$nvencc_exe = 'NVEncC64.exe';
+$nvencc_exe = 'NVEncC64-tvrp.exe';
 $nvencc_path =  $base_dir.'bin/NVEncC/'.$nvencc_exe;
 
 // TSTask の名前とパス
-$tstask_exe = 'TSTask.exe';
+$tstask_exe = 'TSTask-tvrp.exe';
 $tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
-$tstaskcentre_exe = 'TSTaskCentre.exe';
+$tstaskcentre_exe = 'TSTaskCentre-tvrp.exe';
 $tstaskcentre_path = $base_dir.'bin/TSTask/'.$tstaskcentre_exe;
 
 
