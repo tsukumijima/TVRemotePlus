@@ -72,6 +72,11 @@
 ?>
 
   <script>
+    settings = {twitter_show:true, comment_show:true, comment_size:35, onclick_stream:false,};
+    if (Cookies.get('settings') != undefined){
+      settings = JSON.parse(Cookies.get('settings'));
+    }
+
     window.addEventListener('load', function() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register("/serviceworker.js");
@@ -84,18 +89,18 @@
 <body>
 
   <nav id="top">
-    <div id="nav-drawer">
-      <div id="nav-open">
-        <span><i class="material-icons">menu</i></span>
-      </div>
+    <div id="nav-open">
+      <i class="material-icons">menu</i>
     </div>
-    <div id="logo">
-      <a href="/"><img src="<?php echo $icon_file; ?>"></a>
-    </div>
+    <a id="logo" href="/">
+      <img src="<?php echo $icon_file; ?>">
+    </a>
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false or strpos($backtrace[0]["file"], 'watch.php') !== false){ // index.php・watch.phpのみ ?>
-    <div id="menubutton">
+    <div id="menu-button">
       <i class="material-icons">more_vert</i>
     </div>
+<?php	} else { ?>
+    <div id="menu-fakebutton"></div>
 <?php	} // 括弧終了 ?>
   </nav>
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
@@ -183,5 +188,6 @@
     </a>
   </nav>
   <div id="nav-close"></div>
+  <div id="menu-close"></div>
   
   <section id="main">

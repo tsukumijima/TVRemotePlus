@@ -320,10 +320,32 @@
 		
 	}
 
-	function stream_file($filepath, $quality, $encoder){
+	function stream_file($filepath, $quality, $encoder, $subtitle){
 		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $segment_folder, $hlsfile_time;
 		
 		// 設定
+
+		// 字幕切り替え
+		switch ($subtitle) {
+
+			case 'true':
+				$subtitle_ffmpeg_cmd = ' -map 0 -ignore_unknown';
+				$subtitle_qsvencc_cmd = ' --sub-copy asdata';
+				$subtitle_nvencc_cmd = ' --sub-copy asdata';
+			break;
+
+			case 'false':
+				$subtitle_ffmpeg_cmd = '';
+				$subtitle_qsvencc_cmd = '';
+				$subtitle_nvencc_cmd = '';
+			break;
+
+			default:
+				$subtitle_ffmpeg_cmd = '';
+				$subtitle_qsvencc_cmd = '';
+				$subtitle_nvencc_cmd = '';
+			break;
+		}
 		
 		// 画質切り替え
 		switch ($quality) {
@@ -331,8 +353,8 @@
 				$width = 1920; // 動画の横幅
 				$height = 1080; // 動画の高さ
 
-				$vb = '6500k'; // 動画のビットレート
-				$ab = '128k'; // 音声のビットレート
+				$vb = '6200k'; // 動画のビットレート
+				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
@@ -341,8 +363,8 @@
 				$width = 1440; // 動画の横幅
 				$height = 810; // 動画の高さ
 
-				$vb = '5500k'; // 動画のビットレート
-				$ab = '128k'; // 音声のビットレート
+				$vb = '5200k'; // 動画のビットレート
+				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
@@ -351,8 +373,8 @@
 				$width = 1280; // 動画の横幅
 				$height = 720; // 動画の高さ
 
-				$vb = '4500k'; // 動画のビットレート
-				$ab = '128k'; // 音声のビットレート
+				$vb = '4200k'; // 動画のビットレート
+				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
@@ -402,7 +424,7 @@
 				$stream_cmd = 'start /min '.$ffmpeg_path.
 					' -dual_mono_mode main'.
 					' -i "'.$filepath.'"'.
-					' -map 0 -ignore_unknown'.
+					$subtitle_ffmpeg_cmd.
 					' -f hls -preset veryfast'.
 					' -hls_segment_type mpegts'.
 					' -hls_time '.$hlsfile_time.
@@ -430,7 +452,7 @@
 					' -m hls_allow_cache:0'.
 					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
 					' --output-thread 0'.
-					' --sub-copy asdata'.
+					$subtitle_qsvencc_cmd.
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
@@ -450,7 +472,7 @@
 					' -m hls_allow_cache:0'.
 					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
 					' --output-thread 0'.
-					' --sub-copy asdata'.
+					$subtitle_nvencc_cmd.
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.

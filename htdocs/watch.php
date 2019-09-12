@@ -83,7 +83,7 @@
           <input id="stream-end_timestamp" type="hidden" name="end_timestamp" value="">
 
           <div class="setchannel form">
-            動画の画質：
+            <span>動画の画質：</span>
             <div class="select-wrap">
             	<select name="quality">
                 <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
@@ -98,13 +98,28 @@
           </div>
 							
           <div class="setencoder form">
-            エンコード：
+            <span>エンコード：</span>
             <div class="select-wrap">
               <select name="encoder">
                 <option value="<?php echo $encoder_default; ?>">デフォルト (<?php echo $encoder_default; ?>)</option>
                 <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                 <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
                 <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setsubtitle form">
+            <span>字幕データ：</span>
+            <div class="select-wrap">
+              <select name="subtitle">
+<?php		if ($subtitle_file_default == 'true'){ ?>
+                <option value="<?php echo $subtitle_file_default; ?>">デフォルト (字幕オン)</option>
+<?php		} else { ?>
+                <option value="<?php echo $subtitle_file_default; ?>">デフォルト (字幕オフ)</option>
+<?php		} //括弧終了 ?>
+                <option value="true">字幕オン</option>
+                <option value="false">字幕オフ</option>
               </select>
             </div>
           </div>

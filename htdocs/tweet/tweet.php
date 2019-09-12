@@ -13,8 +13,8 @@
 	session_name('twitter_session');
 
 	// セッション有効期限
-	ini_set('session.gc_maxlifetime', 604800); //一週間
-	ini_set('session.cookie_lifetime', 604800); //一週間
+	ini_set('session.gc_maxlifetime', 7776000); // 3ヶ月
+	ini_set('session.cookie_lifetime', 7776000); // 3ヶ月
 
 	// セッション開始
 	session_start();
@@ -150,10 +150,10 @@
 		} else if (isset($result->errors) and $result->errors[0]->code == 326){
 			echo '<span class="tweet-failed">アカウントが一時的にロックされています：投稿に失敗しました…</span>';
 		} else {
-			echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="'.$BASEURL.'tweet/auth.php">再ログイン</a></span>';
+			echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
 		}
 
 	} else { //セッションがない場合
-		echo '<a id="tweet-login" href="'.$BASEURL.'tweet/auth.php">ツイートするにはTwitterでログインして下さい</a>';
+		echo '<a id="tweet-login" href="/tweet/auth.php">ツイートするにはTwitterでログインして下さい</a>';
 	}
 

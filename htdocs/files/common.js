@@ -1,14 +1,4 @@
 
-  // 個人設定読み込み
-  $(window).on('load', function(){
-
-    settings = {twitter_show:true, comment_show:true, onclick_stream:false};
-    if (Cookies.get('settings') != undefined){
-      settings = JSON.parse(Cookies.get('settings'));
-    }
-
-  });
-
   $(function(){
 
       // メニュー開閉
@@ -28,17 +18,25 @@
     });
 
     // サブメニューボタン開閉
-    $('#menubutton').click(function(event){
+    $('#menu-button').click(function(event){
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').toggleClass('open');
+      $('#menu-close').toggleClass('open');
     });
 
     // サブメニューとサブメニューボタン以外クリックでサブメニューを引っ込める
     $(document).click(function(event) {
-      if (!$(event.target).closest('#menubutton').length && !$(event.target).closest('#menu-content').length){
+      if (!$(event.target).closest('#menu-button').length && !$(event.target).closest('#menu-content').length){
         $('#menu-content').velocity('slideUp', 150);
         $('#menu-content').removeClass('open');
+        $('#menu-close').removeClass('open');
       }
+    });
+
+    $('#menu-close').click(function(){
+      $('#menu-content').velocity('slideUp', 150);
+      $('#menu-content').removeClass('open');
+      $('#menu-close').removeClass('open');
     });
 
     // パスワード開閉
