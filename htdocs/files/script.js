@@ -24,9 +24,13 @@
 
       // スマホならスクロールに応じて動画を固定できるようdivを移動させる
       // フルスクリーンで無いことを確認してから
-      if ($(window).width() <= 500 && $(window).height() >= 350 && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
+      if ($(window).width() <= 500 && $(window).height() >= 350
+          && $('#dplayer-script').prev().attr('id') == 'dplayer'
+          && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
         $('#content-wrap').before($('#dplayer'));
-      } else if ($(window).width() > 500 && $(window).height() >= 350 && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
+      } else if ($(window).width() > 500 && $(window).height() >= 350
+          && $('#content-wrap').prev().attr('id') == 'dplayer'
+          && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
         $('#dplayer-script').before($('#dplayer'));
       }
       
