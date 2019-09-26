@@ -352,54 +352,78 @@
               <div class="setting-content">
               <span>デフォルトの動画の画質</span>
                 <p>
-                  新規インストール時のデフォルトは 810p です<br>
+                  新規インストール時のデフォルトは 1080p (1440×1080) です<br>
+                  テレビ放送は一部の BS 局を除き基本的に 1440×1080 で放送されています<br>
+                  再生させる端末のスペックや液晶の大きさや解像度等に合わせ、適宜変更してください<br>
                   240p は画質は低くなりますが、低通信量でワンセグよりも高画質で視聴できます<br>
                 </p>
               </div>
               <div class="select-wrap">
                 <select name="quality_default">
-<?php	if ($quality_default == '1080p'){ ?>
-                  <option value="1080p" selected>1080p (1920×1080)</option>
+<?php	if ($quality_default == '1080p-high'){ ?>
+                  <option value="1080p-high" selected>1080p-high (1920×1080)</option>
+                  <option value="1080p">1080p (1440×1080)</option>
+                  <option value="810p">810p (1440×810)</option>
+                  <option value="720p">720p (1280×720)</option>
+                  <option value="540p">540p (960×540)</option>
+                  <option value="360p">360p (640×360)</option>
+                  <option value="240p">240p (426×240)</option>
+<?php	} else if ($quality_default == '1080p'){ ?>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p" selected>1080p (1440×1080)</option>
                   <option value="810p">810p (1440×810)</option>
                   <option value="720p">720p (1280×720)</option>
                   <option value="540p">540p (960×540)</option>
                   <option value="360p">360p (640×360)</option>
                   <option value="240p">240p (426×240)</option>
 <?php	} else if ($quality_default == '810p'){ ?>
-                  <option value="1080p">1080p (1920×1080)</option>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p">1080p (1440×1080)</option>
                   <option value="810p" selected>810p (1440×810)</option>
                   <option value="720p">720p (1280×720)</option>
                   <option value="540p">540p (960×540)</option>
                   <option value="360p">360p (640×360)</option>
                   <option value="240p">240p (426×240)</option>
 <?php	} else if ($quality_default == '720p'){ ?>
-                  <option value="1080p">1080p (1920×1080)</option>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p">1080p (1440×1080)</option>
                   <option value="810p">810p (1440×810)</option>
                   <option value="720p" selected>720p (1280×720)</option>
                   <option value="540p">540p (960×540)</option>
                   <option value="360p">360p (640×360)</option>
                   <option value="240p">240p (426×240)</option>
 <?php	} else if ($quality_default == '540p'){ ?>
-                  <option value="1080p">1080p (1920×1080)</option>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p">1080p (1440×1080)</option>
                   <option value="810p">810p (1440×810)</option>
                   <option value="720p">720p (1280×720)</option>
                   <option value="540p" selected>540p (960×540)</option>
                   <option value="360p">360p (640×360)</option>
                   <option value="240p">240p (426×240)</option>
 <?php	} else if ($quality_default == '360p'){ ?>
-                  <option value="1080p">1080p (1920×1080)</option>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p">1080p (1440×1080)</option>
                   <option value="810p">810p (1440×810)</option>
                   <option value="720p">720p (1280×720)</option>
                   <option value="540p">540p (960×540)</option>
                   <option value="360p" selected>360p (640×360)</option>
                   <option value="240p">240p (426×240)</option>
 <?php	} else if ($quality_default == '240p'){ ?>
-                  <option value="1080p">1080p (1920×1080)</option>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p">1080p (1440×1080)</option>
                   <option value="810p">810p (1440×810)</option>
                   <option value="720p">720p (1280×720)</option>
                   <option value="540p">540p (960×540)</option>
                   <option value="360p">360p (640×360)</option>
                   <option value="240p" selected>240p (426×240)</option>
+<?php	} else { ?>
+                  <option value="1080p-high">1080p-high (1920×1080)</option>
+                  <option value="1080p" selected>1080p (1440×1080)</option>
+                  <option value="810p">810p (1440×810)</option>
+                  <option value="720p">720p (1280×720)</option>
+                  <option value="540p">540p (960×540)</option>
+                  <option value="360p">360p (640×360)</option>
+                  <option value="240p">240p (426×240)</option>
 <?php	} // 括弧終了 ?>
                 </select>
               </div>
@@ -412,7 +436,7 @@
                   ffmpeg が通常のエンコーダー(ソフトウェアエンコーダー)、
                   QSVEncC・NVEncC がハードウェアエンコーダーです<br>
                   QSVEncC・NVEncC の方が CPU を消費しない・エンコードが早いのでおすすめですが、
-                  QSVEncC は Intel 製の一部の CPU・NVEncC は nvidia 製の GPU 環境しか使えません<br>
+                  QSVEncC は Intel 製の一部の CPU 、NVEncC は nvidia 製の GPU 環境でしか利用できません<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -462,7 +486,7 @@
                   この設定をオンにすると、ファイル再生時に字幕を表示出来るようになります<br>
                   ファイル再生時は、基本的にライブ再生時のようなエンコードの問題は起こりません<br>
                   ただ、ごく稀に字幕付きでエンコードした事で途中でエンコードが失敗する事もあったため、念の為設定出来るようにしています<br>
-                  字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオフにして、 デフォルトはオンにして、問題が起きたときのみオフにすることをおすすめします<br>
+                  字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオンにして、問題が起きたときのみオフにすることをおすすめします<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -481,8 +505,9 @@
                 <span>デフォルトの BonDriver (地デジ用)</span>
                 <p>
                   デフォルトで利用する BonDriver (地デジ用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel などを利用すると安定して視聴できる場合があります<br>
-                  Spinel を導入している場合は BonDriver_Spinel を利用することをおすすめします<br>
+                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります、
+                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
+                  Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -503,8 +528,9 @@
                 <span>デフォルトの BonDriver (BS・CS用)</span>
                 <p>
                   デフォルトで利用する BonDriver (BS・CS用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel などを利用すると安定して視聴できる場合があります<br>
-                  Spinel を導入している場合は BonDriver_Spinel を利用することをおすすめします<br>
+                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります、
+                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
+                  Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -537,7 +563,7 @@
                 <p>
                   番組表取得などで利用します<br>
                   この機能を利用する場合、予め EDCB Material WebUI を導入しておいてください<br>
-                  TVRock 等を利用している場合、TVRemoteViewer_vb 2.93m（再うｐ版）を導入し TVRemoteViewer_vb の URL（例：http://192.168.x.xx:40003/ ）
+                  TVRock 等を利用している場合、TVRemoteViewer_VB 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）
                   を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
@@ -810,7 +836,7 @@
                   基本は変える必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
                   秒数を 5(個) や 10(個) などに設定することで、安定して再生できる場合があります<br>
                   ファイル再生時は全てのセグメントをプレイリストに載せています<br>
-                  新規インストール時のデフォルトは 3(個) です<br>
+                  新規インストール時のデフォルトは 4(個) です<br>
                 </p>
               </div>
               <input class="text-box" name="hlslive_list" type="number" min="1" max="60"  value="<?php echo $hlslive_list; ?>" required />

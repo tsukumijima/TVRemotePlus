@@ -33,7 +33,7 @@ require_once (dirname(__FILE__).'/require.php');
 // また、「`」(バッククオート)は別物です、ご注意ください
 
 // デフォルトの動画の画質
-$quality_default = '810p'; // 1080p・810p・720p・540p・360p・240P から選択
+$quality_default = '1080p'; // 1080p-high・1080p・810p・720p・540p・360p・240P から選択
 
 // デフォルトのエンコーダー
 // ffmpeg が通常のエンコーダー(ソフトウェアエンコード)、
@@ -59,11 +59,11 @@ $subtitle_file_default = 'true';
 
 // BonDriver は (TVRemotePlusをインストールしたフォルダ)/bin/TSTask/BonDriver/ に配置してください
 // デフォルトの BonDriver (地デジ用・変更必須)
-// 例：$BonDriver_default_T = 'BonDriver_Spinel_PX_Q3PE4_T0.dll';
+// 例：$BonDriver_default_T = 'BonDriver_Proxy_T.dll';
 $BonDriver_default_T = '';
 
 // デフォルトの BonDriver (BS用・変更必須)
-// 例：$BonDriver_default_S = 'BonDriver_Spinel_PX_Q3PE4_S0.dll';
+// 例：$BonDriver_default_S = 'BonDriver_Proxy_S.dll';
 $BonDriver_default_S = '';
 
 // 録画ファイルのあるフォルダ (変更必須)
@@ -172,7 +172,7 @@ $udp_port = 8200;
 // 基本は変える必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
 // 値を 5(秒) や 10(秒) にすることで、安定して再生できる場合があります(小数点はエラーになります)
 $hlslive_time = 1; // ライブ再生時 デフォルト: 1(秒)
-$hlsfile_time = 10; // ファイル再生時 デフォルト: 10(秒)
+$hlsfile_time = 5; // ファイル再生時 デフォルト: 5(秒)
 
 // ライブ再生時に HLS プレイリストに載せるセグメントの個数
 // (ファイル再生時は全てのセグメントをリストに載せています)

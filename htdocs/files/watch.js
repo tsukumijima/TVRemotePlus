@@ -185,9 +185,9 @@
 
     // ファイル検索メニュー開閉
     $('#search-find-toggle').click(function(event){
-      $('#search-find-toggle').toggleClass('fa-caret-down');
-      $('#search-find-toggle').toggleClass('fa-caret-up');
-      $('#search-find-link-box').slideToggle(300);
+      $('#search-find-toggle i').toggleClass('fa-caret-down');
+      $('#search-find-toggle i').toggleClass('fa-caret-up');
+      $('#search-find-link-box').velocity($('#search-find-link-box').is(':visible') ? 'slideUp' : 'slideDown', { duration: 300, easing: 'ease-in-out', });
     });
 
     // 並び替えを切り替え

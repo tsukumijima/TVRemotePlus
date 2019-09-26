@@ -21,7 +21,7 @@
 
 		// スタートならChromeCast起動
 		if ($cast['cmd'] == 'start' and isset($_GET['ip']) and isset($_GET['port'])){
-			$cmd = 'pushd '.str_replace('/', '\\', $base_dir).'bin\Apache\bin\ && start /min ..\..\php\php.exe '.$base_dir.'cast/cast.php '.$_SERVER['SERVER_NAME'].' '.$_GET['ip'].' '.$_GET['port'];
+			$cmd = 'pushd '.str_replace('/', '\\', $base_dir).'bin\Apache\bin\ && start "Chromecast Connect" /min  ..\..\php\php.exe '.$base_dir.'cast/cast.php '.$_SERVER['SERVER_NAME'].' '.$_GET['ip'].' '.$_GET['port'];
 			// echo $cmd."\n";
 			win_exec($cmd);
 			$cast['cast'] = true;

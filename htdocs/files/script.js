@@ -14,29 +14,6 @@
       $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth.php">ログイン</a>');
     }
 
-    // リサイズ時に実行
-    $(window).on('load resize', function(){
-
-      // スマホ・タブレットならplaceholder書き換え
-      if ($(window).width() <= 768){
-        $("#tweet").attr('placeholder','ツイート');
-      }
-
-      // スマホならスクロールに応じて動画を固定できるようdivを移動させる
-      // フルスクリーンで無いことを確認してから
-      if ($(window).width() <= 500 && $(window).height() >= 350
-          && $('#dplayer-script').prev().attr('id') == 'dplayer'
-          && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
-        $('#content-wrap').before($('#dplayer'));
-      } else if ($(window).width() > 500 && $(window).height() >= 350
-          && $('#content-wrap').prev().attr('id') == 'dplayer'
-          && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
-        $('#dplayer-script').before($('#dplayer'));
-      }
-      
-    });
-
-
     // ***** 視聴数カウント・ストリーム状態把握 *****
 
     setInterval((function status(){
@@ -142,8 +119,12 @@
           // 結果をHTMLにぶち込む
 
           // 高さフラグ
-          if (document.getElementsByClassName('broadcast-title-ch1')[0].textContent == ''){
-            var flg = true;
+          if (document.getElementsByClassName('broadcast-title-ch1')[0]){
+            if (document.getElementsByClassName('broadcast-title-ch1')[0].textContent == ''){
+              var flg = true;
+            } else {
+              var flg = false;
+            }
           } else {
             var flg = false;
           }
@@ -156,36 +137,34 @@
                 document.getElementById('epg-channel').innerHTML != data['play']['channel']){
 
               // 現在の番組
-              $('#epg-starttime').text(data['play']['starttime']);
-              $('#epg-to').text(data['play']['to']);
-              $('#epg-endtime').text(data['play']['endtime']);
+              document.getElementById('epg-starttime').textContent = data['play']['starttime'];
+              document.getElementById('epg-to').textContent = data['play']['to'];
+              document.getElementById('epg-endtime').textContent = data['play']['endtime'];
               
               if (data['play']['ch'] < 55){
-                $('#epg-channel').text('Ch: ' + zeroPadding(data['play']['ch'], 2) + ' ' + data['play']['channel']);
+                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['play']['ch'], 2) + ' ' + data['play']['channel'];
               } else {
-                $('#epg-channel').text('Ch: ' + zeroPadding(data['play']['ch'], 3) + ' ' + data['play']['channel']);
+                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['play']['ch'], 3) + ' ' + data['play']['channel'];
               }
-              $('#epg-title').html(data['play']['program_name']);
-              $('#epg-info').html(data['play']['program_info']);
+              document.getElementById('epg-title').innerHTML = data['play']['program_name'];
+              document.getElementById('epg-info').innerHTML = data['play']['program_info'];
           
               // 次の番組
-              $('#epg-next-starttime').text(data['play']['next_starttime']);
-              $('#epg-next-to').text(data['play']['to']);
-              $('#epg-next-endtime').text(data['play']['next_endtime']);
-              $('#epg-next-title').html(data['play']['next_program_name']);
-              $('#epg-next-info').html(data['play']['next_program_info']);
+              document.getElementById('epg-next-starttime').textContent = data['play']['next_starttime'];
+              document.getElementById('epg-next-to').textContent = data['play']['to'];
+              document.getElementById('epg-next-endtime').textContent = data['play']['next_endtime'];
+              document.getElementById('epg-next-title').innerHTML = data['play']['next_program_name'];
 
               // ON Air
-              $('#state').text('● ON Air');
-              $('#state').css('color','#007cff');
+              document.getElementById('state').textContent = '● ON Air';
+              document.getElementById('state').style.color = '#007cff';
             }
 
           } else if (data['info']['state'] == 'Offline') {
 
             // Offline
-            $('#state').text('● Offline');
-            $('#state').css('color','gray');
-
+            document.getElementById('state').textContent = '● Offline';
+            document.getElementById('state').style.color = 'gray';
           }
 
           // stateを記録しておく
@@ -196,7 +175,7 @@
           document.getElementById('progress').style.width = percent + '%';
 
           // チャンネルごとに実行
-          Object.keys(data['onair']).forEach(function(key){
+          for (key in data['onair']){
 
             // 変化がある場合のみ書き換え
             // てか特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
@@ -238,7 +217,7 @@
             var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
             document.getElementsByClassName('progress-ch' + key)[0].style.width = percent + '%';
 
-          });
+          }
 
           // 高さ調整(初回のみ)
           if (flg) $('.swiper-wrapper').eq(1).css('height', $('.broadcast-nav.swiper-slide').height() + 'px');
@@ -760,8 +739,8 @@
     function tweet_send(event) {
 
       event.preventDefault(); // 通常のイベントをキャンセル
-      $("#tweet-status").html('ツイートを送信中…');
       $('#tweet-submit').prop('disabled', true).addClass('disabled');
+      $("#tweet-status").html('ツイートを送信中…');
 
       // フォームデータ
       var formData = new FormData($('#tweet-form').get(0));

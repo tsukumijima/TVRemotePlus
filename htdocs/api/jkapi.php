@@ -209,7 +209,7 @@
 		// 実況勢いを取得する
 		@$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
 
-		if ($jkchannels){
+		if ($jkchannels and !empty($channel)){
 
 			// 実況勢いを先に取得しておいたデータから見つけて代入
 			foreach ($jkchannels->channel as $i => $value) {
@@ -235,7 +235,6 @@
 				// コメントサーバのresを取得するURL
 				$jkthread_res_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
 
-				// XMLでAPIを叩く
 				$jkthread_xml = simplexml_load_file($jkthread_res_URL);
 
 				// APIを解析
@@ -345,6 +344,8 @@
 					$error = 'ニコニコ実況が落ちている可能性があります';
 				} else if (strpos($http_response_header[0], '503')){
 					$error = 'メンテナンス中です';
+				} else if (empty($channel)){
+					$error = '-';
 				} else {
 					$error = 'ニコニコ実況に問題が発生しています';
 				}
@@ -560,7 +561,13 @@
 								'&res_from=-1000&when='.$when;
 
 					// XMLでAPIを叩く
-					$jkthread_xml = simplexml_load_file($jkthread_URL);
+					try {
+						$jkthread_xml = simplexml_load_file($jkthread_URL);
+					} catch (Exception $e) {
+						// 失敗したらもう一度
+						sleep(1);
+						echo 'Error: '.file_get_contents($jkthread_URL);
+					}
 
 					// APIを解析
 					list($jkthread_new, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);

@@ -28,6 +28,10 @@ pre:empty {
     padding: 0;
 }
 
+[aria-label]:before {
+    border-top: 5px solid rgba(0, 0, 0, 0.8) !important;
+}
+
 [aria-label]:after {
     background: rgba(0, 0, 0, 0.8) !important;
 }
@@ -181,6 +185,10 @@ input::-moz-focus-inner, button::-moz-focus-inner {
     #scroll:hover {
         background-color: #46b2aa;
     }
+}
+
+#scroll.hover {
+    background-color: #46b2aa;
 }
 
 select {
@@ -583,6 +591,26 @@ section {
     margin-left: 8px;
 }
 
+google-cast-launcher {
+    position: absolute !important;
+    top: 8px;
+    left: 0px;
+    right: 0px;
+    bottom: 56px;
+    opacity: 0;
+    z-index: 10;
+    cursor: pointer;
+}
+
+google-cast-launcher:hover + #cast-toggle{
+    background-color: #EEEEEE;
+}
+
+google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #cast-toggle:after{
+    transform: translate(-50%);
+    opacity: 1;
+}
+
 @media screen and (max-width: 768px){
 
     #menu-content {
@@ -732,6 +760,20 @@ section {
     background-color: #000000;
 }
 
+.dplayer-casting {
+    opacity: 0;
+    position: absolute;
+    top: 25px;
+    left: 45px;
+    font-size: 24px;
+    border-radius: 2px;
+    padding: 7px 20px;
+    transition: all .3s ease-in-out;
+    overflow: hidden;
+    color: #fff;
+    pointer-events: none;
+}
+
 @media (max-width: 500px){
 
     #dplayer-box {
@@ -749,6 +791,12 @@ section {
 
     .dplayer-fulled {
         position: fixed !important;
+    }
+
+    .dplayer-casting {
+        font-size: 15px;
+        top: 6px;
+        left: 3px;
     }
 }
 
@@ -797,8 +845,9 @@ section {
     font-size: 90%;
     display: block;
     border-left: 1px solid #E5E8EA;
+    border-bottom: 8px solid #E5E8EA;
     background-color: #FFFFFF;
-    overflow: scroll;
+    overflow-y: scroll;
     position: absolute;
     border-collapse: collapse;
     top: 43px;
