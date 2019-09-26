@@ -20,6 +20,7 @@
     $('#setting-user').submit(function(event){
 
       event.preventDefault();
+      $('.bluebutton').attr('disabled', true);
 
       var settings = {};
       settings['twitter_show'] = $('#twitter_show').prop('checked');
@@ -30,12 +31,16 @@
       var json = JSON.stringify(settings);
       Cookies.set('settings', json, { expires: 365 });
       toastr.success('個人設定を保存しました。');
+      setTimeout(function(){
+        $('.bluebutton').attr('disabled', false);
+      }, 200);
 
     });
 
     $('#setting-env').submit(function(event){
 
       event.preventDefault();
+      $('.redbutton').attr('disabled', true);
 
       // フォーム送信
       $.ajax({
@@ -45,6 +50,9 @@
         cache: false,
         success: function(data) {
           toastr.success('環境設定を保存しました。');
+          setTimeout(function(){
+            $('.redbutton').attr('disabled', false);
+          }, 200);
         }
       });
 

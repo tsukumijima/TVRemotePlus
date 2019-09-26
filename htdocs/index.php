@@ -372,7 +372,8 @@
           <div class="select-wrap">
             <select name="quality">
               <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
-              <option value="1080p">1080p (1920×1080)</option>
+              <option value="1080p-high">1080p-high (1920×1080)</option>
+              <option value="1080p">1080p (1440×1080)</option>
               <option value="810p">810p (1440×810)</option>
               <option value="720p">720p (1280×720)</option>
               <option value="540p">540p (960×540)</option>

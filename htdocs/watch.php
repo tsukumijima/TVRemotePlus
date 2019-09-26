@@ -26,9 +26,13 @@
       <div id="search-find-box">
       <div id="search-find-wrap">
         <div id="search-find-title">
-          <i id="search-find-submit" class="fas fa-search"></i>
+          <div id="search-find-submit">
+            <i class="fas fa-search"></i>
+          </div>
           <input id="search-find-form" type="text" placeholder="ファイルを検索" />
-          <i id="search-find-toggle" class="fas fa-caret-down"></i>
+          <div id="search-find-toggle">
+            <i class="fas fa-caret-down"></i>
+          </div>
         </div>
         <div id="search-find-link-box">
           <a id="rec-new" class="search-find-link search-find-selected">
@@ -87,7 +91,8 @@
             <div class="select-wrap">
             	<select name="quality">
                 <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
-                <option value="1080p">1080p (1920×1080)</option>
+                <option value="1080p-high">1080p-high (1920×1080)</option>
+                <option value="1080p">1080p (1440×1080)</option>
                 <option value="810p">810p (1440×810)</option>
                 <option value="720p">720p (1280×720)</option>
                 <option value="540p">540p (960×540)</option>

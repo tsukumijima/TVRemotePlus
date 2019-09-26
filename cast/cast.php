@@ -13,6 +13,7 @@ require_once ('Chromecast.php');
 // 引数確認
 if (!isset($argv[1])){
 	echo '  Error:  Argument is missing or too many, please retry.';
+	sleep(1);
 	exit(1);
 }
 
@@ -92,6 +93,13 @@ while(true){
 			echo '  Chromecast UnMute.'."\n\n";
 		}
 
+		
+		if ($cmd['cmd'] == 'status'){
+			$status = $cc->DMP->getStatus();
+			echo '  Chromecast getStatus.'."\n\n";
+			var_dump($status);
+		}
+
 		// 停止(終了)
 		if ($cmd['cmd'] == 'stop'){
 			$cc->DMP->Stop();
@@ -104,4 +112,5 @@ while(true){
 }
 
 echo '  Chromecast Exit.'."\n\n";
+sleep(1);
 

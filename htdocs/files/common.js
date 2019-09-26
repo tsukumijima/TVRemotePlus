@@ -71,11 +71,15 @@
 
     // 一番上まで戻る
     $('#scroll').click(function(){
-      
+
+      $('#scroll').addClass('hover');
       var topPos = $(window).scrollTop();
       
       if (topPos > 400) {
         $('html, body').velocity('scroll', { duration: 700, offset: -54 });
+        setTimeout(function(){
+          $('#scroll').removeClass('hover');
+        }, 700);
       }
 
     });
