@@ -21,7 +21,11 @@
 
 	// stream.m3u8がない場合
 	if (!file_exists($base_dir.'htdocs/stream/stream.m3u8')){
-		copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+		if ($silent == 'true'){
+			copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+		} else {
+			copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+		}
 	}
 
 	// 時計
