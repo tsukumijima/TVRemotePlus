@@ -39,10 +39,17 @@
       $('#menu-close').removeClass('open');
     });
 
+    // セレクトボックス開閉
+    $('.select-wrap').on('mousedown', function(){
+      if (document.body.clientWidth > 1024){
+        $(this).toggleClass('open');
+      }
+    });
+
     // パスワード開閉
     $('.password-box-input').click(function(){
-      $('.password-box-input').toggleClass('fa-eye');
       $('.password-box-input').toggleClass('fa-eye-slash');
+      $('.password-box-input').toggleClass('fa-eye');
       var input = $(this).prev("input");
       // type切替
       if (input.attr("type") == "password") {
@@ -54,6 +61,10 @@
 
     // 上までスクロールで戻る
     $(window).scroll(function() {
+
+      // アカウント情報ボックスを非表示
+      $('#tweet-account-box').css('opacity', 0);
+      $('#tweet-account-box').css('visibility', 'hidden');
 
       // スクロール位置を取得
       var topPos = $(this).scrollTop();

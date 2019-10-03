@@ -79,9 +79,21 @@
           </script>
         </div>
 
+        <div id="tweet-account-box">
+          <div id="tweet-account">
+            <img id="tweet-account-icon" src="/files/account_default.jpg">
+            <div id="tweet-account-info">
+              <a id="tweet-account-name" target="_blank">ログインしていません</a>
+              <div id="tweet-account-id">Not Login</div>
+            </div>
+          </div>
+        </div>
+
         <div id="tweet-box">
           <div id="tweet-info">
-            <div id="tweet-title"><i class="fab fa-twitter"></i></div>
+            <div id="tweet-title">
+              <i class="fab fa-twitter"></i>
+            </div>
             <div id="tweet-status"></div>
           </div>
           <form id="tweet-form" action="javascript:void(0)">
