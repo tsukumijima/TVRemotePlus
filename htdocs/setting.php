@@ -264,7 +264,7 @@
 
             <p>個人設定はブラウザ・端末ごとに反映されます。</p>
 
-            <h4><i class="fas fa-eye"></i>表示</h4>
+            <h4><i class="fas fa-eye-slash"></i>表示</h4>
 
             <div class="setting-form">
               <span>Twitter 投稿フォーム</span>
@@ -642,7 +642,7 @@
               </div>
               <div class="password-box-wrap">
                 <input class="password-box" name="nicologin_password" type="password" value="<?php echo $nicologin_password; ?>" placeholder="password" />
-                <i class="password-box-input fas fa-eye"></i>
+                <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
 
@@ -755,7 +755,7 @@
               </div>
               <div class="password-box-wrap">
                 <input class="password-box" name="basicauth_password" type="password" value="<?php echo $basicauth_password; ?>" placeholder="12345678" required />
-                <i class="password-box-input fas fa-eye"></i>
+                <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
             

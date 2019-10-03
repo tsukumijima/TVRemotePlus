@@ -474,6 +474,7 @@ class TwitterOAuth extends Config
             CURLOPT_CONNECTTIMEOUT => $this->connectionTimeout,
             CURLOPT_HEADER => true,
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_SSL_VERIFYHOST => 2,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_TIMEOUT => $this->timeout,
@@ -493,7 +494,7 @@ class TwitterOAuth extends Config
             $options[CURLOPT_PROXYUSERPWD] = $this->proxy['CURLOPT_PROXYUSERPWD'];
             $options[CURLOPT_PROXYPORT] = $this->proxy['CURLOPT_PROXYPORT'];
             $options[CURLOPT_PROXYAUTH] = CURLAUTH_BASIC;
-            $options[CURLOPT_PROXYTYPE] = CURLPROXY_HTTP;
+            $options[CURLOPT_PROXYTYPE] = $this->proxy['CURLOPT_PROXYTYPE'];
         }
 
         return $options;

@@ -234,6 +234,7 @@ select:-moz-focusring {
     display: inline-block;
     width: 320px;
 }
+
 .select-wrap:before {
     z-index: 1;
     position: absolute;
@@ -245,6 +246,10 @@ select:-moz-focusring {
     line-height: 39px;
     color: #7F878C;
     pointer-events: none;
+}
+
+.select-wrap.open:before {
+    content: "\f077";
 }
 
 @media screen and (max-width : 500px){
@@ -947,6 +952,69 @@ td {
 
 /* ツイート関連 */
 
+#tweet-account-box {
+    display: block;
+    position: relative;
+    float: left;
+    width: 275px;
+    height: 67px;
+    left: 3vw;
+    margin-top: -65px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+    transition: 0.15s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 5;
+}
+
+#tweet-account {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#tweet-account-icon {
+    height: 100%;
+    border-radius: 20%;
+}
+
+#tweet-account-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: 15px;
+}
+
+#tweet-account-name {
+    display: block;
+    width: 190px;
+    color: #272727;
+    font-weight: bold;
+    font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+}
+
+#tweet-account-name:hover {
+    text-decoration: underline;
+}
+
+#tweet-account-id {
+    display: block;
+    width: 190px;
+    color: #657786;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #tweet-box {
     padding-left: 3vw;
     padding-right: 3vw;
@@ -992,16 +1060,20 @@ td {
 }
 
 #tweet-title {
+    display: block;
+    position: relative;
+    width: 30px;
     padding-top: 1px;
     color: #1da1f2;
     font-size: 111%;
     float: left;
-    display: block;
+    text-align: center;
+    cursor: pointer;
 }
 
 #tweet-status {
     display: block;
-    width: calc(100% - 25px);
+    width: calc(100% - 30px);
     color: #1da1f2;
     float: right;
     text-align: right;

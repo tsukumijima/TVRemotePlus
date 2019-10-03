@@ -27,6 +27,9 @@
 		setcookie(session_name(), '', time()-42000, '/'); //Cookieを削除
 	}
 
+	// アカウント情報が入ったCookieを削除
+	setcookie('twitter', '', -1, '/');
+
 	// 最終的に、セッションを破壊する
 	session_destroy();
 

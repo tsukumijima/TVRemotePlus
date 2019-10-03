@@ -131,7 +131,7 @@
 		}
 
 		// 情報取得
-		$info = $connection->get("account/verify_credentials");
+		$info = $connection->get('account/verify_credentials');
 
 		if($result and !isset($result->errors) and !isset($info->errors)){
 			echo $tweet_type.'：投稿に成功しました。';
@@ -156,4 +156,3 @@
 	} else { //セッションがない場合
 		echo '<a id="tweet-login" href="/tweet/auth.php">ツイートするにはTwitterでログインして下さい</a>';
 	}
-

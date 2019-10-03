@@ -13,13 +13,23 @@
     } else {
       $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth.php">ログイン</a>');
     }
+    
+    // Twitterアカウント情報を読み込み
+    twitter = {account_name:'ログインしていません', account_id:'', account_icon:'/files/account_default.jpg'};
+    if (Cookies.get('twitter') != undefined){
+      twitter = JSON.parse(Cookies.get('twitter'));
+      $('#tweet-account-icon').attr('src', twitter['account_icon']);
+      $('#tweet-account-name').text(twitter['account_name']);
+      $('#tweet-account-name').attr('href', 'https://twitter.com/' + twitter['account_id']);
+      $('#tweet-account-id').text('@' + twitter['account_id']);
+    }
 
     // ***** 視聴数カウント・ストリーム状態把握 *****
 
     setInterval((function status(){
       $.ajax({
-        url: "/api/watchnow.php",
-        dataType: "json",
+        url: '/api/watchnow.php',
+        dataType: 'json',
         cache: false,
         success: function(data) {
 
@@ -111,8 +121,8 @@
 
     setInterval((function status(){
       $.ajax({
-        url: "/api/epgguide.php",
-        dataType: "json",
+        url: '/api/epgguide.php',
+        dataType: 'json',
         cache: false,
         success: function(data) {
 
@@ -260,6 +270,30 @@
         }
       }
     });
+    
+    // アカウント情報ボックスを表示する
+    var clickEventType = ((window.ontouchstart!==null) ? 'mouseenter mouseleave' : 'touchstart');
+    $('#tweet-title').on(clickEventType, function(event) {
+      if ($('#tweet-account-box').css('visibility') === 'hidden' && (event.type === 'mouseenter' || event.type === 'touchstart')){
+        $('#tweet-account-box').css('visibility', 'visible');
+        $('#tweet-account-box').css('opacity', 1);
+        console.log('visible')
+      } else {
+        $('#tweet-account-box').css('visibility', 'hidden');
+        $('#tweet-account-box').css('opacity', 0);
+        console.log('hidden')
+      }
+    });
+
+    $('#tweet-account-box').on(clickEventType, function(event) {
+      if (event.type === 'mouseenter'){
+        $('#tweet-account-box').css('visibility', 'visible');
+        $('#tweet-account-box').css('opacity', 1);
+      } else {
+        $('#tweet-account-box').css('visibility', 'hidden');
+        $('#tweet-account-box').css('opacity', 0);
+      }
+    });
 
     // スマホの場合にTwitterだけ下にフロート表示
     $('#tweet').focusin(function(event) {
@@ -314,6 +348,10 @@
       })
       .done(function(data) {
         $("#tweet-status").html(data);
+        $('#tweet-account-icon').attr('src', '/files/account_default.jpg');
+        $('#tweet-account-name').text('ログインしていません');
+        $('#tweet-account-name').removeAttr('href');
+        $('#tweet-account-id').text('Not Login');
       })
       .fail(function(data){
         $("#tweet-status").html('<span class="tweet-failed">ログアウト中にエラーが発生しました…</span>');

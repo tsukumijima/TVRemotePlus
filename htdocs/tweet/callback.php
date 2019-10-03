@@ -27,11 +27,25 @@
 		$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
 		// APIのアクセスに必要なトークンを取得
-		$access_token = $connection->oauth("oauth/access_token", array("oauth_verifier" => $_REQUEST['oauth_verifier']));
+		$access_token = $connection->oauth('oauth/access_token', array('oauth_verifier' => $_REQUEST['oauth_verifier']));
 
 		// セッション関数に入れておいたコールバック用トークンを差し替える
-		$_SESSION['oauth_token'] = $access_token["oauth_token"];
-		$_SESSION['oauth_token_secret'] = $access_token["oauth_token_secret"];
+		$_SESSION['oauth_token'] = $access_token['oauth_token'];
+		$_SESSION['oauth_token_secret'] = $access_token['oauth_token_secret'];
+		
+		// 取得したトークンでもう一度接続
+		$_connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
+
+		// 情報取得
+		$info = $_connection->get("account/verify_credentials");
+
+		// アカウント情報をCookieに登録しておく
+		$cookie = json_encode(array(
+			'account_name' => $info->name,
+			'account_id' => $info->screen_name,
+			'account_icon' => str_replace('_normal', '', $info->profile_image_url_https),
+		), JSON_UNESCAPED_UNICODE);
+		setcookie('twitter', $cookie, time() + 7776000, '/');
 
 		// トップページにリダイレクト
 		header('Location: '.$BASEURL);
