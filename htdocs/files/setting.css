@@ -192,6 +192,10 @@ select {
     width: 150px;
 }
 
+#setting-user .text-box {
+    width: 150px;
+}
+
 .download {
     display: inline-block;
     font-size: 250%;
@@ -309,6 +313,9 @@ select {
 
 @media screen and (max-width: 500px){
     #setting-user .select-wrap {
+        width: 100%;
+    }
+    #setting-user .text-box {
         width: 100%;
     }
     .setting-select {

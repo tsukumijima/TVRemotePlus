@@ -295,7 +295,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff'.
+					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
 					' -o stream.m3u8';
 			break;
 
@@ -316,7 +316,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff'.
+					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
 					' -o stream.m3u8';
 			break;
 		}
@@ -476,7 +476,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff'.
+					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
 					' -o stream.m3u8';
 			break;
 			
@@ -496,7 +496,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff'.
+					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
 					' -o stream.m3u8';
 			break;
 		}

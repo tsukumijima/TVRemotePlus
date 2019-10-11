@@ -37,8 +37,8 @@
             document.getElementById('ikioi').textContent = '実況勢い: ' + data['ikioi'];
           }
 
-          // 5秒後に実行(コメント遅延分)
-          wait(5).done(function(){
+          // n秒後に実行(コメント遅延分)
+          wait(settings['comment_delay']).done(function(){
 
             if (data['data'] != null && data['data'][0]){ //data['data'] があれば(nullでなければ)
 

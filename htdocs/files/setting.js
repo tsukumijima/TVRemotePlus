@@ -26,6 +26,7 @@
       settings['twitter_show'] = $('#twitter_show').prop('checked');
       settings['comment_show'] = $('#comment_show').prop('checked');
       settings['comment_size'] = $('#comment_size').val();
+      settings['comment_delay'] = $('#comment_delay').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');
       console.log(settings);
       var json = JSON.stringify(settings);
