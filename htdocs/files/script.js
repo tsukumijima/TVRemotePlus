@@ -548,7 +548,7 @@
                   top: 0;
                   bottom: 0;
                   font-size: 22px;
-                  font-family: sans-serif;
+                  font-family: メイリオ, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", sans-serif;
                   color: #ffffff;
                 }
                 .video-subtitle-wrap {
@@ -571,7 +571,7 @@
                   top: 0;
                   bottom: 0;
                   font-size: 29px;
-                  font-family: sans-serif;
+                  font-family: メイリオ, "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", sans-serif;
                   color: #fff;
                 }
                 .dplayer-danmaku .dplayer-danmaku-item {

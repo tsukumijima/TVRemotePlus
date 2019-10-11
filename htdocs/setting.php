@@ -317,6 +317,15 @@
               </div>
             </div>
 
+            <div class="setting-form setting-select">
+              <span>コメントの遅延時間（秒）</span>
+<?php	if (isset($_COOKIE['settings']) and isset(json_decode($_COOKIE['settings'], true)['comment_delay'])){ ?>
+              <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="<?php echo json_decode($_COOKIE['settings'], true)['comment_delay']; ?>" required />
+<?php	} else { ?>
+              <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="5" required />
+<?php	} // 括弧終了 ?>
+            </div>
+
             <div class="setting-form">
               <span>デフォルト設定を使いワンクリックでストリームを開始する</span>
               <div class="toggle-switch">
