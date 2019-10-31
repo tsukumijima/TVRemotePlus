@@ -81,6 +81,7 @@
           <input id="stream-filepath" type="hidden" name="filepath" value="">
           <input id="stream-filetitle" type="hidden" name="filetitle" value="">
           <input id="stream-fileinfo" type="hidden" name="fileinfo" value="">
+          <input id="stream-fileext" type="hidden" name="fileext" value="">
           <input id="stream-filechannel" type="hidden" name="filechannel" value="">
           <input id="stream-filetime" type="hidden" name="filetime" value="">
           <input id="stream-start_timestamp" type="hidden" name="start_timestamp" value="">
@@ -90,7 +91,7 @@
             <span>動画の画質：</span>
             <div class="select-wrap">
             	<select name="quality">
-                <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
+                <option value="<?php echo $quality_default; ?>" data-value="<?php echo $quality_default; ?>" data-text="デフォルト (<?php echo $quality_default; ?>)">デフォルト (<?php echo $quality_default; ?>)</option>
                 <option value="1080p-high">1080p-high (1920×1080)</option>
                 <option value="1080p">1080p (1440×1080)</option>
                 <option value="810p">810p (1440×810)</option>
@@ -106,7 +107,7 @@
             <span>エンコード：</span>
             <div class="select-wrap">
               <select name="encoder">
-                <option value="<?php echo $encoder_default; ?>">デフォルト (<?php echo $encoder_default; ?>)</option>
+                <option value="<?php echo $encoder_default; ?>" data-value="<?php echo $encoder_default; ?>" data-text="デフォルト (<?php echo $encoder_default; ?>)">デフォルト (<?php echo $encoder_default; ?>)</option>
                 <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                 <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
                 <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
@@ -156,8 +157,11 @@
 	ob_flush();
 	flush();
 
-	// 3階層まで調べる
-	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'));
+	// 四階層まで調べる
+	// MP4も追加
+	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'), glob($TSfile_dir.'/*/*/*/*.ts'),
+						  glob($TSfile_dir.'/*.mp4'), glob($TSfile_dir.'/*/*.mp4'), glob($TSfile_dir.'/*/*/*.mp4'), glob($TSfile_dir.'/*/*/*/*.mp4'));
+  
 	if (file_exists($infofile)){
 		$TSfile = json_decode(file_get_contents($infofile), true);
 	} else {
@@ -176,8 +180,8 @@
     // リストを更新
     toastr.info('リストを更新しています…');
     $.ajax({
-      url: "/api/searchfile.php",
-      dataType: "json",
+      url: '/api/listupdate',
+      dataType: 'json',
       cache: false,
       success: function(data) {
         $('#rec-new').addClass('search-find-selected');

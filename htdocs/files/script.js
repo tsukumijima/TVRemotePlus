@@ -11,7 +11,7 @@
     if (Cookies.get('twitter_session')){
       $("#tweet-status").html('<a id="tweet-logout" href="javascript:void(0)">ログアウト</a>');
     } else {
-      $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth.php">ログイン</a>');
+      $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth">ログイン</a>');
     }
     
     // Twitterアカウント情報を読み込み
@@ -28,13 +28,13 @@
 
     setInterval((function status(){
       $.ajax({
-        url: '/api/watchnow.php',
+        url: '/api/status',
         dataType: 'json',
         cache: false,
         success: function(data) {
 
           // 視聴数を表示
-          document.getElementById('watchnow').textContent = data["watchnow"] + '人が視聴中';
+          document.getElementById('watching').textContent = data['watching'] + '人が視聴中';
 
           var status = document.getElementById('status').textContent;
 
@@ -65,8 +65,13 @@
               cache: false,
               success: function(data) {
                 var paused = dp.video.paused;
-                dp.video.src = 'stream/stream.m3u8';
-                dp.initVideo(dp.video, 'hls');
+                if (data['streamtype'] == 'progressive'){
+                  dp.video.src = 'api/stream?_=' + time();
+                  dp.initVideo(dp.video, 'normal');
+                } else {
+                  dp.video.src = 'stream/stream.m3u8';
+                  dp.initVideo(dp.video, 'hls');
+                }
                 if (!paused){
                   dp.video.play();
                 } else {
@@ -88,8 +93,13 @@
 
                 // ストリームを読み込みし直す
                 var paused = dp.video.paused;
-                dp.video.src = 'stream/stream.m3u8';
-                dp.initVideo(dp.video, 'hls');
+                if (data['streamtype'] == 'progressive'){
+                  dp.video.src = 'api/stream?_=' + time();
+                  dp.initVideo(dp.video, 'normal');
+                } else {
+                  dp.video.src = 'stream/stream.m3u8';
+                  dp.initVideo(dp.video, 'hls');
+                }
                 if (!paused){
                   dp.video.play();
                 } else {
@@ -121,7 +131,7 @@
 
     setInterval((function status(){
       $.ajax({
-        url: '/api/epgguide.php',
+        url: '/api/epginfo',
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -341,7 +351,7 @@
     // Twitterからログアウト
     $('#tweet-status').on('click', '#tweet-logout', function(event){
       $.ajax({
-        url: "/tweet/logout.php",
+        url: "/tweet/logout",
         type: "post",
         processData: false,
         contentType: false
@@ -509,7 +519,7 @@
             .replace(/color: #ffff;/, 'color: #00ffff;').replace(/color: #ff00;/, 'color: #00ff00;') + '</span></span>\n';
         }
 
-        html = html + subtitle_html + '</div>\n';
+        html = subtitle_html + '</div>\n' + html;
       }
 
       nicoVideoToCanvas({video, html}).then(({canvas}) => {
@@ -794,8 +804,8 @@
 
       // 送信
       $.ajax({
-        url:  "/tweet/tweet.php",
-        type: "post",
+        url:  '/tweet/tweet',
+        type: 'post',
         data: formData,
         processData: false,
         contentType: false
@@ -827,7 +837,7 @@
       if (Cookies.get('twitter_session')){
         $("#tweet-status").html('<a id="tweet-logout" href="javascript:void(0)">ログアウト</a>');
       } else {
-        $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth.php">ログイン</a>');
+        $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth">ログイン</a>');
       }
     }
     
@@ -863,7 +873,13 @@
       if (s < 10) s = "0" + s;
       
 		  $('#clock').text(y + '/' + mo + '/' + d + ' ' + h + ':' + mi + ':' + s);
-	  }
+    }
+    
+    // タイムスタンプ取得
+    function time(){
+      var date = new Date();
+      return Math.floor( date.getTime() / 1000 );
+    }
 
   });
 

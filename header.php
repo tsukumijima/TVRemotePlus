@@ -163,7 +163,7 @@
       <i class="fas fa-search"></i>
       <span class="nav-link-href">ファイルを再生</span>
     </a>
-    <a class="nav-link" href="/tweet/auth.php">
+    <a class="nav-link" href="/tweet/auth">
       <i class="fab fa-twitter"></i>
       <span class="nav-link-href">Twitter ログイン</span>
     </a>

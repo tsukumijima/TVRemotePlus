@@ -270,11 +270,6 @@
 		$httpd_conf = preg_replace("/Define SSL_PORT.*/", 'Define SSL_PORT "'.$ssl_port.'"', $httpd_conf);
 		file_put_contents($httpd_conf_file, $httpd_conf);// 書き込み
 
-		// OpenSSLの設定ファイル
-		$openssl_conf = file_get_contents($openssl_conf_file);
-		$openssl_conf = preg_replace("/commonName_default		= .*/", 'commonName_default		= '.$serverip.'', $openssl_conf); // 置換
-		file_put_contents($openssl_conf_file, $openssl_conf); // 書き込み
-
 		// OpenSSLの拡張設定ファイル
 		$opensslext_conf = file_get_contents($opensslext_conf_file);
 		$opensslext_conf = preg_replace("/subjectAltName = .*/", 'subjectAltName = IP:'.$serverip.'', $opensslext_conf); // 置換		
@@ -283,15 +278,13 @@
 
 		// HTTPS接続用オレオレ証明書の作成
 		echo '  HTTPS 接続用の自己署名証明書を作成します。'."\n";
-		echo '  途中、入力を求められる箇所がありますが、全て Enter で飛ばしてください。'."\n";
-		echo '  途中でパスワードとかも聞かれますが、飛ばして構いません。'."\n";
-		echo '  続行するには何かキーを押してください。'."\n";
-		trim(fgets(STDIN));
+		echo "\n";
 		echo "\n";
 
 		$cmd =  'cd '.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\ && '.
 				'.\openssl.exe genrsa -out ..\conf\server.key 2048 && '.
-				'.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf && '.
+				'.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf'.
+				' -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN='.$serverip.'" && '.
 				'.\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -days 3650 -signkey ..\conf\server.key -extfile ..\conf\openssl.ext';
 
 		exec($cmd, $opt1, $return1);

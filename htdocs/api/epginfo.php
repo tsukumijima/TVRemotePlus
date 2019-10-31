@@ -158,7 +158,7 @@
 		$status = 'offline';
 	}
 
-	$epgguide['info'] = array(
+	$epginfo['info'] = array(
 		'state' => $ini['state'],
 		'status' => $status,
 	);
@@ -167,16 +167,16 @@
 	if ($ini["state"] == "ONAir"){
 
 		// 番組情報を取得
-		$epgguide['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']], $onid[$ini['channel']], $tsid[$ini['channel']]);
+		$epginfo['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']], $onid[$ini['channel']], $tsid[$ini['channel']]);
 
 		// チャンネル名が取得出来なかったら代入
-		if ($epgguide['play']['channel'] == 'チャンネル名を取得できませんでした'){
-			$epgguide['play']['channel'] = $ch[$ini['channel']];
+		if ($epginfo['play']['channel'] == 'チャンネル名を取得できませんでした'){
+			$epginfo['play']['channel'] = $ch[$ini['channel']];
 		}
 
 	} else {
 
-		$epgguide['play'] = array(
+		$epginfo['play'] = array(
 			'ch' => 0,
 			'tsid' => 0,
 			'channel' => '',
@@ -197,13 +197,13 @@
 
 	foreach ($sid as $key => $value) {
 		// 番組情報を取得
-		$epgguide['onair'][strval($key)] = getEpgguide($key, $value, $onid[strval($key)], $tsid[strval($key)]);
+		$epginfo['onair'][strval($key)] = getEpgguide($key, $value, $onid[strval($key)], $tsid[strval($key)]);
 	}
 
-	if (!isset($epgguide['onair'])) $epgguide['onair'] = array();
+	if (!isset($epginfo['onair'])) $epginfo['onair'] = array();
 	
-	$epgguide['apiname'] = 'epgguide';
+	$epginfo['api'] = 'epginfo';
 
 	// 出力
 	header('content-type: application/json; charset=utf-8');
-	echo json_encode($epgguide, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+	echo json_encode($epginfo, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);

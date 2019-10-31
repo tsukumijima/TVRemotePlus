@@ -12,7 +12,7 @@
 	$cast = json_decode(file_get_contents($castfile), true);
 
 	$json = array(
-		'apiname' => 'chromecast'
+		'api' => 'chromecast'
 	);
 
 	// コマンド確認

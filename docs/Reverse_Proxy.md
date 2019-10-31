@@ -53,10 +53,10 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
         Substitute "s|http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/|https://example.com/tvrp/|q"
         Substitute "s|https://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8100/|https://example.com/tvrp/|q"
         Substitute "s|/api/chromecast|/tvrp/api/chromecast|q"
-        Substitute "s|/api/epgguide|/tvrp/api/epgguide|q"
-        Substitute "s|/api/jkapi|/tvrp/api/jkapi|q"
-        Substitute "s|/api/searchfile|/tvrp/api/searchfile|q"
-        Substitute "s|/api/watchnow|/tvrp/api/watchnow|q"
+        Substitute "s|/api/epginfo|/tvrp/api/epginfo|q"
+        Substitute "s|/api/jikkyo|/tvrp/api/jikkyo|q"
+        Substitute "s|/api/listupdate|/tvrp/api/listupdate|q"
+        Substitute "s|/api/status|/tvrp/api/status|q"
         Substitute "s|/files/|/tvrp/files/|q"
         Substitute "s|/stream/|/tvrp/stream/|q"
         Substitute "s|/tweet/|/tvrp/tweet/|q"
@@ -90,10 +90,10 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter "http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/" "https://example.com/tvrp/";
             sub_filter "https://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8100/" "https://example.com/tvrp/";
             sub_filter "/api/chromecast" "/tvrp/api/chromecast";
-            sub_filter "/api/epgguide" "/tvrp/api/epgguide";
-            sub_filter "/api/jkapi" "/tvrp/api/jkapi";
-            sub_filter "/api/searchfile" "/tvrp/api/searchfile";
-            sub_filter "/api/watchnow" "/tvrp/api/watchnow";
+            sub_filter "/api/epginfo" "/tvrp/api/epginfo";
+            sub_filter "/api/jikkyo" "/tvrp/api/jikkyo";
+            sub_filter "/api/listupdate" "/tvrp/api/listupdate";
+            sub_filter "/api/status" "/tvrp/api/status";
             sub_filter "/files/" "/tvrp/files/";
             sub_filter "/stream/" "/tvrp/stream/";
             sub_filter "/tweet/" "/tvrp/tweet/";

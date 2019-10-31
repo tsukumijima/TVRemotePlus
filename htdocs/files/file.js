@@ -10,7 +10,7 @@
       $('#comment-time').css('width', '62px');
 
       $.ajax({
-        url: '/api/jkapi.php/v3/?id=TVRemotePlus',
+        url: '/api/jikkyo/v3/?id=TVRemotePlus',
         dataType: 'json',
         cache: false,
         success: function(data) {
