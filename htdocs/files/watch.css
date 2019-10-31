@@ -52,18 +52,21 @@ section {
 
 #search-find-form {
     width: 75%;
-    height: 32px;
-    padding: 5px 6px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
     font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 110%;
     outline: none;
-    border: 1px solid #dfe1e5;
-    border-radius: 2px;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
     box-sizing: border-box;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
 #search-find-form:focus {
-    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(0,123,255,.25);
 }
 
 #search-find-toggle {
@@ -131,7 +134,7 @@ section {
 
 .search-file-box {
     display: flex;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     cursor: pointer;
     transition: 0.15s ease-in-out;
 }
@@ -143,6 +146,34 @@ section {
 .search-file-thumb {
     width: 30%;
     height: 100%;
+    position: relative;
+}
+
+.search-file-thumb-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.search-file-ext {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    right: 0;
+    color: #ffffff;
+    font-size: 12px;
+    width: 32px;
+    height: 20px;
+}
+
+.search-file-ext.ts {
+    background-color: #e91d5d;
+}
+
+.search-file-ext.mp4 {
+    background-color: #007cff;
 }
 
 .search-file-content {
@@ -407,6 +438,12 @@ section {
 
     .search-file-thumb {
         width: 45%;
+    }
+
+    .search-file-ext {
+        font-size: 10px;
+        width: 28px;
+        height: 16px;
     }
     
     .search-file-content {

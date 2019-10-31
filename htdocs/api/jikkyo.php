@@ -315,7 +315,7 @@
 
 			// 出力JSON
 			$json = array(
-				'apiname' => 'jkapi',
+				'api' => 'jikkyo',
 				'type' => 'read',
 				'ikioi' => $ikioi,
 				'channel' => 'jk'.$channel,
@@ -355,7 +355,7 @@
 
 			// 出力JSON
 			$json = array(
-				'apiname' => 'jkapi',
+				'api' => 'jikkyo',
 				'type' => 'read',
 				'ikioi' => $error,
 				'error' => $error,
@@ -488,7 +488,7 @@
 
 		// 出力JSON
 		$json = array(
-			'apiname' => 'jkapi',
+			'api' => 'jikkyo',
 			'type' => 'send',
 			'ikioi' => null,
 			'ch' => $ini["channel"],
@@ -659,7 +659,7 @@
 
 		// 出力JSON
 		$json = array(
-			'apiname' => 'jkapi',
+			'api' => 'jikkyo',
 			'type' => 'file',
 			'ikioi' => null,
 			'ch' => 'jk'.$channel,
@@ -672,7 +672,7 @@
 
 		// 出力JSON
 		$json = array(
-			'apiname' => 'jkapi',
+			'api' => 'jikkyo',
 			'type' => 'error',
 			'ikioi' => null,
 			'code' => 334,
@@ -684,7 +684,7 @@
 
 		// 出力JSON
 		$json = array(
-			'apiname' => 'jkapi',
+			'api' => 'jikkyo',
 			'type' => 'connect',
 			'ikioi' => null,
 			'code' => 0,
@@ -696,7 +696,7 @@
 
 		// 出力JSON
 		$json = array(
-			'apiname' => 'jkapi',
+			'api' => 'jikkyo',
 			'type' => 'error',
 			'ikioi' => null,
 			'code' => 0,

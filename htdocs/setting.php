@@ -32,12 +32,13 @@
 			stream_stop();
 
 			// ONAirなら
-			if ($ini['state'] == "File"){
+			if ($ini['state'] == 'File'){
 
 				// 連想配列に格納
 				if ($_POST['filepath']) $ini['filepath'] = $_POST['filepath'];
 				if ($_POST['filetitle']) $ini['filetitle'] = $_POST['filetitle'];
 				if ($_POST['fileinfo']) $ini['fileinfo'] = $_POST['fileinfo'];
+				if ($_POST['fileext']) $ini['fileext'] = $_POST['fileext'];
 				if ($_POST['filechannel']) $ini['filechannel'] = $_POST['filechannel'];
 				if ($_POST['filetime']) $ini['filetime'] = $_POST['filetime'];
 				if ($_POST['start_timestamp']) $ini['start_timestamp'] = $_POST['start_timestamp'];
@@ -81,7 +82,6 @@
 						$history['data'][$history_count]['title'] = $TSfile['data'][$key]['title'];
 						$history['data'][$history_count]['update'] = $TSfile['data'][$key]['update'];
 						$history['data'][$history_count]['thumb'] = $TSfile['data'][$key]['thumb'];
-						$history['data'][$history_count]['data'] = $TSfile['data'][$key]['data'];
 						$history['data'][$history_count]['date'] = $TSfile['data'][$key]['date'];
 						$history['data'][$history_count]['info'] = $TSfile['data'][$key]['info'];
 						$history['data'][$history_count]['channel'] = $TSfile['data'][$key]['channel'];
@@ -95,18 +95,23 @@
 
 				// 再生履歴をファイルに保存
 				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		
+				// MP4(progressive)は除外
+		        if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
 
-				// ストリーミング開始
-				stream_file($ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+					// ストリーミング開始
+					stream_file($ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
-				// 準備中用の動画を流すためにm3u8をコピー
-				if ($silent == 'true'){
-					copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-				} else {
-					copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+					// 準備中用の動画を流すためにm3u8をコピー
+					if ($silent == 'true'){
+						copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+					} else {
+						copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+        			}
+
 				}
 
-			} else if ($ini['state'] == "ONAir"){
+			} else if ($ini['state'] == 'ONAir'){
 
 				// 連想配列に格納
 				if ($_POST['channel']) $ini['channel'] = strval($_POST['channel']);
@@ -135,7 +140,7 @@
 				}
 
 			// Offlineなら
-			} else if ($ini['state'] == "Offline"){
+			} else if ($ini['state'] == 'Offline'){
 
 				// 念のためもう一回ストリーミング終了関数を起動
 				stream_stop();
@@ -264,7 +269,7 @@
 
             <p>個人設定はブラウザ・端末ごとに反映されます。</p>
 
-            <h4><i class="fas fa-eye-slash"></i>表示</h4>
+            <h4><i class="fas fa-eye"></i>表示</h4>
 
             <div class="setting-form">
               <span>Twitter 投稿フォーム</span>

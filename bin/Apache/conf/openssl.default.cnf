@@ -72,9 +72,9 @@ cert_opt 	= ca_default		# Certificate field options
 # crlnumber must also be commented out to leave a V1 CRL.
 # crl_extensions	= crl_ext
 
-default_days	= 3650			# how long to certify for
+default_days	= 365			# how long to certify for
 default_crl_days= 30			# how long before next CRL
-default_md	= sha256		# use public key default MD
+default_md	= default		# use public key default MD
 preserve	= no			# keep passed DN ordering
 
 # A few difference way of specifying how similar the request should look
@@ -128,17 +128,17 @@ string_mask = utf8only
 
 [ req_distinguished_name ]
 countryName			= Country Name (2 letter code)
-countryName_default		= JP
+countryName_default		= AU
 countryName_min			= 2
 countryName_max			= 2
 
 stateOrProvinceName		= State or Province Name (full name)
-stateOrProvinceName_default	= Tokyo
+stateOrProvinceName_default	= Some-State
 
 localityName			= Locality Name (eg, city)
 
 0.organizationName		= Organization Name (eg, company)
-0.organizationName_default	= TVRemotePlus
+0.organizationName_default	= Internet Widgits Pty Ltd
 
 # we can do this but it is not needed normally :-)
 #1.organizationName		= Second Organization Name (eg, company)
@@ -148,7 +148,6 @@ organizationalUnitName		= Organizational Unit Name (eg, section)
 #organizationalUnitName_default	=
 
 commonName			= Common Name (e.g. server FQDN or YOUR name)
-commonName_default		= 192.168.1.11
 commonName_max			= 64
 
 emailAddress			= Email Address
@@ -170,14 +169,13 @@ unstructuredName		= An optional company name
 # This goes against PKIX guidelines but some CAs do it and some software
 # requires this to avoid interpreting an end user certificate as a CA.
 
-basicConstraints=critical,CA:TRUE
+basicConstraints=CA:FALSE
 
 # Here are some examples of the usage of nsCertType. If it is omitted
 # the certificate can be used for anything *except* object signing.
 
 # This is OK for an SSL server.
 # nsCertType			= server
-nsCertType = sslCA, emailCA
 
 # For an object signing certificate this would be used.
 # nsCertType = objsign
@@ -190,7 +188,6 @@ nsCertType = sslCA, emailCA
 
 # This is typical in keyUsage for a client certificate.
 # keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-keyUsage = cRLSign, keyCertSign
 
 # This will be displayed in Netscape's comment listbox.
 nsComment			= "OpenSSL Generated Certificate"

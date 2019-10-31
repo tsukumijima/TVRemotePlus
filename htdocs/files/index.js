@@ -120,7 +120,7 @@
   $(function(){
 
     $.ajax({
-      url: '/api/chromecast.php',
+      url: '/api/chromecast',
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -191,7 +191,7 @@
         $('html').removeClass('open');
 
         $.ajax({
-          url: '/api/chromecast.php',
+          url: '/api/chromecast',
           dataType: 'json',
           cache: false,
           success: function(data) {
@@ -234,7 +234,7 @@
         $('#menu-content').removeClass('open');
 
         $.ajax({
-          url: '/api/chromecast.php?cmd=stop',
+          url: '/api/chromecast?cmd=stop',
           dataType: 'json',
           cache: false,
           success: function(data) {
@@ -293,7 +293,7 @@
       $('html').removeClass('open');
 
       $.ajax({
-        url: '/api/chromecast.php?cmd=start&ip=' + $(this).attr('data-ip') + '&port=' + $(this).attr('data-port'),
+        url: '/api/chromecast?cmd=start&ip=' + $(this).attr('data-ip') + '&port=' + $(this).attr('data-port'),
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -318,7 +318,7 @@
       $('#menu-content').removeClass('open');
       toastr.info('スキャンしています…');
       $.ajax({
-        url: '/api/chromecast.php?cmd=scan',
+        url: '/api/chromecast?cmd=scan',
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -355,7 +355,7 @@
 
         // 再生系処理 
         $.ajax({
-          url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
+          url: '/api/chromecast?cmd=seek&arg=' + dp.video.currentTime,
           dataType: 'json',
           cache: false,
           success: function(data) {
@@ -373,7 +373,7 @@
         if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
           $.ajax({
-            url: '/api/chromecast.php?cmd=restart',
+            url: '/api/chromecast?cmd=restart',
             dataType: 'json',
             cache: false,
             success: function(data) {
@@ -392,7 +392,7 @@
           if (state == 'File'){
 
             $.ajax({
-              url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
+              url: '/api/chromecast?cmd=seek&arg=' + dp.video.currentTime,
               dataType: 'json',
               cache: false,
               success: function(data) {
@@ -402,7 +402,7 @@
           } else {
 
             $.ajax({
-              url: '/api/chromecast.php?cmd=pause',
+              url: '/api/chromecast?cmd=pause',
               dataType: 'json',
               cache: false,
               success: function(data) {
@@ -423,7 +423,7 @@
           if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
             $.ajax({
-              url: '/api/chromecast.php?cmd=seek&arg=' + dp.video.currentTime,
+              url: '/api/chromecast?cmd=seek&arg=' + dp.video.currentTime,
               dataType: 'json',
               cache: false,
               success: function(data) {
@@ -441,7 +441,7 @@
         if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
           $.ajax({
-            url: '/api/chromecast.php?cmd=volume&arg=' + dp.video.volume,
+            url: '/api/chromecast?cmd=volume&arg=' + dp.video.volume,
             dataType: 'json',
             cache: false,
             success: function(data) {

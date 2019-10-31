@@ -180,6 +180,7 @@
 				$vb = '6200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 
@@ -190,6 +191,7 @@
 				$vb = '6200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '4:3'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 
@@ -200,6 +202,7 @@
 				$vb = '5200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 
@@ -210,6 +213,7 @@
 				$vb = '4200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 
@@ -220,6 +224,7 @@
 				$vb = '3000k'; // 動画のビットレート
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 
@@ -230,6 +235,7 @@
 				$vb = '1500k'; // 動画のビットレート
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 
@@ -240,6 +246,7 @@
 				$vb = '300k'; // 動画のビットレート
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
+				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
 			break;
 		}
@@ -295,7 +302,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
+					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff --sar '.$sar.
 					' -o stream.m3u8';
 			break;
 
@@ -316,7 +323,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
+					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff --sar '.$sar.
 					' -o stream.m3u8';
 			break;
 		}
@@ -366,7 +373,8 @@
 				$vb = '6200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '1:1'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 
 			case '1080p':
@@ -376,7 +384,8 @@
 				$vb = '6200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '4:3'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 
 			case '810p':
@@ -386,7 +395,8 @@
 				$vb = '5200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '1:1'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 
 			case '720p':
@@ -396,7 +406,8 @@
 				$vb = '4200k'; // 動画のビットレート
 				$ab = '192k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '1:1'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 
 			case '540p':
@@ -406,7 +417,8 @@
 				$vb = '3000k'; // 動画のビットレート
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '1:1'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 
 			case '360p':
@@ -416,7 +428,8 @@
 				$vb = '1500k'; // 動画のビットレート
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '1:1'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 
 			case '240p':
@@ -426,7 +439,8 @@
 				$vb = '300k'; // 動画のビットレート
 				$ab = '128k'; // 音声のビットレート
 				$fps = '30000/1001'; // 動画のfps(基本は弄らなくてOK)
-				$samplerate = 44100; // 音声のサンプルレート
+				$sar = '1:1'; // アスペクト比(SAR)
+				$samplerate = 48000; // 音声のサンプルレート
 			break;
 		}
 
@@ -476,7 +490,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
+					' --vbr '.$vb.' --fallback-rc -u 4 --profile Main --vpp-deinterlace normal --tff --sar '.$sar.
 					' -o stream.m3u8';
 			break;
 			
@@ -496,7 +510,7 @@
 					' --audio-codec aac#dual_mono_mode=main --audio-ignore-notrack-error --audio-stream :stereo'.
 					' --audio-ignore-decode-error 30 --audio-samplerate '.$samplerate.' --audio-bitrate '.$ab.
 					' --avsync forcecfr --max-procfps 90 --output-res '.$width.'x'.$height.' --qp-max 24:26:28'.
-					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff --sar 4:3'.
+					' --vbr '.$vb.' --cabac --profile Main --vpp-deinterlace normal --tff --sar '.$sar.
 					' -o stream.m3u8';
 			break;
 		}

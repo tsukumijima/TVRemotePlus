@@ -20,7 +20,7 @@
     // コメント取得
     setInterval((function status(){
       $.ajax({
-        url: "/api/jkapi.php?res=" + res,
+        url: "/api/jikkyo?res=" + res,
         dataType: "json",
         cache: false,
         success: function(data) {
@@ -43,12 +43,12 @@
             if (data['data'] != null && data['data'][0]){ //data['data'] があれば(nullでなければ)
 
               // コメントを無制限に表示 がオンの場合は全て流す
-              // オフの場合は一度に最大8個のみ
+              // オフの場合は一度に最大5個のみ
               if (document.getElementsByClassName('dplayer-danunlimit-setting-input')[0].checked){
                 var length = data['data'].length;
               } else {
-                if (data['data'].length > 8){
-                  var length = 8;
+                if (data['data'].length > 5){
+                  var length = 5;
                 } else {
                   var length = data['data'].length;
                 }
@@ -58,7 +58,7 @@
               var scrollElement = document.getElementById('comment-draw-box');
               var scrollTop = scrollElement.scrollTop + scrollElement.clientHeight;
               var scrollHeight = scrollElement.scrollHeight;
-              if (scrollHeight - scrollTop < 15){
+              if (scrollHeight - scrollTop < 50){
                 var scrollflg = true;
                 document.getElementById('comment-scroll').style.visibility = 'hidden';
                 document.getElementById('comment-scroll').style.opacity = 0;
@@ -141,7 +141,7 @@
       var scrollHeight = scrollElement.scrollHeight;
 
       // 表示・非表示
-      if (scrollHeight - scrollTop < 15){
+      if (scrollHeight - scrollTop < 50){
         document.getElementById('comment-scroll').style.visibility = 'hidden';
         document.getElementById('comment-scroll').style.opacity = 0;
       } else {

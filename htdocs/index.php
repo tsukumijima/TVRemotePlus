@@ -46,7 +46,7 @@
     volume: 1.0,
     autoplay: true,
     screenshot: true,
-<?php	if ($ini['state'] !== "File"){ ?>
+<?php	if ($ini['state'] !== 'File'){ ?>
     live: true,
 <?php	} //括弧終了 ?>
     loop: true,
@@ -54,14 +54,19 @@
     theme: '#007cff',
     // 読み込むm3u8を指定する
     video: {
+<?php	if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){ ?>
+      url: '/api/stream?_=<?php echo time(); ?>',
+      type: 'normal'
+<?php	} else { ?>
       url: '/stream/stream.m3u8',
       type: 'hls'
+<?php	} //括弧終了 ?>
     },
     // 読み込むdanmaku(コメント)
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
-      api: '/api/jkapi.php/',
+      api: '/api/jikkyo/',
       bottom: '10%',
       height: settings['comment_size'],
       unlimited: false
@@ -202,7 +207,7 @@
 <?php	} //括弧終了 ?>
 
           <div id="watch">
-            <span id="watchnow">1人が視聴中</span>
+            <span id="watching">1人が視聴中</span>
 <?php	if ($ini['state'] == 'ONAir'){ ?>
             <span id="ikioi">実況勢い: -</span>
 <?php	} //括弧終了 ?>
