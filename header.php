@@ -84,9 +84,15 @@
         }
     });
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
+<?php		if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){ ?>
+    
+	streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';
 
-    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream.m3u8';
+<?php		} else { ?>
+    
+	streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream.m3u8';
 
+<?php		} //括弧終了 ?>
 <?php	} // 括弧終了 ?>
   </script>
 
@@ -173,7 +179,7 @@
     </a>
 <?php
 	if ($update_confirm == 'true'){
-		$update = file_get_contents('https://raw.githubusercontent.com/tsukumijima/TVRemotePlus/master/data/version.txt');
+		$update = file_get_contents('https://raw.githubusercontent.com/tsukumijima/TVRemotePlus/master/data/version.txt?_='.time());
 		// 取得したバージョンと現在のバージョンが違う場合のみ
 		if ($update != $version){
 			echo '    <a class="nav-link" href="https://github.com/tsukumijima/TVRemotePlus/releases" target="_blank" '.
