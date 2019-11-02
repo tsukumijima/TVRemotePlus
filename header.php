@@ -29,7 +29,6 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" type="text/css" href="/files/DPlayer.min.css">
   <link rel="stylesheet" type="text/css" href="/files/toastr.min.css">
   <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
   <link rel="stylesheet" type="text/css" href="/files/style.css">
@@ -86,11 +85,13 @@
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
 <?php		if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){ ?>
     
-	streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';
+    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';
+    streamtype = 'video/mp4';
 
 <?php		} else { ?>
     
-	streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream.m3u8';
+    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream.m3u8';
+    streamtype = 'application/vnd.apple.mpegurl';
 
 <?php		} //括弧終了 ?>
 <?php	} // 括弧終了 ?>

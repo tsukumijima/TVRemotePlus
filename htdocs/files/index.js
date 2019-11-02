@@ -552,7 +552,7 @@
     // 3. メディアをロードする
     function loadMedia() {
       var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
-      var mediaInfo = new chrome.cast.media.MediaInfo(streamurl, 'application/vnd.apple.mpegurl');
+      var mediaInfo = new chrome.cast.media.MediaInfo(streamurl, streamtype);
 
       mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
       mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
