@@ -330,11 +330,11 @@
 
 		// 前のTSを消してからストリームを開始させる
 		win_exec('pushd "'.$segment_folder.'" && del *.ts /S && '.$stream_cmd);
-		// echo $stream_cmd.'<br>';
-		// exec($stream_cmd.' > C:\freesoft\Apache2\htdocs\log.txt');
 
 		$ini['channel'] = $ch;
-		
+
+		// エンコードコマンドを返す
+		return $stream_cmd;
 	}
 
 	function stream_file($filepath, $quality, $encoder, $subtitle){
@@ -517,7 +517,9 @@
 
 		// 前のTSを消してからストリームを開始させる
 		win_exec('pushd "'.$segment_folder.'" && del *.ts /S && '.$stream_cmd);
-		
+
+		// エンコードコマンドを返す
+		return $stream_cmd;
 	}
 
 	function stream_stop(){

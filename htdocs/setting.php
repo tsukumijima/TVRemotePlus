@@ -95,19 +95,23 @@
 
 				// 再生履歴をファイルに保存
 				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-		
+
 				// MP4(progressive)は除外
-		        if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
+				if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
-					stream_file($ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+					$cmd = stream_file($ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 					// 準備中用の動画を流すためにm3u8をコピー
 					if ($silent == 'true'){
 						copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
 					} else {
 						copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
-        			}
+					}
+
+				} else {
+
+					$cmd = 'Progressive';
 
 				}
 
@@ -130,7 +134,7 @@
 				}
 
 				// ストリーミング開始
-				stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+				$cmd = stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 				// 準備中用の動画を流すためにm3u8をコピー
 				if ($silent == 'true'){
@@ -905,17 +909,19 @@
             <p>ストリーミングを終了します。</p>
 <?php			} //括弧終了 ?>
             <p>稼働状態：<?php echo $ini['state']; ?></p>
-<?php			if ($ini['state'] == "ONAir"){ ?>
+<?php			if ($ini['state'] == 'ONAir'){ ?>
             <p>チャンネル：<?php echo $ch[$ini['channel']]; ?></p>
             <p>動画の画質：<?php echo $ini['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
             <p>字幕の表示：<?php echo $ini['subtitle']; ?></p>
             <p>使用BonDriver：<?php echo $ini['BonDriver']; ?></p>
+            <p>エンコードコマンド：<?php echo $cmd; ?></p>
 
-<?php			} else if ($ini['state'] == "File"){ ?>
+<?php			} else if ($ini['state'] == 'File'){ ?>
             <p>タイトル：<?php echo $ini['filetitle']; ?></p>
             <p>動画の画質：<?php echo $ini['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
+            <p>エンコードコマンド：<?php echo $cmd; ?></p>
 <?php			} //括弧終了 ?>
           
 <?php		} else { ?>
