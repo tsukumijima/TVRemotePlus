@@ -140,8 +140,10 @@ section {
     transition: 0.15s ease-in-out;
 }
 
-.search-file-box:hover {
-    background-color: #F5F5F5;
+@media screen and (min-width: 1025px){
+    .search-file-box:hover {
+        background-color: #F5F5F5;
+    }
 }
 
 .search-file-thumb {
@@ -177,6 +179,36 @@ section {
 
 .search-file-ext.mp4 {
     background-color: #007cff;
+}
+
+.search-file-download, .search-file-encode {
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    bottom: 5px;
+    right: 5px;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    font-size: 20px;
+    width: 35px;
+    height: 35px;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+@media screen and (min-width: 1025px){
+    .search-file-thumb:hover > .search-file-download,
+    .search-file-thumb:hover > .search-file-encode {
+            opacity: 1;
+    }
+}
+
+.search-file-download.open, .search-file-encode.open {
+    opacity: 1;
 }
 
 .search-file-content {

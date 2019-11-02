@@ -6,13 +6,11 @@
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
-	// MP4のみ
-	if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){
+	// MP4を出力する関数
+	// https://blog.logicky.com/2019/05/29/151209?utm_source=feed
+	// を大変参考にさせていただきました、ありがとうございます
+	function loadMP4 ($file){
 
-		// https://blog.logicky.com/2019/05/29/151209?utm_source=feed
-		// を大変参考にさせていただきました、ありがとうございます
-
-		$file = $ini['filepath'];
 		$fp = @fopen($file, 'rb'); // ファイルを開く
 		$size   = filesize($file); // ファイルサイズ
 		$length = $size;           // Content length
@@ -91,12 +89,29 @@
 
 		// ファイルを閉じる
 		fclose($fp);
-		exit();
+	}
+
+	if (isset($_GET['file'])){
+		$file = rawurldecode($_GET['file']);
+		$pathinfo = pathinfo($TSfile_dir.'/'.$file);
+	}
+
+	// 指定されたファイル
+	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and $pathinfo['extension'] == 'mp4'){
+
+		loadMP4($TSfile_dir.'/'.$_GET['file']);
+		exit();	
+		
+	// MP4のみ
+	} else if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){
+
+		loadMP4($TSfile_dir.'/'.$ini['filepath']);
+		exit();	 
 
 	} else {
 
 		// エラー画像
-		header('Content-Type: image/jpg');
+		header('Content-Type: image/jpeg');
 		readfile('../files/thumb_default.jpg');
 		
 		exit();

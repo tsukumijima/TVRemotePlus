@@ -69,7 +69,7 @@ $commentfile = $base_dir.'data/comment.json';
 $cookiefile = $base_dir.'data/nico.cookie';
 
 // ツイートのタイムスタンプ記録ファイルのパス
-$tweet_time_file = $base_dir.'data/tweet_time.dat';
+$tweet_time_file = $base_dir.'data/tweet_time.txt';
 
 // オフライン時の m3u8 のパス
 $offline_m3u8 = $base_dir.'data/offline.m3u8';

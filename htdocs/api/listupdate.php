@@ -135,11 +135,13 @@
 
 	foreach ($search as $key => $value) {
 
-		$TSfile['data'][$key]['file'] = $value; // パス含めたファイル名
+		$TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value); // ルートフォルダからのパスを含めたファイル名
 		$TSfile['data'][$key]['pathinfo'] = pathinfo($value); // 拡張子なしファイル名など
+		unset($TSfile['data'][$key]['pathinfo']['dirname']); // セキュリティの問題でdirnameは削除
 		$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename'])); // 拡張子なしファイル名を暫定でタイトルに
+		$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']); // HTML抜き
 		$TSfile['data'][$key]['update'] = filemtime($value); // ファイルの更新日時(Unix時間)
-		$md5 = md5($TSfile['data'][$key]['file']); // ファイル名のmd5
+		$md5 = md5($value); // ファイル名のmd5
 
 		// サムネイルが存在するなら
 		if (file_exists($base_dir.'htdocs/files/thumb/'.$md5.'.jpg')){
@@ -196,7 +198,7 @@
 			// 上書きされた拡張子情報を以前のものに戻す
 			// MP4からは番組情報を取得できないので、同じファイル名のTSがあればその番組情報を使う
 			// そのままだと拡張子情報までTSとして上書きされてしまうのでここでMP4に戻しておく
-			$TSfile['data'][$key]['file'] = $value;
+			$TSfile['data'][$key]['file'] = $TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
 			$TSfile['data'][$key]['pathinfo']['extension'] = $extension;
 			
 			// 番組情報取得フラグ
@@ -217,7 +219,7 @@
 			// 上書きされた拡張子情報を以前のものに戻す
 			// MP4からは番組情報を取得できないので、同じファイル名のTSがあればその番組情報を使う
 			// そのままだと拡張子情報までTSとして上書きされてしまうのでここでMP4に戻しておく
-			$TSfile['data'][$key]['file'] = $value;
+			$TSfile['data'][$key]['file'] = $TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
 			$TSfile['data'][$key]['pathinfo']['extension'] = $extension;
 
 			// 番組情報取得フラグ
@@ -244,6 +246,7 @@
 
 				// 出力
 				$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', mb_convert_kana($fileinfo[4], 'asv', 'UTF-8'))); // 取得した番組名の方が正確なので修正
+				$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', mb_convert_kana($fileinfo[4], 'asv', 'UTF-8')); // 取得した番組名の方が正確なので修正
 				$TSfile['data'][$key]['date'] = $fileinfo[0]; // 録画日付
 				$TSfile['data'][$key]['info_state'] = 'generated'; // 番組情報取得フラグ
 				$TSfile['data'][$key]['info'] = str_replace('　', ' ', mb_convert_kana($fileinfo[5], 'asv', 'UTF-8')); // 番組情報

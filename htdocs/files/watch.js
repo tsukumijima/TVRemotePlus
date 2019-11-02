@@ -78,11 +78,23 @@
         if (fileinfo.length > 0){
         
           for (var i = $('.search-file-box').length; i < length; i++){
+
+            download = 
+              '    <a class="search-file-download" href="../api/stream?file=' + encodeURIComponent(fileinfo[i]['file']) + '" target="blank" download="' + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + '">' + "\n"
+            + '      <i class="fas fa-download"></i>' + "\n"
+            + '    </a>' + "\n"
+
+            encode = 
+              '    <div class="search-file-encode">' + "\n"
+            + '      <i class="fas fa-film"></i>' + "\n"
+            + '    </div>' + "\n"
+
             html += 
               '<div class="search-file-box">' + "\n"
             + '  <div class="search-file-thumb">' + "\n"
             + '    <img class="search-file-thumb-img" src="/files/thumb/' + fileinfo[i]['thumb'] + '">' + "\n"
             + '    <div class="search-file-ext ' + fileinfo[i]['pathinfo']['extension'] + '">' + fileinfo[i]['pathinfo']['extension'].toUpperCase() + '</div>' + "\n"
+            + (fileinfo[i]['pathinfo']['extension'] == 'mp4' ? download : encode)
             + '  </div>' + "\n"
             + '  <div class="search-file-content">' + "\n"
             + '    <div class="search-file-path">' + fileinfo[i]['file'] + '</div>' + "\n"
@@ -307,6 +319,25 @@
         $('.bluebutton').click();
       }
 
+    });
+
+    // サムネイルクリック時
+    $('body').on('click','.search-file-thumb',function(event){
+      if ($(window).width() <= 1024){
+        event.stopPropagation()
+        $(this).find('.search-file-encode').toggleClass('open');
+        $(this).find('.search-file-download').toggleClass('open');
+      }
+    });
+
+    // ダウンロードボタン
+    $('body').on('click','.search-file-download',function(event){
+      event.stopPropagation();
+    });
+
+    // エンコードボタン
+    $('body').on('click','.search-file-encode',function(event){
+      event.stopPropagation();
     });
 
     // 再生開始
