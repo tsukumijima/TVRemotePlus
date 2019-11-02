@@ -100,7 +100,7 @@
 				if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
-					$cmd = stream_file($ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+					$cmd = stream_file($TSfile_dir.'/'.$ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 					// 準備中用の動画を流すためにm3u8をコピー
 					if ($silent == 'true'){
