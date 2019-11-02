@@ -375,6 +375,7 @@ section {
     display: flex;
     align-items: center;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 /** ハンバーガーメニューボタン **/
@@ -579,6 +580,7 @@ section {
     display: flex;
     align-items: center;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 .menu-link:hover {
@@ -1462,6 +1464,7 @@ td {
     margin: 0;
     margin-bottom: 15px;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 .broadcast-button {

@@ -66,7 +66,7 @@ section {
 #search-find-form:focus {
     border-color: #80bdff;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(0,123,255,.25);
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
 #search-find-toggle {
@@ -86,6 +86,7 @@ section {
     align-items: center;
     cursor: pointer;
     user-select: none;
+    -webkit-user-select: none;
 }
 
 .search-find-link:hover{
@@ -166,6 +167,8 @@ section {
     font-size: 12px;
     width: 32px;
     height: 20px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .search-file-ext.ts {
