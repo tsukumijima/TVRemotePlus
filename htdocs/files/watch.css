@@ -200,6 +200,7 @@ section {
     -webkit-user-select: none;
 }
 
+/*
 @media screen and (min-width: 1025px){
     .search-file-thumb:hover > .search-file-download,
     .search-file-thumb:hover > .search-file-encode {
@@ -208,6 +209,17 @@ section {
 }
 
 .search-file-download.open, .search-file-encode.open {
+    opacity: 1;
+}
+*/
+
+@media screen and (min-width: 1025px){
+    .search-file-thumb:hover > .search-file-download {
+            opacity: 1;
+    }
+}
+
+.search-file-download.open {
     opacity: 1;
 }
 
