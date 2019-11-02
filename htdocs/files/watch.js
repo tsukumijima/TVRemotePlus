@@ -284,7 +284,7 @@
       // MP4の場合
       var select_channel = $('.setchannel.form select').children('option')[0];
       var select_encoder = $('.setencoder.form select').children('option')[0];
-      if ($('#stream-fileext').val() == 'mp4'){
+      if ($('#stream-fileext').val() == 'mp4' && select_channel.textContent != 'デフォルト (Original)'){
         select_channel.setAttribute('value', 'Original');
         select_channel.textContent = 'デフォルト (Original)';
         select_channel.insertAdjacentHTML('afterend', '<option id="stream-original" value="Original">Original (元画質)</option>');
@@ -292,7 +292,7 @@
         select_encoder.textContent = 'デフォルト (Progressive)';
         select_encoder.insertAdjacentHTML('afterend', '<option id="stream-progressive" value="Progressive">Progressive (プログレッシブダウンロード)</option>');
       // それ以外
-      } else {
+      } else if ($('#stream-fileext').val() == 'ts'){
         select_channel.setAttribute('value', select_channel.getAttribute('data-value'));
         select_channel.textContent = select_channel.getAttribute('data-text');
         $('#stream-original').remove();
