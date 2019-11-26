@@ -1,4 +1,4 @@
 @echo off
 
 cd .\bin\Apache\bin\
-..\..\php\php.exe ..\..\..\install.php
+..\..\PHP\php.exe ..\..\..\install.php
