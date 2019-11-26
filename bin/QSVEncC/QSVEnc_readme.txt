@@ -354,6 +354,8 @@ Intel Graphics Driver 21.20.16.4982 (API v1.25)
 Intel Graphics Driver 23.20.16.5018 (API v1.26)
 Intel Graphics Driver 25.20.100.6326 (API v1.27)
 Intel Graphics Driver 25.20.100.6373 (API v1.27)
+Intel Graphics Driver 25.20.100.7000 (API v1.27)
+Intel Graphics Driver 25.20.100.7327 (API v1.30)
 
 【Intel Media SDKとAPIの対応関係】
 API v1.27 … Intel Media SDK 2018 R2
@@ -376,6 +378,37 @@ API v1.1  … Intel Media SDK v2.0
 
 
 【どうでもいいメモ】
+2019.11.23 (3.27)
+[QSVEnc.auo]
+・プロファイルの保存ができなくなっていたのを修正。
+
+2019.11.19 (3.26)
+[QSVEnc.auo]
+・リサイズが行えないのを修正。
+・vpp-deinterlace bobが正常に動作しない問題を修正。
+
+[QSVEncC]
+・output-resに縦横のどちらかを負の値を指定できるように。
+アスペクト比を維持したまま、片方に合わせてリサイズ。ただし、その負の値で割り切れる数にする。
+--output-res -4x1080
+
+2019.11.15 (3.25)
+[QSVEnc.auo]
+・QSVEnc.auo-QSVEncC間のプロセス間通信を高速化。
+・QSVEnc.auoの出力をmp4/mkv出力に変更し、特に自動フィールドシフト使用時のmux工程数を削減する。
+  また、QSVEncCのmuxerを使用することで、コンテナを作成したライブラリとしQSVEncCを記載するようにする。
+
+[QSVEncC]
+・VC-1をハードウェアデコードの対象から外す。
+  3.04以降、VC-1のでコードができなくなっているが、復旧できなかった。
+・高負荷時にデッドロックが発生しうる問題を修正。
+・CPUの動作周波数が適切に取得できないことがあったのを修正。
+・字幕ファイルを読み込むオプションを追加。 (--sub-source )
+・--audio-sourceの指定方法を拡張。
+・avsからの音声読み込みを可能に。
+・音声エンコードが正常に動作しない場合があったのを修正。
+・mux時にmaster-displayやmax-cllの情報が化けるのを回避。
+
 2019.06.26 (3.24)
 ・--sub-copy asdataの挙動の見直し。
 ・3.21から-c rawや--disable-d3dなどを使用すると、"Failed to SynchronizeFirstTask : unknown error" で

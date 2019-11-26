@@ -9,7 +9,7 @@
 	// MP4を出力する関数
 	// https://blog.logicky.com/2019/05/29/151209?utm_source=feed
 	// を大変参考にさせていただきました、ありがとうございます
-	function loadMP4 ($file){
+	function loadMP4 ($file, $extension){
 
 		$fp = @fopen($file, 'rb'); // ファイルを開く
 		$size   = filesize($file); // ファイルサイズ
@@ -17,7 +17,11 @@
 		$start  = 0;               // 開始バイト
 		$end    = $size - 1;       // 終了バイト
 
-		header('Content-type: video/mp4');
+		if ($extension == 'mp4'){
+			header('Content-type: video/mp4');
+		} else if ($extension == 'mkv'){
+			header('Content-type: video/x-matroska');
+		}
 		header("Accept-Ranges: 0-$length");
 
 		// ブラウザがHTTP_RANGEを要求してきた場合
@@ -97,15 +101,15 @@
 	}
 
 	// 指定されたファイル
-	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and $pathinfo['extension'] == 'mp4'){
+	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and $pathinfo['extension'] != 'ts'){
 
-		loadMP4($TSfile_dir.'/'.$_GET['file']);
+		loadMP4($TSfile_dir.'/'.$_GET['file'], $pathinfo['extension']);
 		exit();	
 		
-	// MP4のみ
-	} else if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){
+	// MP4・MKVのみ
+	} else if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){
 
-		loadMP4($TSfile_dir.'/'.$ini['filepath']);
+		loadMP4($TSfile_dir.'/'.$ini['filepath'], $ini['fileext']);
 		exit();	 
 
 	} else {

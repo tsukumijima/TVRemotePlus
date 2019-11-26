@@ -382,6 +382,7 @@
 
       // Alt(or option)キー
       if (event.altKey){
+        event.preventDefault(); // Mac用
         switch (event.which){
 
           case 49:

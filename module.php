@@ -15,7 +15,7 @@
 
 	// Windows用非同期コマンド実行関数
 	function win_exec($cmd){
-		$fp = popen($cmd.' > nul', "r");
+		$fp = popen($cmd.' > nul 2>&1', "r");
 		pclose($fp);
 	}
 
@@ -114,7 +114,7 @@
 	}
 
 	// ch2を整形して連想配列化する関数
-	function ch2toArray($ch2_file, $flg){
+	function ch2ToArray($ch2_file, $flg){
 
 		// ch2を取得
 		$ch2_rawdata = removeBOM(file_get_contents($ch2_file));
@@ -175,14 +175,22 @@
 		if (!isset($BonDriver_dll)) $BonDriver_dll = array();
 	
 		// BonDriver_dirから地デジ用BonDriverを検索
-		$search_T = array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[tT].dll"), glob($BonDriver_dir."[bB]on[dD]river_*[tT][0-9]*.dll"));
+		$search_T = array_merge(
+			glob($BonDriver_dir."[bB]on[dD]river_*[tT].dll"),
+			glob($BonDriver_dir."[bB]on[dD]river_*_[tT][0-9]*.dll"),
+			glob($BonDriver_dir."[bB]on[dD]river_*-[tT][0-9]*.dll"),
+		);
 		foreach ($search_T as $i => $file) {
 			$BonDriver_dll_T[$i] = str_replace($BonDriver_dir, '', $file);
 		}
 		if (!isset($BonDriver_dll_T)) $BonDriver_dll_T = array();
 
 		// BonDriver_dirからBSCS用BonDriverを検索
-		$search_S = array_merge(glob($BonDriver_dir."[bB]on[dD]river_*[sS].dll"), glob($BonDriver_dir."[bB]on[dD]river_*[sS][0-9]*.dll"));
+		$search_S = array_merge(
+			glob($BonDriver_dir."[bB]on[dD]river_*[sS].dll"),
+			glob($BonDriver_dir."[bB]on[dD]river_*_[sS][0-9]*.dll"),
+			glob($BonDriver_dir."[bB]on[dD]river_*-[sS][0-9]*.dll")
+		);
 		foreach ($search_S as $i => $file) {
 			$BonDriver_dll_S[$i] = str_replace($BonDriver_dir, '', $file);
 		}
@@ -214,13 +222,15 @@
 		// 地デジ用
 		$BonDriver_ch2_file_T = array_merge(
 			glob($BonDriver_dir.'[bB]on[dD]river_*[tT].ch2'),
-			glob($BonDriver_dir.'[bB]on[dD]river_*[tT][0-9]*.ch2')
+			glob($BonDriver_dir.'[bB]on[dD]river_*_[tT][0-9]*.ch2'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*-[tT][0-9]*.ch2')
 		);
 
 		// BS・CS用
 		$BonDriver_ch2_file_S = array_merge(
 			glob($BonDriver_dir."[bB]on[dD]river_*[sS].ch2"),
-			glob($BonDriver_dir."[bB]on[dD]river_*[sS][0-9]*.ch2")
+			glob($BonDriver_dir."[bB]on[dD]river_*_[sS][0-9]*.ch2"),
+			glob($BonDriver_dir."[bB]on[dD]river_*-[sS][0-9]*.ch2")
 		);
 
 		// その他（混合チューナー用）
@@ -232,7 +242,7 @@
 		if (!empty($BonDriver_ch2_file_T) || (empty($BonDriver_ch2_file_T) && empty($BonDriver_ch2_file_S) && !empty($BonDriver_ch2_file_raw))){
 
 			// ch2を連想配列に変換
-			$BonDriver_ch2_T = ch2toArray(array_merge($BonDriver_ch2_file_T, $BonDriver_ch2_file_raw)[0], 'UHF');
+			$BonDriver_ch2_T = ch2ToArray(array_merge($BonDriver_ch2_file_T, $BonDriver_ch2_file_raw)[0], 'UHF');
 
 			if (!empty($BonDriver_ch2_T[0][0])){
 
@@ -286,8 +296,8 @@
 		if (!empty($BonDriver_ch2_file_S) || (empty($BonDriver_ch2_file_T) && empty($BonDriver_ch2_file_S) && !empty($BonDriver_ch2_file_raw))){
 
 			// ch2を連想配列に変換
-			$BonDriver_ch2_S = ch2toArray(array_merge($BonDriver_ch2_file_S, $BonDriver_ch2_file_raw)[0], 'BS');
-			$BonDriver_ch2_CS = ch2toArray(array_merge($BonDriver_ch2_file_S, $BonDriver_ch2_file_raw)[0], 'CS');
+			$BonDriver_ch2_S = ch2ToArray(array_merge($BonDriver_ch2_file_S, $BonDriver_ch2_file_raw)[0], 'BS');
+			$BonDriver_ch2_CS = ch2ToArray(array_merge($BonDriver_ch2_file_S, $BonDriver_ch2_file_raw)[0], 'CS');
 
 			if (!empty($BonDriver_ch2_S[0][0]) && !empty($BonDriver_ch2_CS[0][0])){
 

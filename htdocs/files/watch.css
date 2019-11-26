@@ -181,6 +181,10 @@ section {
     background-color: #007cff;
 }
 
+.search-file-ext.mkv {
+    background-color: #744bff;
+}
+
 .search-file-download, .search-file-encode {
     display: flex;
     position: absolute;
@@ -374,7 +378,7 @@ section {
 
 @media screen and (max-width: 1150px){
     #search-find-title {
-        padding: 16px 20px;
+        padding: 16px 20px 16px 35px;
     }
 
     #search-find-submit, #search-find-toggle {
@@ -382,7 +386,7 @@ section {
     }
 
     .search-find-link {
-        padding: 16px 20px;
+        padding: 16px 20px 16px 35px;
     }
 
     .search-find-link i {
@@ -414,6 +418,14 @@ section {
 
     #search-find-form {
         font-size: 105%;
+    }
+
+    #search-find-title {
+        padding: 16px 15px 16px 25px;
+    }
+
+    .search-find-link {
+        padding: 16px 15px 16px 25px;
     }
 
     .search-find-link span {

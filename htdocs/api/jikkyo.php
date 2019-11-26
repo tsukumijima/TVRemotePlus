@@ -561,13 +561,7 @@
 								'&res_from=-1000&when='.$when;
 
 					// XMLでAPIを叩く
-					try {
-						$jkthread_xml = simplexml_load_file($jkthread_URL);
-					} catch (Exception $e) {
-						// 失敗したらもう一度
-						sleep(1);
-						echo 'Error: '.file_get_contents($jkthread_URL);
-					}
+					$jkthread_xml = @simplexml_load_file($jkthread_URL); // 何故かたまにエラー吐くので抑制
 
 					// APIを解析
 					list($jkthread_new, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);

@@ -1,10 +1,15 @@
 <?php 
 
-// TVRemotePlus 内共通で使用する変数を定義しています
-// 全て基本的にいじる必要はありません
+// TVRemotePlus 内部で利用する設定ファイルです
+// 基本的に変更する必要はありません
 // 変更すると一部動作しなくなるものも含まれています
 
+
 // ***** 各種exeファイルのパス設定 *****
+
+// TSTask の名前とパス
+$tstask_exe = 'TSTask-tvrp.exe';
+$tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
 
 // rplsinfo の名前とパス
 $rplsinfo_exe =  'rplsinfo-tvrp.exe';
@@ -22,11 +27,9 @@ $qsvencc_path =  $base_dir.'bin/QSVEncC/'.$qsvencc_exe;
 $nvencc_exe = 'NVEncC64-tvrp.exe';
 $nvencc_path =  $base_dir.'bin/NVEncC/'.$nvencc_exe;
 
-// TSTask の名前とパス
-$tstask_exe = 'TSTask-tvrp.exe';
-$tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
-$tstaskcentre_exe = 'TSTaskCentre-tvrp.exe';
-$tstaskcentre_path = $base_dir.'bin/TSTask/'.$tstaskcentre_exe;
+// VCEEncC の名前とパス
+$vceencc_exe = 'VCEEncC64-tvrp.exe';
+$vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 
 
 // ***** その他の設定 *****

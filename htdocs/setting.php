@@ -77,19 +77,8 @@
 
 				foreach ($TSfile['data'] as $key => $value) {
 					if ($ini['filepath'] == $TSfile['data'][$key]['file']){
+						$history['data'][$history_count] = $TSfile['data'][$key];
 						$history['data'][$history_count]['play'] = time();
-						$history['data'][$history_count]['file'] = $TSfile['data'][$key]['file'];
-						$history['data'][$history_count]['title'] = $TSfile['data'][$key]['title'];
-						$history['data'][$history_count]['update'] = $TSfile['data'][$key]['update'];
-						$history['data'][$history_count]['thumb'] = $TSfile['data'][$key]['thumb'];
-						$history['data'][$history_count]['date'] = $TSfile['data'][$key]['date'];
-						$history['data'][$history_count]['info'] = $TSfile['data'][$key]['info'];
-						$history['data'][$history_count]['channel'] = $TSfile['data'][$key]['channel'];
-						$history['data'][$history_count]['start'] = $TSfile['data'][$key]['start'];
-						$history['data'][$history_count]['end'] = $TSfile['data'][$key]['end'];
-						$history['data'][$history_count]['duration'] = $TSfile['data'][$key]['duration'];
-						$history['data'][$history_count]['start_timestamp'] = $TSfile['data'][$key]['start_timestamp'];
-						$history['data'][$history_count]['end_timestamp'] = $TSfile['data'][$key]['end_timestamp'];
 					}
 				}
 
@@ -100,7 +89,7 @@
 				if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
-					$cmd = stream_file($TSfile_dir.'/'.$ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+					$stream_cmd = stream_file($TSfile_dir.'/'.$ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 					// 準備中用の動画を流すためにm3u8をコピー
 					if ($silent == 'true'){
@@ -134,7 +123,7 @@
 				}
 
 				// ストリーミング開始
-				$cmd = stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+				list($stream_cmd, $tstask_cmd) = stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 				// 準備中用の動画を流すためにm3u8をコピー
 				if ($silent == 'true'){
@@ -222,18 +211,16 @@
 
           <div class="setting-form-wrap">
 
-            <h3 class="green"><i class="fas fa-tablet-alt"></i>PWA・https</h3>
+            <h3 class="green"><i class="fas fa-tablet-alt"></i>PWA・HTTPS</h3>
 
             <div class="setting-form setting-input">
               <div class="setting-content large">
-                <span>https アクセス用の自己署名証明書をダウンロード</span>
+                <span>HTTPS アクセス用の自己署名証明書のダウンロード</span>
                 <p>
-                  PWA (Progressive Web Apps) 機能を利用する場合は、https でのアクセスが必須です<br>
+                  PWA (Progressive Web Apps) 機能を利用する場合は、HTTPS でのアクセスが必須です<br>
                   そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
-                  右(もしくは下)のダウンロードボタンから、server.crt をダウンロードしてください<br>
-                  なお、「この種類のファイルはコンピュータに損害を与える可能性が～」とか出てくる場合がありますが、安全なので「保存」をクリックします<br>
-                  その後、ダウンロードした server.crt をクリックし、PCであれば自己署名証明書を「証明書を全て次のストアに配置する」→「信頼されたルート証明機関」に設定してからインポートします<br>
-                  iPhone・iPad の Safari であれば自己署名証明書をインストールしなくても、http://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo $http_port; ?>/ にアクセスして □に↑ のアイコンから「ホーム画面に追加」するだけでインストールできます<br>
+                  ダウンロードボタンから、証明書 (server.crt) をダウンロードしてください<br>
+                  証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#PWA%20%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="blank">こちら</a> を参照してください<br>
                 </p>
               </div>
               <a class="download" href="/server.crt">
@@ -243,12 +230,12 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content large">
-                <span>https 用 URL にアクセス</span>
+                <span>HTTPS 用 URL にアクセス</span>
                 <p>
-                  右のボタンから https 用 URL にて TVRemotePlus にアクセスできます<br>
+                  右のボタンから HTTPS 用 URL にて TVRemotePlus にアクセスできます<br>
                   Chrome(iOSのみSafari) でアクセスした場合は、Androidは「TVRemotePlus をホーム画面に追加」から、
-                  PCはURLバーの横に「インストール」と出てくるので、それを押してホーム画面やデスクトップに追加し、そこから起動すると PWA モードでネイティブアプリのように利用できます<br>
-                  https アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も https でアクセスする事をお勧めします<br>
+                  PC は URL バーの横に「インストール」と出てくるので、それを押してホーム画面やデスクトップに追加し、そこから起動すると PWA モードでネイティブアプリのように利用できます<br>
+                  HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
                 </p>
               </div>
               <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo ($http_port + 100); ?>/">
@@ -452,9 +439,9 @@
                 <span>デフォルトのエンコーダー</span>
                 <p>
                   ffmpeg が通常のエンコーダー(ソフトウェアエンコーダー)、
-                  QSVEncC・NVEncC がハードウェアエンコーダーです<br>
-                  QSVEncC・NVEncC の方が CPU を消費しない・エンコードが早いのでおすすめですが、
-                  QSVEncC は Intel 製の一部の CPU 、NVEncC は nvidia 製の GPU 環境でしか利用できません<br>
+                  QSVEncC・NVEncC・VCEEncC がハードウェアエンコーダーです<br>
+                  QSVEncC・NVEncC・VCEEncC の方が CPU を消費しない・エンコードが早いためおすすめですが、
+                  QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 環境、VCEEncC は AMD の Radeon GPU でしか利用できません<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -463,14 +450,22 @@
                   <option value="ffmpeg" selected>ffmpeg (ソフトウェアエンコーダー)</option>
                   <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
                   <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+                  <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
 <?php	} else if ($encoder_default == 'QSVEncC'){ ?>
                   <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                   <option value="QSVEncC" selected>QSVEncC (ハードウェアエンコーダー)</option>
                   <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+                  <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
 <?php	} else if ($encoder_default == 'NVEncC'){ ?>
                   <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                   <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
                   <option value="NVEncC" selected>NVEncC (ハードウェアエンコーダー)</option>
+                  <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
+<?php	} else if ($encoder_default == 'VCEEncC'){ ?>
+                  <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
+                  <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
+                  <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+                  <option value="VCEEncC" selected>VCEEncC (ハードウェアエンコーダー)</option>
 <?php	} // 括弧終了 ?>
                 </select>
               </div>
@@ -548,7 +543,7 @@
                   デフォルトで利用する BonDriver (BS・CS用) です<br>
                   うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります、
                   導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
-                  Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
+                  BonDriver_Spinel よりも BonDriver_Proxy の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -580,8 +575,8 @@
                 <span>EDCB Material WebUI (EMWUI) の API がある URL</span>
                 <p>
                   番組表取得などで利用します<br>
-                  この機能を利用する場合、予め EDCB Material WebUI を導入しておいてください<br>
-                  TVRock 等を利用している場合、TVRemoteViewer_VB 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）
+                  この機能を利用する場合、予め <a href="https://github.com/EMWUI/EDCB_Material_WebUI" target="_blank">EDCB Material WebUI</a> を導入しておいてください<br>
+                  TVRock 等を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）
                   を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
@@ -760,7 +755,7 @@
                   デフォルトは user ですが、Basic 認証を利用する場合はできるだけ変更してください<br>
                 </p>
               </div>
-              <input class="text-box" name="basicauth_user" type="text" value="<?php echo $basicauth_user; ?>" placeholder="user" required />
+              <input class="text-box" name="basicauth_user" type="text" pattern="^[0-9A-Za-z]+$" value="<?php echo $basicauth_user; ?>" placeholder="user" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -768,11 +763,11 @@
                 <span>Basic 認証のパスワード</span>
                 <p>
                   Basic 認証で TVRemotePlus にログインする時のパスワードを設定します<br>
-                  デフォルトは 12345678 ですが、Basic 認証を利用する場合はできるだけ変更してください<br>
+                  デフォルトは password ですが、Basic 認証を利用する場合はできるだけ変更してください<br>
                 </p>
               </div>
               <div class="password-box-wrap">
-                <input class="password-box" name="basicauth_password" type="password" value="<?php echo $basicauth_password; ?>" placeholder="12345678" required />
+                <input class="password-box" name="basicauth_password" type="password" value="<?php echo $basicauth_password; ?>" placeholder="password" required />
                 <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
@@ -915,13 +910,14 @@
             <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
             <p>字幕の表示：<?php echo $ini['subtitle']; ?></p>
             <p>使用BonDriver：<?php echo $ini['BonDriver']; ?></p>
-            <p>エンコードコマンド：<?php echo $cmd; ?></p>
+            <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
+            <p>TSTask起動コマンド：<?php echo $tstask_cmd; ?></p>
 
 <?php			} else if ($ini['state'] == 'File'){ ?>
             <p>タイトル：<?php echo $ini['filetitle']; ?></p>
             <p>動画の画質：<?php echo $ini['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
-            <p>エンコードコマンド：<?php echo $cmd; ?></p>
+            <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
 <?php			} //括弧終了 ?>
           
 <?php		} else { ?>

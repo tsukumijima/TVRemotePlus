@@ -240,16 +240,12 @@ select:-moz-focusring {
     position: absolute;
     right: 15px;
     top: 0;
-    content: "\f078";
+    content: "\f0dc";
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     line-height: 39px;
     color: #7F878C;
     pointer-events: none;
-}
-
-.select-wrap.open:before {
-    content: "\f077";
 }
 
 @media screen and (max-width : 500px){

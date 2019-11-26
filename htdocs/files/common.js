@@ -39,19 +39,6 @@
       $('#menu-close').removeClass('open');
     });
 
-    // セレクトボックス開閉
-    $('.select-wrap').on('mousedown', function(){
-      if (document.body.clientWidth > 1024){
-        $(this).toggleClass('open');
-      }
-    });
-
-    $('.select-wrap select').change(function(){
-      if (document.body.clientWidth > 1024){
-        $(this).parent().removeClass('open');
-      }
-    });
-
     // パスワード開閉
     $('.password-box-input').click(function(){
       $('.password-box-input').toggleClass('fa-eye-slash');

@@ -54,7 +54,7 @@
     theme: '#007cff',
     // 読み込むm3u8を指定する
     video: {
-<?php	if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){ ?>
+<?php	if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){ ?>
       url: '/api/stream?_=<?php echo time(); ?>',
       type: 'normal'
 <?php	} else { ?>
@@ -412,6 +412,7 @@
               <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
               <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
               <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+              <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
             </select>
           </div>
         </div>

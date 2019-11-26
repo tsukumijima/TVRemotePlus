@@ -80,7 +80,7 @@
           for (var i = $('.search-file-box').length; i < length; i++){
 
             download = 
-              '    <a class="search-file-download" href="../api/stream?file=' + encodeURIComponent(fileinfo[i]['file']) + '" target="blank" download="' + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + '">' + "\n"
+              '    <a class="search-file-download" href="/api/stream?file=' + encodeURIComponent(fileinfo[i]['file']) + '" target="blank" download="' + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + '">' + "\n"
             + '      <i class="fas fa-download"></i>' + "\n"
             + '    </a>' + "\n"
 
@@ -94,7 +94,7 @@
             + '  <div class="search-file-thumb">' + "\n"
             + '    <img class="search-file-thumb-img" src="/files/thumb/' + fileinfo[i]['thumb'] + '">' + "\n"
             + '    <div class="search-file-ext ' + fileinfo[i]['pathinfo']['extension'] + '">' + fileinfo[i]['pathinfo']['extension'].toUpperCase() + '</div>' + "\n"
-            + (fileinfo[i]['pathinfo']['extension'] == 'mp4' ? download : encode)
+            + (fileinfo[i]['pathinfo']['extension'].toLowerCase() == 'ts' ? encode : download)
             + '  </div>' + "\n"
             + '  <div class="search-file-content">' + "\n"
             + '    <div class="search-file-path">' + fileinfo[i]['file'] + '</div>' + "\n"
@@ -293,10 +293,10 @@
       $('#search-stream-box').toggleClass('open');
       $('html').toggleClass('open');
 
-      // MP4の場合
+      // MP4・MKVの場合
       var select_channel = $('.setchannel.form select').children('option')[0];
       var select_encoder = $('.setencoder.form select').children('option')[0];
-      if ($('#stream-fileext').val() == 'mp4' && select_channel.textContent != 'デフォルト (Original)'){
+      if (($('#stream-fileext').val() == 'mp4' || $('#stream-fileext').val() == 'mkv') && select_channel.textContent != 'デフォルト (Original)'){
         select_channel.setAttribute('value', 'Original');
         select_channel.textContent = 'デフォルト (Original)';
         select_channel.insertAdjacentHTML('afterend', '<option id="stream-original" value="Original">Original (元画質)</option>');

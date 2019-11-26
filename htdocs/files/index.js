@@ -13,107 +13,127 @@
   };
 
   // ロード時 & リサイズ時に発火
+  var lastInnerWidth = window.innerWidth;
   $(window).on('DOMContentLoaded resize', function(event){
+    
+    // 現在と前回の横幅が違う場合だけ実行
+	  if (lastInnerWidth != window.innerWidth) {
 
-    if (event.type == 'DOMContentLoaded'){
+      // 横幅を記録しておく
+	  	lastInnerWidth = window.innerWidth ;
 
-      // フェード
-      // $('#main').delay(100).velocity('fadeIn', 500);
+      if (event.type == 'DOMContentLoaded'){
 
-      // 個人設定を反映
-      if (!settings['twitter_show']){
-        $('#tweet-box').hide();
-      }
-      if (!settings['comment_show']){
-        $('#sidebar').hide();
-        $('#content').width('100%');
-      }
-    }
+        // フェード
+        // $('#main').delay(100).velocity('fadeIn', 500);
 
-    // 画面の横幅を取得
-    var _width = document.body.clientWidth;
-    // 画面の高さを取得
-    var _height = window.innerHeight;
-    // 画面の向きを取得
-    var orientation = window.orientation;
-
-    $(window).on('load', function(){
-      // スマホ・タブレットならplaceholder書き換え
-      if (_width <= 1024){
-        document.getElementById('tweet').setAttribute('placeholder', 'ツイート');
-      } else {
-        document.getElementById('tweet').setAttribute('placeholder', 'ツイート (Ctrl+Enterで送信)');
-      }
-    });
-
-    // スマホならスクロールに応じて動画を固定できるようdivを移動させる
-    // フルスクリーンで無いことを確認してから
-    // 縦画面のみ発動
-    if (_width <= 500 && (orientation === 0 || orientation === undefined)
-        && (isset(document.getElementById('dplayer-script').previousElementSibling)
-            && document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer')
-        && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
-      $('#content-wrap').before($('#dplayer'));
-    } else if (_width > 500
-      && (isset(document.getElementById('content-wrap').previousElementSibling)
-          && document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer')
-        && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
-      $('#dplayer-script').before($('#dplayer'));
-    }
-
-    // 1024px以上
-    if (_width > 1024){
-
-      // ウィンドウを読み込んだ時・リサイズされた時に発動
-      // 何故か上手くいかないので8回繰り返す
-      // 正直どうなってるのか自分でもわからない
-      var result = 0; // 初期化
-
-      while (true){
-        var WindowHeight = _height - document.getElementById('top').clientHeight;
-        var width = $('section').width();
-
-        // Twitter非表示時
+        // 個人設定を反映
         if (!settings['twitter_show']){
-          var height= $('#dplayer').width() * (9 / 16);
-        } else {
-          var height= $('#dplayer').width() * (9 / 16) + 136; // $('#tweet-box').height()
+          $('#tweet-box').hide();
         }
-
-        // 同じならループを抜ける
-        if (result == (width * WindowHeight) / height) break;
-
-        // widthが変なとき用
-        if (width < ($(window).width() / 2)){
-          $('section').css('max-width', '1250px');
-          break;
+        if (!settings['comment_show']){
+          $('#sidebar').hide();
+          $('#content').width('100%');
         }
-
-        result = (width * WindowHeight) / height;
-        // console.log('width: ' + width);
-        // console.log('result: ' + result);
-        $('section').css('max-width', result + 'px');
-
       }
+
+      // 画面の横幅を取得
+      var _width = document.body.clientWidth;
+      // 画面の高さを取得
+      var _height = window.innerHeight;
+      // 画面の向きを取得
+      var orientation = window.orientation;
+
+      $(window).on('load', function(){
+        // スマホ・タブレットならplaceholder書き換え
+        if (_width <= 1024){
+          document.getElementById('tweet').setAttribute('placeholder', 'ツイート');
+        } else {
+          document.getElementById('tweet').setAttribute('placeholder', 'ツイート (Ctrl+Enterで送信)');
+        }
+      });
+
+      // スマホならスクロールに応じて動画を固定できるようdivを移動させる
+      // フルスクリーンで無いことを確認してから
+      // 縦画面のみ発動
+      if (_width <= 500 && (orientation === 0 || orientation === undefined)
+          && (isset(document.getElementById('dplayer-script').previousElementSibling)
+              && document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer')
+          && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
+        $('#content-wrap').before($('#dplayer'));
+      } else if (_width > 500
+        && (isset(document.getElementById('content-wrap').previousElementSibling)
+            && document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer')
+          && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
+        $('#dplayer-script').before($('#dplayer'));
+      }
+
+      // 1024px以上
+      if (_width > 1024){
+
+        // ウィンドウを読み込んだ時・リサイズされた時に発動
+        // 何故か上手くいかないので8回繰り返す
+        // 正直どうなってるのか自分でもわからない
+        var result = 0; // 初期化
+
+        while (true){
+          var WindowHeight = _height - document.getElementById('top').clientHeight;
+          var width = $('section').width();
+
+          // Twitter非表示時
+          if (!settings['twitter_show']){
+            var height= $('#dplayer').width() * (9 / 16);
+          } else {
+            var height= $('#dplayer').width() * (9 / 16) + 136; // $('#tweet-box').height()
+          }
+
+          // 同じならループを抜ける
+          if (result == (width * WindowHeight) / height) break;
+
+          // widthが変なとき用
+          if (width < ($(window).width() / 2)){
+            $('section').css('max-width', '1250px');
+            break;
+          }
+
+          result = (width * WindowHeight) / height;
+          // console.log('width: ' + width);
+          // console.log('result: ' + result);
+          $('section').css('max-width', result + 'px');
+
+        }
+      } 
     }
 
-    // スライダー関係
-    var galleryThumbs = new Swiper('#broadcast-tab-box', {
-      slidesPerView: 'auto',
-      watchSlidesVisibility: true,
-      watchSlidesProgress: true,
-      slideActiveClass: 'swiper-slide-active'
-    });
-    galleryThumbs.on('tap', function () {
-      var current = galleryTop.activeIndex;
-      galleryThumbs.slideTo(current, 500, true);
-    });
-    var galleryTop = new Swiper('#broadcast-box', {
-      autoHeight: true,
-      thumbs: {
-        swiper: galleryThumbs
+	  if (event.type == 'DOMContentLoaded' || lastInnerWidth != window.innerWidth) {
+
+      // 横幅を記録しておく
+      lastInnerWidth = window.innerWidth ;
+
+      // スライダー関係
+
+      if (galleryThumbs && galleryTop){
+        galleryThumbs.destoroy();
+        galleryTop.destoroy();
       }
-    });
+
+      var galleryThumbs = new Swiper('#broadcast-tab-box', {
+        slidesPerView: 'auto',
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        slideActiveClass: 'swiper-slide-active'
+      });
+      galleryThumbs.on('tap', function () {
+        var current = galleryTop.activeIndex;
+        galleryThumbs.slideTo(current, 500, true);
+      });
+      var galleryTop = new Swiper('#broadcast-box', {
+        autoHeight: true,
+        thumbs: {
+          swiper: galleryThumbs
+        }
+      });
+    }
 
   });
   

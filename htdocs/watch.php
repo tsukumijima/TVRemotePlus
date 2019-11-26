@@ -111,6 +111,7 @@
                 <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                 <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
                 <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+                <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
               </select>
             </div>
           </div>
@@ -158,9 +159,10 @@
 	flush();
 
 	// 四階層まで調べる
-	// MP4も追加
+	// MP4・MKVも追加
 	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'), glob($TSfile_dir.'/*/*/*/*.ts'),
-						  glob($TSfile_dir.'/*.mp4'), glob($TSfile_dir.'/*/*.mp4'), glob($TSfile_dir.'/*/*/*.mp4'), glob($TSfile_dir.'/*/*/*/*.mp4'));
+						  glob($TSfile_dir.'/*.mp4'), glob($TSfile_dir.'/*/*.mp4'), glob($TSfile_dir.'/*/*/*.mp4'), glob($TSfile_dir.'/*/*/*/*.mp4'),
+						  glob($TSfile_dir.'/*.mkv'), glob($TSfile_dir.'/*/*.mkv'), glob($TSfile_dir.'/*/*/*.mkv'), glob($TSfile_dir.'/*/*/*/*.mkv'));
   
 	if (file_exists($infofile)){
 		$TSfile = json_decode(file_get_contents($infofile), true);

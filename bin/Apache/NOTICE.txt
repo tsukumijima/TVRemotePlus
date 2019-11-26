@@ -50,11 +50,3 @@ at https://nghttp2.org/
 This binary distribution of mod_brotli.so includes Brotli C library written 
 by the Brotli Authors. For complete information, visit Brotli's web site 
 at https://github.com/google/brotli
-
-This binary distribution of mod_md.so includes Curl C library written by 
-Daniel Stenberg and many contributors. For complete information, 
-visit curl's web site at https://curl.haxx.se/
-
-This binary distribution of mod_md.so includes Jansson C library written 
-by the  Petri Lehtinen. For complete information, visit Jansson's web site 
-at http://www.digip.org/jansson/

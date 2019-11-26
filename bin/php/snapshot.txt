@@ -1,7 +1,7 @@
 This snapshot was automatically generated on
-Wed, 29 May 2019 12:56:40 +0000
+Tue, 19 Nov 2019 14:57:10 +0000
 
-Version: 7.3.6
+Version: 7.3.12
 Branch: HEAD
 Build: C:\php-snap-build\php73\vc15\x64\obj\Release_TS
 
@@ -79,22 +79,22 @@ Module: php_ftp.dll
 
 Module: php_intl.dll
 ===========================
-	icuuc63.dll
-	icuin63.dll
-	icuio63.dll
+	icuuc64.dll
+	icuin64.dll
+	icuio64.dll
 
-Module: icuuc63.dll
+Module: icuuc64.dll
 ===========================
-	icudt63.dll
+	icudt64.dll
 
-Module: icuin63.dll
+Module: icuin64.dll
 ===========================
-	icuuc63.dll
+	icuuc64.dll
 
-Module: icuio63.dll
+Module: icuio64.dll
 ===========================
-	icuuc63.dll
-	icuin63.dll
+	icuuc64.dll
+	icuin64.dll
 
 Module: php_ldap.dll
 ===========================

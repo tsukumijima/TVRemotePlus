@@ -5,8 +5,9 @@ echo            HTTPS用サーバー証明書の作成バッチ
 echo  ---------------------------------------------------
 echo.
 echo   HTTPS 接続用の自己署名証明書を作成します。
-echo   途中、入力を求められる箇所がありますが、全て Enter で飛ばしてください。
-echo   途中でパスワードとかも聞かれますが、飛ばして構いません。
+echo.
+echo   TVRemotePlusをインストールするPCの、ローカルIPアドレスを入力してください。
+set /P ip=":   ローカルIPアドレス："
 echo.
 echo   続行するには何かキーを押してください。
 pause > NUL
@@ -21,9 +22,9 @@ if not exist ..\conf\openssl.ext (
 )
 echo.
 .\openssl.exe genrsa -out ..\conf\server.key 2048
-.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf
+.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN=%ip%"
 .\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -days 3650 -signkey ..\conf\server.key -extfile ..\conf\openssl.ext
-  copy ..\conf\server.crt ..\..\..\htdocs\server.crt
+copy ..\conf\server.crt ..\..\..\htdocs\server.crt
 echo.
 echo  ---------------------------------------------------
 echo.

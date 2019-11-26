@@ -314,13 +314,16 @@ class TwitterOAuth extends Config
         // Append
         $segmentIndex = 0;
         $media = fopen($parameters['media'], 'rb');
-        while (!feof($media)) {
-            $this->http('POST', self::UPLOAD_HOST, 'media/upload', [
-                'command' => 'APPEND',
-                'media_id' => $init->media_id_string,
-                'segment_index' => $segmentIndex++,
-                'media_data' => base64_encode(fread($media, $this->chunkSize))
-            ], false);
+        try {
+            while (!feof($media)) {
+                $this->http('POST', self::UPLOAD_HOST, 'media/upload', [
+                    'command' => 'APPEND',
+                    'media_id' => $init->media_id_string,
+                    'segment_index' => $segmentIndex++,
+                    'media_data' => base64_encode(fread($media, $this->chunkSize))
+                ], false);
+            }
+        } catch (Exception $e) {
         }
         fclose($media);
         // Finalize
@@ -341,18 +344,13 @@ class TwitterOAuth extends Config
      */
     private function mediaInitParameters(array $parameters)
     {
-        $return = [
+        $allowed_keys = ['media_type', 'additional_owners', 'media_category', 'shared'];
+        $base = [
             'command' => 'INIT',
-            'media_type' => $parameters['media_type'],
             'total_bytes' => filesize($parameters['media'])
         ];
-        if (isset($parameters['additional_owners'])) {
-            $return['additional_owners'] = $parameters['additional_owners'];
-        }
-        if (isset($parameters['media_category'])) {
-            $return['media_category'] = $parameters['media_category'];
-        }
-        return $return;
+        $allowed_parameters = array_intersect_key($parameters, array_flip($allowed_keys));
+        return array_merge($base, $allowed_parameters);
     }
 
     /**

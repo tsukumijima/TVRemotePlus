@@ -129,9 +129,10 @@
 
 	// ファイルを検索
 	// 四階層まで探索する
-	// MP4も追加
+	// MP4・MKVも追加
 	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'), glob($TSfile_dir.'/*/*/*/*.ts'),
-						  glob($TSfile_dir.'/*.mp4'), glob($TSfile_dir.'/*/*.mp4'), glob($TSfile_dir.'/*/*/*.mp4'), glob($TSfile_dir.'/*/*/*/*.mp4'));
+						  glob($TSfile_dir.'/*.mp4'), glob($TSfile_dir.'/*/*.mp4'), glob($TSfile_dir.'/*/*/*.mp4'), glob($TSfile_dir.'/*/*/*/*.mp4'),
+						  glob($TSfile_dir.'/*.mkv'), glob($TSfile_dir.'/*/*.mkv'), glob($TSfile_dir.'/*/*/*.mkv'), glob($TSfile_dir.'/*/*/*/*.mkv'));
 
 	foreach ($search as $key => $value) {
 
@@ -163,8 +164,8 @@
 			$TSfile['data'][$key]['thumb'] = 'thumb_default.jpg'; // サムネイル画像のパス
 
 			// ffmpegでサムネイルを生成
-			$cmd = $ffmpeg_path.' -y -ss 70 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg"';
-			exec($cmd, $opt, $return);
+			$cmd = $ffmpeg_path.' -y -ss 72 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
+			exec($cmd, $opt_, $return);
 
 			// 生成成功
 			if ($return === 0){
@@ -189,48 +190,27 @@
 		if (isset($TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state']) and 
 			$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state'] == 'generated'){
 
-			// 拡張子情報をバックアップ
+			// 拡張子の情報を一時的に保管
 			$extension = $TSfile['data'][$key]['pathinfo']['extension'];
 			
-			// 前に取得した情報を読み込み
+			// 前に取得した情報を読み込む
+			// MP4・MKVからは番組情報を取得できないので、同じファイル名のTSがあればその番組情報を使う
 			$TSfile['data'][$key] = $TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']];
 
-			// 上書きされた拡張子情報を以前のものに戻す
-			// MP4からは番組情報を取得できないので、同じファイル名のTSがあればその番組情報を使う
-			// そのままだと拡張子情報までTSとして上書きされてしまうのでここでMP4に戻しておく
-			$TSfile['data'][$key]['file'] = $TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
-			$TSfile['data'][$key]['pathinfo']['extension'] = $extension;
+			// ファイルパスがTSのものに上書きされてしまうのでここで戻しておく
+			$TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
+
+			// 拡張子も.tsとして上書きされてしまうのでこれも戻しておく（ついでに小文字化）
+			$TSfile['data'][$key]['pathinfo']['extension'] = strtolower($extension);
 			
 			// 番組情報取得フラグ
 			$TSfile['data'][$key]['info_state'] = 'generated';
-		
-		/*
-		// 番組情報は失敗しやすそうなのでコメントアウト
-		// 以前番組情報の取得に失敗したなら
-		} else if (isset($TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state']) and 
-			$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state'] == 'failed'){
-			
-			// 拡張子情報をバックアップ
-			$extension = $TSfile['data'][$key]['pathinfo']['extension'];
-			
-			// 前に取得した情報を読み込み
-			$TSfile['data'][$key] = $TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']];
-
-			// 上書きされた拡張子情報を以前のものに戻す
-			// MP4からは番組情報を取得できないので、同じファイル名のTSがあればその番組情報を使う
-			// そのままだと拡張子情報までTSとして上書きされてしまうのでここでMP4に戻しておく
-			$TSfile['data'][$key]['file'] = $TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
-			$TSfile['data'][$key]['pathinfo']['extension'] = $extension;
-
-			// 番組情報取得フラグ
-			$TSfile['data'][$key]['info_state'] = 'failed';
-		*/
 
 		// 番組情報を取得していないなら
 		} else {
 
 			// rplsinfoでファイル情報を取得
-			$cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'"';
+			$cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
 			exec($cmd, $opt, $return);
 
 			// 取得成功

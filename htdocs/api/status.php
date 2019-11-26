@@ -46,7 +46,7 @@
 	// ついでにストリーム状態を判定する
 	if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){
 
-		if (!($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
+		if (!($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive')){
 
 			// 比較元のm3u8
 			if ($silent == 'true') $standby = file_get_contents($standby_silent_m3u8);

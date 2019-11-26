@@ -225,8 +225,6 @@
 		$tvrp_conf_file = $serverroot.'/config.php';
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
-		$openssl_conf_file = $serverroot.'/bin/Apache/conf/openssl.cnf';
-		$openssl_default_file = $serverroot.'/bin/Apache/conf/openssl.default.cnf';
 		$opensslext_conf_file = $serverroot.'/bin/Apache/conf/openssl.ext';
 		$opensslext_default_file = $serverroot.'/bin/Apache/conf/openssl.default.ext';
 
@@ -234,8 +232,6 @@
 		if (!file_exists($serverroot.'/config.php')) copy($serverroot.'/config.default.php', $serverroot.'/config.php');
 		// httpd.default.conf を httpd.conf にコピー
 		if (!file_exists($httpd_conf_file)) copy($httpd_default_file, $httpd_conf_file);
-		// openssl.default.cnf を openssl.cnf にコピー
-		if (!file_exists($openssl_conf_file)) copy($openssl_default_file, $openssl_conf_file);
 		// openssl.default.ext を openssl.ext にコピー
 		if (!file_exists($opensslext_conf_file)) copy($opensslext_default_file, $opensslext_conf_file);
 		
