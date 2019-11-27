@@ -156,7 +156,7 @@
 			// リダイレクトが有効なら
 			if ($setting_redirect == 'true'){
 				// トップページにリダイレクト
-				header('Location: '.$BASEURL);
+				header('Location: '.$site_url);
 				exit;
 			}
 
@@ -238,7 +238,7 @@
                   HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
                 </p>
               </div>
-              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo ($http_port + 100); ?>/">
+              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo $https_port; ?>/">
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -585,6 +585,19 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
+                <span>リバースプロキシからアクセスする場合の URL</span>
+                <p>
+                  リバースプロキシからのアクセス時のみ利用されます<br>
+                  リバースプロキシからのアクセスをしない場合は空のままで OK です<br>
+                  また、リバースプロキシから Twitter 投稿機能を利用する場合は、
+                  <a href="https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Twitter_Develop.md#%E3%82%A2%E3%83%97%E3%83%AA%E4%BD%9C%E6%88%90%E7%94%BB%E9%9D%A2%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E4%BE%8B" target="_blank">こちら</a> を参考にここで指定した URL を Twitter 開発者アカウントの Callback URLs に追加しておいてください<br>
+                </p>
+              </div>
+              <input class="text-box" name="reverse_proxy_url" type="url" value="<?php echo $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
                 <span>配信休止中・配信準備中時の動画の音楽を消す</span>
                 <p>
                   消す場合はオン、消さない(流す)場合はオフです<br>
@@ -791,19 +804,6 @@
 <?php	} // 括弧終了 ?>
                 <label for="setting_redirect" class="toggle-label"></label>
               </div>
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>TVRemotePlus の HTTP 用ポート番号</span>
-                <p>
-                  インストール時にポートを変更した場合のみ変更してください (デフォルトは 8000 です・事情のない限り変更はおすすめしません)<br>
-                  この設定は TVRemotePlus の内部でのみ使用されます<br>
-                  この設定を変更しても、Apache Web サーバー側の設定は変更されません<br>
-                  HTTPS アクセス用ポートは ここで設定したポート + 100 になります (デフォルトは 8100 です)<br>
-                </p>
-              </div>
-              <input class="text-box" name="http_port" type="number" min="1" max="40000"  value="<?php echo $http_port; ?>" required />
             </div>
 
             <div class="setting-form setting-input">

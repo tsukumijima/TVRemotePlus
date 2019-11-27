@@ -3,6 +3,11 @@
 	// 設定読み込み
 	require_once (dirname(__FILE__).'/config.php');
 
+	// リバースプロキシからのアクセス時はOAUTH_CALLBACKを差し替える
+	if ($reverse_proxy){
+		$OAUTH_CALLBACK = rtrim($reverse_proxy_url, '/').'/tweet/callback.php';
+	}
+
 	// BonDriverのチャンネルを取得
 	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
 		 $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号

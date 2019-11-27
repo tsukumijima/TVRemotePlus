@@ -129,6 +129,9 @@ http://(稼働させているPCのLAN内IPアドレス):8000/tweet/callback.php 
 HTTPS接続用にもう一つ、https://(稼働させているPCのLAN内IPアドレス):8100/tweet/callback.php と入力  
 （例）https://192.168.1.11:8100/tweet/callback.php
 
+リバースプロキシを使うなどして、別の URL からアクセスする場合はそれも入力してください  
+（例）https://example.com/tvrp/tweet/callback.php
+
 ### Terms of service URL
 無記入で OK
 

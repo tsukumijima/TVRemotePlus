@@ -8,13 +8,6 @@ date_default_timezone_set('Asia/Tokyo');
 // べースディレクトリ(フォルダ)
 $base_dir = str_replace('\\', '/', dirname(__FILE__)).'/';
 
-// HTTPSアクセスかどうか
-if (empty($_SERVER["HTTPS"])){
-	$scheme = 'http://';
-} else {
-	$scheme = 'https://';
-}
-
 // TVRemotePlus 内で利用する変数を読み込み
 require_once (dirname(__FILE__).'/require.php');
 
@@ -37,10 +30,10 @@ $quality_default = '1080p'; // 1080p-high・1080p・810p・720p・540p・360p・
 
 // デフォルトのエンコーダー
 // ffmpeg が通常のエンコーダー(ソフトウェアエンコード)、
-// QSVEncC・NVEncC がハードウェアエンコーダーです
-// ( QSVEncC・NVEncC の方が CPU を消費しない・エンコードが早いのでオススメですが、
-// QSVEncC は Intel 製の一部の CPU・NVEncC は nvidia 製の GPU 環境しか使えません)
-$encoder_default = 'QSVEncC'; // ffmpeg・QSVEncC・NVEncC から選択
+// QSVEncC・NVEncC・VCEEncC がハードウェアエンコーダーです
+// QSVEncC・NVEncC・VCEEncC の方が CPU を消費しない・エンコードが早いためおすすめですが、
+// QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 環境、VCEEncC は AMD の Radeon GPU でしか利用できません
+$encoder_default = 'QSVEncC'; // ffmpeg・QSVEncC・NVEncC・VCEEncC から選択
 
 // デフォルトでライブ再生時に字幕データをストリームに含めるか(含める… true 含めない… false )
 // 字幕データを配信するストリームに含めると、字幕をプレイヤー側で表示出来るようになります
@@ -68,7 +61,7 @@ $BonDriver_default_S = '';
 
 // 録画ファイルのあるフォルダ (変更必須)
 // ファイル再生の際に利用します
-// ネットワークドライブは認識できないみたいです
+// ネットワークドライブ内のフォルダは認識できないかもしれません
 // 例：$TSfile_dir = 'E:/TV-Record/';
 $TSfile_dir = '';
 
@@ -77,6 +70,14 @@ $TSfile_dir = '';
 // http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/api/ のように指定します
 // 例：$EDCB_http_url = 'http://192.168.1.11:5510/api/';
 $EDCB_http_url = '';
+
+// リバースプロキシからアクセスする場合の URL を指定します
+// リバースプロキシからのアクセス時のみ利用されます
+// リバースプロキシからのアクセスをしない場合は空のままで OK です
+// また、リバースプロキシから Twitter 投稿機能を利用する場合は、
+// ここで指定した URL を Twitter 開発者アカウントの Callback URLs に追加しておいてください
+// 例：$reverse_proxy_url = 'https://example.com/tvrp/';
+$reverse_proxy_url = '';
 
 // 配信休止中…・配信準備中… の動画の音楽を消すかどうか
 // (音楽を消す… true 音楽を流す(消さない)… false )
@@ -119,9 +120,6 @@ $tweet_upload = 'upload/';
 // 削除するなら true 、削除しないなら false です
 $tweet_delete = 'false';
 
-// ベースとなる URL ($_SERVER["HTTP_HOST"] は IP アドレスを自動で判定する・基本はデフォルトのままでOK)
-$BASEURL = $scheme.$_SERVER["HTTP_HOST"].'/';
-
 
 // ***** Twitter API関連 *****
 // TVRemotePlus からツイートを投稿するのに必須です
@@ -130,12 +128,10 @@ $BASEURL = $scheme.$_SERVER["HTTP_HOST"].'/';
 // コンシューマーキー(変更必須)
 // 例：$CONSUMER_KEY =  'XXXXXXXXXXXXXXXXXXXXXXXXX';
 $CONSUMER_KEY =  '';
+
 // コンシューマーシークレットキー(変更必須)
 // 例：$CONSUMER_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 $CONSUMER_SECRET = '';
-
-// コールバック URL を指定(変更する必要はありません)
-$OAUTH_CALLBACK = $BASEURL.'tweet/callback.php';
 
 
 // ***** basic 認証設定 *****
@@ -159,11 +155,6 @@ $basicauth_password = 'password';
 // ストリーム開始設定後の画面を表示せずに再生画面へリダイレクトするか
 // (リダイレクトする… true リダイレクトしない… false )
 $setting_redirect = 'true';
-
-// HTTP ポート
-// インストール時に入力したものと同じ番号を設定してください
-// HTTPS アクセスポートはこのポート番号 + 100 になります
-$http_port = 8000;
 
 // UDP 送信時の開始ポート番号
 // エンコードソフトが落ちてしまう場合、ポートがバッティングしている可能性が高いです。

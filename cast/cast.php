@@ -32,7 +32,7 @@ echo "\n".'  ***** Chromecast Connect *****'."\n\n";
 $cc = new Chromecast($argv[2], $argv[3]);
 echo "\n".'  Chromecast Init.'."\n\n";
 
-$cc->DMP->play("http://".$argv[1].":".$http_port."/stream/stream.m3u8", "BUFFERED", "application/vnd.apple.mpegurl", true, 0);
+$cc->DMP->play('http://'.$argv[1].':'.$http_port.'/stream/stream.m3u8', 'BUFFERED', 'application/vnd.apple.mpegurl', true, 0);
 $cc->DMP->UnMute();
 
 // 通知

@@ -48,7 +48,7 @@
 		setcookie('twitter', $cookie, time() + 7776000, '/');
 
 		// トップページにリダイレクト
-		header('Location: '.$BASEURL);
+		header('Location: '.$site_url);
 		exit;
 
 	} else {

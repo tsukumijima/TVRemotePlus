@@ -112,3 +112,8 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             proxy_pass http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/;
         }
     }
+
+## TVRemotePlus 側の設定
+
+  1. 設定ページから、［リバースプロキシからアクセスする場合の URL］の箇所を各自のリバースプロキシの URL に変更します。
+  2. また、Twitter 投稿機能を使う場合は、[こちら](Twitter_Develop.md) を参考に Callback URLs にリバースプロキシの URL を追加してください。

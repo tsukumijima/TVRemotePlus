@@ -40,6 +40,34 @@ $version = file_get_contents(dirname(__FILE__).'/data/version.txt');
 // サイト名
 $site_title = 'TVRemotePlus';
 
+// HTTPSアクセスかどうか
+if (!empty($_SERVER['HTTPS'])){
+	$scheme = 'https://';
+	$http_port = @$_SERVER['SERVER_PORT'] - 100;
+	$https_port = @$_SERVER['SERVER_PORT'];
+} else {
+	$scheme = 'http://';
+	$http_port = @$_SERVER['SERVER_PORT'];
+	$https_port = @$_SERVER['SERVER_PORT'] + 100;
+}
+
+// HTTPホスト
+// リバースプロキシからかどうか判定
+if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
+	$reverse_proxy = true;
+    $http_host = @$_SERVER['HTTP_X_FORWARDED_HOST'];
+// 通常のアクセス
+} else {
+	$reverse_proxy = false;
+    $http_host = @$_SERVER['HTTP_HOST'];
+}
+
+// サイトのベース URL
+$site_url = @$scheme.$http_host.'/';
+
+// Twitter API のコールバック URL
+$OAUTH_CALLBACK = $site_url.'tweet/callback.php';
+
 // アイコンのパス
 // htdocs からのパス
 $icon_file = '/files/TVRemotePlus.svg';

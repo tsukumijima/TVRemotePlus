@@ -46,7 +46,7 @@
 		if (preg_match('/Callback URL not approved for this client application.*/', $e)){
 			echo '<b>エラー：TVRemotePlus の Callback URL が TwitterAPI 側に承認されていない、または一致しないため、アプリ連携ができません。</b><br>';
 			echo 'TwitterAPI のアプリ設定にて、Callback URLs の項目に Callback URL ('.$OAUTH_CALLBACK.') を追加し、もう一度アプリ連携し直してください。<br>';
-			echo 'また、config.php にて $OAUTH_CALLBACK の値を変更していて TwitterAPI 側の Callback URL と一致しない場合にもこのエラーが発生します。<br>';
+			echo 'また、require.php にて $OAUTH_CALLBACK の値を変更していて TwitterAPI 側の Callback URL と一致しない場合にもこのエラーが発生します。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
 			
 		} else if (preg_match('/Could not authenticate you.*/', $e)){
