@@ -183,7 +183,7 @@
 		$search_T = array_merge(
 			glob($BonDriver_dir."[bB]on[dD]river_*[tT].dll"),
 			glob($BonDriver_dir."[bB]on[dD]river_*_[tT][0-9]*.dll"),
-			glob($BonDriver_dir."[bB]on[dD]river_*-[tT][0-9]*.dll"),
+			glob($BonDriver_dir."[bB]on[dD]river_*-[tT][0-9]*.dll")
 		);
 		foreach ($search_T as $i => $file) {
 			$BonDriver_dll_T[$i] = str_replace($BonDriver_dir, '', $file);

@@ -156,38 +156,51 @@
 			// リダイレクトが有効なら
 			if ($setting_redirect == 'true'){
 				// トップページにリダイレクト
-				header('Location: '.$site_url);
+				if ($reverse_proxy){
+					header('Location: '.$reverse_proxy_url);
+				} else {
+					header('Location: '.$site_url);
+				}
 				exit;
 			}
 
 		// 環境設定を保存する
 		} else if (isset($_POST['setting-env'])){
+
+			// リバースプロキシからのアクセスの時に環境設定を隠す設定になっていない &
+			// リバースプロキシからのアクセスでないなら
+			if (!($reverse_proxy and $setting_hide == 'true')){
 			
-			// ファイル読み込み
-			$tvrp_conf = file_get_contents($tvrp_conf_file);
+				// ファイル読み込み
+				$tvrp_conf = file_get_contents($tvrp_conf_file);
 
-			// 配列で回す
-			foreach ($_POST as $key => $value) {
+				// 配列で回す
+				foreach ($_POST as $key => $value) {
 
-				// 数値化できるものは数値に変換しておく
-				if (is_numeric($value)){
-					$set = intval($value);
-				} else {
-					$set = '\''.strval($value).'\'';
-				}
+					// シングルクォーテーションを取る（セキュリティ対策）
+					$value = str_replace('\'', '', $value);
 
-				// バックスラッシュ(\)を見つけたらスラッシュに変換
-				if (strpos($set, '\\') !== false){
-					$set = str_replace('\\', '/', $set);
+					// 数値化できるものは数値に変換しておく
+					if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
+						$set = intval($value);
+					} else {
+						$set = '\''.strval($value).'\'';
+					}
+
+					// バックスラッシュ(\)を見つけたらスラッシュに変換
+					if (strpos($set, '\\') !== false){
+						$set = str_replace('\\', '/', $set);
+					}
+					
+					// config.php を書き換え
+					$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+
 				}
 				
-				// config.php を書き換え
-				$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+				// ファイル書き込み
+				file_put_contents($tvrp_conf_file, $tvrp_conf);
 
 			}
-			
-			// ファイル書き込み
-			file_put_contents($tvrp_conf_file, $tvrp_conf);
 
 		}
 		
@@ -210,6 +223,7 @@
           </p>
 
           <div class="setting-form-wrap">
+<?php	if (!$reverse_proxy){ ?>
 
             <h3 class="green"><i class="fas fa-tablet-alt"></i>PWA・HTTPS</h3>
 
@@ -219,7 +233,7 @@
                 <p>
                   PWA (Progressive Web Apps) 機能を利用する場合は、HTTPS でのアクセスが必須です<br>
                   そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
-                  ダウンロードボタンから、証明書 (server.crt) をダウンロードしてください<br>
+                  右 or 下のダウンロードボタンから証明書 (server.crt) をダウンロードしてください<br>
                   証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#PWA%20%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="blank">こちら</a> を参照してください<br>
                 </p>
               </div>
@@ -232,7 +246,7 @@
               <div class="setting-content large">
                 <span>HTTPS 用 URL にアクセス</span>
                 <p>
-                  右のボタンから HTTPS 用 URL にて TVRemotePlus にアクセスできます<br>
+                  HTTPS 用 URL で TVRemotePlus にアクセスできます<br>
                   Chrome(iOSのみSafari) でアクセスした場合は、Androidは「TVRemotePlus をホーム画面に追加」から、
                   PC は URL バーの横に「インストール」と出てくるので、それを押してホーム画面やデスクトップに追加し、そこから起動すると PWA モードでネイティブアプリのように利用できます<br>
                   HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
@@ -242,8 +256,23 @@
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
+
+<?php		if (!empty($reverse_proxy_url)){ ?>
+            <div class="setting-form setting-input">
+              <div class="setting-content large">
+                <span>リバースプロキシ用 URL にアクセス</span>
+                <p>
+                  リバースプロキシ用 URL で TVRemotePlus にアクセスできます<br>
+                </p>
+              </div>
+              <a class="download" href="<?php echo $reverse_proxy_url; ?>">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+<?php		} // 括弧終了 ?>
             
           </div>
+<?php	} // 括弧終了 ?>
           
           <form id="setting-user" class="setting-form-wrap">
 
@@ -335,6 +364,7 @@
             </div>
 
           </form>
+<?php	if (!($reverse_proxy and $setting_hide == 'true')){ ?>
 
           <form id="setting-env" class="setting-form-wrap">
           
@@ -594,6 +624,27 @@
                 </p>
               </div>
               <input class="text-box" name="reverse_proxy_url" type="url" value="<?php echo $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>リバースプロキシからのアクセス時に環境設定を非表示にする</span>
+                <p>
+                  リバースプロキシで外部からアクセスできる（環境設定を編集できる）状態にした場合、外部から悪意のある攻撃が行われた場合に脆弱になる可能性があります<br>
+                  この設定をオンにすると、リバースプロキシからのアクセス時に設定ページの環境設定を非表示にします（環境設定を保存する処理自体を封印します）<br>
+                  リバースプロキシを使っている方はオンにしておくことをおすすめします<br>
+                  再びこの設定をオフにする場合は、リバースプロキシを介さずに設定ページにアクセスするか、config.php を直接編集してください<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="setting_hide" value="false" />
+<?php	if ($setting_hide == 'true'){ ?>
+                <input id="setting_hide" name="setting_hide" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="setting_hide" name="setting_hide" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="setting_hide" class="toggle-label"></label>
+              </div>
             </div>
 
             <div class="setting-form setting-input">
@@ -875,6 +926,7 @@
             </div>
 
           </form>
+<?php	} // 括弧終了 ?>
 
 <?php	} else { // POSTの場合 ?>
 
@@ -920,7 +972,7 @@
             <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
 <?php			} //括弧終了 ?>
           
-<?php		} else { ?>
+<?php		} else if (!($reverse_proxy and $setting_hide == 'true')){ ?>
           <div class="setting-form-wrap">
             <p>環境設定を保存しました。</p>
 <?php			foreach ($_POST as $key => $value) { ?>

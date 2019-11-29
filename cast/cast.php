@@ -29,10 +29,13 @@ if ($argv[1] == 'scan'){
 
 echo "\n".'  ***** Chromecast Connect *****'."\n\n";
 
-$cc = new Chromecast($argv[2], $argv[3]);
+$cc = new Chromecast($argv[3], $argv[4]);
 echo "\n".'  Chromecast Init.'."\n\n";
 
-$cc->DMP->play('http://'.$argv[1].':'.$http_port.'/stream/stream.m3u8', 'BUFFERED', 'application/vnd.apple.mpegurl', true, 0);
+echo '  Cast URL: '.$argv[1]."\n";
+echo '  Cast Type: '.$argv[2]."\n\n";
+
+$cc->DMP->play($argv[1], 'BUFFERED', $argv[2], true, 0);
 $cc->DMP->UnMute();
 
 // 通知

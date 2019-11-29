@@ -21,7 +21,16 @@
 
 		// スタートならChromeCast起動
 		if ($cast['cmd'] == 'start' and isset($_GET['ip']) and isset($_GET['port'])){
-			$cmd = 'pushd '.str_replace('/', '\\', $base_dir).'bin\Apache\bin\ && start "Chromecast Connect" /min  ..\..\php\php.exe '.$base_dir.'cast/cast.php '.$_SERVER['SERVER_NAME'].' '.$_GET['ip'].' '.$_GET['port'];
+
+			if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){
+				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/api/stream';
+				$streamtype = 'video/mp4';
+			} else {
+				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/stream/stream.m3u8';
+				$streamtype = 'application/vnd.apple.mpegurl';
+			}
+
+			$cmd = 'pushd '.str_replace('/', '\\', $base_dir).'bin\Apache\bin\ && start "Chromecast Connect" /min  ..\..\php\php.exe '.$base_dir.'cast/cast.php '.$streamurl.' '.$streamtype.' '.$_GET['ip'].' '.$_GET['port'];
 			// echo $cmd."\n";
 			win_exec($cmd);
 			$cast['cast'] = true;

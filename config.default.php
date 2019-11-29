@@ -79,6 +79,10 @@ $EDCB_http_url = '';
 // 例：$reverse_proxy_url = 'https://example.com/tvrp/';
 $reverse_proxy_url = '';
 
+// リバースプロキシからのアクセス時に環境設定を非表示にする
+// (非表示にする… true 非表示にしない（表示する）… false )
+$setting_hide = 'false';
+
 // 配信休止中…・配信準備中… の動画の音楽を消すかどうか
 // (音楽を消す… true 音楽を流す(消さない)… false )
 $silent = 'true';

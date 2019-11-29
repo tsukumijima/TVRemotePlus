@@ -256,7 +256,7 @@
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
-				$stream_cmd = 'start /min '.$ffmpeg_path.
+				$stream_cmd = 'start /min "ffmpeg Streaming..." '.$ffmpeg_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -285,7 +285,7 @@
 			case 'QSVEncC':
 
 				// QSVEncC用コマンド
-				$stream_cmd = 'start /min '.$qsvencc_path.
+				$stream_cmd = 'start /min "QSVEncC Streaming..." '.$qsvencc_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -315,7 +315,7 @@
 			case 'NVEncC':
 
 				// NVEncC用コマンド
-				$stream_cmd = 'start /min '.$nvencc_path.
+				$stream_cmd = 'start /min "NVEncC Streaming..." '.$nvencc_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -345,7 +345,7 @@
 			case 'VCEEncC':
 	
 				// VCEEncC用コマンド
-				$stream_cmd = 'start /min '.$vceencc_path.
+				$stream_cmd = 'start /min "VCEEncC Streaming..." '.$vceencc_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -490,7 +490,7 @@
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
-				$stream_cmd = 'start /min '.$ffmpeg_path.
+				$stream_cmd = 'start /min "ffmpeg Encoding..." '.$ffmpeg_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -519,7 +519,7 @@
 			case 'QSVEncC':
 
 				// QSVEncC用コマンド
-				$stream_cmd = 'start /min '.$qsvencc_path.
+				$stream_cmd = 'start /min "QSVEncC Encoding..." '.$qsvencc_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -549,7 +549,7 @@
 			case 'NVEncC':
 
 				// NVEncC用コマンド
-				$stream_cmd = 'start /min '.$nvencc_path.
+				$stream_cmd = 'start "NVEncC Encoding..." /min '.$nvencc_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -579,7 +579,7 @@
 			case 'VCEEncC':
 	
 				// VCEEncC用コマンド
-				$stream_cmd = 'start /min '.$vceencc_path.
+				$stream_cmd = 'start /min "VCEEncC Encoding..." '.$vceencc_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.

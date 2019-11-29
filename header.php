@@ -83,7 +83,7 @@
         }
     });
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
-<?php		if ($ini['state'] == 'File' and $ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive'){ ?>
+<?php		if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){ ?>
     
     streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';
     streamtype = 'video/mp4';
