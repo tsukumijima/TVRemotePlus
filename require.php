@@ -17,7 +17,11 @@ $rplsinfo_path =  $base_dir.'bin/'.$rplsinfo_exe;
 
 // ffmpeg の名前とパス
 $ffmpeg_exe =  'ffmpeg-tvrp.exe';
-$ffmpeg_path = $base_dir.'bin/'.$ffmpeg_exe;
+$ffmpeg_path = $base_dir.'bin/ffmpeg/'.$ffmpeg_exe;
+
+// ffprobe の名前とパス
+$ffprobe_exe =  'ffprobe-tvrp.exe';
+$ffprobe_path = $base_dir.'bin/ffmpeg/'.$ffprobe_exe;
 
 // QSVEncC の名前とパス
 $qsvencc_exe = 'QSVEncC64-tvrp.exe';

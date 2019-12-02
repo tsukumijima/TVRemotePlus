@@ -152,11 +152,13 @@
 		switch ($subtitle) {
 
 			case 'true':
+				// $subtitle_ffmpeg_cmd = '-scodec copy'; // ffmpeg4.2以降用・ffmpeg側のバグでうまく行かないので保留
 				$subtitle_ffmpeg_cmd = '-map 0 -ignore_unknown';
 				$subtitle_other_cmd = '--sub-copy asdata';
 			break;
 
 			case 'false':
+				// $subtitle_ffmpeg_cmd = '-sn'; // ffmpeg4.2以降用・ffmpeg側のバグでうまく行かないので保留
 				$subtitle_ffmpeg_cmd = '';
 				$subtitle_other_cmd = '';
 			break;
@@ -259,7 +261,7 @@
 				$stream_cmd = 'start /min "ffmpeg Streaming..." '.$ffmpeg_path.
 
 					// 入力
-					' -i "'.$receive.'"'.
+					' -dual_mono_mode main -i "'.$receive.'"'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -272,7 +274,7 @@
 					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
 					// 音声
-					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -dual_mono_mode main'.
+					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2'.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
@@ -391,14 +393,17 @@
 		switch ($subtitle) {
 
 			case 'true':
+				// $subtitle_ffmpeg_cmd = '-scodec copy'; // ffmpeg4.2以降用・ffmpeg側のバグでうまく行かないので保留
 				$subtitle_ffmpeg_cmd = '-map 0 -ignore_unknown';
 				$subtitle_other_cmd = '--sub-copy asdata';
 			break;
 
 			case 'false':
+				// $subtitle_ffmpeg_cmd = '-sn'; // ffmpeg4.2以降用・ffmpeg側のバグでうまく行かないので保留
 				$subtitle_ffmpeg_cmd = '';
 				$subtitle_other_cmd = '';
 			break;
+
 
 			default:
 				$subtitle_ffmpeg_cmd = '';
@@ -493,7 +498,7 @@
 				$stream_cmd = 'start /min "ffmpeg Encoding..." '.$ffmpeg_path.
 
 					// 入力
-					' -i "'.$filepath.'"'.
+					' -dual_mono_mode main -i "'.$filepath.'"'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -506,7 +511,7 @@
 					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
 					// 音声
-					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -dual_mono_mode main'.
+					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2'.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
