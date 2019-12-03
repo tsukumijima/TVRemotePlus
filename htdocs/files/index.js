@@ -27,24 +27,6 @@
         $('#content').width('100%');
       }
 
-      // タブを初期化
-      slideTab = new Swiper('#broadcast-tab-box', {
-        slidesPerView: 'auto',
-        watchSlidesVisibility: true,
-        watchSlidesProgress: true,
-        slideActiveClass: 'swiper-slide-active'
-      });
-      slideTab.on('tap', function(){
-        currentTab = slideTabButton.activeIndex;
-        slideTab.slideTo(currentTab, 500, true);
-      });
-      slideTabButton = new Swiper('#broadcast-box', {
-        autoHeight: true,
-        thumbs: {
-          swiper: slideTab
-        }
-      });
-
     }
 
     // 画面の横幅を取得
@@ -112,6 +94,30 @@
         $('section').css('max-width', result + 'px');
 
       }
+    }
+
+    // ロード時のみ発火
+    // 画面のリサイズを待ってから初期化する
+    if (event.type == 'DOMContentLoaded'){
+
+      // タブを初期化
+      slideTab = new Swiper('#broadcast-tab-box', {
+        slidesPerView: 'auto',
+        watchSlidesVisibility: true,
+        watchSlidesProgress: true,
+        slideActiveClass: 'swiper-slide-active'
+      });
+      slideTab.on('tap', function(){
+        currentTab = slideTabButton.activeIndex;
+        slideTab.slideTo(currentTab, 500, true);
+      });
+      slideTabButton = new Swiper('#broadcast-box', {
+        autoHeight: true,
+        thumbs: {
+          swiper: slideTab
+        }
+      });
+
     }
 
   });
