@@ -80,7 +80,7 @@
 	echo '  -------------------------------------------------------------------'."\n";
 	echo "\n";
 	echo '    TVRemotePlus のセットアップを行うインストーラーです。'."\n";
-	echo '    途中でキャンセルする場合は Ctrl + C を押してください。'."\n";
+	echo '    途中でキャンセルする場合はそのままウインドウを閉じてください。'."\n";
 	echo "\n";
 	echo '  -------------------------------------------------------------------'."\n";
 
@@ -156,12 +156,12 @@
 		echo "\n";
 		echo '      利用ポート番号：';
 		// TVRemotePlusを稼働させるポート
-		$port = trim(fgets(STDIN));
+		$http_port = trim(fgets(STDIN));
 		// 空だったら
-		if (empty($port)){
-			$port = 8000;
+		if (empty($http_port)){
+			$http_port = 8000;
 		}
-		$ssl_port = $port + 100; // SSL用ポート
+		$https_port = $http_port + 100; // SSL用ポート
 		echo "\n";
 
 		echo '    4. TVTest の BonDriver は 32bit ですか？ 64bit ですか？'."\n";
@@ -192,6 +192,16 @@
 		if (empty($TSfile_dir)){
 			while(empty($TSfile_dir)){
 				echo '      入力欄が空です。もう一度入力してください。'."\n";
+				echo "\n";
+				echo '      録画ファイルのあるフォルダ：';
+				$TSfile_dir = trim(fgets(STDIN));
+				echo "\n";
+			}
+		}
+		// フォルダがなかったら
+		if (!file_exists($TSfile_dir)){
+			while(!file_exists($TSfile_dir)){
+				echo '      フォルダが存在しません。もう一度入力してください。'."\n";
 				echo "\n";
 				echo '      録画ファイルのあるフォルダ：';
 				$TSfile_dir = trim(fgets(STDIN));
@@ -242,11 +252,11 @@
 		$opensslext_default_file = $serverroot.'/bin/Apache/conf/openssl.default.ext';
 
 		// config.default.php を config.php にコピー
-		if (!file_exists($serverroot.'/config.php')) copy($serverroot.'/config.default.php', $serverroot.'/config.php');
+		copy($serverroot.'/config.default.php', $serverroot.'/config.php');
 		// httpd.default.conf を httpd.conf にコピー
-		if (!file_exists($httpd_conf_file)) copy($httpd_default_file, $httpd_conf_file);
+		copy($httpd_default_file, $httpd_conf_file);
 		// openssl.default.ext を openssl.ext にコピー
-		if (!file_exists($opensslext_conf_file)) copy($opensslext_default_file, $opensslext_conf_file);
+		copy($opensslext_default_file, $opensslext_conf_file);
 		
 		// TSTask のコピー
 		if ($bondriver == 2){
@@ -267,7 +277,6 @@
 		// TVRemotePlusの設定ファイル
 		$tvrp_conf = file_get_contents($tvrp_conf_file);
 		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.mb_convert_encoding($TSfile_dir, 'UTF-8', 'SJIS, SJIS-WIN').'\';', $tvrp_conf); // 置換
-		$tvrp_conf = preg_replace('/^\$http_port =.*/m', '$http_port = '.$port.';', $tvrp_conf); // 置換
 		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
 
 		// Apacheの設定ファイル
@@ -275,8 +284,8 @@
 		// 置換
 		$httpd_conf = preg_replace("/Define SRVROOT.*/", 'Define SRVROOT "'.$serverroot.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define SRVIP.*/", 'Define SRVIP "'.$serverip.'"', $httpd_conf);
-		$httpd_conf = preg_replace("/Define PORT.*/", 'Define PORT "'.$port.'"', $httpd_conf);
-		$httpd_conf = preg_replace("/Define SSL_PORT.*/", 'Define SSL_PORT "'.$ssl_port.'"', $httpd_conf);
+		$httpd_conf = preg_replace("/Define HTTP_PORT.*/", 'Define HTTP_PORT "'.$http_port.'"', $httpd_conf);
+		$httpd_conf = preg_replace("/Define HTTPS_PORT.*/", 'Define HTTPS_PORT "'.$https_port.'"', $httpd_conf);
 		file_put_contents($httpd_conf_file, $httpd_conf);// 書き込み
 
 		// OpenSSLの拡張設定ファイル
@@ -330,10 +339,10 @@
 		echo '    セットアップはまだ終わっていません。'."\n\n";
 		echo '    BonDriver と.ch2 ファイルは '.$serverroot .'/bin/TSTask/BonDriver/ に忘れずに入れてください。'."\n\n";
 		echo '    終わったら、デスクトップのショートカットから TVRemotePlus を起動し、'."\n";
-		echo '    ブラウザから http://'.$serverip.':'.$port.'/ へアクセスします。'."\n";
+		echo '    ブラウザから http://'.$serverip.':'.$http_port.'/ へアクセスします。'."\n";
 		echo '    その後、≡ サイドメニュー → 設定 → 環境設定 から必要な箇所を設定してください。'."\n\n";
 		echo '    PWA 機能を使用する場合は、設定ページからダウンロードできる自己署名証明書を'."\n";
-		echo '    あらかじめ端末にインストールした上で、 https://'.$serverip.':'.$ssl_port.'/ にアクセスしてください。'."\n";
+		echo '    あらかじめ端末にインストールした上で、 https://'.$serverip.':'.$https_port.'/ にアクセスしてください。'."\n";
 		echo "\n";
 		sleep(1);
 	}
