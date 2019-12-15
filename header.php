@@ -1,7 +1,8 @@
 <?php
 
 	// モジュール読み込み
-	require_once (dirname(__FILE__).'/config.php');
+	require_once ('../require.php');
+	require_once ('../module.php');
 
 	// iniファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -14,9 +15,9 @@
 <html lang="ja">
 
 <head>
-<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ ?>
+<?php	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ ?>
   <title>ファイル再生 - <?php echo $site_title; ?></title>
-<?php	} else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ ?>
+<?php	} else if (strpos($backtrace[0]['file'], 'setting.php') !== false){ ?>
   <title>設定 - <?php echo $site_title; ?></title>
 <?php	} else { ?>
   <title><?php echo $site_title; ?></title>
@@ -33,13 +34,13 @@
   <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
   <link rel="stylesheet" type="text/css" href="/files/style.css">
 <?php
-	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
+	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/swiper.min.css">'."\n";
 	}
-	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
+	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css">'."\n";
 	}
-	if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
+	if (strpos($backtrace[0]['file'], 'setting.php') !== false){ // setting.phpのみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/setting.css">'."\n";
 	}
 ?>
@@ -55,12 +56,12 @@
   <script type="text/javascript" src="/files/velocity.min.js"></script>
   <script type="text/javascript" src="/files/common.js"></script>
 <?php
-	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ
+	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/index.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
 	}
-	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ
+	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
 		echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
 	} else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
 		echo '  <script type="text/javascript" src="/files/setting.js"></script>'."\n";

@@ -7,7 +7,16 @@
 		//ini_set('display_errors', 0);
 
 		// モジュール読み込み
+		require_once (dirname(__FILE__).'/require.php');
 		require_once (dirname(__FILE__).'/module.php');
+
+		// BonDriverとチャンネルを取得
+		list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
+			$ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+			$sid, $sid_T, $sid_S, $sid_CS, // SID
+			$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+			$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
+			= initBonChannel($BonDriver_dir);
 
 		// ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
@@ -137,9 +146,6 @@
 		
 	}
 
-	// モジュール読み込み
-	require_once (dirname(__FILE__).'/module.php');
-
 	function stream_start($ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
 		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
 		
@@ -180,6 +186,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '1080p':
@@ -190,6 +197,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '4:3'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '810p':
@@ -200,6 +208,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '720p':
@@ -210,6 +219,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '540p':
@@ -220,6 +230,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '360p':
@@ -230,6 +241,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '240p':
@@ -240,6 +252,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 		}
 
@@ -274,7 +287,7 @@
 					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
 					// 音声
-					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2'.
+					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
@@ -304,11 +317,11 @@
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90'.
 					// 出力
 					' -o stream.m3u8';
 		
@@ -334,11 +347,11 @@
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --max-procfps 90'.
 					// 出力
 					' -o stream.m3u8';
 
@@ -364,11 +377,11 @@
 					' --quality balanced --profile Main'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-ignore-decode-error 30'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --max-procfps 90'.
 					// 出力
 					' -o stream.m3u8';
 
@@ -421,6 +434,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '1080p':
@@ -431,6 +445,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '4:3'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '810p':
@@ -441,6 +456,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '720p':
@@ -451,6 +467,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '540p':
@@ -461,6 +478,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '360p':
@@ -471,6 +489,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 
 			case '240p':
@@ -481,6 +500,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
+				$volume = 1.9; // 音量(元の音量の何倍か)
 			break;
 		}
 
@@ -511,7 +531,7 @@
 					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
 					// 音声
-					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2'.
+					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
@@ -541,11 +561,11 @@
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90'.
 					// 出力
 					' -o stream.m3u8';
 		
@@ -571,11 +591,11 @@
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --max-procfps 90'.
 					// 出力
 					' -o stream.m3u8';
 
@@ -601,11 +621,11 @@
 					' --quality balanced --profile Main'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-ignore-decode-error 30'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --max-procfps 90'.
 					// 出力
 					' -o stream.m3u8';
 

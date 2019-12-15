@@ -1,12 +1,8 @@
 <?php
 
-	// 設定読み込み
-	require_once (dirname(__FILE__).'/config.php');
-
-	// リバースプロキシからのアクセス時はOAUTH_CALLBACKを差し替える
-	if ($reverse_proxy){
-		$OAUTH_CALLBACK = rtrim($reverse_proxy_url, '/').'/tweet/callback.php';
-	}
+	/*
+	// 設定を読み込む
+	require_once (dirname(__FILE__).'/require.php');
 
 	// BonDriverのチャンネルを取得
 	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
@@ -15,8 +11,9 @@
 		 $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
 		 $tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		 = initBonChannel($BonDriver_dir);
+	*/
 	
-	// 各種モジュール
+	// ***** 各種モジュール関数 *****
 
 	// Windows用非同期コマンド実行関数
 	function win_exec($cmd){
@@ -60,14 +57,19 @@
 			$htaccess_conf = file_get_contents($htaccess);
 
 			// 文言がない場合は追加する
-			if (!preg_match("/AuthType Basic.*/", $htaccess_conf)){
+			if (!preg_match("/# Basic認証.*/", $htaccess_conf)){
 
 				// .htpasswd の絶対パスを修正
 				$htaccess_conf = $htaccess_conf."\n".
+					'# Basic認証'."\n".
 					'AuthType Basic'."\n".
 					'AuthName "Input your ID and Password."'."\n".
 					'AuthUserFile '.$base_dir.'htdocs/.htpasswd'."\n".
-					'require valid-user'."\n";
+					'require valid-user'."\n".
+					"\n".
+					'<Files "favicon.ico">'."\n".
+					'  Require all granted'."\n".
+					'</Files>'."\n";
 				
 				file_put_contents($htaccess, $htaccess_conf);
 			}
@@ -79,8 +81,9 @@
 
 			// .htaccess 文言削除
 			$htaccess_conf = file_get_contents($htaccess);
-			if (preg_match("/AuthType Basic.*/", $htaccess_conf)){
-				$htaccess_conf = preg_replace("/AuthType Basic.*/s", '', $htaccess_conf);
+			if (preg_match("/# Basic認証.*/", $htaccess_conf)){
+				$htaccess_conf = preg_replace("/# Basic認証.*/s", '', $htaccess_conf);
+				$htaccess_conf = rtrim($htaccess_conf, "\n")."\n";
 				file_put_contents($htaccess, $htaccess_conf);
 			}
 

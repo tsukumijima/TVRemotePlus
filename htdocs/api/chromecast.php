@@ -1,6 +1,7 @@
 <?php
 
 	// モジュール読み込み
+	require_once ('../../require.php');
 	require_once ('../../module.php');
 	
 	// 設定ファイルのパス

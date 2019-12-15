@@ -1,11 +1,20 @@
 <?php
 
 	// モジュール読み込み
+	require_once ('../../require.php');
 	require_once ('../../module.php');
 
 	// かなり長くなることがあるので実行時間制限をオフに
 	ignore_user_abort(true);
 	set_time_limit(0);
+
+	// BonDriverとチャンネルを取得
+	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
+		$ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+		$sid, $sid_T, $sid_S, $sid_CS, // SID
+		$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
+		= initBonChannel($BonDriver_dir);
 
 	// iniファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);

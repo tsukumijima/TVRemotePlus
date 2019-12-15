@@ -5,8 +5,13 @@
 
 	echo '    <pre id="debug">';
 
-	// モジュール読み込み
-	require_once ('../module.php');
+	// BonDriverとチャンネルを取得
+	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
+		$ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+		$sid, $sid_T, $sid_S, $sid_CS, // SID
+		$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
+		= initBonChannel($BonDriver_dir);
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -15,7 +20,7 @@
 	basicAuth($basicauth, $basicauth_user, $basicauth_password);
 
 	// ONAirのみ
-	if ($ini['state'] == "ONAir"){
+	if ($ini['state'] == 'ONAir'){
 		$channel = $ch[strval($ini['channel'])];
 	}
 
@@ -81,7 +86,7 @@
     dp.subtitle.toggle();
   }, false);
 
-<?php	if ($ini['state'] == "File") { ?>
+<?php	if ($ini['state'] == 'File') { ?>
   dp.seek(1);
 <?php	} //括弧終了 ?>
 
@@ -112,13 +117,13 @@
             </div>
             <div id="tweet-etc">
               <div id="tweet-picture" data-balloon="キャプチャ (Alt+1)" data-balloon-pos="up">
-                <img src="files/picture.svg">
+                <img src="/files/picture.svg">
               </div>
               <div id="tweet-picture-comment" data-balloon="コメント付きでキャプチャ (Alt+2)" data-balloon-pos="up">
-                <img src="files/comment.svg">
+                <img src="/files/comment.svg">
               </div>
               <div id="tweet-reset" data-balloon="リセット (Alt+3)" data-balloon-pos="up">
-                <img src="files/reset.svg">
+                <img src="/files/reset.svg">
               </div>
               <span id="tweet-num">140</span>
             </div>

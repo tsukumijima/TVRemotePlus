@@ -3,7 +3,17 @@
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^jikkyo/v3/([1-9]+)/$ jikkyo.php?stream=$1
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^jikkyo/v3/$ jikkyo.php
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)/([1-9]+)/$ $1.php?stream=$2
 
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d

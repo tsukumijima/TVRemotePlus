@@ -1900,8 +1900,8 @@ td {
     color: white;
     text-align: center;
     font-size: 95%;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
+    padding-top: 14px;
+    padding-bottom: 14px;
     display: block;
     box-shadow: 0px 0px 6px 3px #e0e0e0;
 }

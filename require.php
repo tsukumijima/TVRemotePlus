@@ -1,48 +1,19 @@
 <?php 
 
-// TVRemotePlus 内部で利用する設定ファイルです
+// TVRemotePlus 内部で読み込む定義ファイルです
 // 基本的に変更する必要はありません
-// 変更すると一部動作しなくなるものも含まれています
+// 変更すると動作しなくなるものも含まれています
 
+// ***** 定義 *****
 
-// ***** 各種exeファイルのパス設定 *****
+//タイムゾーンを日本に
+date_default_timezone_set('Asia/Tokyo');
 
-// TSTask の名前とパス
-$tstask_exe = 'TSTask-tvrp.exe';
-$tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
-
-// rplsinfo の名前とパス
-$rplsinfo_exe =  'rplsinfo-tvrp.exe';
-$rplsinfo_path =  $base_dir.'bin/'.$rplsinfo_exe;
-
-// ffmpeg の名前とパス
-$ffmpeg_exe =  'ffmpeg-tvrp.exe';
-$ffmpeg_path = $base_dir.'bin/ffmpeg/'.$ffmpeg_exe;
-
-// ffprobe の名前とパス
-$ffprobe_exe =  'ffprobe-tvrp.exe';
-$ffprobe_path = $base_dir.'bin/ffmpeg/'.$ffprobe_exe;
-
-// QSVEncC の名前とパス
-$qsvencc_exe = 'QSVEncC64-tvrp.exe';
-$qsvencc_path =  $base_dir.'bin/QSVEncC/'.$qsvencc_exe;
-
-// NVEncC の名前とパス
-$nvencc_exe = 'NVEncC64-tvrp.exe';
-$nvencc_path =  $base_dir.'bin/NVEncC/'.$nvencc_exe;
-
-// VCEEncC の名前とパス
-$vceencc_exe = 'VCEEncC64-tvrp.exe';
-$vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
-
-
-// ***** その他の設定 *****
+// べースディレクトリ(フォルダ)
+$base_dir = str_replace('\\', '/', dirname(__FILE__)).'/';
 
 // バージョン
 $version = file_get_contents(dirname(__FILE__).'/data/version.txt');
-
-// サイト名
-$site_title = 'TVRemotePlus';
 
 // HTTPSアクセスかどうか
 if (!empty($_SERVER['HTTPS'])){
@@ -65,6 +36,12 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
 	$reverse_proxy = false;
     $http_host = @$_SERVER['HTTP_HOST'];
 }
+
+
+// ***** ファイルパス *****
+
+// サイト名
+$site_title = 'TVRemotePlus';
 
 // サイトのベース URL
 $site_url = @$scheme.$http_host.'/';
@@ -120,3 +97,44 @@ $htaccess = $base_dir.'htdocs/.htaccess';
 // .htpasswd のパス
 $htpasswd = $base_dir.'htdocs/.htpasswd';
 
+
+// ***** 各種exeファイルのパス *****
+
+// TSTask の名前とパス
+$tstask_exe = 'TSTask-tvrp.exe';
+$tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
+
+// rplsinfo の名前とパス
+$rplsinfo_exe =  'rplsinfo-tvrp.exe';
+$rplsinfo_path =  $base_dir.'bin/'.$rplsinfo_exe;
+
+// ffmpeg の名前とパス
+$ffmpeg_exe =  'ffmpeg-tvrp.exe';
+$ffmpeg_path = $base_dir.'bin/ffmpeg/'.$ffmpeg_exe;
+
+// ffprobe の名前とパス
+$ffprobe_exe =  'ffprobe-tvrp.exe';
+$ffprobe_path = $base_dir.'bin/ffmpeg/'.$ffprobe_exe;
+
+// QSVEncC の名前とパス
+$qsvencc_exe = 'QSVEncC-tvrp.exe';
+$qsvencc_path =  $base_dir.'bin/QSVEncC/'.$qsvencc_exe;
+
+// NVEncC の名前とパス
+$nvencc_exe = 'NVEncC-tvrp.exe';
+$nvencc_path =  $base_dir.'bin/NVEncC/'.$nvencc_exe;
+
+// VCEEncC の名前とパス
+$vceencc_exe = 'VCEEncC-tvrp.exe';
+$vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
+
+
+// ***** 設定読み込み *****
+
+// config.php を読み込む
+require_once (dirname(__FILE__).'/config.php');
+
+// リバースプロキシからのアクセス時はOAUTH_CALLBACKを差し替える
+if ($reverse_proxy){
+	$OAUTH_CALLBACK = rtrim($reverse_proxy_url, '/').'/tweet/callback.php';
+}

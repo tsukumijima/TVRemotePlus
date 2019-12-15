@@ -1,9 +1,9 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../../module.php');
+	require_once ('../../require.php');
 
-	ini_set('display_errors', 0);
+	// ini_set('display_errors', 0);
 
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');
