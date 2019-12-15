@@ -57,19 +57,15 @@
 			$htaccess_conf = file_get_contents($htaccess);
 
 			// 文言がない場合は追加する
-			if (!preg_match("/# Basic認証.*/", $htaccess_conf)){
+			if (!preg_match("/# Basic認証をかける.*/", $htaccess_conf)){
 
 				// .htpasswd の絶対パスを修正
 				$htaccess_conf = $htaccess_conf."\n".
-					'# Basic認証'."\n".
+					'# Basic認証をかける'."\n".
 					'AuthType Basic'."\n".
 					'AuthName "Input your ID and Password."'."\n".
 					'AuthUserFile '.$base_dir.'htdocs/.htpasswd'."\n".
-					'require valid-user'."\n".
-					"\n".
-					'<Files "favicon.ico">'."\n".
-					'  Require all granted'."\n".
-					'</Files>'."\n";
+					'require valid-user'."\n";
 				
 				file_put_contents($htaccess, $htaccess_conf);
 			}
@@ -81,8 +77,8 @@
 
 			// .htaccess 文言削除
 			$htaccess_conf = file_get_contents($htaccess);
-			if (preg_match("/# Basic認証.*/", $htaccess_conf)){
-				$htaccess_conf = preg_replace("/# Basic認証.*/s", '', $htaccess_conf);
+			if (preg_match("/# Basic認証をかける.*/", $htaccess_conf)){
+				$htaccess_conf = preg_replace("/# Basic認証をかける.*/s", '', $htaccess_conf);
 				$htaccess_conf = rtrim($htaccess_conf, "\n")."\n";
 				file_put_contents($htaccess, $htaccess_conf);
 			}

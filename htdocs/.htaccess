@@ -1,5 +1,5 @@
 
-# ƒGƒ‰[ƒhƒLƒ…ƒƒ“ƒg
+# ã‚¨ãƒ©ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ
 Options -Indexes
 ErrorDocument 400 /files/error/400.php
 ErrorDocument 401 /files/error/401.php
@@ -9,7 +9,7 @@ ErrorDocument 500 /files/error/500.php
 ErrorDocument 502 /files/error/502.php
 ErrorDocument 503 /files/error/503.php
 
-# php‚ÌŠg’£q‚È‚µ‚ÅƒAƒNƒZƒXo—ˆ‚é‚æ‚¤‚É
+# phpã®æ‹¡å¼µå­ãªã—ã§ã‚¢ã‚¯ã‚»ã‚¹å‡ºæ¥ã‚‹ã‚ˆã†ã«
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([1-9]+)/$ index.php?stream=$1
@@ -19,8 +19,13 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.*)/$ $1.php
 
-# m3u8‚ğƒLƒƒƒbƒVƒ…‚©‚çœŠO
+# m3u8ã‚’ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‹ã‚‰é™¤å¤–
 <Files ~ "\.(m3u8)$">
 Header add Pragma "no-cache"
 Header set Cache-Control no-cache
+</Files>
+
+# faviconã‚’Basicèªè¨¼ã‹ã‚‰é™¤å¤–
+<Files "favicon.ico">
+  Require all granted
 </Files>
