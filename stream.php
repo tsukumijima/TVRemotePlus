@@ -321,7 +321,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
 					// 出力
 					' -o stream.m3u8';
 		
@@ -351,7 +351,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90'.
+					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
 					// 出力
 					' -o stream.m3u8';
 
@@ -565,7 +565,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
 					// 出力
 					' -o stream.m3u8';
 		
@@ -595,7 +595,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90'.
+					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
 					// 出力
 					' -o stream.m3u8';
 

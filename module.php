@@ -103,12 +103,11 @@
 			$jkch = mb_convert_kana($ch_sid[$key][4], 'asv');
 
 			// 正規表現パターン
-			mb_regex_encoding("UTF-8");
+			mb_regex_encoding('UTF-8');
 			$match = "{".$jkch."[0-9]}u";
 			$match2 = "{".preg_quote(mb_substr($jkch, 0, 5))."[0-9]".preg_quote(mb_substr($jkch, 5, 3))."}u"; // NHK総合用パターン
 			$match3 = "{".preg_quote(mb_substr($jkch, 0, 6))."[0-9]".preg_quote(mb_substr($jkch, 6, 3))."}u"; // NHKEテレ用パターン
 
-			//echo $channel.': '.$jkch.': '.preg_match($match, $channel).': '.$ch_sid[$key][0]."\n";
 			// チャンネル名が一致したら
 			if ($channel == $jkch or preg_match($match, $channel) or preg_match($match2, $channel) or preg_match($match3, $channel)){
 				// 実況IDを返す
@@ -173,16 +172,16 @@
 	function initBonChannel($BonDriver_dir){
 
 		// BonDriver_dirからBonDriverを検索
-		foreach (glob($BonDriver_dir."[bB]on[dD]river_*.dll") as $i => $file) {
+		foreach (glob($BonDriver_dir.'[bB]on[dD]river_*.dll') as $i => $file) {
 			$BonDriver_dll[$i] = str_replace($BonDriver_dir, '', $file);
 		}
 		if (!isset($BonDriver_dll)) $BonDriver_dll = array();
 	
 		// BonDriver_dirから地デジ用BonDriverを検索
 		$search_T = array_merge(
-			glob($BonDriver_dir."[bB]on[dD]river_*[tT].dll"),
-			glob($BonDriver_dir."[bB]on[dD]river_*_[tT][0-9]*.dll"),
-			glob($BonDriver_dir."[bB]on[dD]river_*-[tT][0-9]*.dll")
+			glob($BonDriver_dir.'[bB]on[dD]river_*[tT].dll'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*_[tT][0-9]*.dll'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*-[tT][0-9]*.dll')
 		);
 		foreach ($search_T as $i => $file) {
 			$BonDriver_dll_T[$i] = str_replace($BonDriver_dir, '', $file);
@@ -191,9 +190,9 @@
 
 		// BonDriver_dirからBSCS用BonDriverを検索
 		$search_S = array_merge(
-			glob($BonDriver_dir."[bB]on[dD]river_*[sS].dll"),
-			glob($BonDriver_dir."[bB]on[dD]river_*_[sS][0-9]*.dll"),
-			glob($BonDriver_dir."[bB]on[dD]river_*-[sS][0-9]*.dll")
+			glob($BonDriver_dir.'[bB]on[dD]river_*[sS].dll'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*_[sS][0-9]*.dll'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*-[sS][0-9]*.dll')
 		);
 		foreach ($search_S as $i => $file) {
 			$BonDriver_dll_S[$i] = str_replace($BonDriver_dir, '', $file);
@@ -232,13 +231,13 @@
 
 		// BS・CS用
 		$BonDriver_ch2_file_S = array_merge(
-			glob($BonDriver_dir."[bB]on[dD]river_*[sS].ch2"),
-			glob($BonDriver_dir."[bB]on[dD]river_*_[sS][0-9]*.ch2"),
-			glob($BonDriver_dir."[bB]on[dD]river_*-[sS][0-9]*.ch2")
+			glob($BonDriver_dir.'[bB]on[dD]river_*[sS].ch2'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*_[sS][0-9]*.ch2'),
+			glob($BonDriver_dir.'[bB]on[dD]river_*-[sS][0-9]*.ch2')
 		);
 
 		// その他（混合チューナー用）
-		$BonDriver_ch2_file_raw = glob($BonDriver_dir."[bB]on[dD]river_*.ch2");
+		$BonDriver_ch2_file_raw = glob($BonDriver_dir.'[bB]on[dD]river_*.ch2');
 
 
 		// 地デジのch2があれば
