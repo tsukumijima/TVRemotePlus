@@ -74,7 +74,7 @@
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
-      api: '/api/jikkyo/',
+      api: '/api/jikkyo/<?php echo $stream; ?>/',
       bottom: '10%',
       height: settings['comment_size'],
       unlimited: false

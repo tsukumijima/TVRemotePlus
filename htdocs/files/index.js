@@ -5,7 +5,7 @@
 
   // php の isset みたいなの
   function isset(data){
-    if (data === "" || data === null || data === undefined){
+    if (data === '' || data === null || data === undefined){
       return false;
     } else {
       return true;
@@ -125,7 +125,7 @@
   $(function(){
 
     $.ajax({
-      url: '/api/chromecast/' + stream + '/',
+      url: '/api/chromecast/' + stream,
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -196,7 +196,7 @@
         $('html').removeClass('open');
 
         $.ajax({
-          url: '/api/chromecast/' + stream + '/',
+          url: '/api/chromecast/' + stream,
           dataType: 'json',
           cache: false,
           success: function(data) {
@@ -239,7 +239,7 @@
         $('#menu-content').removeClass('open');
 
         $.ajax({
-          url: '/api/chromecast/' + stream + '/?cmd=stop',
+          url: '/api/chromecast/' + stream + '?cmd=stop',
           dataType: 'json',
           cache: false,
           success: function(data) {
@@ -298,7 +298,7 @@
       $('html').removeClass('open');
 
       $.ajax({
-        url: '/api/chromecast/' + stream + '/?cmd=start&ip=' + $(this).attr('data-ip') + '&port=' + $(this).attr('data-port'),
+        url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(this).attr('data-ip') + '&port=' + $(this).attr('data-port'),
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -323,7 +323,7 @@
       $('#menu-content').removeClass('open');
       toastr.info('スキャンしています…');
       $.ajax({
-        url: '/api/chromecast/' + stream + '/?cmd=scan',
+        url: '/api/chromecast/' + stream + '?cmd=scan',
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -360,7 +360,7 @@
 
         // 再生系処理 
         $.ajax({
-          url: '/api/chromecast/' + stream + '/?cmd=seek&arg=' + dp.video.currentTime,
+          url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
           dataType: 'json',
           cache: false,
           success: function(data) {
@@ -378,7 +378,7 @@
         if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
           $.ajax({
-            url: '/api/chromecast/' + stream + '/?cmd=restart',
+            url: '/api/chromecast/' + stream + '?cmd=restart',
             dataType: 'json',
             cache: false,
             success: function(data) {
@@ -397,7 +397,7 @@
           if (state == 'File'){
 
             $.ajax({
-              url: '/api/chromecast/' + stream + '/?cmd=seek&arg=' + dp.video.currentTime,
+              url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
               dataType: 'json',
               cache: false,
               success: function(data) {
@@ -407,7 +407,7 @@
           } else {
 
             $.ajax({
-              url: '/api/chromecast/' + stream + '/?cmd=pause',
+              url: '/api/chromecast/' + stream + '?cmd=pause',
               dataType: 'json',
               cache: false,
               success: function(data) {
@@ -428,7 +428,7 @@
           if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
             $.ajax({
-              url: '/api/chromecast/' + stream + '/?cmd=seek&arg=' + dp.video.currentTime,
+              url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
               dataType: 'json',
               cache: false,
               success: function(data) {
@@ -446,7 +446,7 @@
         if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
           $.ajax({
-            url: '/api/chromecast/' + stream + '/?cmd=volume&arg=' + dp.video.volume,
+            url: '/api/chromecast/' + stream + '?cmd=volume&arg=' + dp.video.volume,
             dataType: 'json',
             cache: false,
             success: function(data) {

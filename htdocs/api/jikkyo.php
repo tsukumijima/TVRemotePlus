@@ -209,7 +209,7 @@
 	}
 
 	// コメントの取得
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini['state'] == 'ONAir' and intval($ini['channel']) !== 0 and !isset($_GET['id'])){ //パラメータ確認(jk0もはじく)
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini['state'] == 'ONAir' and intval($ini['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認(jk0もはじく)
 
 		// 実況IDを取得
 		$channel = getJKchannel($ch[$ini['channel']]);

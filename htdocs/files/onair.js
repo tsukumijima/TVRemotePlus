@@ -20,7 +20,7 @@
     // コメント取得
     setInterval((function status(){
       $.ajax({
-        url: '/api/jikkyo/' + stream + '/?res=' + res,
+        url: '/api/jikkyo/' + stream + '?res=' + res,
         dataType: 'json',
         cache: false,
         success: function(data) {

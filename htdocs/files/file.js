@@ -10,27 +10,27 @@
       $('#comment-time').css('width', '62px');
 
       $.ajax({
-        url: '/api/jikkyo/v3/' + stream + '/?id=TVRemotePlus',
+        url: '/api/jikkyo/' + stream + '?id=TVRemotePlus',
         dataType: 'json',
         cache: false,
         success: function(data) {
 
-          if (data["data"] != null && data["data"][0]){ //data["data"] があれば(nullでなければ)
+          if (data['data'] != null && data['data'][0]){ //data['data'] があれば(nullでなければ)
 
             var html = '';
 
-            for (i = 0; i <= data["data"].length-1; i++){
+            for (i = 0; i <= data['data'].length-1; i++){
 
               // 分と秒を計算
-              var videotime = (data["data"][i][0]).toString();
+              var videotime = (data['data'][i][0]).toString();
               ss = Math.floor(videotime % 60);
               mm = Math.floor(videotime / 60);
-              if (ss < 10) ss = "0" + ss;
-              if (mm < 10) mm = "0" + mm;
+              if (ss < 10) ss = '0' + ss;
+              if (mm < 10) mm = '0' + mm;
               var time = mm + ':' + ss;            
 
               html += '<tr class="comment-file"><td class="time" style="width: 62px;" align="center" value="' + videotime+ '">' + time + '</td>'
-                    + '<td class="comment">' + data["data"][i][4].toString() +'</td></tr>';
+                    + '<td class="comment">' + data['data'][i][4].toString() +'</td></tr>';
             }
 
             // コメントを一気にコメント一覧に挿入

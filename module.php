@@ -92,8 +92,9 @@
 		// クエリを除外
 		$url = parse_url($url, PHP_URL_PATH);
 
-		// URLの最初と最後にあるかもしれないスラッシュを削除しておくのがポイント
-		$slash = explode('/', trim($url, '/'));
+		// URLの最初と最後にあるかもしれないスラッシュと
+		// v3/ を削除しておくのがポイント
+		$slash = explode('/', str_replace('v3/', '', trim($url, '/')));
 
 		// 配列の最後の値を取得
 		$stream = end($slash);
