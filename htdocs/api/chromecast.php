@@ -30,7 +30,7 @@
 				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/api/stream';
 				$streamtype = 'video/mp4';
 			} else {
-				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/stream/stream.m3u8';
+				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/stream/stream'.$stream.'.m3u8';
 				$streamtype = 'application/vnd.apple.mpegurl';
 			}
 

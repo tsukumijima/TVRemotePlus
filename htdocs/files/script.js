@@ -69,7 +69,7 @@
                   dp.video.src = 'api/stream?_=' + time();
                   dp.initVideo(dp.video, 'normal');
                 } else {
-                  dp.video.src = 'stream/stream.m3u8';
+                  dp.video.src = 'stream/stream' + stream + '.m3u8';
                   dp.initVideo(dp.video, 'hls');
                 }
                 if (!paused){
@@ -97,7 +97,7 @@
                   dp.video.src = 'api/stream?_=' + time();
                   dp.initVideo(dp.video, 'normal');
                 } else {
-                  dp.video.src = 'stream/stream.m3u8';
+                  dp.video.src = 'stream/stream' + stream + '.m3u8';
                   dp.initVideo(dp.video, 'hls');
                 }
                 if (!paused){

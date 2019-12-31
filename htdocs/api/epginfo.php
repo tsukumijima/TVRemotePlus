@@ -156,9 +156,9 @@
 	}
 
 	// ついでにストリーム状態を判定する
-	if ($ini["state"] == "ONAir" or $ini["state"] == "File"){
+	if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){
 		$standby = file_get_contents($standby_m3u8);
-		$stream = file_get_contents($segment_folder.'stream.m3u8');
+		$stream = file_get_contents($segment_folder.'stream'.$stream.'.m3u8');
 		if ($standby == $stream){
 			$status = 'standby';
 		} else {

@@ -28,11 +28,11 @@
 	}
 
 	// stream.m3u8がない場合
-	if (!file_exists($base_dir.'htdocs/stream/stream.m3u8')){
+	if (!file_exists($base_dir.'htdocs/stream/stream'.$stream.'.m3u8')){
 		if ($silent == 'true'){
-			copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 		} else {
-			copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+			copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 		}
 	}
 
@@ -66,7 +66,7 @@
       url: '/api/stream?_=<?php echo time(); ?>',
       type: 'normal'
 <?php	} else { ?>
-      url: '/stream/stream.m3u8',
+      url: '/stream/stream'.$stream.'.m3u8',
       type: 'hls'
 <?php	} //括弧終了 ?>
     },

@@ -33,12 +33,12 @@
 		if (isset($_POST['state'])) $ini['state'] = $_POST['state'];
 
 		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or 
-			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream.m3u8') > 20)){
+			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream'.$stream.'.m3u8') > 20)){
 
 			// 通常のストリーム開始処理
 
 			// ストリームを終了させる
-			stream_stop();
+			stream_stop($stream);
 
 			// ONAirなら
 			if ($ini['state'] == 'File'){
@@ -98,13 +98,13 @@
 				if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
-					$stream_cmd = stream_file($TSfile_dir.'/'.$ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+					$stream_cmd = stream_file($stream, $TSfile_dir.'/'.$ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 					// 準備中用の動画を流すためにm3u8をコピー
 					if ($silent == 'true'){
-						copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+						copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 					} else {
-						copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+						copy($standby_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 					}
 
 				} else {
@@ -132,13 +132,13 @@
 				}
 
 				// ストリーミング開始
-				list($stream_cmd, $tstask_cmd) = stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+				list($stream_cmd, $tstask_cmd) = stream_start($stream, $ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 				// 準備中用の動画を流すためにm3u8をコピー
 				if ($silent == 'true'){
-					copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+					copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 				} else {
-					copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+					copy($standby_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 				}
 
 			// Offlineなら
@@ -152,9 +152,9 @@
 					
 				// 配信休止中用のプレイリスト
 				if ($silent == 'true'){
-					copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+					copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 				} else {
-					copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+					copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 				}
 
 			}

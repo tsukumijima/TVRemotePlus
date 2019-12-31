@@ -173,7 +173,7 @@
 	}
 
 	// ライブ放送のストリームを開始する関数
-	function stream_start($ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
+	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
 		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
 		
 		// 設定
@@ -320,7 +320,7 @@
 					// その他
 					' -flags +loop+global_header -movflags +faststart -threads auto'.
 					// 出力
-					' stream.m3u8';
+					' stream'.$stream.'.m3u8';
 
 				break;
 
@@ -410,7 +410,7 @@
 					// その他
 					' --avsync forcecfr --max-procfps 90'.
 					// 出力
-					' -o stream.m3u8';
+					' -o stream'.$stream.'.m3u8';
 
 				break;
 		}
@@ -425,7 +425,7 @@
 	}
 
 	// ファイル再生のストリームを開始する関数
-	function stream_file($filepath, $quality, $encoder, $subtitle){
+	function stream_file($stream, $filepath, $quality, $encoder, $subtitle){
 		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time;
 		
 		// 設定
@@ -668,7 +668,7 @@
 	}
 
 	// ストリームを終了する関数
-	function stream_stop(){
+	function stream_stop($stream){
 		global $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $segment_folder, $TSTask_shutdown;
 		
 		// ffmpegを終了する

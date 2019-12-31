@@ -4,7 +4,7 @@
 	require_once ('../require.php');
 	require_once ('../module.php');
   
-  	// ストリーム番号を取得
+	// ストリーム番号を取得
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// iniファイル読み込み
@@ -89,12 +89,14 @@
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
 <?php		if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){ ?>
     
+    stream = '<?php echo $stream; ?>';
     streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';
     streamtype = 'video/mp4';
 
 <?php		} else { ?>
     
-    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream.m3u8';
+    stream = '<?php echo $stream; ?>';
+    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream'.$stream.'.m3u8';
     streamtype = 'application/vnd.apple.mpegurl';
 
 <?php		} //括弧終了 ?>

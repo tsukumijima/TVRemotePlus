@@ -56,15 +56,15 @@
 			if ($silent == 'true') $standby = file_get_contents($standby_silent_m3u8);
 			else $standby = file_get_contents($standby_m3u8);
 			// 比較先のm3u8
-			$stream = file_get_contents($segment_folder.'stream.m3u8');
+			$stream = file_get_contents($segment_folder.'stream'.$stream.'.m3u8');
 			// 比較先のm3u8の更新日時
-			$modified = filemtime($segment_folder.'stream.m3u8');
+			$modified = filemtime($segment_folder.'stream'.$stream.'.m3u8');
 
 			// m3u8が30秒経っても更新されない
 			if ($standby == $stream and time() - $modified > 30){
 				$status = 'failed';
 			// 再生始まったけど更新が止まってしまった
-			} else if ($ini["state"] == "ONAir" and time() - $modified > 20){
+			} else if ($ini['state'] == 'ONAir' and time() - $modified > 20){
 				$status = 'restart';
 			// m3u8が更新されていない
 			} else if ($standby == $stream){
