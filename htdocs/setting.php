@@ -1,9 +1,9 @@
 <?php
 
 	// ヘッダー読み込み
-  require_once ('../header.php');
+	require_once ('../header.php');
   
-  // モジュール読み込み
+	// モジュール読み込み
 	require_once ('../stream.php');
 
 	echo '    <pre id="debug">';
@@ -14,7 +14,10 @@
 		$sid, $sid_T, $sid_S, $sid_CS, // SID
 		$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
-		= initBonChannel($BonDriver_dir);
+        = initBonChannel($BonDriver_dir);
+        
+    // ストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -23,7 +26,7 @@
 	$clock = date("Y/m/d H:i:s");
 
 	// POSTでフォームが送られてきた場合
-	if ($_SERVER["REQUEST_METHOD"] == "POST"){
+	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 		// POSTデータ読み込み
 		// もし存在するなら$iniの連想配列に格納
@@ -121,7 +124,7 @@
 
 				// BonDriverのデフォルトを要求される or 何故かBonDriverが空
 				if ($ini['BonDriver'] == 'default' or empty($ini['BonDriver'])){
-					if (intval($ini['channel']) >= 100 or intval($ini['channel']) == 55){ // チャンネルの値が100より(=BSか)
+					if (intval($ini['channel']) >= 100 or intval($ini['channel']) === 55){ // チャンネルの値が100より上(=BS・CSか・ショップチャンネルは055なので例外指定)
 						$ini['BonDriver'] = $BonDriver_default_S;
 					} else { // 地デジなら
 						$ini['BonDriver'] = $BonDriver_default_T;

@@ -19,9 +19,6 @@
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		= initBonChannel($BonDriver_dir);
 
-	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
-
 	echo '</pre>';
 
 ?>

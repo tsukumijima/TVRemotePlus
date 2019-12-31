@@ -64,9 +64,6 @@
 		exit;
 	}
 
-	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
-
 	// 終了時間を計算する関数
 	function end_calc($start, $duration){
 

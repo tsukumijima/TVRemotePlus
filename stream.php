@@ -21,12 +21,15 @@
 		// ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
 
+		// コマンドラインからのストリーム開始・停止はおまけ機能です
+		// ファイル再生機能は今の所ついていません
+
 		echo "\n";
 		echo ' ---------------------------------------------------'."\n";
 		echo '           TVRemotePlus-Cmdline '.$version."\n";
 		echo ' ---------------------------------------------------'."\n";
 
-		if ($argc < 2){
+		if ($argc < 3){
 			echo ' ---------------------------------------------------'."\n";
 			echo '   Error: Argument is missing or too many.'."\n";
 			echo '   Please Retry... m(__)m'."\n";
@@ -34,16 +37,23 @@
 			exit(1);
 		}
 
+		// ストリーム開始の引数：
+		// stream.bat ONAir (ストリーム番号) (チャンネル番号)
+		// stream.bat ONAir (ストリーム番号) (チャンネル番号) (動画の画質) (エンコーダー) (字幕データ (true ならオン・false ならオフ)) (BonDriver)
+
 		// ストリーム開始の場合
 		if ($argv[1] == 'ONAir'){
 
-			// 引数チェック
-			// State
+			// ストリーム番号
+			$stream = strval($argv[2]);
+
+			// ステータス
 			$ini['state'] = 'ONAir';
+			
 			// チャンネル
-			if (isset($argv[2]) and isset($ch[$argv[2]])){
-				$ini['channel'] = $argv[2];
-			} else if (!isset($ch[$argv[2]])){
+			if (isset($argv[3]) and isset($ch[$argv[3]])){ // チャンネルが存在するかチェック
+				$ini['channel'] = $argv[3];
+			} else if (!isset($ch[$argv[3]])){
 				echo ' ---------------------------------------------------'."\n";
 				echo '   Error: Channel '.$argv[2].' Not found.'."\n";
 				echo '   Please Retry... m(__)m'."\n";
@@ -56,18 +66,24 @@
 				echo ' ---------------------------------------------------'."\n";
 				exit(1);
 			}
+
+			// ↓ は指定されていなかったらデフォルト値を使う
+
 			// 動画の画質
-			if (isset($argv[3])) $ini['quality'] = $argv[3];
+			if (isset($argv[4])) $ini['quality'] = $argv[4];
 			else $ini['quality'] = $quality_default;
-			// エンコード
-			if (isset($argv[4])) $ini['encoder'] = $argv[4];
+
+			// エンコーダー
+			if (isset($argv[5])) $ini['encoder'] = $argv[5];
 			else $ini['encoder'] = $encoder_default;
+
 			// 字幕データ
-			if (isset($argv[5])) $ini['subtitle'] = $argv[5];
+			if (isset($argv[6])) $ini['subtitle'] = $argv[6];
 			else $ini['subtitle'] = $subtitle_default;
+
 			// BonDriver
-			if (!isset($argv[6]) or $argv[4] == 'default'){
-				if ($ini['channel'] >= 100){ // チャンネルの値が100より(=BSか)
+			if (!isset($argv[7]) or $argv[5] == 'default'){
+				if (intval($ini['channel']) >= 100 or intval($ini['channel']) === 55){ // チャンネルの値が100より上(=BS・CSか・ショップチャンネルは055なので例外指定)
 					$ini['BonDriver'] = $BonDriver_default_S;
 				} else { // 地デジなら
 					$ini['BonDriver'] = $BonDriver_default_T;
@@ -76,8 +92,9 @@
 				$ini['BonDriver'] = $argv[3];
 			}
 
-			// ストリーム開始
+			// ストリーム開始表示
 			echo '   Starting stream...'."\n\n";
+			echo '   Stream:   '.$stream."\n";
 			echo '   Channel:   '.$ini['channel']."\n";
 			echo '   sid:       '.$sid[$ini['channel']]."\n";
 			echo '   tsid:      '.$tsid[$ini['channel']]."\n";
@@ -88,6 +105,7 @@
 			echo ' ---------------------------------------------------'."\n";
 			echo "\n";
 
+			// ストリームを開始する
 			stream_start($ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
@@ -107,16 +125,24 @@
 			echo ' ---------------------------------------------------'."\n";
 			exit();
 
+		// ストリーム終了の引数：
+		// stream.bat Offline (ストリーム番号)
+		
 		// ストリーム終了の場合
 		} else if ($argv[1] == 'Offline'){
 
-			// State
+			// ストリーム番号
+			$stream = strval($argv[2]);
+
+			// ステータス
 			$ini['state'] = 'Offline';
 			
+			// ストリーム終了表示
 			echo '   Stopping stream...'."\n";
 			echo ' ---------------------------------------------------'."\n";
 			echo "\n";
 
+			// ストリームを停止する
 			stream_stop();
 
 			// 配信休止中用のプレイリスト
@@ -146,6 +172,7 @@
 		
 	}
 
+	// ライブ放送のストリームを開始する関数
 	function stream_start($ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
 		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
 		
@@ -186,7 +213,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '1080p':
@@ -197,7 +224,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '4:3'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '810p':
@@ -208,7 +235,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '720p':
@@ -219,7 +246,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '540p':
@@ -230,7 +257,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '360p':
@@ -241,7 +268,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '240p':
@@ -252,7 +279,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 44100; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 		}
 
@@ -397,6 +424,7 @@
 		return array($stream_cmd, $tstask_cmd);
 	}
 
+	// ファイル再生のストリームを開始する関数
 	function stream_file($filepath, $quality, $encoder, $subtitle){
 		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time;
 		
@@ -434,7 +462,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '1080p':
@@ -445,7 +473,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '4:3'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '810p':
@@ -456,7 +484,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '720p':
@@ -467,7 +495,7 @@
 				$ab = '192k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '540p':
@@ -478,7 +506,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '360p':
@@ -489,7 +517,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 
 			case '240p':
@@ -500,7 +528,7 @@
 				$ab = '128k'; // 音声のビットレート
 				$sar = '1:1'; // アスペクト比(SAR)
 				$samplerate = 48000; // 音声のサンプルレート
-				$volume = 1.9; // 音量(元の音量の何倍か)
+				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 		}
 
@@ -639,6 +667,7 @@
 		return $stream_cmd;
 	}
 
+	// ストリームを終了する関数
 	function stream_stop(){
 		global $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $segment_folder, $TSTask_shutdown;
 		

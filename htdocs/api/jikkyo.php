@@ -16,7 +16,10 @@
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		= initBonChannel($BonDriver_dir);
 
-	// iniファイル読み込み
+    // ストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
+
+	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 	if (file_exists($commentfile)){
 		$comment_ini = json_decode(file_get_contents($commentfile), true);
@@ -147,66 +150,66 @@
 	function getColor($option){
 
 		if (strpos($option, 'red') !== false){
-			$color = "#E54256";
+			$color = '#E54256';
 		} else if (strpos($option, 'pink') !== false){
-			$color = "#FF8080";
+			$color = '#FF8080';
 		} else if (strpos($option, 'orange') !== false){
-			$color = "#FFC000";
+			$color = '#FFC000';
 		} else if (strpos($option, 'yellow') !== false){
-			$color = "#FFE133";
+			$color = '#FFE133';
 		} else if (strpos($option, 'green') !== false){
-			$color = "#64DD17";
+			$color = '#64DD17';
 		} else if (strpos($option, 'cyan') !== false){
-			$color = "#39CCFF";
+			$color = '#39CCFF';
 		} else if (strpos($option, 'blue') !== false){
-			$color = "#0000FF";
+			$color = '#0000FF';
 		} else if (strpos($option, 'purple') !== false){
-			$color = "#D500F9";
+			$color = '#D500F9';
 		} else if (strpos($option, 'black') !== false){
-			$color = "#000000";
+			$color = '#000000';
 		} else if (strpos($option, 'white2') !== false){
-			$color = "#CCCC99";
+			$color = '#CCCC99';
 		} else if (strpos($option, 'niconicowhite') !== false){
-			$color = "#CCCC99";
+			$color = '#CCCC99';
 		} else if (strpos($option, 'red2') !== false){
-			$color = "#CC0033";
+			$color = '#CC0033';
 		} else if (strpos($option, 'truered') !== false){
-			$color = "#CC0033";
+			$color = '#CC0033';
 		} else if (strpos($option, 'pink2') !== false){
-			$color = "#FF33CC";
+			$color = '#FF33CC';
 		} else if (strpos($option, 'orange2') !== false){
-			$color = "#FF6600";
+			$color = '#FF6600';
 		} else if (strpos($option, 'passionorange') !== false){
-			$color = "#FF6600";
+			$color = '#FF6600';
 		} else if (strpos($option, 'yellow2') !== false){
-			$color = "#999900";
+			$color = '#999900';
 		} else if (strpos($option, 'madyellow') !== false){
-			$color = "#999900";
+			$color = '#999900';
 		} else if (strpos($option, 'green2') !== false){
-			$color = "#00CC66";
+			$color = '#00CC66';
 		} else if (strpos($option, 'elementalgreen') !== false){
-			$color = "#00CC66";
+			$color = '#00CC66';
 		} else if (strpos($option, 'cyan2') !== false){
-			$color = "#00CCCC";
+			$color = '#00CCCC';
 		} else if (strpos($option, 'blue2') !== false){
-			$color = "#3399FF";
+			$color = '#3399FF';
 		} else if (strpos($option, 'marineblue') !== false){
-			$color = "#3399FF";
+			$color = '#3399FF';
 		} else if (strpos($option, 'purple2') !== false){
-			$color = "#6633CC";
+			$color = '#6633CC';
 		} else if (strpos($option, 'nobleviolet') !== false){
-			$color = "#6633CC";
+			$color = '#6633CC';
 		} else if (strpos($option, 'black2') !== false){
-			$color = "#666666";
+			$color = '#666666';
 		} else {
-			$color = "#FFFFFF";
+			$color = '#FFFFFF';
 		}
 
 		return $color;
 	}
 
 	// コメントの取得
-	if ($_SERVER["REQUEST_METHOD"] == "GET" and $ini['state'] == 'ONAir' and intval($ini['channel']) !== 0 and !isset($_GET['id'])){ //パラメータ確認(jk0もはじく)
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini['state'] == 'ONAir' and intval($ini['channel']) !== 0 and !isset($_GET['id'])){ //パラメータ確認(jk0もはじく)
 
 		// 実況IDを取得
 		$channel = getJKchannel($ch[$ini['channel']]);
@@ -247,7 +250,7 @@
 				$jkthread_xml = simplexml_load_file($jkthread_res_URL);
 
 				// APIを解析
-				list($jkthread_res, $jkthread_res_info) = call_user_func("getJKthread", $jkthread_xml);
+				list($jkthread_res, $jkthread_res_info) = getJKthread($jkthread_xml);
 
 				if (isset($jkthread_res_info['last_res'])){ //last_resがあれば代入
 					$last_res = $jkthread_res_info['last_res'];
@@ -269,7 +272,7 @@
 			$jkthread_xml = simplexml_load_file($jkthread_URL);
 
 			// APIを解析
-			list($jkthread, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);
+			list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
 
 			// jkthreadから取得したres
 			$res = intval($jkthread_info['last_res']);
@@ -279,18 +282,20 @@
 			// かつ受け取ったresがAPIのresと同じだったら(新しいコメがなかったら)
 			if (isset($_GET['res']) and !$_GET['res'] == '' and $res != $last_res){
 
-				// $jkthread をDPlayer用 danmaku 形式に変換する
+				// jkthread をDPlayer用 danmaku 形式に変換する
 				for ($i = 0; $i < count($jkthread); $i++) { 
 
-					// last_commentとコメント内容が同じ&フラグ立ってない場合
-					if (isset($comment_ini['last_comment'])){ // 空になっちゃってる場合があるので分岐
-						if (($jkthread[$i]['content'] == $comment_ini['last_comment']) and ($comment_ini['last_comment_read'] == 'noread')){
+					// 自分のコメントを表示しない
+					// commentとコメント内容が同じ & フラグが立っていない場合
+					if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
+						// 自分のコメントだったら
+						if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
 							$jkthread[$i]['content'] = ''; // 空にする
-							$comment_ini['last_comment_read'] = 'readed'; //フラグをtrueに
+							$comment_ini['comment_readed'] = true; //フラグをtrueに
 						}
-					} else { // 空だったら再設定しておく
-						$comment_ini['last_comment'] = ' ';
-						$comment_ini['last_comment_read'] = 'noread';
+					} else { // iniが空だったら再設定しておく
+						$comment_ini['comment'] = ' ';
+						$comment_ini['comment_readed'] = false;
 					}
 
 					// iniファイル書き込み
@@ -375,17 +380,17 @@
 		}
 
 	// コメントの送信
-	} else if ($_SERVER["REQUEST_METHOD"] == "POST" and $ini['state'] == 'ONAir'){ //POSTでアクセスがあった&生放送なら
+	} else if ($_SERVER['REQUEST_METHOD'] == 'POST' and $ini['state'] == 'ONAir'){ //POSTでアクセスがあった&生放送なら
 
 		// コメント(JSON形式)をPOSTで受信
 		$comment = json_decode(file_get_contents('php://input'), true);
 
 		// コメントが前のコメントと同じでない & ニコニコのログイン情報がセットされてるなら
-		if ($comment['text'] !== $comment_ini['last_comment'] and !empty($nicologin_mail) and !empty($nicologin_password)){
+		if ($comment['text'] !== $comment_ini['comment'] and !empty($nicologin_mail) and !empty($nicologin_password)){
 
-			// last_commentをアップデート
-			$comment_ini['last_comment'] = $comment['text'];
-			$comment_ini['last_comment_read'] = 'noread'; //フラグをfalseに
+			// commentをアップデート
+			$comment_ini['comment'] = $comment['text'];
+			$comment_ini['comment_readed'] = false; //フラグをfalseに
 
 			// iniファイル書き込み
 			file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
@@ -423,7 +428,7 @@
 				$jkthread_xml = simplexml_load_file($jkthread_URL);
 
 				// APIを解析
-				list($jkthread, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);
+				list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
 
 				// vpos = 現在の時間 - 放送開始時間
 				$vpos = time() - $jkthread_info['thread'];
@@ -475,7 +480,7 @@
 
 				// 受信
 				$out = socket_read($socket, 2048, PHP_BINARY_READ);
-				//echo mb_convert_encoding(socket_strerror(socket_last_error($socket)), 'UTF-8', "sjis-win"); // エラー把握
+				//echo mb_convert_encoding(socket_strerror(socket_last_error($socket)), 'UTF-8', 'sjis-win'); // エラー把握
 
 				// Socketを閉じる
 				socket_close($socket);
@@ -500,7 +505,7 @@
 			'api' => 'jikkyo',
 			'type' => 'send',
 			'ikioi' => null,
-			'ch' => $ini["channel"],
+			'ch' => $ini['channel'],
 			'color' => $color,
 			'text' => $comment['text'],
 			'code' => $code,
@@ -509,7 +514,7 @@
 		);
 
 	// 過去ログの取得
-	} else if ($_SERVER["REQUEST_METHOD"] == "GET" and $ini['state'] == 'File'){ //ファイル再生なら
+	} else if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini['state'] == 'File'){ //ファイル再生なら
 
 		// タイムスタンプ類
 		$start_timestamp = $ini['start_timestamp'];
@@ -573,7 +578,7 @@
 					$jkthread_xml = @simplexml_load_file($jkthread_URL); // 何故かたまにエラー吐くので抑制
 
 					// APIを解析
-					list($jkthread_new, $jkthread_info) = call_user_func("getJKthread", $jkthread_xml);
+					list($jkthread_new, $jkthread_info) = getJKthread($jkthread_xml);
 
 					// コメントがあれば
 					if (!isset($jkthread_new[0]['date'])) break;
@@ -671,7 +676,7 @@
 			'data' => $danmaku,
 		);
 
-	} else if ($_SERVER["REQUEST_METHOD"] == "POST"){ // オフラインかファイル再生で投稿できないときに蹴る
+	} else if ($_SERVER['REQUEST_METHOD'] == 'POST'){ // オフラインかファイル再生で投稿できないときに蹴る
 
 		// 出力JSON
 		$json = array(

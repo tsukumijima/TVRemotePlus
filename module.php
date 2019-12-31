@@ -56,7 +56,7 @@
 			// .htaccess 書き換え
 			$htaccess_conf = file_get_contents($htaccess);
 
-			// 文言がない場合は追加する
+			// 記述がない場合は追加する
 			if (!preg_match("/# Basic認証をかける.*/", $htaccess_conf)){
 
 				// .htpasswd の絶対パスを修正
@@ -75,7 +75,7 @@
 			// .htpasswd 削除
 			if (file_exists($htpasswd)) unlink($htpasswd);
 
-			// .htaccess 文言削除
+			// .htaccess の記述を削除
 			$htaccess_conf = file_get_contents($htaccess);
 			if (preg_match("/# Basic認証をかける.*/", $htaccess_conf)){
 				$htaccess_conf = preg_replace("/# Basic認証をかける.*/s", '', $htaccess_conf);
@@ -84,6 +84,24 @@
 			}
 
 		}
+	}
+
+	// URLからストリーム番号を取得する関数
+	function getStreamNumber($url){
+
+		// クエリを除外
+		$url = parse_url($url, PHP_URL_PATH);
+
+		// URLの最初と最後にあるかもしれないスラッシュを削除しておくのがポイント
+		$slash = explode('/', trim($url, '/'));
+
+		// 配列の最後の値を取得
+		$stream = end($slash);
+
+		// URLにストリーム番号が入っていなかった場合はストリーム1とする
+		if (empty($stream)) $stream = 1;
+
+		return strval($stream);
 	}
 
 	// ニコニコ実況IDをチャンネル名から取得する関数

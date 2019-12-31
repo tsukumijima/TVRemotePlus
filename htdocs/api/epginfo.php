@@ -12,12 +12,15 @@
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		= initBonChannel($BonDriver_dir);
 
+    // ストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
+
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
 	// 番組情報を取得する関数
-	function getEpgguide($ch_, $sid, $onid, $tsid){
-		global $ini, $ch, $EDCB_http_url, $jkchannels;
+	function getEpgInfo($ch, $jkchannels, $chnum, $sid, $onid, $tsid){
+		global  $EDCB_http_url;
 		
 		// 番組表API読み込み
 		$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
@@ -104,7 +107,7 @@
 		$next_endtime = date("H:i", $next_endtimestamp);
 
 		// 実況IDを取得する
-		$jkch = getJKchannel($ch[$ch_]);
+		$jkch = getJKchannel($ch[$chnum]);
 		
 		if (!empty($jkchannels)){
 			// 実況勢いを先に取得しておいたデータから見つけて代入
@@ -128,7 +131,7 @@
 		}
 
 		return array(
-			'ch' => intval($ch_),
+			'ch' => intval($chnum),
 			'tsid' => intval($tsid),
 			'channel' => $channel,
 			'ikioi'=> $ikioi,
@@ -174,7 +177,7 @@
 	if ($ini["state"] == "ONAir"){
 
 		// 番組情報を取得
-		$epginfo['play'] = getEpgguide($ini['channel'], $sid[$ini['channel']], $onid[$ini['channel']], $tsid[$ini['channel']]);
+		$epginfo['play'] = getEpgInfo($ch, $jkchannels, $ini['channel'], $sid[$ini['channel']], $onid[$ini['channel']], $tsid[$ini['channel']]);
 
 		// チャンネル名が取得出来なかったら代入
 		if ($epginfo['play']['channel'] == 'チャンネル名を取得できませんでした'){
@@ -204,7 +207,7 @@
 
 	foreach ($sid as $key => $value) {
 		// 番組情報を取得
-		$epginfo['onair'][strval($key)] = getEpgguide($key, $value, $onid[strval($key)], $tsid[strval($key)]);
+		$epginfo['onair'][strval($key)] = getEpgInfo($ch, $jkchannels, $key, $value, $onid[strval($key)], $tsid[strval($key)]);
 	}
 
 	if (!isset($epginfo['onair'])) $epginfo['onair'] = array();

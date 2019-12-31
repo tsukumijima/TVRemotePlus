@@ -8,6 +8,9 @@
 	$castfile = $base_dir.'cast/cast.json';
 	$scanfile = $base_dir.'cast/scan.json';
 
+    // ストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
+
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 	$cast = json_decode(file_get_contents($castfile), true);

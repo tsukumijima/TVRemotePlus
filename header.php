@@ -3,6 +3,9 @@
 	// モジュール読み込み
 	require_once ('../require.php');
 	require_once ('../module.php');
+  
+  	// ストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// iniファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
