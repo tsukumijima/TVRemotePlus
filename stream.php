@@ -110,9 +110,9 @@
 
 			// 準備中用の動画を流すためにm3u8をコピー
 			if ($silent == 'true'){
-				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				copy($standby_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 			} else {
-				copy($standby_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				copy($standby_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 			}
 
 			// ファイル書き込み
@@ -147,9 +147,9 @@
 
 			// 配信休止中用のプレイリスト
 			if ($silent == 'true'){
-				copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 			} else {
-				copy($offline_m3u8, $base_dir.'htdocs/stream/stream.m3u8');
+				copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 			}
 
 			// ファイル書き込み
@@ -286,7 +286,7 @@
 		// 内部処理
 
 		// 一旦すべてタスクを切る
-		stream_stop();
+		stream_stop($stream);
 
 		// TSTask.exeを起動する
 		$tstask_cmd = 'start /min '.$tstask_path.' /min /xclient- /udp /port '.$udp_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
@@ -309,7 +309,7 @@
 					' -hls_list_size '.$hlslive_list.
 					' -hls_allow_cache 0'.
 					' -hls_flags delete_segments'.
-					' -hls_segment_filename stream-'.date('mdHi').'_%05d.ts'.
+					' -hls_segment_filename stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
@@ -338,7 +338,7 @@
 					' -m hls_list_size:'.$hlslive_list.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
-					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
@@ -350,7 +350,7 @@
 					// その他
 					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
 					// 出力
-					' -o stream.m3u8';
+					' -o stream'.$stream.'.m3u8';
 		
 				break;
 
@@ -368,7 +368,7 @@
 					' -m hls_list_size:'.$hlslive_list.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
-					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
@@ -380,7 +380,7 @@
 					// その他
 					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
 					// 出力
-					' -o stream.m3u8';
+					' -o stream'.$stream.'.m3u8';
 
 				break;
 
@@ -398,7 +398,7 @@
 					' -m hls_list_size:'.$hlslive_list.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
-					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main'.
@@ -535,7 +535,7 @@
 		// 内部処理
 
 		// 一旦すべてタスクを切る
-		stream_stop();
+		stream_stop($stream);
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
@@ -554,7 +554,7 @@
 					' -hls_list_size 0'.
 					' -hls_allow_cache 0'.
 					' -hls_flags delete_segments'.
-					' -hls_segment_filename stream-'.date('mdHi').'_%05d.ts'.
+					' -hls_segment_filename stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
@@ -565,7 +565,7 @@
 					// その他
 					' -flags +loop+global_header -movflags +faststart -threads auto'.
 					// 出力
-					' stream.m3u8';
+					' stream'.$stream.'.m3u8';
 
 				break;
 
@@ -583,7 +583,7 @@
 					' -m hls_list_size:0'.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
-					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
@@ -595,7 +595,7 @@
 					// その他
 					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
 					// 出力
-					' -o stream.m3u8';
+					' -o stream'.$stream.'.m3u8';
 		
 				break;
 
@@ -613,7 +613,7 @@
 					' -m hls_list_size:0'.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
-					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
@@ -625,7 +625,7 @@
 					// その他
 					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
 					// 出力
-					' -o stream.m3u8';
+					' -o stream'.$stream.'.m3u8';
 
 				break;
 
@@ -643,7 +643,7 @@
 					' -m hls_list_size:0'.
 					' -m hls_allow_cache:0'.
 					' -m hls_flags:delete_segments'.
-					' -m hls_segment_filename:stream-'.date('mdHi').'_%05d.ts'.
+					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main'.
@@ -655,7 +655,7 @@
 					// その他
 					' --avsync forcecfr --max-procfps 90'.
 					// 出力
-					' -o stream.m3u8';
+					' -o stream'.$stream.'.m3u8';
 
 				break;
 		}

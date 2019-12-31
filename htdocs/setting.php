@@ -15,18 +15,18 @@
 		$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
         = initBonChannel($BonDriver_dir);
-        
-    // ストリーム番号を取得
-	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
-
-	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
 	
 	// 時計
 	$clock = date("Y/m/d H:i:s");
 
 	// POSTでフォームが送られてきた場合
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+		// ストリーム番号を取得
+		$stream = '1';
+
+		// 設定ファイル読み込み
+		$ini = json_decode(file_get_contents($inifile), true);
 
 		// POSTデータ読み込み
 		// もし存在するなら$iniの連想配列に格納
@@ -145,7 +145,7 @@
 			} else if ($ini['state'] == 'Offline'){
 
 				// 念のためもう一回ストリーミング終了関数を起動
-				stream_stop();
+				stream_stop($stream);
 					
 				// 強制でチャンネルを0に設定する
 				$ini['channel'] = '0';

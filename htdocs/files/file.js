@@ -10,7 +10,7 @@
       $('#comment-time').css('width', '62px');
 
       $.ajax({
-        url: '/api/jikkyo/v3/?id=TVRemotePlus',
+        url: '/api/jikkyo/v3/' + stream + '/?id=TVRemotePlus',
         dataType: 'json',
         cache: false,
         success: function(data) {

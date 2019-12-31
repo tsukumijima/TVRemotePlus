@@ -66,7 +66,7 @@
       url: '/api/stream?_=<?php echo time(); ?>',
       type: 'normal'
 <?php	} else { ?>
-      url: '/stream/stream'.$stream.'.m3u8',
+      url: '/stream/stream<?php echo $stream; ?>.m3u8',
       type: 'hls'
 <?php	} //括弧終了 ?>
     },

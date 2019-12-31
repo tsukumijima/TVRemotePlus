@@ -98,8 +98,8 @@
 		// 配列の最後の値を取得
 		$stream = end($slash);
 
-		// URLにストリーム番号が入っていなかった場合はストリーム1とする
-		if (empty($stream)) $stream = 1;
+		// URLに正しいストリーム番号が入っていなかった場合はストリーム1とする
+		if (empty($stream) or !is_numeric($stream)) $stream = 1;
 
 		return strval($stream);
 	}

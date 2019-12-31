@@ -28,7 +28,7 @@
 
     setInterval((function status(){
       $.ajax({
-        url: '/api/status',
+        url: '/api/status/' + stream + '/',
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -131,7 +131,7 @@
 
     setInterval((function status(){
       $.ajax({
-        url: '/api/epginfo',
+        url: '/api/epginfo/' + stream + '/',
         dataType: 'json',
         cache: false,
         success: function(data) {

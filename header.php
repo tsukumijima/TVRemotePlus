@@ -96,7 +96,7 @@
 <?php		} else { ?>
     
     stream = '<?php echo $stream; ?>';
-    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream'.$stream.'.m3u8';
+    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream<?php echo $stream; ?>.m3u8';
     streamtype = 'application/vnd.apple.mpegurl';
 
 <?php		} //括弧終了 ?>
