@@ -535,7 +535,7 @@
                 <p>
                   この設定をオンにすると、ファイル再生時に字幕を表示出来るようになります<br>
                   ファイル再生時は、基本的にライブ再生時のようなエンコードの問題は起こりません<br>
-                  ただ、ごく稀に字幕付きでエンコードした事で途中でエンコードが失敗する事もあったため、念の為設定出来るようにしています<br>
+                  ただ、ごく稀に字幕付きでエンコードした事で途中でエンコードが失敗する場合があるため、念のため設定できるようにしています<br>
                   字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオンにして、問題が起きたときのみオフにすることをおすすめします<br>
                 </p>
               </div>
@@ -555,7 +555,7 @@
                 <span>デフォルトの BonDriver (地デジ用)</span>
                 <p>
                   デフォルトで利用する BonDriver (地デジ用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります、
+                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
                   導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
                   Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
@@ -578,7 +578,7 @@
                 <span>デフォルトの BonDriver (BS・CS用)</span>
                 <p>
                   デフォルトで利用する BonDriver (BS・CS用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります、
+                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
                   導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
                   BonDriver_Spinel よりも BonDriver_Proxy の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
@@ -613,8 +613,7 @@
                 <p>
                   番組表取得などで利用します<br>
                   この機能を利用する場合、予め <a href="https://github.com/EMWUI/EDCB_Material_WebUI" target="_blank">EDCB Material WebUI</a> を導入しておいてください<br>
-                  TVRock 等を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）
-                  を代わりに設定することで番組情報が表示できるようになります<br>
+                  TVRock 等を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
               <input class="text-box" name="EDCB_http_url" type="url" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/api/" />
@@ -627,7 +626,7 @@
                   リバースプロキシからのアクセス時のみ利用されます<br>
                   リバースプロキシからのアクセスをしない場合は空のままで OK です<br>
                   また、リバースプロキシから Twitter 投稿機能を利用する場合は、
-                  <a href="https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Twitter_Develop.md#%E3%82%A2%E3%83%97%E3%83%AA%E4%BD%9C%E6%88%90%E7%94%BB%E9%9D%A2%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E4%BE%8B" target="_blank">こちら</a> を参考にここで指定した URL を Twitter 開発者アカウントの Callback URLs に追加しておいてください<br>
+                  <a href="https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Twitter_Develop.md#%E3%82%A2%E3%83%97%E3%83%AA%E4%BD%9C%E6%88%90%E7%94%BB%E9%9D%A2%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E4%BE%8B" target="_blank">こちら</a> を参考に Twitter API アプリ作成フォームの Callback URLs に (ここで指定したURL)/tweet/callback.php と追加しておいてください<br>
                 </p>
               </div>
               <input class="text-box" name="reverse_proxy_url" type="url" value="<?php echo $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
@@ -656,10 +655,10 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>配信休止中・配信準備中時の動画の音楽を消す</span>
+                <span>配信休止中・配信準備中時の動画の BGM を消す</span>
                 <p>
-                  消す場合はオン、消さない(流す)場合はオフです<br>
-                  毎回音楽が流れて鬱陶しい場合はオンにしてください<br>
+                  消す場合はオン、消さない (流す) 場合はオフです<br>
+                  毎回 BGM が流れて鬱陶しい場合はオンにしてください<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -675,19 +674,19 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>再生履歴を何件まで保持するか</span>
+                <span>再生履歴を保持する件数</span>
                 <p>
                   新規インストール時のデフォルトは10件です<br>
                 </p>
               </div>
-              <input class="text-box" name="history_keep" type="number" min="1" max="100"  value="<?php echo $history_keep; ?>" required />
+              <input class="text-box" name="history_keep" type="number" min="1" max="100" placeholder="10" value="<?php echo $history_keep; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>TVRemotePlus のアップデートを確認する</span>
                 <p>
-                鬱陶しい場合・TVRemotePlusの読み込みが遅い場合はオフにしてください<br>
+                鬱陶しい場合・TVRemotePlus の読み込みが遅い場合はオフにしてください<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -734,20 +733,21 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>ハッシュタグ付きツイートを連投した際に何秒以内ならハッシュタグを消すか</span>
+                <span>ハッシュタグ付きツイートを連投したと判断しハッシュタグを外すまでの秒数</span>
                 <p>
-                  アカウントのシャドウバン回避のためのの設定です<br>
-                  Twitter の規制が厳しいため、60秒以内(？)にハッシュタグつけて連投するとシャドウバン(Search Ban・検索に引っかからなくなる)されてしまうみたいです<br>
-                  シャドウバンを避けるため、60(秒)より下には設定しないことをお勧めします<br>
-                  鬱陶しいのであれば0(秒)に設定すればオフになります<br>
+                  アカウントのシャドウバンを回避するための設定です<br>
+                  Twitter の規制が厳しいため、ハッシュタグをつけたツイートを60秒以下（？）の間隔で連投すると、シャドウバン (Search Ban・検索に引っかからなくなる) されてしまうことがあります<br>
+                  例えば 60 (秒) に設定した場合、ハッシュタグ付きツイートを投稿してから60秒以内に、再びハッシュタグ付きツイートを投稿しようとした場合にツイートからハッシュタグを外します<br>
+                  シャドウバンを避けるため、60 (秒) より下には設定しないことをお勧めします<br>
+                  連投と判定されたツイートは 「#」の右にスペースを入れハッシュタグとして機能しないようにしてから投稿されますが、鬱陶しい場合は 0 (秒) に設定すればオフになります<br>
                 </p>
               </div>
-              <input class="text-box" name="tweet_time" type="number" min="0" max="120"  value="<?php echo $tweet_time; ?>" required />
+              <input class="text-box" name="tweet_time" type="number" min="0" max="120" placeholder="60" value="<?php echo $tweet_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>画像付きツイートを投稿する際に一度アップロードする画像の保存フォルダ</span>
+                <span>画像付きツイートを投稿する時に一度アップロードする画像の保存フォルダ</span>
                 <p>
                 新規インストール時のデフォルトの upload/ に設定すると、(TVRemotePlusをインストールしたフォルダ)/htdocs/tweet/upload/ に自動で保存されます<br>
                 ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、適宜録画用 HDD 内のフォルダを指定しておくのも良いと思います<br>
@@ -758,10 +758,10 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>画像付きツイートを投稿した際に一度アップロードした画像を削除する</span>
+                <span>画像付きツイートを投稿する時に一度アップロードした画像を削除する</span>
                 <p>
                   削除する場合はオン、削除しない場合はオフです<br>
-                  アップロードした画像を削除しない場合、画像は上で設定したフォルダに保存されます<br>
+                  アップロードした画像を削除しない場合、画像は上の項目で設定したフォルダに保存されます<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -847,10 +847,10 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>ストリーム開始設定後の画面を表示せずに再生画面へリダイレクトする</span>
+                <span>ストリーム開始後に再生画面へリダイレクトする</span>
                 <p>
-                  リダイレクトする場合はオン、リダイレクトしない場合はオフです<br>
-                  ストリーム開始が失敗する時などにオフに設定してデバッグするための機能です、基本的にオンで良いと思います<br>
+                  リダイレクトする場合はオン、リダイレクトしない場合はオフですが、基本的にオンで良いと思います<br>
+                  ストリーム開始に失敗する時などにオフに設定して設定完了ページを表示し、デバッグできるようにするための機能です<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -866,58 +866,9 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>UDP送信時の開始ポート番号</span>
+                <span>ストリーム終了時に TSTask を強制終了する</span>
                 <p>
-                  基本的に変更する必要はありません<br>
-                  エンコーダーがすぐ落ちてしまう場合、UDP送信ポートが他のソフトとバッティングしている可能性があります<br>
-                  その場合は、UDP送信ポートを空いているポートに変更してください<br>
-                </p>
-              </div>
-              <input class="text-box" name="udp_port" type="number" min="1" max="40000"  value="<?php echo $udp_port; ?>" required />
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>HLS セグメントあたりの秒数 (ライブ再生時)</span>
-                <p>
-                  基本は変える必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
-                  秒数を 5(秒) や 10(秒) などに伸ばすことで、安定して再生できる場合があります<br>
-                  新規インストール時のデフォルトは 1(秒) です<br>
-                </p>
-              </div>
-              <input class="text-box" name="hlslive_time" type="number" min="1" max="60"  value="<?php echo $hlslive_time; ?>" required />
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>HLS セグメントあたりの秒数 (ファイル再生時)</span>
-                <p>
-                  基本は変える必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
-                  秒数を 10(秒) や 15(秒) などに伸ばすことで、安定して再生できる場合があります<br>
-                  新規インストール時のデフォルトは 5(秒) です<br>
-                </p>
-              </div>
-              <input class="text-box" name="hlsfile_time" type="number" min="1" max="60"  value="<?php echo $hlsfile_time; ?>" required />
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>ライブ再生時に HLS プレイリストに載せるセグメントの個数</span>
-                <p>
-                  基本は変える必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
-                  秒数を 5(個) や 10(個) などに設定することで、安定して再生できる場合があります<br>
-                  ファイル再生時は全てのセグメントをプレイリストに載せています<br>
-                  新規インストール時のデフォルトは 4(個) です<br>
-                </p>
-              </div>
-              <input class="text-box" name="hlslive_list" type="number" min="1" max="60"  value="<?php echo $hlslive_list; ?>" required />
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>TSTask を強制終了させる</span>
-                <p>
-                  一部の環境にて TSTask がうまく終了しない場合のみオンにしてください<br>
+                  TSTask がうまく終了しない・ゾンビプロセス化する場合のみオンにしてください<br>
                   強制終了させると TSTask・TSTaskCentre の動作がおかしくなる場合があるので、できるだけオフにしておく事をおすすめします<br>
                 </p>
               </div>
@@ -930,6 +881,55 @@
 <?php	} // 括弧終了 ?>
                 <label for="TSTask_shutdown" class="toggle-label"></label>
               </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>UDP送信時の開始ポート番号</span>
+                <p>
+                  通常は変更する必要はありません<br>
+                  エンコーダーがすぐ落ちてしまう場合、UDP送信ポートが他のソフトとバッティングしている可能性があります<br>
+                  その場合は、UDP送信ポートを空いているポートに変更してください<br>
+                </p>
+              </div>
+              <input class="text-box" name="udp_port" type="number" min="1" max="40000" placeholder="8201" value="<?php echo $udp_port; ?>" required />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>HLS セグメントあたりの秒数 (ライブ再生時)</span>
+                <p>
+                  通常は変更する必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
+                  秒数を 5 (秒) や 10 (秒) などに伸ばすことで、安定して再生できる場合があります<br>
+                  新規インストール時のデフォルトは 1 (秒) です<br>
+                </p>
+              </div>
+              <input class="text-box" name="hlslive_time" type="number" min="1" max="60" placeholder="1" value="<?php echo $hlslive_time; ?>" required />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>HLS セグメントあたりの秒数 (ファイル再生時)</span>
+                <p>
+                  通常は変更する必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
+                  秒数を 10 (秒) や 15 (秒) などに伸ばすことで、安定して再生できる場合があります<br>
+                  新規インストール時のデフォルトは 5 (秒) です<br>
+                </p>
+              </div>
+              <input class="text-box" name="hlsfile_time" type="number" min="1" max="60" placeholder="5" value="<?php echo $hlsfile_time; ?>" required />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>ライブ再生時に HLS プレイリストに載せるセグメントの個数</span>
+                <p>
+                  通常は変更する必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
+                  秒数を 5 (個) や 10 (個) などに設定することで、安定して再生できる場合があります<br>
+                  ファイル再生時は全てのセグメントをプレイリストに載せています<br>
+                  新規インストール時のデフォルトは 4 (個) です<br>
+                </p>
+              </div>
+              <input class="text-box" name="hlslive_list" type="number" min="1" max="60" placeholder="4" value="<?php echo $hlslive_list; ?>" required />
             </div>
 
           </form>
