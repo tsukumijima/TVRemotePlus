@@ -23,8 +23,8 @@
 	basicAuth($basicauth, $basicauth_user, $basicauth_password);
 
 	// ONAirのみ
-	if ($ini['state'] == 'ONAir'){
-		$channel = $ch[strval($ini['channel'])];
+	if ($ini[$stream]['state'] == 'ONAir'){
+		$channel = $ch[strval($ini[$stream]['channel'])];
 	}
 
 	// stream.m3u8がない場合
@@ -54,7 +54,7 @@
     volume: 1.0,
     autoplay: true,
     screenshot: true,
-<?php	if ($ini['state'] !== 'File'){ ?>
+<?php	if ($ini[$stream]['state'] !== 'File'){ ?>
     live: true,
 <?php	} //括弧終了 ?>
     loop: true,
@@ -62,7 +62,7 @@
     theme: '#007cff',
     // 読み込むm3u8を指定する
     video: {
-<?php	if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){ ?>
+<?php	if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){ ?>
       url: '/api/stream?_=<?php echo time(); ?>',
       type: 'normal'
 <?php	} else { ?>
@@ -89,7 +89,7 @@
     dp.subtitle.toggle();
   }, false);
 
-<?php	if ($ini['state'] == 'File') { ?>
+<?php	if ($ini[$stream]['state'] == 'File') { ?>
   dp.seek(1);
 <?php	} //括弧終了 ?>
 
@@ -158,9 +158,9 @@
     <div id="description">
       <div id="epg-box">
         <div id="epg">
-<?php	if ($ini['state'] == 'File') { ?>
-          <div id="epg-title"><?php echo $ini['filetitle']; ?></div>
-<?php	} else if ($ini['state'] == 'Offline') { ?>
+<?php	if ($ini[$stream]['state'] == 'File') { ?>
+          <div id="epg-title"><?php echo $ini[$stream]['filetitle']; ?></div>
+<?php	} else if ($ini[$stream]['state'] == 'Offline') { ?>
           <div id="epg-title">配信休止中…</div>
 <?php	} else { ?>
           <div id="epg-title">取得中…</div>
@@ -171,52 +171,52 @@
               <i class="fas fa-redo-alt"></i>
             </a>
           </div>
-<?php	if ($ini['state'] == "ONAir") { ?>
+<?php	if ($ini[$stream]['state'] == 'ONAir') { ?>
           <div id="epg-next">
             Next >>> <span id="epg-next-title">取得中…</span> <span id="epg-next-starttime"></span><span id="epg-next-to"></span><span id="epg-next-endtime"></span>
           </div>
 <?php	} //括弧終了 ?>
-<?php	if ($ini['state'] == "File") { ?>
-          <div id="epg-info"><?php echo $ini['fileinfo']; ?></div>
+<?php	if ($ini[$stream]['state'] == 'File') { ?>
+          <div id="epg-info"><?php echo $ini[$stream]['fileinfo']; ?></div>
 <?php	} else { ?>
           <div id="epg-info"></div>
 <?php	} //括弧終了 ?>
         </div>
 
         <div id="epg-subinfo">
-<?php	if ($ini['state'] == 'ONAir'){ ?>
-          <span id="state" style="color: #007cff;" value="<?php echo $ini['state']; ?>">● ON Air</span>
+<?php	if ($ini[$stream]['state'] == 'ONAir'){ ?>
+          <span id="state" style="color: #007cff;" value="<?php echo $ini[$stream]['state']; ?>">● ON Air</span>
           <span id="status"></span>
           <div id="epg-chinfo"> 
-<?php		if ($ini['channel'] < 55){ ?>
-            <span id="epg-channel">Ch: <?php echo sprintf('%02d', $ini['channel']).' '.$channel; ?></span>
+<?php		if ($ini[$stream]['channel'] < 55){ ?>
+            <span id="epg-channel">Ch: <?php echo sprintf('%02d', $ini[$stream]['channel']).' '.$channel; ?></span>
 <?php		} else { //括弧終了 ?>
-            <span id="epg-channel">Ch: <?php echo sprintf('%03d', $ini['channel']).' '.$channel; ?></span>
+            <span id="epg-channel">Ch: <?php echo sprintf('%03d', $ini[$stream]['channel']).' '.$channel; ?></span>
 <?php		} //括弧終了 ?>
             <span id="epg-time">
               <span id="epg-starttime"></span><span id="epg-to"></span><span id="epg-endtime"></span>
             </span>
           </div>
-<?php	} else if ($ini['state'] == "Offline") { ?>
-          <span id="state" style="color: gray;" value="<?php echo $ini['state']; ?>">● Offline</span>
+<?php	} else if ($ini[$stream]['state'] == 'File') { ?>
+          <span id="state" style="color: #4ECDC4;" value="<?php echo $ini[$stream]['state']; ?>">● File</span>
+          <span id="status"></span>
+          <div id="epg-chinfo"> 
+            <span id="epg-channel"><?php echo $ini[$stream]['filechannel']; ?></span>
+            <span id="epg-time"><?php echo $ini[$stream]['filetime']; ?></span>
+          </div>
+<?php	} else { ?>
+          <span id="state" style="color: gray;" value="<?php echo $ini[$stream]['state']; ?>">● Offline</span>
           <span id="status"></span>
           <div id="epg-chinfo">
             <span id="epg-time">
               <span id="epg-starttime"></span><span id="epg-to"></span><span id="epg-endtime"></span>
             </span>
           </div>
-<?php	} else if ($ini['state'] == "File") { ?>
-          <span id="state" style="color: #4ECDC4;" value="<?php echo $ini['state']; ?>">● File</span>
-          <span id="status"></span>
-          <div id="epg-chinfo"> 
-            <span id="epg-channel"><?php echo $ini['filechannel']; ?></span>
-            <span id="epg-time"><?php echo $ini['filetime']; ?></span>
-          </div>
 <?php	} //括弧終了 ?>
 
           <div id="watch">
             <span id="watching">1人が視聴中</span>
-<?php	if ($ini['state'] == 'ONAir'){ ?>
+<?php	if ($ini[$stream]['state'] == 'ONAir'){ ?>
             <span id="ikioi">実況勢い: -</span>
 <?php	} //括弧終了 ?>
           </div>

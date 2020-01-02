@@ -68,9 +68,9 @@
 		echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
 	} else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
 		echo '  <script type="text/javascript" src="/files/setting.js"></script>'."\n";
-	} else if ($ini['state'] == 'ONAir'){
+	} else if ($ini[$stream]['state'] == 'ONAir'){
 		echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
-	} else if ($ini['state'] == 'File'){
+	} else if ($ini[$stream]['state'] == 'File'){
 		echo '  <script type="text/javascript" src="/files/file.js"></script>'."\n";
 	}
 ?>
@@ -87,7 +87,7 @@
         }
     });
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
-<?php		if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){ ?>
+<?php		if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){ ?>
     
     stream = '<?php echo $stream; ?>';
     streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';

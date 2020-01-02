@@ -156,10 +156,10 @@
 	}
 
 	// ついでにストリーム状態を判定する
-	if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){
+	if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){
 		$standby = file_get_contents($standby_m3u8);
-		$stream = file_get_contents($segment_folder.'stream'.$stream.'.m3u8');
-		if ($standby == $stream){
+		$stream_m3u8 = file_get_contents($segment_folder.'stream'.$stream.'.m3u8');
+		if ($standby == $stream_m3u8){
 			$status = 'standby';
 		} else {
 			$status = 'onair';
@@ -168,20 +168,22 @@
 		$status = 'offline';
 	}
 
+	if ($ini[$stream]['state'] === null) $ini[$stream]['state'] = 'Offline';
+
 	$epginfo['info'] = array(
-		'state' => $ini['state'],
+		'state' => $ini[$stream]['state'],
 		'status' => $status,
 	);
 
 	// ONAir状態なら
-	if ($ini["state"] == "ONAir"){
+	if ($ini[$stream]["state"] == "ONAir"){
 
 		// 番組情報を取得
-		$epginfo['play'] = getEpgInfo($ch, $jkchannels, $ini['channel'], $sid[$ini['channel']], $onid[$ini['channel']], $tsid[$ini['channel']]);
+		$epginfo['play'] = getEpgInfo($ch, $jkchannels, $ini[$stream]['channel'], $sid[$ini[$stream]['channel']], $onid[$ini[$stream]['channel']], $tsid[$ini[$stream]['channel']]);
 
 		// チャンネル名が取得出来なかったら代入
 		if ($epginfo['play']['channel'] == 'チャンネル名を取得できませんでした'){
-			$epginfo['play']['channel'] = $ch[$ini['channel']];
+			$epginfo['play']['channel'] = $ch[$ini[$stream]['channel']];
 		}
 
 	} else {

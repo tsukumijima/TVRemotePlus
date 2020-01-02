@@ -27,14 +27,14 @@
 			$stream = strval($_POST['stream']);
 		} else {
 			$stream = '1';
-		}
+    }
 
 		// 設定ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
 
 		// POSTデータ読み込み
 		// もし存在するなら$iniの連想配列に格納
-		if (isset($_POST['state'])) $ini['state'] = $_POST['state'];
+		if (isset($_POST['state'])) $ini[$stream]['state'] = $_POST['state'];
 
 		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or 
 			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream'.$stream.'.m3u8') > 20)){
@@ -45,20 +45,20 @@
 			stream_stop($stream);
 
 			// ONAirなら
-			if ($ini['state'] == 'File'){
+			if ($ini[$stream]['state'] == 'File'){
 
 				// 連想配列に格納
-				if ($_POST['filepath']) $ini['filepath'] = $_POST['filepath'];
-				if ($_POST['filetitle']) $ini['filetitle'] = $_POST['filetitle'];
-				if ($_POST['fileinfo']) $ini['fileinfo'] = $_POST['fileinfo'];
-				if ($_POST['fileext']) $ini['fileext'] = $_POST['fileext'];
-				if ($_POST['filechannel']) $ini['filechannel'] = $_POST['filechannel'];
-				if ($_POST['filetime']) $ini['filetime'] = $_POST['filetime'];
-				if ($_POST['start_timestamp']) $ini['start_timestamp'] = $_POST['start_timestamp'];
-				if ($_POST['end_timestamp']) $ini['end_timestamp'] = $_POST['end_timestamp'];
-				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
-				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
-				if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
+				if ($_POST['filepath']) $ini[$stream]['filepath'] = $_POST['filepath'];
+				if ($_POST['filetitle']) $ini[$stream]['filetitle'] = $_POST['filetitle'];
+				if ($_POST['fileinfo']) $ini[$stream]['fileinfo'] = $_POST['fileinfo'];
+				if ($_POST['fileext']) $ini[$stream]['fileext'] = $_POST['fileext'];
+				if ($_POST['filechannel']) $ini[$stream]['filechannel'] = $_POST['filechannel'];
+				if ($_POST['filetime']) $ini[$stream]['filetime'] = $_POST['filetime'];
+				if ($_POST['start_timestamp']) $ini[$stream]['start_timestamp'] = $_POST['start_timestamp'];
+				if ($_POST['end_timestamp']) $ini[$stream]['end_timestamp'] = $_POST['end_timestamp'];
+				if ($_POST['quality']) $ini[$stream]['quality'] = $_POST['quality'];
+				if ($_POST['encoder']) $ini[$stream]['encoder'] = $_POST['encoder'];
+				if ($_POST['subtitle']) $ini[$stream]['subtitle'] = $_POST['subtitle'];
 
 				// jsonからデコードして代入
 				if (file_exists($infofile)){
@@ -89,7 +89,7 @@
 				}
 
 				foreach ($TSfile['data'] as $key => $value) {
-					if ($ini['filepath'] == $TSfile['data'][$key]['file']){
+					if ($ini[$stream]['filepath'] == $TSfile['data'][$key]['file']){
 						$history['data'][$history_count] = $TSfile['data'][$key];
 						$history['data'][$history_count]['play'] = time();
 					}
@@ -99,10 +99,10 @@
 				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 				// MP4(progressive)は除外
-				if (!($ini['fileext'] == 'mp4' and $ini['encoder'] == 'Progressive')){
+				if (!($ini[$stream]['fileext'] == 'mp4' and $ini[$stream]['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
-					$stream_cmd = stream_file($stream, $TSfile_dir.'/'.$ini['filepath'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+					$stream_cmd = stream_file($stream, $TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
 
 					// 準備中用の動画を流すためにm3u8をコピー
 					if ($silent == 'true'){
@@ -117,26 +117,26 @@
 
 				}
 
-			} else if ($ini['state'] == 'ONAir'){
+			} else if ($ini[$stream]['state'] == 'ONAir'){
 
 				// 連想配列に格納
-				if ($_POST['channel']) $ini['channel'] = strval($_POST['channel']);
-				if ($_POST['quality']) $ini['quality'] = $_POST['quality'];
-				if ($_POST['encoder']) $ini['encoder'] = $_POST['encoder'];
-				if ($_POST['subtitle']) $ini['subtitle'] = $_POST['subtitle'];
-				if ($_POST['BonDriver']) $ini['BonDriver'] = $_POST['BonDriver'];
+				if ($_POST['channel']) $ini[$stream]['channel'] = strval($_POST['channel']);
+				if ($_POST['quality']) $ini[$stream]['quality'] = $_POST['quality'];
+				if ($_POST['encoder']) $ini[$stream]['encoder'] = $_POST['encoder'];
+				if ($_POST['subtitle']) $ini[$stream]['subtitle'] = $_POST['subtitle'];
+				if ($_POST['BonDriver']) $ini[$stream]['BonDriver'] = $_POST['BonDriver'];
 
 				// BonDriverのデフォルトを要求される or 何故かBonDriverが空
-				if ($ini['BonDriver'] == 'default' or empty($ini['BonDriver'])){
-					if (intval($ini['channel']) >= 100 or intval($ini['channel']) === 55){ // チャンネルの値が100より上(=BS・CSか・ショップチャンネルは055なので例外指定)
-						$ini['BonDriver'] = $BonDriver_default_S;
+				if ($ini[$stream]['BonDriver'] == 'default' or empty($ini[$stream]['BonDriver'])){
+					if (intval($ini[$stream]['channel']) >= 100 or intval($ini[$stream]['channel']) === 55){ // チャンネルの値が100より上(=BS・CSか・ショップチャンネルは055なので例外指定)
+						$ini[$stream]['BonDriver'] = $BonDriver_default_S;
 					} else { // 地デジなら
-						$ini['BonDriver'] = $BonDriver_default_T;
+						$ini[$stream]['BonDriver'] = $BonDriver_default_T;
 					}
 				}
 
 				// ストリーミング開始
-				list($stream_cmd, $tstask_cmd) = stream_start($stream, $ini['channel'], $sid[$ini['channel']], $tsid[$ini['channel']], $ini['BonDriver'], $ini['quality'], $ini['encoder'], $ini['subtitle']);
+				list($stream_cmd, $tstask_cmd) = stream_start($stream, $ini[$stream]['channel'], $sid[$ini[$stream]['channel']], $tsid[$ini[$stream]['channel']], $ini[$stream]['BonDriver'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
 
 				// 準備中用の動画を流すためにm3u8をコピー
 				if ($silent == 'true'){
@@ -146,13 +146,13 @@
 				}
 
 			// Offlineなら
-			} else if ($ini['state'] == 'Offline'){
+			} else if ($ini[$stream]['state'] == 'Offline'){
 
 				// 念のためもう一回ストリーミング終了関数を起動
 				stream_stop($stream);
 					
 				// 強制でチャンネルを0に設定する
-				$ini['channel'] = '0';
+				$ini[$stream]['channel'] = '0';
 					
 				// 配信休止中用のプレイリスト
 				if ($silent == 'true'){
@@ -946,7 +946,7 @@
           </h2>
 
 <?php		if (!isset($_POST['setting-env'])){ ?>
-<?php			if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
+<?php			if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){ ?>
           <h3 class="blue">
             <i class="fas fa-video"></i>ストリーム開始
 <?php			} else { ?>
@@ -957,7 +957,7 @@
 
           <div class="setting-form-wrap">
             <p>ストリーム設定を保存しました。</p>
-<?php			if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){ ?>
+<?php			if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){ ?>
             <p>
               ストリームを開始します。<br>
               なお、ストリームの起動には数秒かかります。<br>
@@ -966,21 +966,21 @@
 <?php			} else { ?>
             <p>ストリーミングを終了します。</p>
 <?php			} //括弧終了 ?>
-            <p>稼働状態：<?php echo $ini['state']; ?></p>
+            <p>稼働状態：<?php echo $ini[$stream]['state']; ?></p>
             <p>ストリーム：<?php echo $stream; ?></p>
-<?php			if ($ini['state'] == 'ONAir'){ ?>
-            <p>チャンネル：<?php echo $ch[$ini['channel']]; ?></p>
-            <p>動画の画質：<?php echo $ini['quality']; ?></p>
-            <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
-            <p>字幕の表示：<?php echo $ini['subtitle']; ?></p>
-            <p>使用BonDriver：<?php echo $ini['BonDriver']; ?></p>
+<?php			if ($ini[$stream]['state'] == 'ONAir'){ ?>
+            <p>チャンネル：<?php echo $ch[$ini[$stream]['channel']]; ?></p>
+            <p>動画の画質：<?php echo $ini[$stream]['quality']; ?></p>
+            <p>エンコーダー：<?php echo $ini[$stream]['encoder']; ?></p>
+            <p>字幕の表示：<?php echo $ini[$stream]['subtitle']; ?></p>
+            <p>使用BonDriver：<?php echo $ini[$stream]['BonDriver']; ?></p>
             <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
             <p>TSTask起動コマンド：<?php echo $tstask_cmd; ?></p>
 
-<?php			} else if ($ini['state'] == 'File'){ ?>
-            <p>タイトル：<?php echo $ini['filetitle']; ?></p>
-            <p>動画の画質：<?php echo $ini['quality']; ?></p>
-            <p>エンコーダー：<?php echo $ini['encoder']; ?></p>
+<?php			} else if ($ini[$stream]['state'] == 'File'){ ?>
+            <p>タイトル：<?php echo $ini[$stream]['filetitle']; ?></p>
+            <p>動画の画質：<?php echo $ini[$stream]['quality']; ?></p>
+            <p>エンコーダー：<?php echo $ini[$stream]['encoder']; ?></p>
             <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
 <?php			} //括弧終了 ?>
           

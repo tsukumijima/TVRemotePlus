@@ -48,9 +48,9 @@
 	$watching = getActiveCount();
 
 	// ついでにストリーム状態を判定する
-	if ($ini['state'] == 'ONAir' or $ini['state'] == 'File'){
+	if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){
 
-		if (!($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive')){
+		if (!($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive')){
 
 			// 比較元のm3u8
 			if ($silent == 'true') $standby = file_get_contents($standby_silent_m3u8);
@@ -64,7 +64,7 @@
 			if ($standby == $stream_m3u8 and time() - $modified > 30){
 				$status = 'failed';
 			// 再生始まったけど更新が止まってしまった
-			} else if ($ini['state'] == 'ONAir' and time() - $modified > 20){
+			} else if ($ini[$stream]['state'] == 'ONAir' and time() - $modified > 20){
 				$status = 'restart';
 			// m3u8が更新されていない
 			} else if ($standby == $stream_m3u8){
@@ -87,10 +87,12 @@
 		$status = 'offline';
 		$streamtype = 'normal';
 	}
+	
+	if ($ini[$stream]['state'] === null) $ini[$stream]['state'] = 'Offline';
 
 	$json = array(
 		'api' => 'status',
-		'state' => $ini['state'],
+		'state' => $ini[$stream]['state'],
 		'status' => $status,
 		'watching' => $watching,
 		'streamtype' => $streamtype,

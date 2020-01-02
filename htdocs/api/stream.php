@@ -111,9 +111,9 @@
 		exit();	
 		
 	// MP4・MKVのみ
-	} else if ($ini['state'] == 'File' and $ini['fileext'] != 'ts' and $ini['encoder'] == 'Progressive'){
+	} else if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){
 
-		loadMP4($TSfile_dir.'/'.$ini['filepath'], $ini['fileext']);
+		loadMP4($TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['fileext']);
 		exit();	 
 
 	} else {

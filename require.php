@@ -72,7 +72,7 @@ $infofile = $base_dir.'htdocs/files/fileinfo.json';
 $historyfile = $base_dir.'htdocs/files/history.json';
 
 // 設定ファイルのパス
-$inifile = $base_dir.'data/setting.json';
+$inifile = $base_dir.'data/settings.json';
 
 // コメント設定ファイルのパス
 $commentfile = $base_dir.'data/comment.json';

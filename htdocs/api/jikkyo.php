@@ -209,10 +209,10 @@
 	}
 
 	// コメントの取得
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini['state'] == 'ONAir' and intval($ini['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認(jk0もはじく)
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini[$stream]['state'] == 'ONAir' and intval($ini[$stream]['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認(jk0もはじく)
 
 		// 実況IDを取得
-		$channel = getJKchannel($ch[$ini['channel']]);
+		$channel = getJKchannel($ch[$ini[$stream]['channel']]);
 		$getflv = nicologin($basegetflv.'jk'.$channel, false); //こ↑こ↓でgetflvを叩く
 
 		// 取得した結果(クエリ)をParseして配列に格納する
@@ -380,7 +380,7 @@
 		}
 
 	// コメントの送信
-	} else if ($_SERVER['REQUEST_METHOD'] == 'POST' and $ini['state'] == 'ONAir'){ //POSTでアクセスがあった&生放送なら
+	} else if ($_SERVER['REQUEST_METHOD'] == 'POST' and $ini[$stream]['state'] == 'ONAir'){ //POSTでアクセスがあった&生放送なら
 
 		// コメント(JSON形式)をPOSTで受信
 		$comment = json_decode(file_get_contents('php://input'), true);
@@ -396,7 +396,7 @@
 			file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 			// 実況IDを取得
-			$channel = getJKchannel($ch[$ini['channel']]);
+			$channel = getJKchannel($ch[$ini[$stream]['channel']]);
 			$getflv = nicologin($basegetflv.'jk'.$channel, false); //こ↑こ↓でgetflvを叩く
 
 			// 取得した結果(クエリ)をParseして配列に格納する
@@ -504,7 +504,7 @@
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'send',
-			'channel' => 'jk'.$ini['channel'],
+			'channel' => 'jk'.$ini[$stream]['channel'],
 			'color' => $color,
 			'text' => $comment['text'],
 			'code' => $code,
@@ -512,14 +512,14 @@
 		);
 
 	// 過去ログの取得
-	} else if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini['state'] == 'File'){ //ファイル再生なら
+	} else if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini[$stream]['state'] == 'File'){ //ファイル再生なら
 
 		// タイムスタンプ類
-		$start_timestamp = $ini['start_timestamp'];
-		$end_timestamp = $ini['end_timestamp'];
+		$start_timestamp = $ini[$stream]['start_timestamp'];
+		$end_timestamp = $ini[$stream]['end_timestamp'];
 
 		// 実況IDを取得
-		$channel = getJKchannel($ini['filechannel']);
+		$channel = getJKchannel($ini[$stream]['filechannel']);
 
 		// チャンネルが-1・空白以外 & ニコニコのログイン情報がセットされてるなら
 		// -1・空白はそのチャンネルが実況にない事を意味します

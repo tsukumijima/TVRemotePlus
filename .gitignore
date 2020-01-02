@@ -19,7 +19,7 @@
 /data/session/*
 /data/comment.json
 /data/nico.cookie
-/data/setting.json
+/data/settings.json
 /data/tweet_time.txt
 /cast/cast.json
 /cast/scan.json
