@@ -1,5 +1,8 @@
 <?php
 
+	// レスポンスをバッファに貯める
+	ob_start();
+
 	// ヘッダー読み込み
 	require_once ('../header.php');
   
@@ -148,19 +151,41 @@
 			// Offlineなら
 			} else if ($ini[$stream]['state'] == 'Offline'){
 
-				// 念のためもう一回ストリーミング終了関数を起動
-				stream_stop($stream);
-					
-				// 強制でチャンネルを0に設定する
-				$ini[$stream]['channel'] = '0';
-					
-				// 配信休止中用のプレイリスト
-				if ($silent == 'true'){
-					copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
-				} else {
-					copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
-				}
+				if (!isset($_POST['allstop'])){
 
+					// 念のためもう一回ストリーミング終了関数を起動
+					stream_stop($stream);
+						
+					// 強制でチャンネルを0に設定する
+					$ini[$stream]['channel'] = '0';
+						
+					// 配信休止中用のプレイリスト
+					if ($silent == 'true'){
+						copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+					} else {
+						copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+					}
+
+				} else {
+
+					// 念のためもう一回ストリーミング終了関数を起動
+					stream_stop($stream, true);
+
+					// ストリーム番号ごとに実行
+					foreach ($ini as $key => $value) {
+					
+						// 強制でチャンネルを0に設定する
+						$ini[$key]['channel'] = '0';
+							
+						// 配信休止中用のプレイリスト
+						if ($silent == 'true'){
+							copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
+						} else {
+							copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
+						}
+
+					}
+				}
 			}
 
 			// iniファイル書き込み
@@ -218,6 +243,11 @@
 	}
 
 	echo '</pre>';
+
+	// 溜めてあった出力を解放しフラッシュする
+	ob_end_flush();
+	ob_flush();
+	flush();
 
 ?>
 

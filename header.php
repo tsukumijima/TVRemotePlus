@@ -173,6 +173,15 @@
         <span class="nav-link-href">このストリームを終了</span>
       </a>
     </form>
+    <form method="post" name="allstop" action="/setting/">
+      <input type="hidden" name="state" value="Offline">
+      <input type="hidden" name="stream" value="<?php echo $stream; ?>">
+      <input type="hidden" name="allstop" value="true">
+      <a class="nav-link" href="javascript:allstop.submit()">
+        <i class="far fa-stop-circle"></i>
+        <span class="nav-link-href">全てのストリームを終了</span>
+      </a>
+    </form>
     <a class="nav-link" href="/watch/">
       <i class="fas fa-search"></i>
       <span class="nav-link-href">ファイルを再生</span>

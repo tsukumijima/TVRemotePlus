@@ -275,7 +275,11 @@
 			list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
 
 			// jkthreadから取得したres
-			$res = intval($jkthread_info['last_res']);
+			if (isset($jkthread_info['last_res'])){
+				$res = intval($jkthread_info['last_res']);
+			} else {
+				$res = 0;
+			}
 
 			// まずresのパラメータが存在していて
 			// かつresが空でなくて

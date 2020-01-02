@@ -654,7 +654,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     left: 0;
     z-index: 300;
     width: 90%;
-    max-width: 260px;
+    max-width: 270px;
     height: 130%;
     background-color: #272727;
     -webkit-transform: translateX(-105%);
