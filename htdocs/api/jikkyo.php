@@ -265,11 +265,11 @@
 			$last_res_request = $last_res + 1; //リクエストする時にlast_resがそのままだとコメが重複するので+1する
 			
 			// コメントサーバから実況を取得するURL
-			$jkthread_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
+			$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
 							'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
 
 			// XMLでAPIを叩く
-			$jkthread_xml = simplexml_load_file($jkthread_URL);
+			$jkthread_xml = simplexml_load_file($jkthread_url);
 
 			// APIを解析
 			list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
@@ -330,13 +330,13 @@
 			// 出力JSON
 			$json = array(
 				'api' => 'jikkyo',
-				'type' => 'read',
+				'type' => 'load',
 				'ikioi' => $ikioi,
 				'channel' => 'jk'.$channel,
 				'res' => $last_res,
 				'last_res' => $res,
-				'jkthread_url'=> $jkthread_URL,
 				//'jkthread' => $jkthread,
+				//'jkthread_url'=> $jkthread_url,
 				'code' => 0,
 				'version' => 3,
 				'data' => $danmaku,
@@ -370,12 +370,12 @@
 			// 出力JSON
 			$json = array(
 				'api' => 'jikkyo',
-				'type' => 'read',
+				'type' => 'load',
 				'ikioi' => $error,
-				'error' => $error,
 				'channel' => 'jk'.$channel,
+				'error' => $error,
 				'code' => 0,
-				'version' => 3,
+				'version' => 3
 			);
 		}
 
@@ -422,10 +422,10 @@
 			if ($login){
 
 				// コメントサーバの情報を取得するURL
-				$jkthread_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
+				$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
 			
 				// XMLでAPIを叩く
-				$jkthread_xml = simplexml_load_file($jkthread_URL);
+				$jkthread_xml = simplexml_load_file($jkthread_url);
 
 				// APIを解析
 				list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
@@ -504,13 +504,11 @@
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'send',
-			'ikioi' => null,
-			'ch' => $ini['channel'],
+			'channel' => 'jk'.$ini['channel'],
 			'color' => $color,
 			'text' => $comment['text'],
 			'code' => $code,
-			'version' => 3,
-			'data' => null,
+			'version' => 3
 		);
 
 	// 過去ログの取得
@@ -570,12 +568,12 @@
 				while($start_timestamp < $when){
 
 					// コメントサーバから実況を取得するURL
-					$jkthread_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
+					$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
 								'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&user_id='.$getflv_param['user_id'].'&waybackkey='.$waybackkey.
 								'&res_from=-1000&when='.$when;
 
 					// XMLでAPIを叩く
-					$jkthread_xml = @simplexml_load_file($jkthread_URL); // 何故かたまにエラー吐くので抑制
+					$jkthread_xml = @simplexml_load_file($jkthread_url); // 何故かたまにエラー吐くので抑制
 
 					// APIを解析
 					list($jkthread_new, $jkthread_info) = getJKthread($jkthread_xml);
@@ -669,23 +667,21 @@
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'file',
-			'ikioi' => null,
 			'ch' => 'jk'.$channel,
 			'code' => $code,
 			'version' => 3,
-			'data' => $danmaku,
+			'data' => $danmaku
 		);
 
-	} else if ($_SERVER['REQUEST_METHOD'] == 'POST'){ // オフラインかファイル再生で投稿できないときに蹴る
+	// オフラインかファイル再生で投稿できないときに蹴る
+	} else if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 		// 出力JSON
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'error',
-			'ikioi' => null,
 			'code' => 334,
-			'version' => 3,
-			'data' => null,
+			'version' => 3
 		);
 
 	} else if (isset($_GET['id'])){ // ?id=TVRemotePlus
@@ -694,22 +690,18 @@
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'connect',
-			'ikioi' => null,
 			'code' => 0,
-			'version' => 3,
-			'data' => null,
+			'version' => 3
 		);
 
-	} else { // ?chがなかったら
+	} else { // それ以外のエラー
 
 		// 出力JSON
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'error',
-			'ikioi' => null,
 			'code' => 0,
-			'version' => 3,
-			'data' => null,
+			'version' => 3
 		);
 
 	}

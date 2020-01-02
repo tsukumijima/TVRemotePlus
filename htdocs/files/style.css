@@ -700,7 +700,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 .nav-link {
     display: flex;
-    padding: 16px 40px;
+    padding: 16px 20px 16px 35px;
     margin: 0;
     width: 100%;
     color: #fafafa;
@@ -1647,7 +1647,7 @@ td {
     opacity: 0;
     width: 95%;
     max-width: 500px;
-    height: 340px;
+    height: 395px;
     background-color: #FFFFFF;
     border-radius: 5px;
     font-size: 16px;
@@ -1794,11 +1794,11 @@ td {
 
 @media screen and (max-width: 500px){
     #broadcast-stream-box {
-        height: 445px;
+        height: 525px;
     }
     @-moz-document url-prefix() {
         #broadcast-stream-box {
-            height: 445px;
+            height: 525px;
         }
     }
 

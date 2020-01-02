@@ -18,7 +18,7 @@
 			$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 			= initBonChannel($BonDriver_dir);
 
-		// ファイル読み込み
+		// 設定読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
 
 		// コマンドラインからのストリーム開始・停止はおまけ機能です
@@ -178,8 +178,11 @@
 		
 		// 設定
 
+		// UDPポート
+		$stream_port = $udp_port + intval($stream);
+
 		// UDP受信スキーム
-		$receive = 'udp://127.0.0.1:'.$udp_port.'?pkt_size=262144&fifo_size=1000000';
+		$receive = 'udp://127.0.0.1:'.$stream_port.'?pkt_size=262144&fifo_size=1000000';
 
 		// 字幕切り替え
 		switch ($subtitle) {
@@ -289,7 +292,7 @@
 		stream_stop($stream);
 
 		// TSTask.exeを起動する
-		$tstask_cmd = 'start /min '.$tstask_path.' /min /xclient- /udp /port '.$udp_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
+		$tstask_cmd = 'start /min '.$tstask_path.' /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
 		win_exec($tstask_cmd);
 
 		// 変換コマンド切り替え
@@ -415,9 +418,10 @@
 				break;
 		}
 
-		// 前のTSを消してからストリームを開始させる
-		win_exec('pushd "'.$segment_folder.'" && del *.ts /S && '.$stream_cmd);
+		// ストリームを開始する
+		win_exec('pushd "'.$segment_folder.'" && '.$stream_cmd);
 
+		// ここでチャンネルを変更する
 		$ini['channel'] = $ch;
 
 		// エンコードコマンドとTSTaskのコマンドを返す
@@ -660,8 +664,8 @@
 				break;
 		}
 
-		// 前のTSを消してからストリームを開始させる
-		win_exec('pushd "'.$segment_folder.'" && del *.ts /S && '.$stream_cmd);
+		// ストリームを開始する
+		win_exec('pushd "'.$segment_folder.'" && '.$stream_cmd);
 
 		// エンコードコマンドを返す
 		return $stream_cmd;
@@ -669,27 +673,69 @@
 
 	// ストリームを終了する関数
 	function stream_stop($stream){
-		global $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $segment_folder, $TSTask_shutdown;
-		
-		// ffmpegを終了する
-		win_exec('taskkill /F /IM '.$ffmpeg_exe);
-		
-		// QSVEncCを終了する
-		win_exec('taskkill /F /IM '.$qsvencc_exe);
-		
-		// NVEncCを終了する
-		win_exec('taskkill /F /IM '.$nvencc_exe);
-		
-		// VCEEncCを終了する
-		win_exec('taskkill /F /IM '.$vceencc_exe);
-		
-		// TSTaskを終了する
-		if ($TSTask_shutdown == 'true'){ // 強制終了
-			win_exec('taskkill /F /IM '.$tstask_exe);
-		} else { // 通常終了
-			win_exec('taskkill /IM '.$tstask_exe);
+		global $inifile, $udp_port, $process_csv, $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $segment_folder, $TSTask_shutdown;
+
+		// UDPポート
+		$stream_port = $udp_port + intval($stream);
+
+		// 録画ファイルのファイルパス
+		$filepath = json_decode(file_get_contents($inifile), true)['filepath'];
+
+		// 現在のプロセスのコマンドライン引数とプロセスIDを取得する
+		exec('wmic process get commandline,processid /format:csv > '.$process_csv);
+
+		// CSVをパースして取得
+		$process = getCSV($process_csv, 'UTF-16LE');
+
+		// プロセスごとに該当するかチェックしてKill
+		foreach ($process as $key => $value) {
+
+			// ffmpeg
+			if (strpos($value['CommandLine'], $ffmpeg_exe) !== false and 
+			   (strpos($value['CommandLine'], strval($stream_port)) !== false) or (strpos($value['CommandLine'], $filepath) !== false)){
+				win_exec('taskkill /F /PID '.$value['ProcessId']);
+				// echo 'ffmpeg Killed. Stream: '.$stream.' Cmd:'.$value['CommandLine']."\n\n";
+			}
+
+			// QSVEncC
+			if (strpos($value['CommandLine'], $qsvencc_exe) !== false and 
+			   (strpos($value['CommandLine'], strval($stream_port)) !== false) or (strpos($value['CommandLine'], $filepath) !== false)){
+				win_exec('taskkill /F /PID '.$value['ProcessId']);
+				// echo 'QSVEncC Killed. Stream: '.$stream.' Cmd:'.$value['CommandLine']."\n\n";
+			}
+			
+			// NVEncC
+			if (strpos($value['CommandLine'], $nvencc_exe) !== false and 
+			   (strpos($value['CommandLine'], strval($stream_port)) !== false) or (strpos($value['CommandLine'], $filepath) !== false)){
+				win_exec('taskkill /F /PID '.$value['ProcessId']);
+				// echo 'NVEncC Killed. Stream: '.$stream.' Cmd:'.$value['CommandLine']."\n\n";
+			}
+
+			// VCEEncC
+			if (strpos($value['CommandLine'], $vceencc_exe) !== false and 
+			   (strpos($value['CommandLine'], strval($stream_port)) !== false) or (strpos($value['CommandLine'], $filepath) !== false)){
+				win_exec('taskkill /F /PID '.$value['ProcessId']);
+				// echo 'VCEEncC Killed. Stream: '.$stream.' Cmd:'.$value['CommandLine']."\n\n";
+			}
+
+
+			// TSTask
+			if (strpos($value['CommandLine'], $tstask_exe) !== false and 
+			   (strpos($value['CommandLine'], strval($stream_port)) !== false) or (strpos($value['CommandLine'], $filepath) !== false)){
+				if ($TSTask_shutdown == 'true'){ // 強制終了
+					win_exec('taskkill /F /PID '.$value['ProcessId']);
+				} else { // 通常終了
+					win_exec('taskkill /PID '.$value['ProcessId']);
+				}
+				// echo 'TSTask Killed. Stream: '.$stream.' Cmd:'.$value['CommandLine']."\n\n";
+			}
+
 		}
 		
 		// フォルダ内のTSを削除
-		win_exec('pushd "'.$segment_folder.'" && del *.ts /S');
+		win_exec('pushd "'.$segment_folder.'" && del stream'.$stream.'*.ts /S');
+
+		// CSVファイル自体はもういらないので削除
+		unlink($process_csv);
+
 	}

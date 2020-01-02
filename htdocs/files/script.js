@@ -44,7 +44,8 @@
               url: '/setting/',
               type: 'post',
               data: {
-                'state': 'Offline'
+                'state': 'Offline',
+                'stream': stream
               },
               cache: false,
               success: function(data) {
@@ -60,16 +61,17 @@
               type: 'post',
               data: {
                 'state': 'ONAir',
+                'stream': stream,
                 'restart': 'true'
               },
               cache: false,
               success: function(data) {
                 var paused = dp.video.paused;
                 if (data['streamtype'] == 'progressive'){
-                  dp.video.src = 'api/stream?_=' + time();
+                  dp.video.src = '/api/stream?_=' + time();
                   dp.initVideo(dp.video, 'normal');
                 } else {
-                  dp.video.src = 'stream/stream' + stream + '.m3u8';
+                  dp.video.src = '/stream/stream' + stream + '.m3u8';
                   dp.initVideo(dp.video, 'hls');
                 }
                 if (!paused){
@@ -94,10 +96,10 @@
                 // ストリームを読み込みし直す
                 var paused = dp.video.paused;
                 if (data['streamtype'] == 'progressive'){
-                  dp.video.src = 'api/stream?_=' + time();
+                  dp.video.src = '/api/stream?_=' + time();
                   dp.initVideo(dp.video, 'normal');
                 } else {
-                  dp.video.src = 'stream/stream' + stream + '.m3u8';
+                  dp.video.src = '/stream/stream' + stream + '.m3u8';
                   dp.initVideo(dp.video, 'hls');
                 }
                 if (!paused){

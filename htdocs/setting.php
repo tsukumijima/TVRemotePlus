@@ -23,7 +23,11 @@
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 		// ストリーム番号を取得
-		$stream = '1';
+		if (!empty($_POST['stream'])){
+			$stream = strval($_POST['stream']);
+		} else {
+			$stream = '1';
+		}
 
 		// 設定ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
@@ -166,9 +170,9 @@
 			if ($setting_redirect == 'true'){
 				// トップページにリダイレクト
 				if ($reverse_proxy){
-					header('Location: '.$reverse_proxy_url);
+					header('Location: '.$reverse_proxy_url.$stream.'/');
 				} else {
-					header('Location: '.$site_url);
+					header('Location: '.$site_url.$stream.'/');
 				}
 				exit;
 			}
@@ -892,7 +896,7 @@
                   その場合は、UDP送信ポートを空いているポートに変更してください<br>
                 </p>
               </div>
-              <input class="text-box" name="udp_port" type="number" min="1" max="40000" placeholder="8201" value="<?php echo $udp_port; ?>" required />
+              <input class="text-box" name="udp_port" type="number" min="1" max="40000" placeholder="8200" value="<?php echo $udp_port; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -963,6 +967,7 @@
             <p>ストリーミングを終了します。</p>
 <?php			} //括弧終了 ?>
             <p>稼働状態：<?php echo $ini['state']; ?></p>
+            <p>ストリーム：<?php echo $stream; ?></p>
 <?php			if ($ini['state'] == 'ONAir'){ ?>
             <p>チャンネル：<?php echo $ch[$ini['channel']]; ?></p>
             <p>動画の画質：<?php echo $ini['quality']; ?></p>

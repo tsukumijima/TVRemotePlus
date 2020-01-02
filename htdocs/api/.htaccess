@@ -1,22 +1,16 @@
 
 # phpの拡張子なしでアクセス出来るように
-RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteCond %{QUERY_STRING} (.+)
-RewriteRule ^jikkyo/([1-9]+)/v3/$ jikkyo.php?stream=$1&%1
-
-RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteCond %{QUERY_STRING} (.+)
-RewriteRule ^jikkyo/v3/$ jikkyo.php?%1
 
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteCond %{QUERY_STRING} (.+)
 RewriteRule ^(.*)/([1-9]+)$ $1.php?stream=$2&%1
+
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)/([1-9]+)$ $1.php?stream=$2
 
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d

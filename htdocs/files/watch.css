@@ -331,7 +331,7 @@ section {
     opacity: 0;
     width: 95%;
     max-width: 500px;
-    height: 295px;
+    height: 345px;
     background-color: #FFFFFF;
     border-radius: 5px;
     will-change: opacity;
@@ -367,7 +367,7 @@ section {
 
 @media screen and (max-width: 500px){
     #search-stream-box {
-        height: 370px;
+        height: 455px;
     }
     @-moz-document url-prefix() {
         #search-stream-box {

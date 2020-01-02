@@ -240,6 +240,46 @@ NVIDIA グラフィックドライバ 436.02
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2019.12.24 (4.59)
+[NVEncC]
+・vpp-subburnで字幕の色成分が欠けて焼きこまれるようになっていたのを修正。
+
+[NVEnc.auo]
+・簡易インストーラを更新。
+
+2019.12.16 (4.58)
+[NVEncC]
+・HEVCエンコ時のlevelがログに正しく表示されないのを修正。
+・音声処理でのメモリリークを解消。
+・--pref-monitorにエンコード速度やビットレートが表示されなかったのを修正。
+
+2019.12.05 (4.57)
+[NVEnc.auo]
+・8bitでインタレ保持・インタレ解除を行う際に色がおかしくなるのを修正。
+
+[NVEncC]
+・vpp-afsのYUV420処理時のlevel=0の出力がおかしいのを修正。
+・誤字修正: arib-srd-b67 →　arib-std-b67
+・--vpp-colorspaceにHLG→SDRのサポートを追加。
+  --vpp-colorspace transfer=arib-srd-b67:bt709,hdr2sdr=hable
+・trueHD in mkvなどで、音声デコードに失敗する場合があるのを修正。
+・4.56で字幕のコピーが動かなくなっていたのを修正。
+・vpp-colorspace hdr2sdrのパラメータ"w"を廃止。source_peak / ldr_nits で求めるべきだった。
+・vpp-colorspaceのsource_peak周りの扱いを見直し。
+
+2019.11.25 (4.56)
+[NVEnc.auo]
+・NVEnc.auoの出力をmp4/mkv出力に変更し、特に自動フィールドシフト使用時のmux工程数を削減する。
+  また、NVEncCのmuxerを使用することで、コンテナを作成したライブラリとしてNVEncCを記載するようにする。
+
+[NVEncC]
+・YUV444で出力する際、vpp-afsの判定結果がおかしくなっていたのを修正。
+・mkv入りのVC-1をカットした動画のエンコードに失敗する問題を修正。
+・output-resに負の値を指定できるように。
+・HEVC + weightpが不安定とする警告はPascal/Volta世代のGPUに限定する。
+・HEVCのmultirefを自動的に制限するように。
+・音声に遅延を加えるオプションを追加。(--audio-delay)
+
 2019.11.05 (4.55)
 [NVEncC]
 ・4.53での下記の変更の修正方法が間違っていたのを修正。

@@ -1,17 +1,4 @@
 <?php
-
-	/*
-	// 設定を読み込む
-	require_once (dirname(__FILE__).'/require.php');
-
-	// BonDriverのチャンネルを取得
-	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
-		 $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
-		 $sid, $sid_T, $sid_S, $sid_CS, // SID
-		 $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
-		 $tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
-		 = initBonChannel($BonDriver_dir);
-	*/
 	
 	// ***** 各種モジュール関数 *****
 
@@ -133,6 +120,41 @@
 				return $ch_sid[$key][0];
 			}
 		}
+	}
+
+	// CSVファイルを読み込む関数
+	function getCSV($csvfile, $encoding='UTF-16LE'){
+
+		// ファイル存在確認
+		if (!file_exists($csvfile)) return false;
+
+		// 行頭と行末の改行・BOM削除・UTF-8へ変換
+		file_put_contents($csvfile, trim(removeBOM(mb_convert_encoding(file_get_contents($csvfile), 'UTF-8', $encoding))));
+	
+		// SplFileObject()を使用してCSVロード
+		$file = new SplFileObject($csvfile);
+		$file->setFlags(
+			SplFileObject::READ_CSV |
+			SplFileObject::SKIP_EMPTY |
+			SplFileObject::READ_AHEAD
+		);
+	
+		// 各行を処理
+		$records = array();
+		foreach ($file as $i => $row){
+
+			// 1行目はキーヘッダ行として取り込み
+			if($i===0) {
+				foreach($row as $j => $col) $colbook[$j] = $col;
+				continue;
+			}
+	
+			// 2行目以降はデータ行として取り込み
+			$line = array();
+			foreach($colbook as $j=>$col) $line[$colbook[$j]] = @$row[$j];
+			$records[] = $line;
+		}
+		return $records;
 	}
 
 	// ch2を整形して連想配列化する関数

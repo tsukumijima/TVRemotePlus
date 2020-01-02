@@ -167,9 +167,10 @@
     </a>
     <form method="post" name="quickstop" action="/setting/">
       <input type="hidden" name="state" value="Offline">
+      <input type="hidden" name="stream" value="<?php echo $stream; ?>">
       <a class="nav-link" href="javascript:quickstop.submit()">
         <i class="far fa-stop-circle"></i>
-        <span class="nav-link-href">ストリーム終了</span>
+        <span class="nav-link-href">このストリームを終了</span>
       </a>
     </form>
     <a class="nav-link" href="/watch/">

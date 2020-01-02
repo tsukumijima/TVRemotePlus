@@ -89,6 +89,18 @@
           <input id="stream-start_timestamp" type="hidden" name="start_timestamp" value="">
           <input id="stream-end_timestamp" type="hidden" name="end_timestamp" value="">
 
+          <div class="setstream form">
+            <span>ストリーム：</span>
+            <div class="select-wrap">
+              <select name="stream">
+                <option value="1" selected>Stream 1</option>
+                <option value="2">Stream 2</option>
+                <option value="3">Stream 3</option>
+                <option value="4">Stream 4</option>
+              </select>
+            </div>
+          </div>
+
           <div class="setchannel form">
             <span>動画の画質：</span>
             <div class="select-wrap">

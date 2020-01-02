@@ -74,7 +74,7 @@
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
-      api: '/api/jikkyo/<?php echo $stream; ?>/',
+      api: '/api/jikkyo/<?php echo $stream; ?>',
       bottom: '10%',
       height: settings['comment_size'],
       unlimited: false
@@ -395,6 +395,18 @@
       <form id="setting-form" action="/setting/" method="post">
         <input type="hidden" name="state" value="ONAir">
         <input id="broadcast-stream-channel" type="hidden" name="channel" value="">
+
+        <div class="setstream form">
+          <span>ストリーム：</span>
+          <div class="select-wrap">
+            <select name="stream">
+              <option value="1" selected>Stream 1</option>
+              <option value="2">Stream 2</option>
+              <option value="3">Stream 3</option>
+              <option value="4">Stream 4</option>
+            </select>
+          </div>
+        </div>
 
         <div class="setchannel form">
           <span>動画の画質：</span>
