@@ -21,6 +21,7 @@
 /data/nico.cookie
 /data/settings.json
 /data/tweet_time.txt
+/data/*.log
 /cast/cast.json
 /cast/scan.json
 /htdocs/server.crt

@@ -4,8 +4,20 @@
 
 	// Windows用非同期コマンド実行関数
 	function win_exec($cmd){
-		$fp = popen($cmd.' > nul 2>&1', "r");
+		$fp = popen($cmd.' > nul', 'r');
 		pclose($fp);
+	}
+
+	// Windowsコマンド用に文字列をエスケープする関数
+	function win_exec_escape($text){
+
+		$text = str_replace('^', '^^', $text);
+		$text = str_replace('&', '^&', $text);
+		$text = str_replace('<', '^<', $text);
+		$text = str_replace('>', '^>', $text);
+		$text = str_replace('|', '^|', $text);
+
+		return $text;
 	}
 
 	// BOM除去

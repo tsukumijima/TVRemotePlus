@@ -165,6 +165,7 @@
       <i class="fas fa-home"></i>
       <span class="nav-link-href">ホーム</span>
     </a>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
     <form method="post" name="quickstop" action="/settings/">
       <input type="hidden" name="state" value="Offline">
       <input type="hidden" name="stream" value="<?php echo $stream; ?>">
@@ -173,6 +174,7 @@
         <span class="nav-link-href">このストリームを終了</span>
       </a>
     </form>
+<?php	} // 括弧終了 ?>
     <form method="post" name="allstop" action="/settings/">
       <input type="hidden" name="state" value="Offline">
       <input type="hidden" name="stream" value="<?php echo $stream; ?>">

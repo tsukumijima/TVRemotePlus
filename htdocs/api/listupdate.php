@@ -205,7 +205,8 @@
 			$TSfile['data'][$key]['info_state'] = 'generated';
 
 		// 番組情報を取得していないなら
-		} else {
+		// MP4には番組情報は含まれていないので除外
+		} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4'){
 
 			// rplsinfoでファイル情報を取得
 			$cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'" 2>&1';

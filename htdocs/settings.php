@@ -903,6 +903,26 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
+                <span>エンコード時のログをファイルに書き出す</span>
+                <p>
+                  この設定がオンの場合、エンコード時のログを (TVRemotePlus)/data/stream(ストリーム番号).log に書き出します（デフォルトはオフです）<br>
+                  出力をログとしてファイルに書き出すため、タスクバーに表示されるウインドウにはタイトルに (エンコーダー名) Streaming... と表示されるだけで何も出力されなくなります<br>
+                  エンコーダーが途中で落ちる場合はこの設定をオンにし、書き出されたログを確認してみてください<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="output_encodelog" value="false" />
+<?php	if ($output_encodelog == 'true'){ ?>
+                <input id="output_encodelog" name="output_encodelog" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="output_encodelog" name="output_encodelog" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="output_encodelog" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
                 <span>ストリーム終了時に TSTask を強制終了する</span>
                 <p>
                   TSTask がうまく終了しない・ゾンビプロセス化する場合のみオンにしてください<br>

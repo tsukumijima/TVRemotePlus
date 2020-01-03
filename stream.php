@@ -174,7 +174,7 @@
 
 	// ライブ放送のストリームを開始する関数
 	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
-		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list;
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $output_encodelog;
 		
 		// 設定
 
@@ -301,7 +301,7 @@
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
-				$stream_cmd = 'start /min "ffmpeg Streaming..." '.$ffmpeg_path.
+				$stream_cmd = $ffmpeg_path.
 
 					// 入力
 					' -dual_mono_mode main -i "'.$receive.'"'.
@@ -330,7 +330,7 @@
 			case 'QSVEncC':
 
 				// QSVEncC用コマンド
-				$stream_cmd = 'start /min "QSVEncC Streaming..." '.$qsvencc_path.
+				$stream_cmd = $qsvencc_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -360,7 +360,7 @@
 			case 'NVEncC':
 
 				// NVEncC用コマンド
-				$stream_cmd = 'start /min "NVEncC Streaming..." '.$nvencc_path.
+				$stream_cmd = $nvencc_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -390,7 +390,7 @@
 			case 'VCEEncC':
 	
 				// VCEEncC用コマンド
-				$stream_cmd = 'start /min "VCEEncC Streaming..." '.$vceencc_path.
+				$stream_cmd = $vceencc_path.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -418,6 +418,13 @@
 				break;
 		}
 
+		// ログを書き出すかどうか
+		if ($output_encodelog == 'true'){
+			$stream_cmd = 'start /min "'.$encoder.' Encoding..." cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'data/stream'.$stream.'.log 2>&1"';
+		} else {
+			$stream_cmd = 'start /min "'.$encoder.' Encoding..." cmd.exe /C "'.win_exec_escape($stream_cmd).'"';
+		}
+
 		// ストリームを開始する
 		win_exec('pushd "'.$segment_folder.'" && '.$stream_cmd);
 
@@ -430,7 +437,7 @@
 
 	// ファイル再生のストリームを開始する関数
 	function stream_file($stream, $filepath, $quality, $encoder, $subtitle){
-		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time;
+		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time, $base_dir, $output_encodelog;
 		
 		// 設定
 
@@ -547,7 +554,7 @@
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
-				$stream_cmd = 'start /min "ffmpeg Encoding..." '.$ffmpeg_path.
+				$stream_cmd = $ffmpeg_path.
 
 					// 入力
 					' -dual_mono_mode main -i "'.$filepath.'"'.
@@ -576,7 +583,7 @@
 			case 'QSVEncC':
 
 				// QSVEncC用コマンド
-				$stream_cmd = 'start /min "QSVEncC Encoding..." '.$qsvencc_path.
+				$stream_cmd = $qsvencc_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -606,7 +613,7 @@
 			case 'NVEncC':
 
 				// NVEncC用コマンド
-				$stream_cmd = 'start "NVEncC Encoding..." /min '.$nvencc_path.
+				$stream_cmd = $nvencc_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -636,7 +643,7 @@
 			case 'VCEEncC':
 	
 				// VCEEncC用コマンド
-				$stream_cmd = 'start /min "VCEEncC Encoding..." '.$vceencc_path.
+				$stream_cmd = $vceencc_path.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -662,6 +669,13 @@
 					' -o stream'.$stream.'.m3u8';
 
 				break;
+		}
+
+		// ログを書き出すかどうか
+		if ($output_encodelog == 'true'){
+			$stream_cmd = 'start /min "'.$encoder.' Encoding..." cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'data/stream'.$stream.'.log 2>&1"';
+		} else {
+			$stream_cmd = 'start /min "'.$encoder.' Encoding..." cmd.exe /C "'.win_exec_escape($stream_cmd).'"';
 		}
 
 		// ストリームを開始する
