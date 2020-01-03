@@ -45,7 +45,7 @@
 
       // フォーム送信
       $.ajax({
-        url: '/setting/',
+        url: '/settings/',
         type: 'post',
         data: $('#setting-env').serialize(),
         cache: false,

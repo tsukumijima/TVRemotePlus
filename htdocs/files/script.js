@@ -41,7 +41,7 @@
           if (data['status'] == 'failed' && status != 'failed'){
             toastr.error('ストリームの開始に失敗しました…');
             $.ajax({
-              url: '/setting/',
+              url: '/settings/',
               type: 'post',
               data: {
                 'state': 'Offline',
@@ -57,7 +57,7 @@
           if (data['status'] == 'restart' && status != 'restart'){
             toastr.warning('ストリームが途中で中断しました…');
             $.ajax({
-              url: '/setting/',
+              url: '/settings/',
               type: 'post',
               data: {
                 'state': 'ONAir',
@@ -151,38 +151,38 @@
             var flg = false;
           }
           
-          if (data['info']['state'] == 'ONAir'){
+          if (data['info'][stream]['state'] == 'ONAir'){
 
             // 変化がある場合のみ書き換え
-            if (document.getElementById('epg-starttime').innerHTML != data['play']['starttime'] ||
-                document.getElementById('epg-title').innerHTML != data['play']['program_name'] ||
-                document.getElementById('epg-channel').innerHTML != data['play']['channel']){
+            if (document.getElementById('epg-starttime').innerHTML != data['stream'][stream]['starttime'] ||
+                document.getElementById('epg-title').innerHTML != data['stream'][stream]['program_name'] ||
+                document.getElementById('epg-channel').innerHTML != data['stream'][stream]['channel']){
 
               // 現在の番組
-              document.getElementById('epg-starttime').textContent = data['play']['starttime'];
-              document.getElementById('epg-to').textContent = data['play']['to'];
-              document.getElementById('epg-endtime').textContent = data['play']['endtime'];
+              document.getElementById('epg-starttime').textContent = data['stream'][stream]['starttime'];
+              document.getElementById('epg-to').textContent = data['stream'][stream]['to'];
+              document.getElementById('epg-endtime').textContent = data['stream'][stream]['endtime'];
               
-              if (data['play']['ch'] < 55){
-                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['play']['ch'], 2) + ' ' + data['play']['channel'];
+              if (data['stream'][stream]['ch'] < 55){
+                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['stream'][stream]['ch'], 2) + ' ' + data['stream'][stream]['channel'];
               } else {
-                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['play']['ch'], 3) + ' ' + data['play']['channel'];
+                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['stream'][stream]['ch'], 3) + ' ' + data['stream'][stream]['channel'];
               }
-              document.getElementById('epg-title').innerHTML = data['play']['program_name'];
-              document.getElementById('epg-info').innerHTML = data['play']['program_info'];
+              document.getElementById('epg-title').innerHTML = data['stream'][stream]['program_name'];
+              document.getElementById('epg-info').innerHTML = data['stream'][stream]['program_info'];
           
               // 次の番組
-              document.getElementById('epg-next-starttime').textContent = data['play']['next_starttime'];
-              document.getElementById('epg-next-to').textContent = data['play']['to'];
-              document.getElementById('epg-next-endtime').textContent = data['play']['next_endtime'];
-              document.getElementById('epg-next-title').innerHTML = data['play']['next_program_name'];
+              document.getElementById('epg-next-starttime').textContent = data['stream'][stream]['next_starttime'];
+              document.getElementById('epg-next-to').textContent = data['stream'][stream]['to'];
+              document.getElementById('epg-next-endtime').textContent = data['stream'][stream]['next_endtime'];
+              document.getElementById('epg-next-title').innerHTML = data['stream'][stream]['next_program_name'];
 
               // ON Air
               document.getElementById('state').textContent = '● ON Air';
               document.getElementById('state').style.color = '#007cff';
             }
 
-          } else if (data['info']['state'] == 'Offline') {
+          } else if (data['info'][stream]['state'] == 'Offline') {
 
             // Offline
             document.getElementById('state').textContent = '● Offline';
@@ -190,10 +190,10 @@
           }
 
           // stateを記録しておく
-          document.getElementById('state').value = data['info']['state'];
+          document.getElementById('state').value = data['info'][stream]['state'];
 
           // progressbarの割合を計算して代入
-          var percent = ((Math.floor(Date.now() / 1000) - data['play']['timestamp']) / data['play']['duration']) * 100;
+          var percent = ((Math.floor(Date.now() / 1000) - data['stream'][stream]['timestamp']) / data['stream'][stream]['duration']) * 100;
           document.getElementById('progress').style.width = percent + '%';
 
           // チャンネルごとに実行

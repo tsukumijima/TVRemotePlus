@@ -74,7 +74,8 @@
 	}
 
 	// URLからストリーム番号を取得する関数
-	function getStreamNumber($url){
+	// flgをtrueにするとストリーム番号が指定されているかどうかを返す
+	function getStreamNumber($url, $flg=false){
 
 		// クエリを除外
 		$url = parse_url($url, PHP_URL_PATH);
@@ -87,9 +88,18 @@
 		$stream = end($slash);
 
 		// URLに正しいストリーム番号が入っていなかった場合はストリーム1とする
-		if (empty($stream) or !is_numeric($stream)) $stream = 1;
+		if (empty($stream) or !is_numeric($stream)){
+			$stream = 1;
+			$stream_flg = false;
+		} else {
+			$stream_flg = true;
+		}
 
-		return strval($stream);
+		if (!$flg){
+			return strval($stream);
+		} else {
+			return $stream_flg;
+		}
 	}
 
 	// ニコニコ実況IDをチャンネル名から取得する関数

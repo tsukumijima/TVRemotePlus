@@ -149,72 +149,90 @@
 		);
 	}
 
+	$epginfo['api'] = 'epginfo';
+
 	// 実況勢いを取得してパースしておく
 	@$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
 	if (!$jkchannels){
 		$jkchannels = array();
 	}
 
-	// ついでにストリーム状態を判定する
-	if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){
-		$standby = file_get_contents($standby_m3u8);
-		$stream_m3u8 = file_get_contents($segment_folder.'stream'.$stream.'.m3u8');
-		if ($standby == $stream_m3u8){
-			$status = 'standby';
-		} else {
-			$status = 'onair';
-		}
-	} else {
-		$status = 'offline';
-	}
-
-	if ($ini[$stream]['state'] === null) $ini[$stream]['state'] = 'Offline';
-
-	$epginfo['info'] = array(
-		'state' => $ini[$stream]['state'],
-		'status' => $status,
-	);
-
-	// ONAir状態なら
-	if ($ini[$stream]["state"] == "ONAir"){
-
-		// 番組情報を取得
-		$epginfo['play'] = getEpgInfo($ch, $jkchannels, $ini[$stream]['channel'], $sid[$ini[$stream]['channel']], $onid[$ini[$stream]['channel']], $tsid[$ini[$stream]['channel']]);
-
-		// チャンネル名が取得出来なかったら代入
-		if ($epginfo['play']['channel'] == 'チャンネル名を取得できませんでした'){
-			$epginfo['play']['channel'] = $ch[$ini[$stream]['channel']];
-		}
-
-	} else {
-
-		$epginfo['play'] = array(
-			'ch' => 0,
-			'tsid' => 0,
-			'channel' => '',
-			'timestamp' => '', 
-			'duration' => '', 
-			'starttime' => '', 
-			'to' => '', 
-			'endtime' => '', 
-			'program_name' => '配信休止中…',
-			'program_info' => '',
-			'next_starttime' => '', 
-			'next_endtime' => '', 
-			'next_program_name' => '',
-			'next_program_info' => '',
-		);
-
-	}
-
+	// 番組情報を取得
 	foreach ($sid as $key => $value) {
-		// 番組情報を取得
 		$epginfo['onair'][strval($key)] = getEpgInfo($ch, $jkchannels, $key, $value, $onid[strval($key)], $tsid[strval($key)]);
 	}
 
 	if (!isset($epginfo['onair'])) $epginfo['onair'] = array();
+
+	// ストリーム状態とストリームの番組情報を取得する
+	foreach ($ini as $key => $value) {
+
+		$key = strval($key);
+
+		if ($ini[$key]['state'] == 'ONAir' or $ini[$key]['state'] == 'File'){
+			$standby = file_get_contents($standby_m3u8);
+			$stream_m3u8 = file_get_contents($segment_folder.'stream'.$key.'.m3u8');
+			if ($standby == $stream_m3u8){
+				$status = 'standby';
+			} else {
+				$status = 'onair';
+			}
+		} else {
+			$status = 'offline';
+		}
 	
-	$epginfo['api'] = 'epginfo';
+		if ($ini[$key]['state'] === null) $ini[$key]['state'] = 'Offline';
+	
+		$epginfo['info'][$key] = array(
+			'state' => $ini[$key]['state'],
+			'status' => $status,
+		);
+
+		// ONAir状態なら
+		if ($ini[$key]['state'] == 'ONAir'){
+
+			// 番組情報を取得
+			$epginfo['stream'][$key] = $epginfo['onair'][$ini[$key]['channel']];
+
+			// チャンネル名が取得出来なかったら代入
+			if ($epginfo['stream'][$key]['channel'] == 'チャンネル名を取得できませんでした'){
+				$epginfo['stream'][$key]['channel'] = $ch[$ini[$key]['channel']];
+			}
+
+		} else if ($ini[$key]['state'] == 'File'){
+
+			$epginfo['stream'][$key] = array(
+				'ch' => 0,
+				'tsid' => 0,
+				'channel' => $ini[$key]['filechannel'],
+				'time' => $ini[$key]['filetime'],
+				'start_timestamp' => $ini[$key]['start_timestamp'], 
+				'end_timestamp' => $ini[$key]['end_timestamp'], 
+				'program_name' => $ini[$key]['filetitle'],
+				'program_info' => $ini[$key]['fileinfo'],
+			);
+
+		} else {
+
+			$epginfo['stream'][$key] = array(
+				'ch' => 0,
+				'tsid' => 0,
+				'channel' => '',
+				'timestamp' => '', 
+				'duration' => '', 
+				'starttime' => '', 
+				'to' => '', 
+				'endtime' => '', 
+				'program_name' => '配信休止中…',
+				'program_info' => '',
+				'next_starttime' => '', 
+				'next_endtime' => '', 
+				'next_program_name' => '',
+				'next_program_info' => '',
+			);
+
+		}
+	}
 
 	// 出力
 	header('content-type: application/json; charset=utf-8');

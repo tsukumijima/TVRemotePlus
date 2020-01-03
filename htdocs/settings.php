@@ -149,7 +149,7 @@
 				}
 
 			// Offlineなら
-			} else if ($ini[$stream]['state'] == 'Offline'){
+			} else if ($_POST['state'] == 'Offline'){
 
 				if (!isset($_POST['allstop'])){
 
@@ -173,8 +173,11 @@
 
 					// ストリーム番号ごとに実行
 					foreach ($ini as $key => $value) {
+
+						$key = strval($key);
 					
-						// 強制でチャンネルを0に設定する
+						// 強制で全てのストリームをOfflineに設定
+						$ini[$key]['state'] = 'Offline';
 						$ini[$key]['channel'] = '0';
 							
 						// 配信休止中用のプレイリスト
@@ -1023,7 +1026,7 @@
 
 <?php		} //括弧終了 ?>
             <div id="button-box">
-              <button class="redbutton" type="button" onclick="location.href='/'"><i class="fas fa-home"></i>ホームに戻る</button>
+              <button class="redbutton" type="button" onclick="location.href='/<?php echo $stream; ?>/'"><i class="fas fa-home"></i>ホームに戻る</button>
             </div>
           </div>
 

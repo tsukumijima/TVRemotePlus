@@ -70,7 +70,7 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
         Substitute "s|/files/|/tvrp/files/|q"
         Substitute "s|/stream/|/tvrp/stream/|q"
         Substitute "s|/tweet/|/tvrp/tweet/|q"
-        Substitute "s|/setting/|/tvrp/setting/|q"
+        Substitute "s|/settings/|/tvrp/settings/|q"
         Substitute "s|/watch/|/tvrp/watch/|q"
         Substitute "s| \"/\"| \"/tvrp/\"|q"
         Substitute "s|href=\"/|href=\"/tvrp/|q"
@@ -108,7 +108,7 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter "/files/" "/tvrp/files/";
             sub_filter "/stream/" "/tvrp/stream/";
             sub_filter "/tweet/" "/tvrp/tweet/";
-            sub_filter "/setting/" "/tvrp/setting/";
+            sub_filter "/settings/" "/tvrp/settings/";
             sub_filter "/watch/" "/tvrp/watch/";
             sub_filter '"start_url": "/"' '"start_url": "/tvrp/"';
             sub_filter 'href="/"' 'href="/tvrp/"';

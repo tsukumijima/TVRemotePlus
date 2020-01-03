@@ -1,5 +1,8 @@
 <?php
 
+	// レスポンスをバッファに貯める
+	ob_start();
+
 	// ヘッダー読み込み
 	require_once ('../header.php');
 
@@ -12,6 +15,17 @@
 		$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		= initBonChannel($BonDriver_dir);
+
+	// ストリーム番号が指定されていなかったらリダイレクト
+	if (!getStreamNumber($_SERVER['REQUEST_URI'], true)){
+		// トップページにリダイレクト
+		if ($reverse_proxy){
+			header('Location: '.$reverse_proxy_url.'1/');
+		} else {
+			header('Location: '.$site_url.'1/');
+		}
+		exit;
+	}
 
 	// ストリーム番号を取得
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
@@ -40,6 +54,11 @@
 	$clock = date("Y/m/d H:i:s");
 
 	echo '</pre>';
+
+	// 溜めてあった出力を解放しフラッシュする
+	ob_end_flush();
+	ob_flush();
+	flush();
 
 ?>
 
@@ -392,7 +411,7 @@
     <div id="broadcast-stream-box">
       <div id="broadcast-stream-title"></div>
       <div id="broadcast-stream-info"></div>
-      <form id="setting-form" action="/setting/" method="post">
+      <form id="setting-form" action="/settings/" method="post">
         <input type="hidden" name="state" value="ONAir">
         <input id="broadcast-stream-channel" type="hidden" name="channel" value="">
 

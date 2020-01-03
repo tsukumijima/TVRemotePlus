@@ -20,7 +20,7 @@
 <head>
 <?php	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ ?>
   <title>ファイル再生 - <?php echo $site_title; ?></title>
-<?php	} else if (strpos($backtrace[0]['file'], 'setting.php') !== false){ ?>
+<?php	} else if (strpos($backtrace[0]['file'], 'settings.php') !== false){ ?>
   <title>設定 - <?php echo $site_title; ?></title>
 <?php	} else { ?>
   <title><?php echo $site_title; ?></title>
@@ -43,8 +43,8 @@
 	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css">'."\n";
 	}
-	if (strpos($backtrace[0]['file'], 'setting.php') !== false){ // setting.phpのみ
-		echo '  <link rel="stylesheet" type="text/css" href="/files/setting.css">'."\n";
+	if (strpos($backtrace[0]['file'], 'settings.php') !== false){ // settings.phpのみ
+		echo '  <link rel="stylesheet" type="text/css" href="/files/settings.css">'."\n";
 	}
 ?>
   <!-- Script -->
@@ -66,8 +66,8 @@
 	}
 	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
 		echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
-	} else if (strpos($backtrace[0]["file"], 'setting.php') !== false){ // setting.phpのみ
-		echo '  <script type="text/javascript" src="/files/setting.js"></script>'."\n";
+	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false){ // settings.phpのみ
+		echo '  <script type="text/javascript" src="/files/settings.js"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'ONAir'){
 		echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'File'){
@@ -165,7 +165,7 @@
       <i class="fas fa-home"></i>
       <span class="nav-link-href">ホーム</span>
     </a>
-    <form method="post" name="quickstop" action="/setting/">
+    <form method="post" name="quickstop" action="/settings/">
       <input type="hidden" name="state" value="Offline">
       <input type="hidden" name="stream" value="<?php echo $stream; ?>">
       <a class="nav-link" href="javascript:quickstop.submit()">
@@ -173,7 +173,7 @@
         <span class="nav-link-href">このストリームを終了</span>
       </a>
     </form>
-    <form method="post" name="allstop" action="/setting/">
+    <form method="post" name="allstop" action="/settings/">
       <input type="hidden" name="state" value="Offline">
       <input type="hidden" name="stream" value="<?php echo $stream; ?>">
       <input type="hidden" name="allstop" value="true">
@@ -190,7 +190,7 @@
       <i class="fab fa-twitter"></i>
       <span class="nav-link-href">Twitter ログイン</span>
     </a>
-    <a class="nav-link" href="/setting/">
+    <a class="nav-link" href="/settings/">
       <i class="fas fa-cog"></i>
       <span class="nav-link-href">設定</span>
     </a>

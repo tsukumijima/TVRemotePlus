@@ -77,7 +77,7 @@
       <div id="search-stream-box">
         <div id="search-stream-title"></div>
         <div id="search-stream-info"></div>
-        <form id="setting-form" action="/setting/" method="post">
+        <form id="setting-form" action="/settings/" method="post">
 
           <input type="hidden" name="state" value="File">
           <input id="stream-filepath" type="hidden" name="filepath" value="">
