@@ -16,8 +16,11 @@
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		= initBonChannel($BonDriver_dir);
 
-	// ストリーム番号が指定されていなかったらリダイレクト
-	if (!getStreamNumber($_SERVER['REQUEST_URI'], true)){
+	// ストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
+
+	// ストリーム番号が指定されていなかった or ストリーム番号が存在しなかったらストリーム1にリダイレクト
+	if (!getStreamNumber($_SERVER['REQUEST_URI'], true) or !isset($ini[$stream])){
 		// トップページにリダイレクト
 		if ($reverse_proxy){
 			header('Location: '.$reverse_proxy_url.'1/');
@@ -26,9 +29,6 @@
 		}
 		exit;
 	}
-
-	// ストリーム番号を取得
-	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
@@ -213,7 +213,7 @@
             <span id="epg-channel">Ch: <?php echo sprintf('%03d', $ini[$stream]['channel']).' '.$channel; ?></span>
 <?php		} //括弧終了 ?>
             <span id="epg-time">
-              <span id="epg-starttime"></span><span id="epg-to"></span><span id="epg-endtime"></span>
+              <span id="epg-starttime"></span> <span id="epg-to"></span> <span id="epg-endtime"></span>
             </span>
           </div>
 <?php	} else if ($ini[$stream]['state'] == 'File') { ?>
@@ -228,7 +228,7 @@
           <span id="status"></span>
           <div id="epg-chinfo">
             <span id="epg-time">
-              <span id="epg-starttime"></span><span id="epg-to"></span><span id="epg-endtime"></span>
+              <span id="epg-starttime"></span> <span id="epg-to"></span> <span id="epg-endtime"></span>
             </span>
           </div>
 <?php	} //括弧終了 ?>
@@ -246,7 +246,72 @@
         </div>
       </div>
 
-      <div class="line"></div>
+      <div id="stream-view-box">
+        <button class="stream-view" type="button" onclick="location.href='/1/'">
+          <div class="stream-box">
+            <div class="stream-number-title">Stream</div><div class="stream-number">1</div>
+            <form class="stream-stop" method="post" name="streamstop1" action="/settings/">
+              <input type="hidden" name="state" value="Offline">
+              <input type="hidden" name="stream" value="1">
+              <a href="javascript:streamstop1.submit();">
+                <i class="stream-stop-icon far fa-stop-circle"></i>
+              </a>
+            </form>
+            <div class="stream-state green">● File</div>
+            <div class="stream-info">
+              <div class="stream-title">恋する小惑星 [新] 01.「二人の約束」</div>
+              <div class="stream-time">2020/01/03 23:00 ～ 23:30</div>
+              <div class="stream-description">高校に入学した木ノ幡みらは、入ろうと決めていた天文部がなくなっていて大ショック。みらには、幼い頃にある人物と約束した「小惑星を発見する」という夢があったのだ。</div>
+            </div>
+          </div>
+        </button>
+        <button class="stream-view" type="button" onclick="location.href='/2/'">
+          <div class="stream-box">
+            <div class="stream-number-title">Stream</div><div class="stream-number">2</div>
+            <form class="stream-stop" method="post" name="streamstop2" action="/settings/">
+              <input type="hidden" name="state" value="Offline">
+              <input type="hidden" name="stream" value="2">
+              <a href="javascript:streamstop2.submit();">
+                <i class="stream-stop-icon far fa-stop-circle"></i>
+              </a>
+            </form>
+            <div class="stream-state blue">● ON Air</div>
+            <div class="stream-info">
+              <div class="stream-title">鉄オタ選手権～名鉄電車の陣▽多種多彩な車両を大特集!初代パノラマカー登場 [字][デ]</div>
+              <div class="stream-time">04:00 ～ 05:30</div>
+              <div class="stream-description">舞台は「名鉄電車」。愛知、岐阜に広がる全長440キロ超の路線を走る多種多彩な車両を大特集!初代パノラマカーや空港特急ミュースカイ、伝説の特急など名車が続々登場!</div>
+            </div>
+          </div>
+        </button>
+        <button class="stream-view" type="button" onclick="location.href='/3/'">
+          <div class="stream-box">
+            <div class="stream-number-title">Stream</div><div class="stream-number">3</div>
+            <form class="stream-stop disabled">
+              <i class="stream-stop-icon far fa-stop-circle"></i>
+            </form>
+            <div class="stream-state">● Offline</div>
+            <div class="stream-info">
+              <div class="stream-title">配信休止中…</div>
+              <div class="stream-time"></div>
+              <div class="stream-description"></div>
+            </div>
+          </div>
+        </button>
+        <button class="stream-view" type="button" onclick="location.href='/4/'">
+          <div class="stream-box">
+            <div class="stream-number-title">Stream</div><div class="stream-number">4</div>
+            <form class="stream-stop disabled">
+              <i class="stream-stop-icon far fa-stop-circle"></i>
+            </form>
+            <div class="stream-state">● Offline</div>
+            <div class="stream-info">
+              <div class="stream-title">配信休止中…</div>
+              <div class="stream-time"></div>
+              <div class="stream-description"></div>
+            </div>
+          </div>
+        </button>
+      </div>
 
       <div id="information">
 <?php		if (empty($BonDriver_dll) and empty($ch)){ // エラーを吐く ?>

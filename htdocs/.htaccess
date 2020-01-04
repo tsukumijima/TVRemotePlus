@@ -12,7 +12,7 @@ ErrorDocument 503 /files/error/503.php
 # phpの拡張子なしでアクセス出来るように
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([1-9]+)/$ index.php?stream=$1
+RewriteRule ^([0-9]+)/$ index.php?stream=$1
 
 RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d

@@ -75,6 +75,7 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
         Substitute "s| \"/\"| \"/tvrp/\"|q"
         Substitute "s|href=\"/|href=\"/tvrp/|q"
         Substitute "s|URL='/'|URL='/tvrp/'|q"
+        Substitute "s|location.href='/|location.href='/tvrp/|q"
         Substitute "s|/serviceworker.js|/tvrp/serviceworker.js|q"
       </Location>
     </VirtualHost>
@@ -113,6 +114,7 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter '"start_url": "/"' '"start_url": "/tvrp/"';
             sub_filter 'href="/"' 'href="/tvrp/"';
             sub_filter "URL='/'" "URL='/tvrp/'";
+            sub_filter "location.href='/" "location.href='/tvrp/";
             sub_filter "/serviceWorker.js" "/tvrp/serviceWorker.js";
             sub_filter "Cookies.set('settings', json)" "Cookies.set('settings', json, {path: '/tvrp/'})";
           

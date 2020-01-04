@@ -136,8 +136,12 @@ input[type="button"] {
     appearance: button;
 	outline: none;
     border: none;
+    background: none;
     box-sizing: border-box;
     cursor: pointer;
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Segoe UI','Arial','メイリオ';
 }
 
 input[type="submit"]::-webkit-search-decoration,
@@ -152,6 +156,11 @@ input[type="button"]::focus {
 
 button {
 	outline: none;
+    border: none;
+    background: none;
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Segoe UI','Arial','メイリオ';
 }
 
 input::-moz-focus-inner, button::-moz-focus-inner {
@@ -1317,6 +1326,8 @@ td {
     margin: 0;
     font-size: 21px;
     color: black;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #epg-title {
@@ -1348,10 +1359,11 @@ td {
 }
 
 #epg-info {
+    width: 77%;
+    margin-bottom: 10px;
     color: #575757;
     font-size: 15px;
-    margin-bottom: 10px;
-    width: 77%;
+    line-height: 150%;
 }
 
 @media screen and (max-width: 1024px){
@@ -1378,6 +1390,11 @@ td {
 }
 
 @media screen and (max-width: 500px){
+
+    #epg {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
     
     #epg-title {
         font-size: 19px;
@@ -1404,6 +1421,8 @@ td {
     font-size: 16.6px;
     line-height: 155%;
     margin-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #status {
@@ -1435,6 +1454,172 @@ td {
 
 #ikioi {
     margin-left: 4px;
+}
+
+@media screen and (max-width: 500px){
+    #epg-subinfo {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+/* ストリーム一覧 */
+
+#stream-view-box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    color: #272727;
+    box-sizing: border-box;
+}
+
+.stream-view {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    font-size: 16px;
+    padding: 0px 20px;
+    border-top: 2px solid #ededed;
+    box-sizing: border-box;
+    transition: ease 0.3s;
+    text-align: left;
+    user-select: none;
+    cursor: pointer;
+}
+
+.stream-view:last-of-type {
+    border-bottom: 2px solid #ededed;
+}
+
+.stream-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.stream-number {
+    margin-left: 6px;
+}
+
+.stream-stop {
+    margin-top: 2.5px;
+    margin-left: 25px;
+}
+
+.stream-stop-icon {
+    font-size: 26px;
+    color: #e91d5d;
+    transition: ease 0.1s;
+    opacity: 1;
+}
+
+.stream-stop.disabled .stream-stop-icon {
+    color: #808080;
+    opacity: 0.5;
+}
+
+.stream-stop:hover .stream-stop-icon {
+    color: #e95e1d;
+}
+
+.stream-stop.disabled:hover .stream-stop-icon {
+    color: #808080;
+}
+
+.stream-state {
+    min-width: 70px;
+    margin-left: 30px;
+    color: #808080;
+    font-size: 17px;
+}
+
+.stream-state.blue {
+    color: #007cff;
+}
+
+.stream-state.green {
+    color: #4ECDC4;
+}
+
+.stream-info {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    font-size: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.stream-title {
+    display: inline-block;
+    height: 18.5px;
+}
+
+.stream-time {
+    display: inline-block;
+    height: 17px;
+    margin-left: 15px;
+    font-size: 13.5px;
+}
+
+.stream-description {
+    display: inline-block;
+    height: 17px;
+    margin-left: 15px;
+    color: #808080;
+    font-size: 13.5px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@media screen and (min-width: 1024px){
+    .stream-view:hover {
+        background-color: #F5F5F5;
+    }
+}
+
+@media screen and (max-width: 500px){
+
+    .stream-view {
+        padding: 0px 10px;
+    }
+
+    .stream-number-title {
+        display: none;
+    }
+
+    .stream-stop {
+        margin-left: 10px;
+    }
+
+    .stream-state {
+        margin-left: 15px;
+    }
+
+    .stream-info {
+        margin-left: 10px;
+    }
+
+    .stream-title {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .stream-time {
+        display: none;
+    }
+
+    .stream-description {
+        display: none;
+    }
 }
 
 /* インフォメーション */
@@ -1494,6 +1679,7 @@ td {
     color: #474747;
     font-size: 110%;
 }
+
 /* 番組表 */
 
 #broadcast-box {

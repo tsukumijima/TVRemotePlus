@@ -80,49 +80,48 @@
           for (var i = $('.search-file-box').length; i < length; i++){
 
             download = 
-              '    <a class="search-file-download" href="/api/stream?file=' + encodeURIComponent(fileinfo[i]['file']) + '" target="blank" download="' + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + '">' + "\n"
-            + '      <i class="fas fa-download"></i>' + "\n"
-            + '    </a>' + "\n"
+              '    <a class="search-file-download" href="/api/stream?file=' + encodeURIComponent(fileinfo[i]['file']) + '" target="blank" download="' + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + '">'
+            + '      <i class="fas fa-download"></i>'
+            + '    </a>'
 
             encode = 
-              '    <div class="search-file-encode">' + "\n"
-            + '      <i class="fas fa-film"></i>' + "\n"
-            + '    </div>' + "\n"
+              '    <div class="search-file-encode">'
+            + '      <i class="fas fa-film"></i>'
+            + '    </div>'
 
             html += 
-              '<div class="search-file-box">' + "\n"
-            + '  <div class="search-file-thumb">' + "\n"
-            + '    <img class="search-file-thumb-img" src="/files/thumb/' + fileinfo[i]['thumb'] + '">' + "\n"
-            + '    <div class="search-file-ext ' + fileinfo[i]['pathinfo']['extension'] + '">' + fileinfo[i]['pathinfo']['extension'].toUpperCase() + '</div>' + "\n"
-            + (fileinfo[i]['pathinfo']['extension'].toLowerCase() == 'ts' ? encode : download)
-            + '  </div>' + "\n"
-            + '  <div class="search-file-content">' + "\n"
-            + '    <div class="search-file-path">' + fileinfo[i]['file'] + '</div>' + "\n"
-            + '    <div class="start_timestamp">' + fileinfo[i]['start_timestamp'] + '</div>' + "\n"
-            + '    <div class="end_timestamp">' + fileinfo[i]['end_timestamp'] + '</div>' + "\n"
-            + '    <div class="search-file-title">' + fileinfo[i]['title'] + '</div>' + "\n"
-            + '    <div class="search-file-info">' + "\n"
-            + '      <span class="search-file-channel">' + fileinfo[i]['channel'] + '</span>' + "\n"
-            + '      <div class="search-file-time">'
-            + '        <span>' + fileinfo[i]['date'] + '</span>' + "\n"
-            + '        <span>' + fileinfo[i]['start'] + '～' + fileinfo[i]['end'] + '(' + fileinfo[i]['duration'] + '分)</span>' + "\n"
-            + '      </div>' + "\n"
-            + '    </div>' + "\n"
-            + '    <div class="search-file-description">' + "\n"
-            + '      ' + fileinfo[i]['info'] + "\n"
-            + '    </div>' + "\n"
-            + '  </div>' + "\n"
-            + '</div>'; + "\n";
+              '<div class="search-file-box">'
+              + '<div class="search-file-thumb">'
+                + '<img class="search-file-thumb-img" src="/files/thumb/' + fileinfo[i]['thumb'] + '">'
+                + '<div class="search-file-ext ' + fileinfo[i]['pathinfo']['extension'] + '">' + fileinfo[i]['pathinfo']['extension'].toUpperCase() + '</div>'
+                + (fileinfo[i]['pathinfo']['extension'].toLowerCase() == 'ts' ? encode : download)
+              + '</div>'
+              + '<div class="search-file-content">'
+                + '<div class="search-file-path">' + fileinfo[i]['file'] + '</div>'
+                + '<div class="start_timestamp">' + fileinfo[i]['start_timestamp'] + '</div>'
+                + '<div class="end_timestamp">' + fileinfo[i]['end_timestamp'] + '</div>'
+                + '<div class="search-file-title">' + fileinfo[i]['title'] + '</div>'
+                + '<div class="search-file-info">'
+                + '<span class="search-file-channel">' + fileinfo[i]['channel'] + '</span>'
+                  + '<div class="search-file-time">'
+                    + '<span>' + fileinfo[i]['date'] + '</span> <span>' + fileinfo[i]['start'] + ' ～ ' + fileinfo[i]['end'] + ' (' + fileinfo[i]['duration'] + '分)</span>'
+                  + '</div>'
+                + '</div>'
+                + '<div class="search-file-description">'
+                  + fileinfo[i]['info']
+                + '</div>'
+              + '</div>'
+            + '</div>';;
           }
 
           // まだ表示しきれてないのがあるなら
           if (fileinfo.length > length){
             // もっと見る
             html += 
-              '<div id="search-more-box">' + "\n"
-            + '  <i class="fas fa-angle-down"></i>' + "\n"
-            + '  <span>もっと見る</span>' + "\n"
-            + '</div>'; + "\n";
+              '<div id="search-more-box">'
+            + '  <i class="fas fa-angle-down"></i>'
+            + '  <span>もっと見る</span>'
+            + '</div>';;
           }
 
           // 1つずつだと遅すぎるため一気に出す
