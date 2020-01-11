@@ -404,7 +404,7 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --quality balanced --profile Main'.
+					' --vpp-afs preset=default --quality balanced --profile Main'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
@@ -657,7 +657,7 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --quality balanced --profile Main'.
+					' --vpp-afs preset=default --quality balanced --profile Main'.
 					// 音声
 					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.

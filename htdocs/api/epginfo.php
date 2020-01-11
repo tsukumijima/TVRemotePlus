@@ -182,11 +182,6 @@
 		}
 	
 		if ($ini[$key]['state'] === null) $ini[$key]['state'] = 'Offline';
-	
-		$epginfo['info'][$key] = array(
-			'state' => $ini[$key]['state'],
-			'status' => $status,
-		);
 
 		// ONAir状態なら
 		if ($ini[$key]['state'] == 'ONAir'){
@@ -194,14 +189,21 @@
 			// 番組情報を取得
 			$epginfo['stream'][$key] = $epginfo['onair'][$ini[$key]['channel']];
 
+			// ステータス
+			$epginfo['stream'][$key]['state'] = $ini[$key]['state'];
+			$epginfo['stream'][$key]['status'] = $status;
+
 			// チャンネル名が取得出来なかったら代入
 			if ($epginfo['stream'][$key]['channel'] == 'チャンネル名を取得できませんでした'){
 				$epginfo['stream'][$key]['channel'] = $ch[$ini[$key]['channel']];
 			}
 
+		// ファイル再生
 		} else if ($ini[$key]['state'] == 'File'){
 
 			$epginfo['stream'][$key] = array(
+				'state' => $ini[$key]['state'],
+				'status' => $status,
 				'ch' => 0,
 				'tsid' => 0,
 				'channel' => $ini[$key]['filechannel'],
@@ -212,9 +214,12 @@
 				'program_info' => $ini[$key]['fileinfo'],
 			);
 
+		// オフライン
 		} else {
 
 			$epginfo['stream'][$key] = array(
+				'state' => $ini[$key]['state'],
+				'status' => $status,
 				'ch' => 0,
 				'tsid' => 0,
 				'channel' => '',

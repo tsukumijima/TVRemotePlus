@@ -1482,7 +1482,7 @@ td {
     padding: 0px 20px;
     border-top: 2px solid #ededed;
     box-sizing: border-box;
-    transition: ease 0.3s;
+    transition: background-color ease 0.3s;
     text-align: left;
     user-select: none;
     cursor: pointer;
@@ -1514,8 +1514,11 @@ td {
 .stream-stop-icon {
     font-size: 26px;
     color: #e91d5d;
-    transition: ease 0.1s;
     opacity: 1;
+}
+
+.stream-stop.disabled {
+    cursor: auto;
 }
 
 .stream-stop.disabled .stream-stop-icon {
@@ -1524,7 +1527,7 @@ td {
 }
 
 .stream-stop:hover .stream-stop-icon {
-    color: #e95e1d;
+    color: #b91a4d;
 }
 
 .stream-stop.disabled:hover .stream-stop-icon {
@@ -1558,19 +1561,20 @@ td {
 
 .stream-title {
     display: inline-block;
-    height: 18.5px;
+    line-height: 18.5px;
 }
 
-.stream-time {
+.stream-channel {
     display: inline-block;
-    height: 17px;
+    line-height: 17px;
     margin-left: 15px;
     font-size: 13.5px;
+    color: #e91d5d;
 }
 
 .stream-description {
     display: inline-block;
-    height: 17px;
+    line-height: 17px;
     margin-left: 15px;
     color: #808080;
     font-size: 13.5px;
@@ -1613,7 +1617,7 @@ td {
         text-overflow: ellipsis;
     }
 
-    .stream-time {
+    .stream-channel {
         display: none;
     }
 

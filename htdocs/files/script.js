@@ -129,7 +129,7 @@
     }()),1000);
 
 
-    // ***** 番組表表示 *****
+    // ***** 番組表・ストリーム一覧表示 *****
 
     setInterval((function status(){
       $.ajax({
@@ -151,7 +151,7 @@
             var flg = false;
           }
           
-          if (data['info'][stream]['state'] == 'ONAir'){
+          if (data['stream'][stream]['state'] == 'ONAir'){
 
             // 変化がある場合のみ書き換え
             if (document.getElementById('epg-starttime').innerHTML != data['stream'][stream]['starttime'] ||
@@ -182,7 +182,7 @@
               document.getElementById('state').style.color = '#007cff';
             }
 
-          } else if (data['info'][stream]['state'] == 'Offline') {
+          } else if (data['stream'][stream]['state'] == 'Offline') {
 
             // Offline
             document.getElementById('state').textContent = '● Offline';
@@ -190,7 +190,7 @@
           }
 
           // stateを記録しておく
-          document.getElementById('state').value = data['info'][stream]['state'];
+          document.getElementById('state').value = data['stream'][stream]['state'];
 
           // progressbarの割合を計算して代入
           var percent = ((Math.floor(Date.now() / 1000) - data['stream'][stream]['timestamp']) / data['stream'][stream]['duration']) * 100;
@@ -200,7 +200,7 @@
           for (key in data['onair']){
 
             // 変化がある場合のみ書き換え
-            // てか特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
+            // 特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
             if (document.getElementsByClassName('broadcast-start-ch' + key)[0].innerHTML != data['onair'][key]['starttime'] ||
                 document.getElementsByClassName('broadcast-title-ch' + key)[0].innerHTML != data['onair'][key]['program_name']){
 
@@ -241,6 +241,73 @@
 
           }
 
+          // ストリーム番号ごとに実行
+          for (key in data['stream']){
+
+            var elem = document.getElementsByClassName('stream-view-' + (key))[0];
+            
+            switch (data['stream'][key]['state']){
+              
+              case 'ONAir':
+                var state = '● ON Air'
+                var color = 'blue';
+                var time = data['stream'][key]['starttime'] + ' ～ ' + data['stream'][key]['endtime'];
+                break;
+
+              case 'File':
+                var state = '● File'
+                var color = 'green';
+                var time = data['stream'][key]['time'];
+                break;
+
+              default:
+                var state = '● Offline'
+                var color = '';
+                var time = '';
+                break;
+            }
+
+            // 要素が存在しない・変化がある場合のみ書き換え
+            if ((data['stream'][key]['state'] != 'Offline' || key == '1') &&
+                (elem === undefined || elem.getElementsByClassName('stream-title')[0].innerHTML != data['stream'][key]['program_name'])){
+
+              // 書き換え用html
+              var streamview = `<div class="stream-box">
+                                  <div class="stream-number-title">Stream</div><div class="stream-number">` + key + `</div>
+                                  <div class="stream-stop ` + (data['stream'][key]['state'] == 'Offline' ? 'disabled' : '') + `">
+                                    <i class="stream-stop-icon far fa-stop-circle"></i>
+                                  </div>
+                                  <div class="stream-state ` + color + `">` + state + `</div>
+                                  <div class="stream-info">
+                                    <div class="stream-title">` + data['stream'][key]['program_name'] + `</div>
+                                    <div class="stream-channel">` + data['stream'][key]['channel'] + `</div>
+                                    <div class="stream-description">` + data['stream'][key]['program_info'] + `</div>
+                                  </div>
+                                </div>`;
+
+              // 番組情報を書き換え
+              if (elem === undefined){
+
+                // 親要素を追加
+                streamview = `<button class="stream-view stream-view-` + key + `" type="button" data-num="` + key + `" data-url="/` + key + `/">` + streamview + `</button>`;
+
+                // 新規で要素を作る
+                document.getElementById('stream-view-box').insertAdjacentHTML('beforeend', streamview);
+
+              } else {
+
+                // 既存のものを書き換え
+                elem.innerHTML = streamview;
+              }
+
+            // オフラインかつ要素が存在する場合
+            } else if (elem !== undefined && data['stream'][key]['state'] == 'Offline' && key != '1'){
+
+              // 要素を削除する
+              elem.parentNode.removeChild(elem);
+            }
+          }
+
           // 高さ調整(初回のみ)
           if (flg) $('.swiper-wrapper').eq(1).css('height', $('.broadcast-nav.swiper-slide').height() + 'px');
 
@@ -248,6 +315,55 @@
       });
       return status;
     }()), 10000);
+
+
+    // ***** ストリーム終了・遷移 *****
+
+    $('body').on('click','.stream-view',function(event){
+
+      // ストリーム終了ボタン
+      if ($(event.target).hasClass('stream-stop-icon') && !$(event.target).parent().hasClass('disabled')){
+
+        var streamview = this;
+        var streamnum = $(streamview).attr('data-num');
+        
+        toastr.info('ストリーム ' + streamnum + ' を終了します。');
+
+        $.ajax({
+          url: '/settings/',
+          type: 'post',
+          data: {state: 'Offline', stream: streamnum},
+          cache: false,
+          success: function(data) {
+            
+            toastr.success('ストリーム ' + streamnum + ' を終了しました。');
+
+            // Offlineにする
+            $(streamview).find('.stream-stop').addClass('disabled');
+            $(streamview).find('.stream-state').removeClass('blue');
+            $(streamview).find('.stream-state').removeClass('green');
+            $(streamview).find('.stream-state').html('● Offline');
+            $(streamview).find('.stream-title').html('配信休止中…');
+            $(streamview).find('.stream-channel').empty();
+            $(streamview).find('.stream-description').empty();
+
+          }, error: function(){
+            toastr.error('ストリーム ' + streamnum + ' の終了に失敗しました…');
+          }
+        });
+
+      } else if ($(event.target).parent().hasClass('disabled')){
+
+        event.preventDefault();
+
+      } else {
+
+        // 他のストリームへ遷移
+        location.href = $(this).attr('data-url');
+
+      }
+
+    });
 
 
     // ***** ツイート関連 *****

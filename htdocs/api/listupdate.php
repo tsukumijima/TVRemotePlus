@@ -45,16 +45,33 @@
 
 	}
 
-	// リセット要求が来た場合
-	if (isset($_GET['reset'])){
+	// リストリセット
+	if (isset($_GET['list_reset'])){
 
 		// jsonを削除
 		@unlink($infofile);
+
+		$json = array(
+			'api' => 'listupdate',
+			'status' => 'list_reset',
+		);
+
+		// レスポンス
+		$response = json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+		echo $response;
+
+		exit;
+	}
+
+	// 再生履歴を削除
+	if (isset($_GET['history_reset'])){
+
+		// jsonを削除
 		@unlink($historyfile);
 
 		$json = array(
 			'api' => 'listupdate',
-			'status' => 'reset',
+			'status' => 'history_reset',
 		);
 
 		// レスポンス

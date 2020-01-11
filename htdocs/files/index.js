@@ -13,6 +13,7 @@
   };
 
   // ロード時 & リサイズ時に発火
+  var timer = false;
   $(window).on('DOMContentLoaded resize', function(event){
 
     // ロード時のみ発火
@@ -30,15 +31,15 @@
     }
 
     // 画面の横幅を取得
-    var _width = document.body.clientWidth;
+    var windowWidth = document.documentElement.clientWidth;
     // 画面の高さを取得
-    var _height = window.innerHeight;
+    var windowHeight = document.documentElement.clientHeight;
     // 画面の向きを取得
     var orientation = window.orientation;
 
     $(window).on('load', function(){
       // スマホ・タブレットならplaceholder書き換え
-      if (_width <= 1024){
+      if (windowWidth <= 1024){
         document.getElementById('tweet').setAttribute('placeholder', 'ツイート');
       } else {
         document.getElementById('tweet').setAttribute('placeholder', 'ツイート (Ctrl+Enterで送信)');
@@ -48,68 +49,63 @@
     // スマホならスクロールに応じて動画を固定できるようdivを移動させる
     // フルスクリーンで無いことを確認してから
     // 縦画面のみ発動
-    if (_width <= 500 && (orientation === 0 || orientation === undefined)
+    if (windowWidth <= 500 && (orientation === 0 || orientation === undefined)
         && (isset(document.getElementById('dplayer-script').previousElementSibling)
             && document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer')
         && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
       $('#content-wrap').before($('#dplayer'));
-    } else if (_width > 500
+    } else if (windowWidth > 500
       && (isset(document.getElementById('content-wrap').previousElementSibling)
           && document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer')
         && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
       $('#dplayer-script').before($('#dplayer'));
     }
 
-    // 1024px以上
-    if (_width > 1024){
-
-      // ウィンドウを読み込んだ時・リサイズされた時に発動
-      // 何故か上手くいかないので8回繰り返す
-      // 正直どうなってるのか自分でもわからない
-      var result = 0; // 初期化
-
-      while (true){
-        var WindowHeight = _height - document.getElementById('top').clientHeight;
-        var width = $('section').width();
-
-        // Twitter非表示時
-        if (!settings['twitter_show']){
-          var height= $('#dplayer').width() * (9 / 16);
-        } else {
-          var height= $('#dplayer').width() * (9 / 16) + 136; // $('#tweet-box').height()
-        }
-
-        // 同じならループを抜ける
-        if (result == (width * WindowHeight) / height) break;
-
-        // widthが変なとき用
-        if (width < ($(window).width() / 2)){
-          $('section').css('max-width', '1250px');
-          break;
-        }
-
-        result = (width * WindowHeight) / height;
-        // console.log('width: ' + width);
-        // console.log('result: ' + result);
-        $('section').css('max-width', result + 'px');
-
-      }
+    if (timer !== false) {
+      clearTimeout(timer);
     }
 
-    // ロード時のみ発火
-    // 画面のリサイズを待ってから初期化する
-    if (event.type == 'DOMContentLoaded'){
+    timer = setTimeout(function() {
+
+      // リサイズが終了した後に実行する
+      
+      // 1024px以上
+      if (windowWidth > 1024){
+
+        // リサイズ対象の幅
+        var targetWidth = document.getElementById('content-wrap').clientWidth * 0.99;
+        var targetHeight = document.getElementById('content-wrap').clientHeight;
+        var headerheight = document.getElementById('top').clientHeight; // ヘッダーの高さ分
+        var percentage = (windowHeight - headerheight) / targetHeight; // windowHeight は targetHeight の percentage 倍
+
+        // リサイズする
+        var resize = Math.ceil(targetWidth * percentage) + 'px';
+        document.getElementById('main').style.maxWidth = resize;
+
+        // 高さのずれを補正
+        var gap = (windowHeight - headerheight) - document.getElementById('content-wrap').clientHeight;
+
+        // なぜ大体ずれ×2.3追加で直るかはしらない（本当は ↑ だけで綺麗に収まるはず・調べてもよくわからなかったので妥協…）
+        document.getElementById('main').style.maxWidth = Math.ceil(targetWidth * percentage + (gap * 2.3)) + 'px';
+
+        // フッターも忘れずに
+        document.getElementById('footer').style.maxWidth = Math.ceil(targetWidth * percentage + (gap * 2.3)) + 'px';
+          
+      }
+
+      // 既に初期化されていたら一旦破棄する
+      if (typeof slideTab !== 'undefined'){
+        slideTabButton.destroy(false, true);
+        slideTab.destroy(false, true);
+      }
 
       // タブを初期化
       slideTab = new Swiper('#broadcast-tab-box', {
         slidesPerView: 'auto',
         watchSlidesVisibility: true,
         watchSlidesProgress: true,
+        updateOnWindowResize: true,
         slideActiveClass: 'swiper-slide-active'
-      });
-      slideTab.on('tap', function(){
-        currentTab = slideTabButton.activeIndex;
-        slideTab.slideTo(currentTab, 500, true);
       });
       slideTabButton = new Swiper('#broadcast-box', {
         autoHeight: true,
@@ -118,7 +114,7 @@
         }
       });
 
-    }
+    }, 200);
 
   });
   

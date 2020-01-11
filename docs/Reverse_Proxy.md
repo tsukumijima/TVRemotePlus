@@ -8,16 +8,16 @@
 
 ## 注意
 
- - **既に Apache や nginx などの Web サーバーについて比較的知識がある人向けです。**
+ - **既に Apache や nginx などの Web サーバーについて比較的知識がある人向けです**
    - よくわからない方（ Apache や nginx が何か分からない人・設定ファイルを弄ったことがない人・リバースプロキシの意味が全くわからない人）はやらない方が良いと思います…  
    - また、**設定を誤ると外部からの攻撃に脆弱になる可能性があります**・細心の注意を払って作業してください
  - リバースプロキシとは、TVRemotePlus のサーバー PC に直接アクセスするのではなく、リバースプロキシになる PC が代わりに TVRemotePlus にアクセスし、そのデータをそっくりそのまま返してくる（アクセスにワンクッションおく）事を指します（詳しくは [Wikipedia](https://ja.wikipedia.org/wiki/%E3%83%AA%E3%83%90%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7) や [リバースプロキシ (reverse proxy) とは](https://wa3.i-3-i.info/word1755.html) を参照してください）
- - **予め Let's Encrypt を使い、HTTPS で接続出来るようにしておいてください。**
+ - **予め Let's Encrypt を使い、HTTPS で接続出来るようにしておいてください**
    - HTTP 接続の場合、通信内容が盗聴される可能性があります・セキュリティ向上の為、 HTTPS にすることを強く推奨します
- - V6プラスを契約している環境では、ポート解放が出来ない場合があります。
+ - V6プラスを契約している環境では、ポート解放が出来ない場合があります
    - VPS を契約した上で OpenVPN サーバーを VPS に建て、TVRemotePlus のサーバ PC と VPN で接続し、VPS をリバースプロキシにすることも出来ます（難易度高）
  - リバースプロキシを利用せず直接 TVRemotePlus のサーバー PC を外部に公開することも出来るとは思いますが、外部からの攻撃に常に晒される事になるためお勧めしません
- - **Apache と nginx は同じ Web サーバー用ソフトウェアです。どちらか好きな方を選んでリバースプロキシにする PC にインストール・設定してください。**
+ - **Apache と nginx は同じ Web サーバー用ソフトウェアです。どちらか好きな方を選んでリバースプロキシにする PC にインストール・設定してください**
    - 両方設定する必要はありません（むしろポートがバッティングしてどっちかが落ちます）
    - Apache を使う場合は［Apache の設定］の方を、nginx を使う場合は［nginx の設定］の方を参照してください
 
@@ -74,8 +74,8 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
         Substitute "s|/watch/|/tvrp/watch/|q"
         Substitute "s| \"/\"| \"/tvrp/\"|q"
         Substitute "s|href=\"/|href=\"/tvrp/|q"
+        Substitute "s|data-url=\"/|data-url=\"/tvrp/|q"
         Substitute "s|URL='/'|URL='/tvrp/'|q"
-        Substitute "s|location.href='/|location.href='/tvrp/|q"
         Substitute "s|/serviceworker.js|/tvrp/serviceworker.js|q"
       </Location>
     </VirtualHost>
@@ -113,8 +113,8 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter "/watch/" "/tvrp/watch/";
             sub_filter '"start_url": "/"' '"start_url": "/tvrp/"';
             sub_filter 'href="/"' 'href="/tvrp/"';
+            sub_filter 'data-url="/"' 'data-url="/tvrp/"';
             sub_filter "URL='/'" "URL='/tvrp/'";
-            sub_filter "location.href='/" "location.href='/tvrp/";
             sub_filter "/serviceWorker.js" "/tvrp/serviceWorker.js";
             sub_filter "Cookies.set('settings', json)" "Cookies.set('settings', json, {path: '/tvrp/'})";
           

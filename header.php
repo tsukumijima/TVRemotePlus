@@ -153,6 +153,10 @@
         <i class="fas fa-trash-restore-alt"></i>
         <span class="menu-link-href">リストをリセット</span>
       </div>
+      <div id="hisory-reset" class="menu-link">
+        <i class="fas fa-trash-alt"></i>
+        <span class="menu-link-href">再生履歴をリセット</span>
+      </div>
     </div>
   </nav>
 <?php	} // 括弧終了 ?>

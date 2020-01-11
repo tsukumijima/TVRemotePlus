@@ -191,12 +191,27 @@
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
       $.ajax({
-        url: '/api/listupdate?reset',
+        url: '/api/listupdate?list_reset',
         dataType: 'json',
         cache: false,
         success: function(data) {
           sortFileinfo('fileinfo', 1);
           toastr.success('リストをリセットしました。');
+        }
+      });
+    });
+
+    // 再生履歴をリセット
+    $('#history-reset').click(function(event){ 	
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
+      $('#menu-content').removeClass('open');
+      $.ajax({
+        url: '/api/listupdate?history_reset',
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+          sortFileinfo('fileinfo', 1);
+          toastr.success('再生履歴をリセットしました。');
         }
       });
     });

@@ -247,70 +247,32 @@
       </div>
 
       <div id="stream-view-box">
-        <button class="stream-view" type="button" onclick="location.href='/1/'">
+<?php	foreach ($ini as $key => $value){ // 地デジchの数だけ繰り返す ?>
+<?php	  if ($value['state'] != 'Offline' || $key == '1'){ ?>
+        <div class="stream-view stream-view-<?php echo $key; ?>" data-num="<?php echo $key; ?>" data-url="/<?php echo $key; ?>/">
           <div class="stream-box">
-            <div class="stream-number-title">Stream</div><div class="stream-number">1</div>
-            <form class="stream-stop" method="post" name="streamstop1" action="/settings/">
-              <input type="hidden" name="state" value="Offline">
-              <input type="hidden" name="stream" value="1">
-              <a href="javascript:streamstop1.submit();">
-                <i class="stream-stop-icon far fa-stop-circle"></i>
-              </a>
-            </form>
-            <div class="stream-state green">● File</div>
-            <div class="stream-info">
-              <div class="stream-title">恋する小惑星 [新] 01.「二人の約束」</div>
-              <div class="stream-time">2020/01/03 23:00 ～ 23:30</div>
-              <div class="stream-description">高校に入学した木ノ幡みらは、入ろうと決めていた天文部がなくなっていて大ショック。みらには、幼い頃にある人物と約束した「小惑星を発見する」という夢があったのだ。</div>
+            <div class="stream-number-title">Stream</div><div class="stream-number"><?php echo $key; ?></div>
+            <div class="stream-stop <?php echo $value['state'] == 'Offline' ? 'disabled' : ''; ?>">
+              <i class="stream-stop-icon far fa-stop-circle"></i>
             </div>
-          </div>
-        </button>
-        <button class="stream-view" type="button" onclick="location.href='/2/'">
-          <div class="stream-box">
-            <div class="stream-number-title">Stream</div><div class="stream-number">2</div>
-            <form class="stream-stop" method="post" name="streamstop2" action="/settings/">
-              <input type="hidden" name="state" value="Offline">
-              <input type="hidden" name="stream" value="2">
-              <a href="javascript:streamstop2.submit();">
-                <i class="stream-stop-icon far fa-stop-circle"></i>
-              </a>
-            </form>
+<?php	    if ($value['state'] == 'ONAir'){ ?>
             <div class="stream-state blue">● ON Air</div>
-            <div class="stream-info">
-              <div class="stream-title">鉄オタ選手権～名鉄電車の陣▽多種多彩な車両を大特集!初代パノラマカー登場 [字][デ]</div>
-              <div class="stream-time">04:00 ～ 05:30</div>
-              <div class="stream-description">舞台は「名鉄電車」。愛知、岐阜に広がる全長440キロ超の路線を走る多種多彩な車両を大特集!初代パノラマカーや空港特急ミュースカイ、伝説の特急など名車が続々登場!</div>
-            </div>
-          </div>
-        </button>
-        <button class="stream-view" type="button" onclick="location.href='/3/'">
-          <div class="stream-box">
-            <div class="stream-number-title">Stream</div><div class="stream-number">3</div>
-            <form class="stream-stop disabled">
-              <i class="stream-stop-icon far fa-stop-circle"></i>
-            </form>
+<?php	    } else if ($value['state'] == 'File') { ?>
+            <div class="stream-state green">● File</div>
+<?php	    } else { ?>
             <div class="stream-state">● Offline</div>
+<?php	    } //括弧終了 ?>
             <div class="stream-info">
-              <div class="stream-title">配信休止中…</div>
-              <div class="stream-time"></div>
+              <div class="stream-title"><?php echo $value['state'] == 'Offline' ? '配信休止中…' : '取得中…'; ?></div>
+              <div class="stream-channel">
+                <?php echo $value['state'] == 'File' ? $value['filechannel'] : ($value['state'] == 'ONAir' ? $ch[strval($value['channel'])] : '') ?>
+              </div>
               <div class="stream-description"></div>
             </div>
           </div>
-        </button>
-        <button class="stream-view" type="button" onclick="location.href='/4/'">
-          <div class="stream-box">
-            <div class="stream-number-title">Stream</div><div class="stream-number">4</div>
-            <form class="stream-stop disabled">
-              <i class="stream-stop-icon far fa-stop-circle"></i>
-            </form>
-            <div class="stream-state">● Offline</div>
-            <div class="stream-info">
-              <div class="stream-title">配信休止中…</div>
-              <div class="stream-time"></div>
-              <div class="stream-description"></div>
-            </div>
-          </div>
-        </button>
+        </div>
+<?php	  } //括弧終了 ?>
+<?php	} //括弧終了 ?>
       </div>
 
       <div id="information">
