@@ -27,8 +27,18 @@
 	if (empty($CONSUMER_KEY) or empty($CONSUMER_SECRET)){
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">';
 		echo '<b>エラー：TwitterAPI の Consumer Key 、または Consumer Secret が設定されていないため、アプリ連携ができません。</b><br>';
-		echo 'Twitter 投稿機能を利用する場合は、予め TwitterAPI 開発者アカウントを取得した上で <a href="/setting/">設定ページ</a> から<br>';
+		echo 'Twitter 投稿機能を利用する場合は、予め TwitterAPI 開発者アカウントを取得した上で <a href="/settings/">環境設定</a> から<br>';
 		echo 'TwitterAPI の Consumer Key・Consumer Secret を設定し、もう一度アプリ連携し直してください。<br>';
+		echo '<a href="/">ホームに戻る</a><br>';
+		exit(1);
+	}
+
+	// リバースプロキシからのアクセスでリバースプロキシのURLが指定されていない場合
+	if ($OAUTH_CALLBACK === false){
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">';
+		echo '<b>エラー：リバースプロキシからアクセスする場合の URL が指定されていないため、アプリ連携ができません。</b><br>';
+		echo 'リバースプロキシから Twitter 投稿機能を利用する場合は、予め TwitterAPI 開発者アカウントを取得した上で <a href="/settings/">環境設定</a> から<br>';
+		echo 'リバースプロキシからアクセスする場合の URL を設定し、もう一度アプリ連携し直してください。<br>';
 		echo '<a href="/">ホームに戻る</a><br>';
 		exit(1);
 	}
@@ -46,19 +56,18 @@
 		if (preg_match('/Callback URL not approved for this client application.*/', $e)){
 			echo '<b>エラー：TVRemotePlus の Callback URL が TwitterAPI 側に承認されていない、または一致しないため、アプリ連携ができません。</b><br>';
 			echo 'TwitterAPI のアプリ設定にて、Callback URLs の項目に Callback URL ('.$OAUTH_CALLBACK.') を追加し、もう一度アプリ連携し直してください。<br>';
-			echo 'また、require.php にて $OAUTH_CALLBACK の値を変更していて TwitterAPI 側の Callback URL と一致しない場合にもこのエラーが発生します。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
 			
 		} else if (preg_match('/Could not authenticate you.*/', $e)){
 			echo '<b>エラー：TwitterAPI の認証に失敗したため、アプリ連携ができません。</b><br>';
 			echo '設定した Consumer Key・Consumer Secret が間違っている可能性があります。<br>';
-			echo '<a href="/setting/">設定ページ</a> から Consumer Key・Consumer Secret が正しいかどうか確認し、もう一度アプリ連携し直してください。<br>';
+			echo '<a href="/settings/">環境設定</a> から Consumer Key・Consumer Secret が正しいかどうか確認し、もう一度アプリ連携し直してください。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
 			
 		} else {
 			echo '<b>エラー：認証中に不明なエラーが発生したため、アプリ連携ができません。</b><br>';
 			echo $e.'<br>';
-			echo '<a href="/setting/">設定ページ</a> から設定が正しいかどうか確認し、もう一度アプリ連携し直してください。<br>';
+			echo '<a href="/settings/">環境設定</a> から設定が正しいかどうか確認し、もう一度アプリ連携し直してください。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
 		}
 		exit(1);

@@ -26,15 +26,13 @@ if (!empty($_SERVER['HTTPS'])){
 	$https_port = @$_SERVER['SERVER_PORT'] + 100;
 }
 
-// HTTPホスト
-// リバースプロキシからかどうか判定
+// リバースプロキシからのアクセスかどうか判定
 if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
+	// リバースプロキシからのアクセス
 	$reverse_proxy = true;
-    $http_host = @$_SERVER['HTTP_X_FORWARDED_HOST'];
-// 通常のアクセス
 } else {
+	// 通常のアクセス
 	$reverse_proxy = false;
-    $http_host = @$_SERVER['HTTP_HOST'];
 }
 
 
@@ -44,7 +42,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
 $site_title = 'TVRemotePlus';
 
 // サイトのベース URL
-$site_url = @$scheme.$http_host.'/';
+$site_url = @$scheme.$_SERVER['HTTP_HOST'].'/';
 
 // Twitter API のコールバック URL
 $OAUTH_CALLBACK = $site_url.'tweet/callback.php';
@@ -137,7 +135,16 @@ $vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 // config.php を読み込む
 require_once (dirname(__FILE__).'/config.php');
 
-// リバースプロキシからのアクセス時はOAUTH_CALLBACKを差し替える
-if ($reverse_proxy){
-	$OAUTH_CALLBACK = rtrim($reverse_proxy_url, '/').'/tweet/callback.php';
+// リバースプロキシからのアクセス時は site_url と OAUTH_CALLBACK を差し替える
+if ($reverse_proxy and !empty($reverse_proxy_url)){
+
+	$site_url = rtrim($reverse_proxy_url, '/').'/';
+	$OAUTH_CALLBACK = $site_url.'tweet/callback.php';
+
+// リバースプロキシからのアクセスだがリバースプロキシのURLが指定されていない
+} else if ($reverse_proxy and empty($reverse_proxy_url)){
+
+	$OAUTH_CALLBACK = false;
+
 }
+
