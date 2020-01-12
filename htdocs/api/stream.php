@@ -10,10 +10,10 @@
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
-	// MP4を出力する関数
+	// 動画を出力する関数
 	// https://blog.logicky.com/2019/05/29/151209?utm_source=feed
 	// を大変参考にさせていただきました、ありがとうございます
-	function loadMP4 ($file, $extension){
+	function loadVideo($file, $extension){
 
 		$fp = @fopen($file, 'rb'); // ファイルを開く
 		$size   = filesize($file); // ファイルサイズ
@@ -105,15 +105,15 @@
 	}
 
 	// 指定されたファイル
-	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and $pathinfo['extension'] != 'ts'){
+	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and ($pathinfo['extension'] == 'mp4' or $pathinfo['extension'] == 'mkv')){
 
-		loadMP4($TSfile_dir.'/'.$_GET['file'], $pathinfo['extension']);
+		loadVideo($TSfile_dir.'/'.$_GET['file'], $pathinfo['extension']);
 		exit();	
 		
 	// MP4・MKVのみ
-	} else if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){
+	} else if ($ini[$stream]['state'] == 'File' and $ini[$stream]['encoder'] == 'Progressive' and ($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv')){
 
-		loadMP4($TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['fileext']);
+		loadVideo($TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['fileext']);
 		exit();	 
 
 	} else {

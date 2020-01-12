@@ -142,12 +142,12 @@
 		return $duration;
 	}
 
-	// ファイルを検索
-	// 四階層まで探索する
-	// MP4・MKVも追加
-	$search = array_merge(glob($TSfile_dir.'/*.ts'), glob($TSfile_dir.'/*/*.ts'), glob($TSfile_dir.'/*/*/*.ts'), glob($TSfile_dir.'/*/*/*/*.ts'),
-						  glob($TSfile_dir.'/*.mp4'), glob($TSfile_dir.'/*/*.mp4'), glob($TSfile_dir.'/*/*/*.mp4'), glob($TSfile_dir.'/*/*/*/*.mp4'),
-						  glob($TSfile_dir.'/*.mkv'), glob($TSfile_dir.'/*/*.mkv'), glob($TSfile_dir.'/*/*/*.mkv'), glob($TSfile_dir.'/*/*/*/*.mkv'));
+	// ファイルを四階層まで検索する
+	// MP4・MKVファイルも検索する
+	$search = array_merge(glob($TSfile_dir.'/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE),
+						  glob($TSfile_dir.'/*/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE),
+						  glob($TSfile_dir.'/*/*/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE),
+						  glob($TSfile_dir.'/*/*/*/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE));
 
 	foreach ($search as $key => $value) {
 
@@ -222,8 +222,8 @@
 			$TSfile['data'][$key]['info_state'] = 'generated';
 
 		// 番組情報を取得していないなら
-		// MP4には番組情報は含まれていないので除外
-		} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4'){
+		// MP4・MKVには番組情報は含まれていないので除外
+		} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4' and $TSfile['data'][$key]['pathinfo']['extension'] != 'mkv'){
 
 			// rplsinfoでファイル情報を取得
 			$cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
