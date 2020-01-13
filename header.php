@@ -90,7 +90,7 @@
 <?php		if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){ ?>
     
     stream = '<?php echo $stream; ?>';
-    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream';
+    streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream/<?php echo $stream; ?>';
     streamtype = 'video/mp4';
 
 <?php		} else { ?>

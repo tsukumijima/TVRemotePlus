@@ -174,10 +174,10 @@
 
 	// ファイルを四階層まで検索する
 	// MP4・MKVファイルも検索する
-	$search = array_merge(glob($TSfile_dir.'/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE),
-						  glob($TSfile_dir.'/*/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE),
-						  glob($TSfile_dir.'/*/*/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE),
-						  glob($TSfile_dir.'/*/*/*/*{.ts,.mts,.m2ts,.mp4,.mkv}', GLOB_BRACE));
+	$search = array_merge(glob($TSfile_dir.'/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE),
+						  glob($TSfile_dir.'/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE),
+						  glob($TSfile_dir.'/*/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE),
+						  glob($TSfile_dir.'/*/*/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE));
   
 	if (file_exists($infofile)){
 		$TSfile = json_decode(file_get_contents($infofile), true);

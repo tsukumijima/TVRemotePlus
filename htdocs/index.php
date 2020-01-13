@@ -82,7 +82,7 @@
     // 読み込むm3u8を指定する
     video: {
 <?php	if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){ ?>
-      url: '/api/stream?_=<?php echo time(); ?>',
+      url: '/api/stream/<?php echo $stream; ?>?_=<?php echo time(); ?>',
       type: 'normal'
 <?php	} else { ?>
       url: '/stream/stream<?php echo $stream; ?>.m3u8',
