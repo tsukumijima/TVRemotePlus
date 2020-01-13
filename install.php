@@ -310,8 +310,15 @@
 		echo "\n";
 		echo '  -------------------------------------------------------------------'."\n";
 		echo "\n";
-		if ($return1 == 0) echo '    自己署名証明書を正常に作成しました。'."\n";
-		else echo '    自己署名証明書の作成に失敗しました…'."\n";
+		if ($return1 == 0){
+			echo '    自己署名証明書を正常に作成しました。'."\n";
+		} else {
+			echo '    自己署名証明書の作成に失敗しました…'."\n\n";
+			echo '    自己署名証明書が正常に作成されていない場合、Apache の起動に失敗します。'."\n";
+			echo '    インストール先にコピーされている createcert.bat を実行して自己署名証明書を作成するか、'."\n";
+			echo '    再インストールし、'.$serverroot.'/bin/Apache/conf/ に openssl.crt と openssl.key'."\n";
+			echo '    が作成されていることを確認してから TVRemotePlus を起動してください。'."\n";
+		}
 
 		// ショートカット作成
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.

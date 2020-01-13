@@ -23,9 +23,11 @@
 
 ## TVRemotePlus 側の設定
 
- 1. 設定ページから、［リバースプロキシからアクセスする場合の URL］の箇所を各自のリバースプロキシの URL に変更します。
- 2. また、Twitter 投稿機能を使う場合は、[こちら](Twitter_Develop.md) を参考に Callback URLs にリバースプロキシの URL を追加してください。
- 3. セキュリティ向上のため、Basic 認証なしで利用する場合は［リバースプロキシからのアクセス時に環境設定を非表示にする］の設定をオンにしておくことをおすすめします。
+ 1. 設定ページから、［リバースプロキシからアクセスする場合の URL］の箇所を各自のリバースプロキシの URL に変更します
+    - リバースプロキシからのアクセスかどうかは HTTP ヘッダに X-FORWARDED-HOST があるかどうかで判定しています
+    - このため、X-FORWARDED-HOST ヘッダが送信されないリバースプロキシの場合はリバースプロキシからのアクセスかどうかを判定できません
+ 2. Twitter 投稿機能を使う場合は、[こちら](Twitter_Develop.md) を参考に TwitterAPI のアプリ設定内の Callback URLs にリバースプロキシの URL を追加してください
+ 3. セキュリティ向上のため、Basic 認証なしで利用する場合は［リバースプロキシからのアクセス時に環境設定を非表示にする］の設定をオンにしておくことをおすすめします
 
 ## Apache の設定
 ここでは https://example.com/tvrp/ でアクセス出来るようにします（お好みで tvrp の部分を書き換えてください）。  
@@ -66,9 +68,11 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
         Substitute "s|/api/jikkyo|/tvrp/api/jikkyo|q"
         Substitute "s|/api/listupdate|/tvrp/api/listupdate|q"
         Substitute "s|/api/status|/tvrp/api/status|q"
-        Substitute "s|/api/stream|/tvrp/api/stream|q"
+        Substitute "s|\"/api/stream|\"/tvrp/api/stream|q"
+        Substitute "s|'/api/stream|'/tvrp/api/stream|q"
         Substitute "s|/files/|/tvrp/files/|q"
-        Substitute "s|/stream/|/tvrp/stream/|q"
+        Substitute "s|\"/stream/|\"/tvrp/stream/|q"
+        Substitute "s|'/stream/|'/tvrp/stream/|q"
         Substitute "s|/tweet/|/tvrp/tweet/|q"
         Substitute "s|/settings/|/tvrp/settings/|q"
         Substitute "s|/watch/|/tvrp/watch/|q"
@@ -105,9 +109,11 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter "/api/jikkyo" "/tvrp/api/jikkyo";
             sub_filter "/api/listupdate" "/tvrp/api/listupdate";
             sub_filter "/api/status" "/tvrp/api/status";
-            sub_filter "/api/stream" "/tvrp/api/stream";
+            sub_filter '"/api/stream' '"/tvrp/api/stream';
+            sub_filter "'/api/stream" "'/tvrp/api/stream";
             sub_filter "/files/" "/tvrp/files/";
-            sub_filter "/stream/" "/tvrp/stream/";
+            sub_filter '"/stream/' '"/tvrp/stream/';
+            sub_filter "'/stream/" "'/tvrp/stream/";
             sub_filter "/tweet/" "/tvrp/tweet/";
             sub_filter "/settings/" "/tvrp/settings/";
             sub_filter "/watch/" "/tvrp/watch/";

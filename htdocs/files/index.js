@@ -1,7 +1,9 @@
   
   // 生放送・ファイル再生共通その2 (script.jsが肥大化したためこっちに)
 
-  // document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', '<style>#main { opacity: 0; }</style>');
+  // 定義
+  var remotePlayer;
+  var remotePlayerController;
 
   // php の isset みたいなの
   function isset(data){
@@ -117,8 +119,16 @@
     }, 200);
 
   });
-  
+
+
   $(function(){
+
+    // メニューを引っ込める用
+    $('google-cast-launcher').click(function() {
+      $('#menu-content').velocity('slideUp', 150);
+      $('#menu-content').removeClass('open');
+      $('#menu-close').removeClass('open');
+    });
 
     $.ajax({
       url: '/api/chromecast/' + stream,
@@ -132,7 +142,7 @@
             if (state == 'File'){
               dp.pause();
             }
-            chromecast(state);
+            cast_server_control(state);
           }, 1500);
         }
       }
@@ -259,59 +269,9 @@
 
     // キャスト開始
     $('body').on('click','.chromecast-device',function(){
-      var state = document.getElementById('state').value;
+  
+      cast_server_init(this);
       
-      toastr.info('キャストを開始しています…');
-
-      // 動画を一旦止める
-      dp.video.pause();
-      // 端末はミュートにする
-      dp.video.muted = true;
-      // 音量を半分にする
-      dp.video.volume = 0.5;
-
-      // キャスト端末の名前
-      var castName = $(this).find('.chromecast-name').text();
-
-      // シークを通知
-      $('#dplayer').addClass('dplayer-seeking');
-      // ローディング表示
-      $('#dplayer').addClass('dplayer-loading');
-      // 動画表示を消す
-      dp.video.style.transition = 'opacity 0.3s ease';
-      dp.video.style.opacity = 0;
-      
-      // 「〇〇で再生しています」を出す
-      if (!$('.dplayer-casting').length){
-        $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
-      } else if ($('.dplayer-casting').text() !== castName + 'で再生しています'){
-        $('.dplayer-casting').text(castName + 'で再生しています');
-      }
-      $('.dplayer-casting').css('opacity', 0.7);
-
-      $('#nav-close').removeClass('open');
-      $('#chromecast-box').removeClass('open');
-      $('html').removeClass('open');
-
-      $.ajax({
-        url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(this).attr('data-ip') + '&port=' + $(this).attr('data-port'),
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-
-          if (data['status'] == 'play'){
-
-            $('#cast-toggle > .menu-link-href').text('キャストを終了');
-
-            // 操作系は関数に投げる
-            chromecast(state);
-
-          } else {
-            toastr.error('キャストの開始に失敗しました…');
-          }
-
-        }
-      });
     });
 
     $('#cast-scan').click(function(){
@@ -339,345 +299,398 @@
 
     });
 
-    // Chromecast の操作関連をまとめた関数
-    function chromecast(state){
+  });
 
-      setTimeout(function(){
-        toastr.success('キャストを開始しました。');
-      }, 1000);
+  // *** Chromecast 関連の関数 ***
 
-      // シーク通知を消す
-      $('#dplayer').removeClass('dplayer-seeking');
-      // ローディング表示を消す
-      $('#dplayer').removeClass('dplayer-loading');
-
-      // ファイル再生のみ
-      if (state == 'File'){
-
-        // 再生系処理 
-        $.ajax({
-          url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            dp.video.muted = true;
-          }
-        });
-
-      } else {
-        dp.video.muted = true;
-      }
-
-      // 再生
-      $('.dplayer-video-current').on('play', function(){
-
-        if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
-
-          $.ajax({
-            url: '/api/chromecast/' + stream + '?cmd=restart',
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-            }
-          });
-        
-        }
-      });
-
-      // 一時停止
-      $('.dplayer-video-current').on('pause', function(){
-
-        if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
-
-          // ファイル再生のみ
-          if (state == 'File'){
-
-            $.ajax({
-              url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
-              dataType: 'json',
-              cache: false,
-              success: function(data) {
-              }
-            });
-
-          } else {
-
-            $.ajax({
-              url: '/api/chromecast/' + stream + '?cmd=pause',
-              dataType: 'json',
-              cache: false,
-              success: function(data) {
-                dp.pause();
-              }
-            });
-
-          }
-        }
-      });
-
-      // ファイル再生のみ
-      if (state == 'File'){
-
-        // シーク
-        $('.dplayer-video-current').on('seeking', function(){
-
-          if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
-
-            $.ajax({
-              url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
-              dataType: 'json',
-              cache: false,
-              success: function(data) {
-                dp.pause();
-              }
-            });
-
-          }
-        });
-      }
-
-      // 音量
-      $('.dplayer-video-current').on('volumechange', function(){
-
-        if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
-
-          $.ajax({
-            url: '/api/chromecast/' + stream + '?cmd=volume&arg=' + dp.video.volume,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-            }
-          });
-          
-          dp.video.muted = true; // 端末はミュートにする
-
-        }
-      });
-
-    }
-
-    // Chromecastをjsから起動
-
-    window.__onGCastApiAvailable = function(isAvailable) {
-      if (isAvailable) {
-        initializeCastApi();
-        display();
-      }
-    };
-
-    // ボタンが押されたらメニューを引っ込める
-    $('google-cast-launcher').click(function() {
-      $('#menu-content').velocity('slideUp', 150);
-      $('#menu-content').removeClass('open');
-      $('#menu-close').removeClass('open');
-    });
-
-    // 何故か display: none; されがちなので強制で表示させる関数
-    function display() {
+  // JavaScript からのキャストに対応しているかどうかのリスナー
+  window.__onGCastApiAvailable = function(isAvailable) {
+    if (isAvailable){
+      cast_init();
       setInterval(function() {
         $('google-cast-launcher').css('display', 'block');
       }, 1000);
     }
+  };
 
-    // Chromecast周りを初期化
-    var remotePlayer;
-    var remotePlayerController;
-    function initializeCastApi() {
-      cast.framework.CastContext.getInstance().setOptions({
-        receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-        autoJoinPolicy: chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+  // JavaScript から Chromecast を初期化・起動する関数
+  function cast_init(){
+
+    // キャストオプション
+    cast.framework.CastContext.getInstance().setOptions({
+      receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+      autoJoinPolicy: chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+    });
+
+    // リモートプレーヤーを初期化
+    remotePlayer = new cast.framework.RemotePlayer();
+    remotePlayerController = new cast.framework.RemotePlayerController(remotePlayer);
+
+    // キャストボタンクリック時に発火
+    remotePlayerController.addEventListener(
+      cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED, function() {
+        
+        if (remotePlayer.isConnected){
+
+          $('#cast-toggle > .menu-link-href').text('キャストを終了');
+          toastr.info('キャストを開始しています…');
+          
+          // 動画を一旦止める
+          dp.video.pause();
+          // 端末はミュートにする
+          dp.video.muted = true;
+          // 音量を半分にする
+          dp.video.volume = 0.5;
+          
+          // シークを通知
+          $('#dplayer').addClass('dplayer-seeking');
+          // ローディング表示
+          $('#dplayer').addClass('dplayer-loading');
+          // 動画表示を消す
+          dp.video.style.transition = 'opacity 0.3s ease';
+          dp.video.style.opacity = 0;
+          
+          // キャスト端末の名前
+          var castName = cast.framework.CastContext.getInstance().getCurrentSession().getSessionObj().receiver.friendlyName;
+
+          // 「〇〇で再生しています」を出す
+          if (!$('.dplayer-casting').length){
+            $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
+          } else if ($('.dplayer-casting').text() !== castName + 'で再生しています'){
+            $('.dplayer-casting').text(castName + 'で再生しています');
+          }
+          $('.dplayer-casting').css('opacity', 0.8);
+
+          // 制御は別の関数に投げる
+          cast_control();
+
+        } else {
+
+          $('#cast-toggle > .menu-link-href').text('キャストを開始');
+          toastr.success('キャストを終了しました。');
+          // 端末のミュートを解除
+          dp.video.muted = false;
+          // 音量を戻す
+          dp.video.volume = 1;
+
+          // 動画表示を戻す
+          dp.video.style.opacity = 1;
+          $('.dplayer-casting').css('opacity', 0);
+        }
+      }
+    );
+
+  }
+
+  // サーバー経由で Chromecast を初期化・起動する関数
+  function cast_server_init(elem){
+
+    var state = document.getElementById('state').value;
+
+    toastr.info('キャストを開始しています…');
+
+    // 動画を一旦止める
+    dp.video.pause();
+    // 端末はミュートにする
+    dp.video.muted = true;
+    // 音量を半分にする
+    dp.video.volume = 0.5;
+
+    // シークを通知
+    $('#dplayer').addClass('dplayer-seeking');
+    // ローディング表示
+    $('#dplayer').addClass('dplayer-loading');
+    // 動画表示を消す
+    dp.video.style.transition = 'opacity 0.3s ease';
+    dp.video.style.opacity = 0;
+
+    // キャスト端末の名前
+    var castName = $(elem).find('.chromecast-name').text();
+    
+    // 「〇〇で再生しています」を出す
+    if (!$('.dplayer-casting').length){
+      $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
+    } else if ($('.dplayer-casting').text() !== castName + 'で再生しています'){
+      $('.dplayer-casting').text(castName + 'で再生しています');
+    }
+    $('.dplayer-casting').css('opacity', 0.7);
+
+    // ボックスを閉じる
+    $('#nav-close').removeClass('open');
+    $('#chromecast-box').removeClass('open');
+    $('html').removeClass('open');
+
+    // Chromecast を起動
+    $.ajax({
+      url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(elem).attr('data-ip') + '&port=' + $(elem).attr('data-port'),
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+
+        if (data['status'] == 'play'){
+
+          $('#cast-toggle > .menu-link-href').text('キャストを終了');
+
+          // 制御は別の関数に投げる
+          cast_server_control(state);
+
+        } else {
+          toastr.error('キャストの開始に失敗しました…');
+        }
+
+      }
+    });
+  }
+
+  // JavaScript から Chromecast を制御する関数
+  function cast_control(){
+    
+    // セッション周り
+    var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
+    var mediaInfo = new chrome.cast.media.MediaInfo(streamurl, streamtype);
+
+    mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
+    mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
+
+    // 動画の読み込みをリクエストする
+    var request = new chrome.cast.media.LoadRequest(mediaInfo);
+
+    // 読み込み後に発火
+    castSession.loadMedia(request).then(
+      function() {
+
+        setTimeout(function(){
+          toastr.success('キャストを開始しました。');
+        }, 3000);
+
+        // Chromecast制御用RemotePlayerの初期化
+        var player = new cast.framework.RemotePlayer();
+        var playerController = new cast.framework.RemotePlayerController(player);
+
+        // ここでChromecastと再生状態をだいたい同期させる
+        var playerState = 'BUFFERING'; // playerStateを比較用に格納
+        var buffering = false; // バッファリング中に再生/停止に反応させないための変数
+
+        // メディア状態が変わった(IDLE・BUFFERING・PLAYING・PAUSED)とき
+        playerController.addEventListener(
+          cast.framework.RemotePlayerEventType.PLAYER_STATE_CHANGED, function() {
+
+            // 読み込み中のとき
+            if (player.playerState == 'BUFFERING'){
+              
+              buffering = true;
+              // シークを通知
+              $('#dplayer').addClass('dplayer-seeking');
+              // ローディング表示
+              $('#dplayer').addClass('dplayer-loading');
+              // 動画を一旦止める
+              dp.video.pause();
+
+            // 以前読み込み中でかつ今再生中のとき
+            } else if (player.playerState === 'PLAYING' && playerState === 'BUFFERING'){
+
+              buffering = false;
+              // シーク通知を消す
+              $('#dplayer').removeClass('dplayer-seeking');
+              // ローディング表示を消す
+              $('#dplayer').removeClass('dplayer-loading');
+              // 動画をもう一度再生させる(同期させる)
+              dp.video.play();
+
+            // アイドル状態 (=再生終了)
+            } else if (player.playerState === 'IDLE' && playerState !== 'IDLE'){
+
+              // Chromecast を終了する
+
+              // キャストを終了
+              castSession.endSession(true);
+
+              buffering = false;
+              // シーク通知を消す
+              $('#dplayer').removeClass('dplayer-seeking');
+              // ローディング表示を消す
+              $('#dplayer').removeClass('dplayer-loading');
+
+            }
+
+            // playerState を比較用に記録
+            playerState = player.playerState;
+
+          }
+        );
+
+        // ミュート解除
+        player.volumeLevel = dp.video.volume;
+        playerController.setVolumeLevel();
+        if (player.isMuted){
+          playerController.muteOrUnmute();
+        }
+
+        // 最初に現在の位置までシーク
+        player.currentTime = dp.video.currentTime;
+        playerController.seek();
+        
+        // 再生
+        $('.dplayer-video-current').on('play playing', function(){
+          if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
+            if (player.isPaused && !buffering){
+              dp.video.currentTime = player.currentTime;
+              playerController.playOrPause();
+            }
+          }
+        });
+
+        // 停止
+        $('.dplayer-video-current').on('pause', function(){
+          if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
+            if (!player.isPaused && !buffering){
+              dp.video.currentTime = player.currentTime;
+              playerController.playOrPause();
+            }
+          }
+        });
+
+        // シーク
+        $('.dplayer-video-current').on('seeking', function(){
+          if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
+            player.currentTime = dp.video.currentTime;
+            playerController.seek();
+            dp.template.notice.style.opacity = 0;
+          }
+        });
+
+        // 音量
+        $('.dplayer-video-current').on('volumechange', function(){
+          if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
+            dp.video.muted = true; // 端末はミュートにする
+            player.volumeLevel = dp.video.volume;
+            playerController.setVolumeLevel();
+            dp.template.notice.style.opacity = 0;
+          }
+        });
+
+      },
+      function(e) { 
+        console.error(e);
+      }
+    );
+  }
+
+  // サーバー経由で Chromecast を制御する関数
+  function cast_server_control(state){
+
+    setTimeout(function(){
+      toastr.success('キャストを開始しました。');
+    }, 1000);
+
+    // シーク通知を消す
+    $('#dplayer').removeClass('dplayer-seeking');
+    // ローディング表示を消す
+    $('#dplayer').removeClass('dplayer-loading');
+
+    dp.pause();
+
+    // ファイル再生のみ
+    if (state == 'File'){
+
+      // 再生系処理 
+      $.ajax({
+        url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+          dp.video.muted = true;
+        }
       });
 
-      launchApp();
+    } else {
+      dp.video.muted = true;
     }
 
-    // 端末とChromecastが接続されたらのリスナー
-    function launchApp() {
-      remotePlayer = new cast.framework.RemotePlayer();
-      remotePlayerController = new cast.framework.RemotePlayerController(remotePlayer);
-      // キャスト起動時に発火
-      remotePlayerController.addEventListener(
-        cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED, function() {
-          
-          if (remotePlayer.isConnected){
+    // 再生
+    $('.dplayer-video-current').on('play', function(){
 
-            $('#cast-toggle > .menu-link-href').text('キャストを終了');
-            toastr.info('キャストを開始しています…');
-            
-            // 動画を一旦止める
-            dp.video.pause();
-            // 端末はミュートにする
-            dp.video.muted = true;
-            // 音量を半分にする
-            dp.video.volume = 0.5;
+      if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
-            // キャスト端末の名前
-            var castName = cast.framework.CastContext.getInstance().getCurrentSession().getSessionObj().receiver.friendlyName;
-            
-            // シークを通知
-            $('#dplayer').addClass('dplayer-seeking');
-            // ローディング表示
-            $('#dplayer').addClass('dplayer-loading');
-            // 動画表示を消す
-            dp.video.style.transition = 'opacity 0.3s ease';
-            dp.video.style.opacity = 0;
-
-            // 「〇〇で再生しています」を出す
-            if (!$('.dplayer-casting').length){
-              $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
-            } else if ($('.dplayer-casting').text() !== castName + 'で再生しています'){
-              $('.dplayer-casting').text(castName + 'で再生しています');
-            }
-            $('.dplayer-casting').css('opacity', 0.8);
-
-            // メディアを読み込み
-            loadMedia();
-
-          } else {
-
-            $('#cast-toggle > .menu-link-href').text('キャストを開始');
-            toastr.success('キャストを終了しました。');
-            // 端末のミュートを解除
-            dp.video.muted = false;
-            // 音量を戻す
-            dp.video.volume = 1;
-
-            // 動画表示を戻す
-            dp.video.style.opacity = 1;
-            $('.dplayer-casting').css('opacity', 0);
+        $.ajax({
+          url: '/api/chromecast/' + stream + '?cmd=restart',
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
           }
+        });
+      
+      }
+    });
+
+    // 一時停止
+    $('.dplayer-video-current').on('pause', function(){
+
+      if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
+
+        // ファイル再生のみ
+        if (state == 'File'){
+
+          $.ajax({
+            url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+            }
+          });
+
+        } else {
+
+          $.ajax({
+            url: '/api/chromecast/' + stream + '?cmd=pause',
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+              dp.pause();
+            }
+          });
+
         }
-      );
+      }
+    });
+
+    // ファイル再生のみ
+    if (state == 'File'){
+
+      // シーク
+      $('.dplayer-video-current').on('seeking', function(){
+
+        if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
+
+          $.ajax({
+            url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+              dp.pause();
+            }
+          });
+
+        }
+      });
     }
 
-    // メディアをロードする
-    function loadMedia() {
-      var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
-      var mediaInfo = new chrome.cast.media.MediaInfo(streamurl, streamtype);
+    // 音量
+    $('.dplayer-video-current').on('volumechange', function(){
 
-      mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
-      mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
+      if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
-      var request = new chrome.cast.media.LoadRequest(mediaInfo);
-
-      castSession.loadMedia(request).then(
-        function() {
-
-          setTimeout(function(){
-            toastr.success('キャストを開始しました。');
-          }, 3000);
-
-          // Chromecast制御用RemotePlayerの初期化
-          var player = new cast.framework.RemotePlayer();
-          var playerController = new cast.framework.RemotePlayerController(player);
-
-          // ここでChromecastと再生状態をだいたい同期させる
-          var playerState = 'BUFFERING'; // playerStateを比較用に格納
-          var buffering = false; // バッファリング中に再生/停止に反応させないための変数
-
-          // メディア状態が変わった(IDLE・BUFFERING・PLAYING・PAUSED)とき
-          playerController.addEventListener(
-            cast.framework.RemotePlayerEventType.PLAYER_STATE_CHANGED, function() {
-
-              // 読み込み中のとき
-              if (player.playerState == 'BUFFERING'){
-                
-                buffering = true;
-                // シークを通知
-                $('#dplayer').addClass('dplayer-seeking');
-                // ローディング表示
-                $('#dplayer').addClass('dplayer-loading');
-                // 動画を一旦止める
-                dp.video.pause();
-
-              // 以前読み込み中でかつ今再生中のとき
-              } else if (player.playerState === 'PLAYING' && playerState === 'BUFFERING'){
-
-                buffering = false;
-                // シーク通知を消す
-                $('#dplayer').removeClass('dplayer-seeking');
-                // ローディング表示を消す
-                $('#dplayer').removeClass('dplayer-loading');
-                // 動画をもう一度再生させる(同期させる)
-                dp.video.play();
-
-              // アイドル状態 (=再生終了)
-              } else if (player.playerState === 'IDLE' && playerState !== 'IDLE'){
-
-                // Chromecast を終了する
-
-                // キャストを終了
-                castSession.endSession(true);
-
-                buffering = false;
-                // シーク通知を消す
-                $('#dplayer').removeClass('dplayer-seeking');
-                // ローディング表示を消す
-                $('#dplayer').removeClass('dplayer-loading');
-
-              }
-
-              // playerState を比較用に記録
-              playerState = player.playerState;
-
-            }
-          );
-
-          // ミュート解除
-          player.volumeLevel = dp.video.volume;
-          playerController.setVolumeLevel();
-          if (player.isMuted){
-            playerController.muteOrUnmute();
+        $.ajax({
+          url: '/api/chromecast/' + stream + '?cmd=volume&arg=' + dp.video.volume,
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
           }
+        });
+        
+        dp.video.muted = true; // 端末はミュートにする
 
-          // 最初に現在の位置までシーク
-          player.currentTime = dp.video.currentTime;
-          playerController.seek();
-          
-          // 再生
-          $('.dplayer-video-current').on('play playing', function(){
-            if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
-              if (player.isPaused && !buffering){
-                dp.video.currentTime = player.currentTime;
-                playerController.playOrPause();
-              }
-            }
-          });
+      }
+    });
+  }
 
-          // 停止
-          $('.dplayer-video-current').on('pause', function(){
-            if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
-              if (!player.isPaused && !buffering){
-                dp.video.currentTime = player.currentTime;
-                playerController.playOrPause();
-              }
-            }
-          });
-
-          // シーク
-          $('.dplayer-video-current').on('seeking', function(){
-            if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
-              player.currentTime = dp.video.currentTime;
-              playerController.seek();
-              dp.template.notice.style.opacity = 0;
-            }
-          });
-
-          // 音量
-          $('.dplayer-video-current').on('volumechange', function(){
-            if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
-              dp.video.muted = true; // 端末はミュートにする
-              player.volumeLevel = dp.video.volume;
-              playerController.setVolumeLevel();
-              dp.template.notice.style.opacity = 0;
-            }
-          });
-
-        },
-        function(e) { 
-          console.error(e);
-        }
-      );
-    }
-
-  });
