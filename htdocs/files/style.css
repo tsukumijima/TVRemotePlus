@@ -1480,7 +1480,7 @@ td {
     height: 50px;
     font-size: 16px;
     padding: 0px 20px;
-    border-top: 2px solid #ededed;
+    border-bottom: 2px solid #ededed;
     box-sizing: border-box;
     transition: background-color ease 0.3s;
     text-align: left;
@@ -1488,8 +1488,8 @@ td {
     cursor: pointer;
 }
 
-.stream-view:last-of-type {
-    border-bottom: 2px solid #ededed;
+.stream-view:first-of-type {
+    border-top: 2px solid #ededed;
 }
 
 .stream-box {

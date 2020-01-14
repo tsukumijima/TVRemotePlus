@@ -48,7 +48,7 @@
 	$watching = getActiveCount();
 
 	// ついでにストリーム状態を判定する
-	if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){
+	if (isset($ini[$stream]) and ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File')){
 
 		if (!($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive')){
 
@@ -88,7 +88,7 @@
 		$streamtype = 'normal';
 	}
 	
-	if ($ini[$stream]['state'] === null) $ini[$stream]['state'] = 'Offline';
+	if (!isset($ini[$stream]) or $ini[$stream]['state'] === null) $ini[$stream]['state'] = 'Offline';
 
 	$json = array(
 		'api' => 'status',

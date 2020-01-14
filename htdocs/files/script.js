@@ -244,7 +244,7 @@
           // ストリーム番号ごとに実行
           for (key in data['stream']){
 
-            var elem = document.getElementsByClassName('stream-view-' + (key))[0];
+            var elem = document.getElementsByClassName('stream-view-' + key)[0];
             
             switch (data['stream'][key]['state']){
               
@@ -304,7 +304,13 @@
             } else if (elem !== undefined && data['stream'][key]['state'] == 'Offline' && key != '1'){
 
               // 要素を削除する
-              elem.parentNode.removeChild(elem);
+              $('.stream-view-' + key).slideUp(400).animate(
+                { opacity: 0 },
+                { queue: false, duration: 400, easing: 'swing' }
+              ).queue(function() {
+                $('.stream-view-' + key).remove();
+              });
+
             }
           }
 
@@ -346,6 +352,16 @@
             $(streamview).find('.stream-title').html('配信休止中…');
             $(streamview).find('.stream-channel').empty();
             $(streamview).find('.stream-description').empty();
+
+            // 自分のストリームでないなら要素を削除する
+            if (stream != streamnum){
+              $(streamview).slideUp(400).animate(
+                { opacity: 0 },
+                { queue: false, duration: 400, easing: 'swing' }
+              ).queue(function() {
+                $(streamview).remove();
+              });
+            }
 
           }, error: function(){
             toastr.error('ストリーム ' + streamnum + ' の終了に失敗しました…');
