@@ -114,6 +114,38 @@
 		}
 	}
 
+	// ストリーム状態を整形して返す関数
+	function getFormattedState($state, $flg=false){
+		if ($state == 'ONAir'){
+			$format = 'ON Air';
+		} else if ($state == 'File'){
+			$format = 'File';
+		} else {
+			$format = 'Offline';
+		}
+		if ($flg){
+			return $format;
+		} else {
+			return '● '.$format;
+		}
+	}
+
+	// ストリームかアクティブかどうかを返す関数
+	function isStreamActive($ini, $num){
+
+		$num = strval($num);
+
+		if (isset($ini[$num])){
+			if ($ini[$num]['state'] == 'ONAir' or $ini[$num]['state'] == 'File'){
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 	// ニコニコ実況IDをチャンネル名から取得する関数
 	function getJKchannel($channel){
 		global $base_dir;

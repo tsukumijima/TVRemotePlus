@@ -93,10 +93,36 @@
             <span>ストリーム：</span>
             <div class="select-wrap">
               <select name="stream">
-                <option value="1" selected>Stream 1</option>
-                <option value="2">Stream 2</option>
-                <option value="3">Stream 3</option>
-                <option value="4">Stream 4</option>
+<?php	if (!isStreamActive($ini, 1)){ ?>
+                <option value="1" selected>Stream 1 - <?php echo getFormattedState($ini['1']['state'], true); ?></option>
+                <option value="2">Stream 2 - <?php echo getFormattedState($ini['2']['state'], true); ?></option>
+                <option value="3">Stream 3 - <?php echo getFormattedState($ini['3']['state'], true); ?></option>
+                <option value="4">Stream 4 - <?php echo getFormattedState($ini['4']['state'], true); ?></option>
+<?php	} else if (!isStreamActive($ini, 2)){ ?>
+                <option value="1">Stream 1 - <?php echo getFormattedState($ini['1']['state'], true); ?></option>
+                <option value="2" selected>Stream 2 - <?php echo getFormattedState($ini['2']['state'], true); ?></option>
+                <option value="3">Stream 3 - <?php echo getFormattedState($ini['3']['state'], true); ?></option>
+                <option value="4">Stream 4 - <?php echo getFormattedState($ini['4']['state'], true); ?></option>
+<?php	} else if (!isStreamActive($ini, 3)){ ?>
+                <option value="1">Stream 1 - <?php echo getFormattedState($ini['1']['state'], true); ?></option>
+                <option value="2">Stream 2 - <?php echo getFormattedState($ini['2']['state'], true); ?></option>
+                <option value="3" selected>Stream 3 - <?php echo getFormattedState($ini['3']['state'], true); ?></option>
+                <option value="4">Stream 4 - <?php echo getFormattedState($ini['4']['state'], true); ?></option>
+<?php	} else if (!isStreamActive($ini, 4)){ ?>
+                <option value="1">Stream 1 - <?php echo getFormattedState($ini['1']['state'], true); ?></option>
+                <option value="2">Stream 2 - <?php echo getFormattedState($ini['2']['state'], true); ?></option>
+                <option value="3">Stream 3 - <?php echo getFormattedState($ini['3']['state'], true); ?></option>
+                <option value="4" selected>Stream 4 - <?php echo getFormattedState($ini['4']['state'], true); ?></option>
+<?php	} //括弧終了 ?>
+<?php	if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
+                <option value="1">Stream 1 - <?php echo getFormattedState($ini['1']['state'], true); ?></option>
+                <option value="2">Stream 2 - <?php echo getFormattedState($ini['2']['state'], true); ?></option>
+                <option value="3">Stream 3 - <?php echo getFormattedState($ini['3']['state'], true); ?></option>
+                <option value="4">Stream 4 - <?php echo getFormattedState($ini['4']['state'], true); ?></option>
+<?php		for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
+                <option value="<?php echo $i; ?>"<?php if (!isStreamActive($ini, $i)) echo ' selected'; ?>>Stream <?php echo $i; ?> - <?php echo getFormattedState($ini[$i]['state'], true); ?></option>
+<?php		} //括弧終了 ?>
+<?php	} //括弧終了 ?>
               </select>
             </div>
           </div>

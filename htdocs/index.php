@@ -248,20 +248,20 @@
 
       <div id="stream-view-box">
 <?php	foreach ($ini as $key => $value){ // 地デジchの数だけ繰り返す ?>
-<?php	  if ($value['state'] != 'Offline' || $key == '1'){ ?>
+<?php		if ($value['state'] != 'Offline' || $key == '1'){ ?>
         <div class="stream-view stream-view-<?php echo $key; ?>" data-num="<?php echo $key; ?>" data-url="/<?php echo $key; ?>/">
           <div class="stream-box">
             <div class="stream-number-title">Stream</div><div class="stream-number"><?php echo $key; ?></div>
             <div class="stream-stop <?php echo $value['state'] == 'Offline' ? 'disabled' : ''; ?>">
               <i class="stream-stop-icon far fa-stop-circle"></i>
             </div>
-<?php	    if ($value['state'] == 'ONAir'){ ?>
+<?php			if ($value['state'] == 'ONAir'){ ?>
             <div class="stream-state blue">● ON Air</div>
-<?php	    } else if ($value['state'] == 'File') { ?>
+<?php			} else if ($value['state'] == 'File') { ?>
             <div class="stream-state green">● File</div>
-<?php	    } else { ?>
+<?php			} else { ?>
             <div class="stream-state">● Offline</div>
-<?php	    } //括弧終了 ?>
+<?php			} //括弧終了 ?>
             <div class="stream-info">
               <div class="stream-title"><?php echo $value['state'] == 'Offline' ? '配信休止中…' : '取得中…'; ?></div>
               <div class="stream-channel">
@@ -271,33 +271,33 @@
             </div>
           </div>
         </div>
-<?php	  } //括弧終了 ?>
+<?php		} //括弧終了 ?>
 <?php	} //括弧終了 ?>
       </div>
 
       <div id="information">
-<?php		if (empty($BonDriver_dll) and empty($ch)){ // エラーを吐く ?>
+<?php	if (empty($BonDriver_dll) and empty($ch)){ // エラーを吐く ?>
         <div class="error">
           BonDriverとチャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
           ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
         </div>
-<?php		} else if (empty($BonDriver_dll)){ ?>
+<?php	} else if (empty($BonDriver_dll)){ ?>
         <div class="error">
           BonDriverが見つからないため、ストリームを開始できません。<br>
           ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
         </div>
-<?php		} else if (empty($ch)){ ?>
+<?php	} else if (empty($ch)){ ?>
         <div class="error">
           チャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
           ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
         </div>
-<?php		} //括弧終了 ?>
-<?php		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'/EnumEventInfo')){ // EMWUI ?>
+<?php	} //括弧終了 ?>
+<?php	if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'/EnumEventInfo')){ // EMWUI ?>
         <div class="error">
           EDCB Material WebUI の API がある URL が正しく設定されていないため、番組情報が表示できません。<br>
           設定ページの「EDCB Material WebUI (EMWUI) の API がある URL」が正しく設定されているかどうか、確認してください。<br>
         </div>
-<?php		} //括弧終了 ?>
+<?php	} //括弧終了 ?>
 
         <div id="broadcast-tab-box" class="swiper-container">
           <div id="broadcast-tab" class="swiper-wrapper">
@@ -446,10 +446,15 @@
           <span>ストリーム：</span>
           <div class="select-wrap">
             <select name="stream">
-              <option value="1" selected>Stream 1</option>
-              <option value="2">Stream 2</option>
-              <option value="3">Stream 3</option>
-              <option value="4">Stream 4</option>
+              <option value="1"<?php if ($stream == '1') echo ' selected'; ?>>Stream 1 - <?php echo getFormattedState($ini['1']['state'], true); ?></option>
+              <option value="2"<?php if ($stream == '2') echo ' selected'; ?>>Stream 2 - <?php echo getFormattedState($ini['2']['state'], true); ?></option>
+              <option value="3"<?php if ($stream == '3') echo ' selected'; ?>>Stream 3 - <?php echo getFormattedState($ini['3']['state'], true); ?></option>
+              <option value="4"<?php if ($stream == '4') echo ' selected'; ?>>Stream 4 - <?php echo getFormattedState($ini['4']['state'], true); ?></option>
+<?php	if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
+<?php		for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
+              <option value="<?php echo $i; ?>"<?php if ($stream == $i) echo ' selected'; ?>>Stream <?php echo $i; ?> - <?php echo getFormattedState($ini[$i]['state']); ?></option>
+<?php		} //括弧終了 ?>
+<?php	} //括弧終了 ?>
             </select>
           </div>
         </div>
