@@ -166,6 +166,11 @@
 						copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 					}
 
+					// Stream 1 以外ならキーごと削除する
+					if ($stream != '1'){
+						unset($ini[$stream]);
+					}
+
 				} else {
 
 					// 念のためもう一回ストリーミング終了関数を起動
@@ -187,6 +192,10 @@
 							copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
 						}
 
+						// Stream 1 以外ならキーごと削除する
+						if ($key != '1'){
+							unset($ini[$key]);
+						}
 					}
 				}
 			}

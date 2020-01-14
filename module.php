@@ -115,14 +115,22 @@
 	}
 
 	// ストリーム状態を整形して返す関数
-	function getFormattedState($state, $flg=false){
-		if ($state == 'ONAir'){
-			$format = 'ON Air';
-		} else if ($state == 'File'){
-			$format = 'File';
+	function getFormattedState($ini, $num, $flg=false){
+		
+		$num = strval($num);
+
+		if (isset($ini[$num])){
+			if ($ini[$num]['state'] == 'ONAir'){
+				$format = 'ON Air';
+			} else if ($ini[$num]['state'] == 'File'){
+				$format = 'File';
+			} else {
+				$format = 'Offline';
+			}
 		} else {
 			$format = 'Offline';
 		}
+
 		if ($flg){
 			return $format;
 		} else {
