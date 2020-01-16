@@ -353,8 +353,8 @@
             $(streamview).find('.stream-channel').empty();
             $(streamview).find('.stream-description').empty();
 
-            // 自分のストリームでないなら要素を削除する
-            if (stream != streamnum){
+            // 自分のストリームでない&ストリーム1でないなら要素を削除する
+            if (stream != streamnum && streamnum != '1'){
               $(streamview).slideUp(400).animate(
                 { opacity: 0 },
                 { queue: false, duration: 400, easing: 'swing' }
