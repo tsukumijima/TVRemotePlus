@@ -471,6 +471,7 @@
               <option value="540p">540p (960×540)</option>
               <option value="360p">360p (640×360)</option>
               <option value="240p">240p (426×240)</option>
+              <option value="144p">144p (256×144)</option>
             </select>
           </div>
         </div>

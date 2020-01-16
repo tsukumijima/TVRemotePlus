@@ -240,6 +240,35 @@ NVIDIA グラフィックドライバ 436.02
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.01.16 (4.61)
+[NVEncC]
+・コピーすべきmaxcll/maxfallの情報がない時に、--master-display copyや--max-cll copyを使用してmkv出力すると
+  おかしな値がmaxcll/maxfallに設定されてしまうのを修正。
+・--ssim/--psnr使用時に解放されないメモリが残っていたのを修正。
+
+[NVEnc.auo]
+・vpp-yadifでbob化を指定できるように。
+
+2020.01.13 (4.60)
+[共通]
+・ssimの計算を行うオプションを追加。(--ssim)
+・psnrの計算を行うオプションを追加。(--psnr)
+・プロセスのGPU使用率情報を使用するように。 (Win10のみ)
+
+[NVEncC]
+・vpp-subburnで指定したtrackがない場合、エラー終了するのではなく、警告メッセージを出して処理を継続するように。
+・HDR関連のmeta情報を入力ファイルからコピーできるように。
+  (--master-display copy, --max-cll copy)
+・ffmpeg関連のdllを更新。
+  libogg-1.3.3 -> 1.3.4
+  twolame-0.3.13 -> 0.4.0
+  wavpack-5.1.0 -> 5.2.0
+  libxml2-2.9.9 -> 2.9.10
+  dav1d-0.5.2 !new!
+
+[NVEnc.auo]
+・vpp-yadifを追加。
+
 2019.12.24 (4.59)
 [NVEncC]
 ・vpp-subburnで字幕の色成分が欠けて焼きこまれるようになっていたのを修正。
