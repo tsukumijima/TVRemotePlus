@@ -32,7 +32,7 @@
           // console.log('―― GetComment postres:' + last_res + ' getres:' + res + ' draw:' + (res - last_res) + ' ――');
           // console.log(data['data']);
 
-          if (data["ikioi"] !== null){
+          if (data['ikioi'] !== null && data['ikioi'] !== undefined){
             // 実況勢いを表示
             document.getElementById('ikioi').textContent = '実況勢い: ' + data['ikioi'];
           }
