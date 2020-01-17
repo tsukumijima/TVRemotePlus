@@ -241,31 +241,67 @@
 		$ch2_data = preg_replace("/; 名称,チューニング空間.*/", "", $ch2_data);
 		$ch2_data = str_replace(',,', ',1,', $ch2_data); // サービスタイプ欄がない場合に1として換算しておく
 
-		// 地上波
-		if ($flg == 'UHF'){
-			$ch2_data = preg_replace("/;#SPACE\(.\,BS\).*$/s", "", $ch2_data); // BS・CSを削除
-		// BS
-		} else if ($flg == 'BS'){
-			$ch2_data = preg_replace("/;#SPACE\(.\,UHF\).*;#SPACE\(.\,BS\)/s", "", $ch2_data); // 地上波を削除
-			$ch2_data = preg_replace("/;#SPACE\(.\,CS110\).*$/s", "", $ch2_data); // CSを削除
-		// CS
-		} else if ($flg == 'CS') {
-			$ch2_data = preg_replace("/;#SPACE\(.\,UHF\).*;#SPACE\(.\,CS110\)/s", "", $ch2_data); // 地上波・BSを削除（混合チューナー用）
-			$ch2_data = preg_replace("/;#SPACE\(.\,BS\).*;#SPACE\(.\,CS110\)/s", "", $ch2_data); // BSを削除
-		}
+		// トランスモジュレーションの場合
+		if (strpos($ch2_data, 'TransModulation') !== false){
 
-		//余計なコメントを削除
-		$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data);
-		// 空行削除
-		$ch2_data = str_replace("\n\n", "", $ch2_data);
-		$ch2_data = rtrim($ch2_data);
+			//余計なコメントを削除
+			$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data);
+			
+			// 空行削除
+			$ch2_data = str_replace("\n\n", '', $ch2_data);
+			$ch2_data = rtrim($ch2_data);
+	
+			// 改行で分割
+			$ch2 = explode("\n", $ch2_data);
+	
+			// さらにコンマで分割
+			foreach ($ch2 as $key => $value) {
+				$line = explode(',', $ch2[$key]);
+				if ($flg == 'UHF'){
+					if (intval($line[6]) > 30000 and intval($line[6]) < 40000){
+						$ch2[$key] = $line;
+					}
+				} else if ($flg == 'BS'){
+					if (intval($line[6]) == 4){
+						$ch2[$key] = $line;
+					}
+				} else if ($flg == 'CS'){
+					if (intval($line[6]) == 65534){
+						$ch2[$key] = $line;
+					}
+				}
+			}
 
-		// 改行で分割
-		$ch2 = explode("\n", $ch2_data);
+		// 通常
+		} else {
 
-		// さらにコンマで分割
-		foreach ($ch2 as $key => $value) {
-			$ch2[$key] = explode(",", $ch2[$key]);
+			// 地上波
+			if ($flg == 'UHF'){
+				$ch2_data = preg_replace("/;#SPACE\(.\,BS\).*$/s", "", $ch2_data); // BS・CSを削除
+			// BS
+			} else if ($flg == 'BS'){
+				$ch2_data = preg_replace("/;#SPACE\(.\,UHF\).*;#SPACE\(.\,BS\)/s", "", $ch2_data); // 地上波を削除
+				$ch2_data = preg_replace("/;#SPACE\(.\,CS110\).*$/s", "", $ch2_data); // CSを削除
+			// CS
+			} else if ($flg == 'CS') {
+				$ch2_data = preg_replace("/;#SPACE\(.\,UHF\).*;#SPACE\(.\,CS110\)/s", "", $ch2_data); // 地上波・BSを削除（混合チューナー用）
+				$ch2_data = preg_replace("/;#SPACE\(.\,BS\).*;#SPACE\(.\,CS110\)/s", "", $ch2_data); // BSを削除
+			}
+
+			//余計なコメントを削除
+			$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data);
+
+			// 空行削除
+			$ch2_data = str_replace("\n\n", '', $ch2_data);
+			$ch2_data = rtrim($ch2_data);
+	
+			// 改行で分割
+			$ch2 = explode("\n", $ch2_data);
+	
+			// さらにコンマで分割
+			foreach ($ch2 as $key => $value) {
+				$ch2[$key] = explode(',', $ch2[$key]);
+			}
 		}
 
 		return $ch2;
