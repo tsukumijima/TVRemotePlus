@@ -41,7 +41,7 @@
     $('#setting-env').submit(function(event){
 
       event.preventDefault();
-      $('#save').addClass('hover');
+      $('#save').addClass('disabled');
       $('.redbutton').attr('disabled', true);
 
       // フォーム送信
@@ -54,7 +54,7 @@
           toastr.success('環境設定を保存しました。');
           setTimeout(function(){
             $('.redbutton').attr('disabled', false);
-            $('#save').removeClass('hover');
+            $('#save').removeClass('disabled');
           }, 200);
         }
       });

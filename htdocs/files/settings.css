@@ -343,7 +343,7 @@ select {
     font-size: 31px;
     color: #FFFFFF;
     background-color: #e8004a;
-    transition: 0.2s ease-in-out;
+    transition: opacity 0.2s, visibility 0.2s, background-color 0.1s ease-in-out;
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
     -webkit-tap-highlight-color: transparent;
     border-radius: 50%;
@@ -357,6 +357,7 @@ select {
     }
 }
 
-#save.hover {
-    background-color: #ca0040;
+#save.disabled {
+    background-color: #ff709e;
+    cursor: auto;
 }
