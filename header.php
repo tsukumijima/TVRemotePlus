@@ -189,7 +189,7 @@
       </a>
     </form>
     <a class="nav-link" href="/watch/">
-      <i class="fas fa-search"></i>
+      <i class="fas fa-video"></i>
       <span class="nav-link-href">録画番組を再生</span>
     </a>
     <a class="nav-link" href="/tweet/auth">

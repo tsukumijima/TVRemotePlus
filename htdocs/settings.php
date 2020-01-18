@@ -448,71 +448,14 @@
               </div>
               <div class="select-wrap">
                 <select name="quality_default">
-<?php	if ($quality_default == '1080p-high'){ ?>
-                  <option value="1080p-high" selected>1080p-high (1920×1080)</option>
-                  <option value="1080p">1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} else if ($quality_default == '1080p'){ ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p" selected>1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} else if ($quality_default == '810p'){ ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p">1080p (1440×1080)</option>
-                  <option value="810p" selected>810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} else if ($quality_default == '720p'){ ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p">1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p" selected>720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} else if ($quality_default == '540p'){ ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p">1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p" selected>540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} else if ($quality_default == '360p'){ ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p">1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p" selected>360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} else if ($quality_default == '240p'){ ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p">1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p" selected>240p (426×240)</option>
-<?php	} else { ?>
-                  <option value="1080p-high">1080p-high (1920×1080)</option>
-                  <option value="1080p" selected>1080p (1440×1080)</option>
-                  <option value="810p">810p (1440×810)</option>
-                  <option value="720p">720p (1280×720)</option>
-                  <option value="540p">540p (960×540)</option>
-                  <option value="360p">360p (640×360)</option>
-                  <option value="240p">240p (426×240)</option>
-<?php	} // 括弧終了 ?>
+                  <option value="1080p-high"<?php if ($quality_default == '1080p-high') echo ' selected'; ?>>1080p-high (1920×1080)</option>
+                  <option value="1080p"<?php if ($quality_default == '1080p' or $quality_default == '') echo ' selected'; ?>>1080p (1440×1080)</option>
+                  <option value="810p"<?php if ($quality_default == '810p') echo ' selected'; ?>>810p (1440×810)</option>
+                  <option value="720p"<?php if ($quality_default == '720p') echo ' selected'; ?>>720p (1280×720)</option>
+                  <option value="540p"<?php if ($quality_default == '540p') echo ' selected'; ?>>540p (960×540)</option>
+                  <option value="360p"<?php if ($quality_default == '360p') echo ' selected'; ?>>360p (640×360)</option>
+                  <option value="240p"<?php if ($quality_default == '240p') echo ' selected'; ?>>240p (426×240)</option>
+                  <option value="144p"<?php if ($quality_default == '144p') echo ' selected'; ?>>144p (256×144)</option>
                 </select>
               </div>
             </div>
@@ -529,27 +472,10 @@
               </div>
               <div class="select-wrap">
                 <select name="encoder_default" required>
-<?php	if ($encoder_default == 'ffmpeg'){ ?>
-                  <option value="ffmpeg" selected>ffmpeg (ソフトウェアエンコーダー)</option>
-                  <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
-                  <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
-                  <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
-<?php	} else if ($encoder_default == 'QSVEncC'){ ?>
-                  <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
-                  <option value="QSVEncC" selected>QSVEncC (ハードウェアエンコーダー)</option>
-                  <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
-                  <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
-<?php	} else if ($encoder_default == 'NVEncC'){ ?>
-                  <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
-                  <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
-                  <option value="NVEncC" selected>NVEncC (ハードウェアエンコーダー)</option>
-                  <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
-<?php	} else if ($encoder_default == 'VCEEncC'){ ?>
-                  <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
-                  <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
-                  <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
-                  <option value="VCEEncC" selected>VCEEncC (ハードウェアエンコーダー)</option>
-<?php	} // 括弧終了 ?>
+                  <option value="ffmpeg"<?php if ($encoder_default == 'ffmpeg' or $encoder_default == '') echo ' selected'; ?>>ffmpeg (ソフトウェアエンコーダー)</option>
+                  <option value="QSVEncC"<?php if ($encoder_default == 'QSVEncC') echo ' selected'; ?>>QSVEncC (ハードウェアエンコーダー)</option>
+                  <option value="NVEncC"<?php if ($encoder_default == 'NVEncC') echo ' selected'; ?>>NVEncC (ハードウェアエンコーダー)</option>
+                  <option value="VCEEncC"<?php if ($encoder_default == 'VCEEncC') echo ' selected'; ?>>VCEEncC (ハードウェアエンコーダー)</option>
                 </select>
               </div>
             </div>
@@ -1066,6 +992,9 @@
 
     <div id="scroll">
       <i class="fas fa-arrow-up"></i>
+    </div>
+    <div id="save">
+      <i class="fas fa-save"></i>
     </div>
 
   </section>

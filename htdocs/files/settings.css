@@ -327,3 +327,36 @@ select {
         margin-bottom: 10px;
     }
 }
+
+#save {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 100px;
+    bottom: 30px;
+    width: 62px;
+    height: 62px;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 31px;
+    color: #FFFFFF;
+    background-color: #e8004a;
+    transition: 0.2s ease-in-out;
+    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 150;
+}
+
+@media screen and (min-width: 1024px){
+    #save:hover {
+        background-color: #ca0040;
+    }
+}
+
+#save.hover {
+    background-color: #ca0040;
+}

@@ -41,6 +41,7 @@
     $('#setting-env').submit(function(event){
 
       event.preventDefault();
+      $('#save').addClass('hover');
       $('.redbutton').attr('disabled', true);
 
       // フォーム送信
@@ -53,10 +54,35 @@
           toastr.success('環境設定を保存しました。');
           setTimeout(function(){
             $('.redbutton').attr('disabled', false);
+            $('#save').removeClass('hover');
           }, 200);
         }
       });
 
+    });
+
+    // 上までスクロールで戻る
+    $(window).scroll(function() {
+
+      // スクロール位置を取得
+      var topPos = $(this).scrollTop();
+
+      if ($('#setting-env').length === 1){
+        // 表示・非表示
+        if (topPos > $('#setting-env').offset().top) {
+          $('#save').css('opacity', '1');
+          $('#save').css('visibility', 'visible');
+        } else {
+          $('#save').css('opacity', '0');
+          $('#save').css('visibility', 'hidden');
+        }
+      }
+
+    });
+
+    // 保存
+    $('#save').click(function(){
+      $('#setting-env .redbutton').click();
     });
 
   });
