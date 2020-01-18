@@ -511,12 +511,18 @@
       // tabキー
       if (event.which == 9){
         // フォーカス
-        $('#tweet-hashtag').focus();
+        event.preventDefault();
+        console.log($(':focus').is('#tweet'))
+        if($(':focus').is('#tweet')) {
+          $('#tweet').blur();
+        } else {
+          $('#tweet').focus();
+        }
       }
 
       // Alt(or option)キー
       if (event.altKey){
-        event.preventDefault(); // Mac用
+        event.preventDefault();
         switch (event.which){
 
           case 49:

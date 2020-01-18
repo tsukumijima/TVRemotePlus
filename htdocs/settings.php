@@ -272,7 +272,7 @@
           </h2>
 
           <p>
-            TVRemotePlus の設定を Web 上から行えます。<br>
+            <?php echo $site_title; ?> の設定を Web 上から行えます。<br>
           </p>
 
           <div class="setting-form-wrap">

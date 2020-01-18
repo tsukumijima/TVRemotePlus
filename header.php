@@ -19,7 +19,7 @@
 
 <head>
 <?php	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ ?>
-  <title>ファイル再生 - <?php echo $site_title; ?></title>
+  <title>録画一覧 - <?php echo $site_title; ?></title>
 <?php	} else if (strpos($backtrace[0]['file'], 'settings.php') !== false){ ?>
   <title>設定 - <?php echo $site_title; ?></title>
 <?php	} else { ?>
@@ -190,7 +190,7 @@
     </form>
     <a class="nav-link" href="/watch/">
       <i class="fas fa-search"></i>
-      <span class="nav-link-href">ファイルを再生</span>
+      <span class="nav-link-href">録画番組を再生</span>
     </a>
     <a class="nav-link" href="/tweet/auth">
       <i class="fab fa-twitter"></i>

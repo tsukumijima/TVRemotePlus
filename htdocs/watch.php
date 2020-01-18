@@ -31,7 +31,7 @@
           <div id="search-find-submit">
             <i class="fas fa-search"></i>
           </div>
-          <input id="search-find-form" type="text" placeholder="ファイルを検索" />
+          <input id="search-find-form" type="text" placeholder="番組を検索" />
           <div id="search-find-toggle">
             <i class="fas fa-caret-down"></i>
           </div>
