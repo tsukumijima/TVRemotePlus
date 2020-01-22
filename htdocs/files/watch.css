@@ -17,6 +17,10 @@ section {
     z-index: 50;
 }
 
+.dark #search-find-box {
+    background-color: #3DA39C;
+}
+
 #search-find-wrap {
     position: -webkit-sticky;
     position: sticky;
@@ -142,7 +146,7 @@ section {
 
 @media screen and (min-width: 1025px){
     .search-file-box:hover {
-        background-color: #F5F5F5;
+        background-color: var(--color-hover);
     }
 }
 
@@ -251,7 +255,7 @@ section {
 }
 
 .search-file-info {
-    color: gray;
+    color: var(--color-text-gray);
 }
 
 .search-file-info span {
@@ -270,7 +274,7 @@ section {
 }
 
 .search-file-description {
-    color: gray;
+    color: var(--color-text-gray);
     margin-top: 6px;
     display: -webkit-box;
     font-size: 85%;
@@ -284,19 +288,19 @@ section {
 #search-more-box {
     position: relative;
     display: block;
-    background-color: #FFFFFF;
+    background-color: var(--color-menu);
     text-align: center;
     font-size: 16px;
-    color: #202124;
+    color: var(--color-text);
     border-radius: 20px;
-    border: 1px solid #DFE1E5;
+    border: 1px solid var(--color-border);
     margin: 16px 16px 10px 16px;
     padding: 13px;
     cursor: pointer;
 }
 
 #search-more-box:hover {
-    background-color: #F5F5F5;
+    background-color: var(--color-hover);
     transition: 0.15s ease-in-out;
 }
 
@@ -332,7 +336,7 @@ section {
     width: 95%;
     max-width: 500px;
     height: 345px;
-    background-color: #FFFFFF;
+    background-color: var(--color-white);
     border-radius: 5px;
     will-change: opacity;
 }
@@ -355,7 +359,7 @@ section {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 90%;
-    color: gray;
+    color: var(--color-text-gray);
     margin-top: 5px;
 }
 

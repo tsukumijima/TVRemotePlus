@@ -279,9 +279,9 @@
                                   </div>
                                   <div class="stream-state ` + color + `">` + state + `</div>
                                   <div class="stream-info">
-                                    <div class="stream-title">` + data['stream'][key]['program_name'].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'') + `</div>
+                                    <div class="stream-title">` + data['stream'][key]['program_name'].replace(/<br>/g,' ') + `</div>
                                     <div class="stream-channel">` + data['stream'][key]['channel'] + `</div>
-                                    <div class="stream-description">` + data['stream'][key]['program_info'].replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'') + `</div>
+                                    <div class="stream-description">` + data['stream'][key]['program_info'].replace(/<br>/g,' ') + `</div>
                                   </div>
                                 </div>`;
 

@@ -1,4 +1,44 @@
 
+:root {
+    --color-white: #FFFFFF;
+    --color-white-light: #FAFAFA;
+    --color-menu: #FFFFFF;
+    --color-hover: #F5F5F5;
+    --color-hover-light: #f5f8fa;
+    --color-background: #EEEEEE;
+    --color-scrollbar: #E1E1E1;
+    --color-shadow: #E0E0E0;
+    --color-border: #E5E8EA;
+    --color-border-dark: #272727;
+    --color-green: #4ECDC4;
+    --color-tweet: #1DA1F2;
+    --color-blue: #007CFF;
+    --color-visited: #0163cd;
+    --color-dark: #272727;
+    --color-text: rgba(0, 0, 0, 0.87);
+    --color-text-light: rgba(0, 0, 0, 0.70);
+    --color-text-gray: rgba(0, 0, 0, 0.54);
+    --color-text-darkgray: #4f565c;
+}
+
+.dark {
+    --color-white: #15202B;
+    --color-white-light: #16212C;
+    --color-menu: #2e2d3a;
+    --color-hover: rgba(107, 125, 140, 0.2);
+    --color-hover-light: rgba(107, 125, 140, 0.18);
+    --color-background: #192734;
+    --color-scrollbar: rgba(0, 0, 0, 0.5);
+    --color-shadow: rgba(10, 10, 10, 0.5);
+    --color-border: rgb(56, 68, 77);
+    --color-border-dark: rgb(77, 94, 107);
+    --color-dark: #E4E4E4;
+    --color-text: rgba(255, 255, 255, 0.87);
+    --color-text-light: rgba(255, 255, 255, 0.70);
+    --color-text-gray: rgba(255, 255, 255, 0.54);
+    --color-text-darkgray: #8d99a1;
+}
+
 html {
     transform: none !important;
     will-change: auto;
@@ -8,8 +48,17 @@ body {
     transform: none !important;
     will-change: auto;
     font-family: 'Segoe UI','Arial','メイリオ';
-    background-color: #EEEEEE;
+    background-color: var(--color-background);
+    color: var(--color-text);
     margin: 0px;
+}
+
+a:link {
+    color: var(--color-blue);
+}
+
+a:visited {
+    color: var(--color-visited);
 }
 
 a:focus {
@@ -40,10 +89,10 @@ pre:empty {
     pre::-webkit-scrollbar {
         width: 8px;
         height: 8px;
-        background: #B2BEC2;
+        background: var(--color-scrollbar);
     }
     pre::-webkit-scrollbar-corner {
-        background: #B2BEC2;
+        background: var(--color-scrollbar);
     }
     pre::-webkit-scrollbar-thumb {    width: 8px;
         height: 8px;
@@ -82,13 +131,13 @@ pre:empty {
 .progress {
     width: 0%;
     height: 100%;
-    background-color: #4ECDC4;
+    background-color: var(--color-green);
     transition: 0.4s ease;
 }
 
 .line {
     height: 2px;
-    background-color: #ededed;
+    background-color: var(--color-border);
 }
 
 /** アイコンなど **/
@@ -181,7 +230,7 @@ input::-moz-focus-inner, button::-moz-focus-inner {
     visibility: hidden;
     font-size: 31px;
     color: #FFFFFF;
-    background-color: #4ECDC4;
+    background-color: var(--color-green);
     transition: 0.2s ease-in-out;
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
     -webkit-tap-highlight-color: transparent;
@@ -210,7 +259,6 @@ select {
     vertical-align: middle;
     font-size: inherit;
     font-family: 'Segoe UI','Arial','メイリオ';
-    color: inherit;
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
@@ -219,14 +267,15 @@ select {
     -moz-appearance: none;
     height: 35px;
     padding: 6px 12px;
-    border: 1.5px solid #dddddd;
-    color: #333333;
+    border: 1.5px solid var(--color-border);
+    background-color: var(--color-white);
+    color: var(--color-text);
     border-radius: 3px;
 }
 
 select option {
-    background-color: #ffffff;
-    color: #333333;
+    background-color: var(--color-white);
+    color: var(--color-text);
 }
 
 select::-ms-expand {
@@ -326,7 +375,8 @@ section {
     max-width: 1250px;
     height: 100%;
     margin: auto;
-    background-color: white;
+    background-color: var(--color-white);
+    box-shadow: 0px 6px 6px 3px var(--color-shadow);
 }
 
 @media screen and (max-width : 1024px){
@@ -339,7 +389,6 @@ section {
 
 #main {
     margin-top: 54px;
-    box-shadow: 0px 0px 6px 3px #e0e0e0;
 }
 
 #content-wrap {
@@ -399,7 +448,7 @@ section {
 }
   
 #nav-open, #nav-open:before, #nav-open:after {
-    color: white;
+    color: #FFFFFF;
 }
 
 @media screen and (min-width: 1025px) {
@@ -556,7 +605,7 @@ section {
     top: 46px;
     right: 2vw;
     width: 210px;
-    background-color: #FFFFFF;
+    background-color: var(--color-menu);
     border-radius: 8px;
     box-shadow: -1px 4px 2px 0 rgba(0,0,0,.14),
                 0 3px 1px -2px rgba(0,0,0,.10),
@@ -589,7 +638,7 @@ section {
 }
 
 .menu-link:hover {
-    background-color: #EEEEEE;
+    background-color: var(--color-hover);
 }
 
 .menu-link i {
@@ -615,7 +664,7 @@ google-cast-launcher {
 }
 
 google-cast-launcher:hover + #cast-toggle{
-    background-color: #EEEEEE;
+    background-color: var(--color-hover);
 }
 
 google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #cast-toggle:after{
@@ -712,13 +761,16 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     padding: 16px 20px 16px 35px;
     margin: 0;
     width: 100%;
-    color: #fafafa;
     font-size: 14px;
     line-height: 18px;
     text-decoration: none;
     box-sizing: border-box;
     align-items: center;
     border-bottom: 1.5px #171717 solid;
+}
+
+.nav-link, .nav-link:link, .nav-link:visited {
+    color: #fafafa;
 }
 
 .nav-link:hover{
@@ -824,7 +876,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 #comment-box-header {
     font-size: 90%;
-    background-color: #FFFFFF;
+    background-color: var(--color-white);
     padding: 10px 20px 8px 20px;
     height: 20px;
     top: 0;
@@ -843,7 +895,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 #comment-draw-box-header {
     display: block;
-    background-color: #F5F5F5;
+    background-color: var(--color-border);
     height: 43px;
     position: absolute;
     top: 0;
@@ -856,9 +908,9 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 #comment-draw-box {
     font-size: 90%;
     display: block;
-    border-left: 1px solid #E5E8EA;
-    border-bottom: 8px solid #E5E8EA;
-    background-color: #FFFFFF;
+    border-left: 1px solid var(--color-border);
+    border-bottom: 8px solid var(--color-border);
+    color: var(--color-text);
     overflow-y: scroll;
     position: absolute;
     border-collapse: collapse;
@@ -871,10 +923,10 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 #comment-draw-box::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    background: #B2BEC2;
+    background: var(--color-scrollbar);
 }
 #comment-draw-box::-webkit-scrollbar-corner {
-    background: #B2BEC2;
+    background: var(--color-scrollbar);
 }
 #comment-draw-box::-webkit-scrollbar-thumb {
     background: #657586;
@@ -901,7 +953,7 @@ td {
 .time {
     width: 84px;
     padding: 3px 0px;
-    border-right: 1px solid #e5e8ea;
+    border-right: 1px solid var(--color-border);
     box-sizing: border-box;
 }
 
@@ -910,7 +962,7 @@ td {
 }
 
 .comment-file:hover {
-    color: #007cff;
+    color: var(--color-blue);
 }
 
 .comment {
@@ -934,7 +986,7 @@ td {
     visibility: hidden;
     font-size: 25px;
     color: #FFFFFF;
-    background-color: #4ECDC4;
+    background-color: var(--color-green);
     transition: 0.2s ease-in-out;
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
     -webkit-tap-highlight-color: transparent;
@@ -968,7 +1020,7 @@ td {
     left: 3vw;
     margin-top: -65px;
     border-radius: 10px;
-    background-color: #ffffff;
+    background-color: var(--color-white);
     box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
     transition: 0.15s ease-in-out;
     opacity: 0;
@@ -999,7 +1051,7 @@ td {
 #tweet-account-name {
     display: block;
     width: 190px;
-    color: #272727;
+    color: var(--color-text);
     font-weight: bold;
     font-size: 17px;
     white-space: nowrap;
@@ -1015,7 +1067,7 @@ td {
 #tweet-account-id {
     display: block;
     width: 190px;
-    color: #657786;
+    color: var(--color-text-darkgray);
     font-size: 15px;
     white-space: nowrap;
     overflow: hidden;
@@ -1031,7 +1083,7 @@ td {
 
 #tweet-box.open {
     position: fixed;
-    background-color: #FFFFFF;
+    background-color: var(--color-white);
     bottom: 0px;
     transition-delay: 0s;
     opacity: 1.0;
@@ -1070,8 +1122,7 @@ td {
     display: block;
     position: relative;
     width: 30px;
-    padding-top: 1px;
-    color: #1da1f2;
+    color: var(--color-tweet);
     font-size: 111%;
     float: left;
     text-align: center;
@@ -1081,7 +1132,7 @@ td {
 #tweet-status {
     display: block;
     width: calc(100% - 30px);
-    color: #1da1f2;
+    color: var(--color-tweet);
     float: right;
     text-align: right;
 }
@@ -1095,7 +1146,7 @@ td {
 }
 
 #tweet-login {
-    color: #007cff;
+    color: var(--color-blue);
     text-decoration: none;
 }
 
@@ -1116,7 +1167,7 @@ td {
     width: 85%;
     height: 73px;
     padding: 12px;
-    background-color: #f5f8fa;
+    background-color: var(--color-hover-light);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom: 2px #1da1f2 solid;
@@ -1133,15 +1184,12 @@ td {
     color: #1b95e0;
     outline: none;
     border: 0px;
-    background-color: #f5f8fa;
+    background: none;
 }
 
-#tweet-hashtag::-webkit-input-placeholder {
-    color: #80ceff;
-}
-
-#tweet-hashtag::-moz-placeholder {
+#tweet-hashtag::placeholder {
     color: #1b95e0;
+    opacity: 0.7;
 }
 
 #tweet {
@@ -1153,21 +1201,22 @@ td {
     font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 105%;
     resize: none;
+    color: var(--color-text);
     outline: none;
     border: 0px;
-    background-color: #f5f8fa;
+    background: none;
 }
 
 #tweet::-webkit-scrollbar {
     width: 10px;
     height: 10px;
-    background: #E1E1E1;
+    background: var(--color-scrollbar);
 }
 #tweet::-webkit-scrollbar-corner {
-    background: #EDEDED;
+    background: var(--color-scrollbar);
 }
 #tweet::-webkit-scrollbar-thumb {
-    background: #B3B3B3;
+    background: #657586;
 }
 
 #tweet-etc {
@@ -1198,18 +1247,10 @@ td {
     cursor: pointer;
 }
 
-#tweet-picture:hover {
-    background-color: rgba(29, 161, 242, 0.1);
-}
-
 #tweet-picture-comment, #tweet-picture-comment img {
     width: 28px;
     height: 25px;
     cursor: pointer;
-}
-
-#tweet-picture-comment:hover {
-    background-color: rgba(29, 161, 242, 0.1);
 }
 
 #tweet-reset, #tweet-reset img {
@@ -1218,22 +1259,14 @@ td {
     cursor: pointer;
 }
 
-#tweet-reset:hover {
+#tweet-picture:hover, #tweet-picture-comment:hover, #tweet-reset:hover {
     background-color: rgba(29, 161, 242, 0.1);
 }
 
 @media screen and (max-width : 768px){
 
-    #tweet-picture:hover {
-        background-color: #FFFFFF;
-    }
-
-    #tweet-picture-comment:hover {
-        background-color: #FFFFFF;
-    }
-
-    #tweet-reset:hover {
-        background-color: #FFFFFF;
+    #tweet-picture:hover, #tweet-picture-comment:hover, #tweet-reset:hover {
+        background-color: none;
     }
 }
 
@@ -1263,7 +1296,7 @@ td {
     outline: none;
     border-radius: 4px;
     border-style: none;
-    background-color: #1da1f2;
+    background-color: var(--color-tweet);
     transition: all  0.1s ease;
     cursor: pointer;
 }
@@ -1325,7 +1358,7 @@ td {
     display: block;
     margin: 0;
     font-size: 21px;
-    color: black;
+    color: var(--color-text);
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -1348,12 +1381,12 @@ td {
 
 #reload {
     font-size: 18px;
-    color: gray;
+    color: var(--color-text-gray);
     text-decoration: none;
 }
 
 #epg-next {
-    color: gray;
+    color: var(--color-text-gray);
     font-size: 15.8px;
     margin-bottom: 10px;
 }
@@ -1361,7 +1394,7 @@ td {
 #epg-info {
     width: 77%;
     margin-bottom: 10px;
-    color: #575757;
+    color: var(--color-text-gray);
     font-size: 15px;
     line-height: 150%;
 }
@@ -1436,18 +1469,18 @@ td {
 #epg-channel {
     display: inline-block;
     margin-left: 3px;
-    color: #fb4343;
+    color: #e91d5d;
 }
 
 #epg-time {
     display: inline-block;
     margin-left: 3px;
-    color: gray;
+    color: var(--color-text-gray);
 }
 
 #watch {
     display: block;
-    color: gray;
+    color: var(--color-text-gray);
     margin-left: 3px;
     margin-right: 3px;
 }
@@ -1469,7 +1502,7 @@ td {
     display: flex;
     align-items: center;
     flex-direction: column;
-    color: #272727;
+    color: var(--color-text);
     box-sizing: border-box;
 }
 
@@ -1480,7 +1513,7 @@ td {
     height: 50px;
     font-size: 16px;
     padding: 0px 20px;
-    border-bottom: 2px solid #ededed;
+    border-bottom: 2px solid var(--color-border);
     box-sizing: border-box;
     transition: background-color ease 0.3s;
     text-align: left;
@@ -1489,7 +1522,7 @@ td {
 }
 
 .stream-view:first-of-type {
-    border-top: 2px solid #ededed;
+    border-top: 2px solid var(--color-border);
 }
 
 .stream-box {
@@ -1542,11 +1575,11 @@ td {
 }
 
 .stream-state.blue {
-    color: #007cff;
+    color: var(--color-blue);
 }
 
 .stream-state.green {
-    color: #4ECDC4;
+    color: var(--color-green);
 }
 
 .stream-info {
@@ -1585,7 +1618,7 @@ td {
 
 @media screen and (min-width: 1024px){
     .stream-view:hover {
-        background-color: #F5F5F5;
+        background-color: var(--color-hover);
     }
 }
 
@@ -1654,9 +1687,9 @@ td {
 
 .broadcast-button {
     width: calc(100% / 3) !important;
-    color: #333;
+    color: var(--color-text-light);
     padding: 15px 20px;
-    border-bottom: 5px solid #DDDDDD;
+    border-bottom: 5px solid var(--color-border);
     cursor: pointer;
     list-style: none;
     text-align: center;
@@ -1667,20 +1700,20 @@ td {
 
 @media screen and (min-width: 1024px){
     .broadcast-button:hover {
-        background: #F5F5F5;
+        background: var(--color-hover);
     }
 }
 
 .swiper-slide-thumb-active {
-    color: #007cff;
-    border-bottom: 5px solid #007cff;
+    color: var(--color-blue);
+    border-bottom: 5px solid var(--color-blue);
 }
 
 #next-channel {
     display: inline-block;
     margin-top: 5px;
     margin-bottom: 5px;
-    color: #474747;
+    color: var(--color-text-light);
     font-size: 110%;
 }
 
@@ -1715,7 +1748,7 @@ td {
 
 @media screen and (min-width: 1024px){
     .broadcast-wrap:hover {
-        background-color: #F5F5F5;
+        background-color: var(--color-hover);
     }
 }
 
@@ -1725,7 +1758,7 @@ td {
     box-sizing: border-box;
     border-radius: 50%;
     color: #FFFFFF;
-    background-color: #4ECDC4;
+    background-color: var(--color-green);
     font-size: 24px;
     padding: 8px;
 }
@@ -1736,7 +1769,7 @@ td {
     flex-direction: column;
     font-family: 'Segoe UI','Arial','メイリオ';
     padding-left: 20px;
-    color: rgba(0,0,0,.87);
+    color: var(--color-text);
 }
 
 @media screen and (max-width: 350px){
@@ -1792,7 +1825,7 @@ td {
 
 .broadcast-jikkyo {
     display: inline-block;
-    color: rgba(0,0,0,.70);
+    color: var(--color-text-light);
     font-size: 14px;
     overflow: hidden;
     white-space: nowrap;
@@ -1812,7 +1845,7 @@ td {
 
 .broadcast-next {
     display: block;
-    color: rgba(0,0,0,.54);
+    color: var(--color-text-gray);
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1838,7 +1871,7 @@ td {
     width: 95%;
     max-width: 500px;
     height: 395px;
-    background-color: #FFFFFF;
+    background-color: var(--color-white);
     border-radius: 5px;
     font-size: 16px;
     will-change: opacity;
@@ -1890,7 +1923,7 @@ td {
     width: 95%;
     max-width: 500px;
     height: 230px;
-    background-color: #FFFFFF;
+    background-color: var(--color-white);
     border-radius: 5px;
     font-size: 16px;
     will-change: opacity;
@@ -1927,10 +1960,10 @@ td {
 #chromecast-device-box::-webkit-scrollbar {
     width: 8px;
     height: 8px;
-    background: #FFFFFF;
+    background: var(--color-scrollbar);
 }
 #chromecast-device-box::-webkit-scrollbar-corner {
-    background: #FFFFFF;
+    background: var(--color-scrollbar);
 }
 #chromecast-device-box::-webkit-scrollbar-thumb {
     background: #B2BEC2;
@@ -1948,7 +1981,7 @@ td {
 }
 
 .chromecast-device:hover {
-    background-color: #F5F5F5;
+    background-color: var(--color-hover);
 }
 
 .chromecast-name-box {
@@ -1964,7 +1997,7 @@ td {
 
 .chromecast-type {
     font-size: 85%;
-    color: rgba(0,0,0,.54);
+    color: var(--color-text-gray);
 }
 
 /* フォーム */
@@ -2026,7 +2059,7 @@ td {
     outline: none;
     border-radius: 4px;
     border-style: none;
-    background-color: #1da1f2;
+    background-color: var(--color-tweet);
     transition: all  0.1s ease;
     cursor: pointer;
 }
@@ -2086,12 +2119,11 @@ td {
 }
 
 #footer {
-    background-color: #007cff;
+    background-color: var(--color-blue);
     color: white;
     text-align: center;
     font-size: 95%;
     padding-top: 14px;
     padding-bottom: 14px;
     display: block;
-    box-shadow: 0px 0px 6px 3px #e0e0e0;
 }

@@ -7,8 +7,6 @@
 
 #main {
     min-height: 85.7vh;
-    margin-top: 54px;
-    box-shadow: 0px 0px 6px 3px #e0e0e0;
 }
 
 #setting {
@@ -50,9 +48,9 @@ h2 {
     display: flex;
     align-items: center;
     margin: 0;
-    color: #272727;
+    color: var(--color-dark);
     font-size: 24px;
-    border-bottom: solid 3px #272727;
+    border-bottom: solid 3px var(--color-border-dark);
     padding-bottom: 5px;
     margin-bottom: 15px;
     position: relative;
@@ -80,9 +78,9 @@ h3 {
     display: flex;
     align-items: center;
     margin: 0;
-    color: #272727;
+    color: var(--color-dark);
     font-size: 20px;
-    border-bottom: solid 3px #272727;
+    border-bottom: solid 3px var(--color-border-dark);
     padding-bottom: 5px;
     margin-bottom: 15px;
     position: relative;
@@ -120,9 +118,9 @@ h4 {
     display: flex;
     align-items: center;
     margin: 0;
-    color: #272727;
+    color: var(--color-dark);
     font-size: 17px;
-    border-bottom: solid 3px #272727;
+    border-bottom: solid 3px var(--color-border-dark);
     padding-bottom: 5px;
     margin-bottom: 18px;
     position: relative;
@@ -172,7 +170,7 @@ h4:before {
 } 
 
 .setting-form p {
-    color: #4f565c;
+    color: var(--color-text-darkgray);
     margin-top: 10px;
     margin-left: 15px;
     margin-right: 0px;
@@ -197,7 +195,7 @@ select {
     width: 150px;
 }
 
-.download {
+.download, .download:link, .download:visited {
     display: inline-block;
     font-size: 250%;
     color: #4bd8a2;
@@ -234,10 +232,11 @@ select {
     -moz-appearance: none;
     height: 35px;
     padding: 6px 12px;
-    border: 1.5px solid #dddddd;
-    box-sizing: border-box;
-    color: #333333;
+    border: 1.5px solid var(--color-border);
+    background-color: var(--color-white);
+    color: var(--color-text);
     border-radius: 3px;
+    box-sizing: border-box;
 }
 
 .password-box-wrap {
@@ -278,10 +277,11 @@ select {
     -moz-appearance: none;
     height: 35px;
     padding: 6px 12px;
-    border: 1.5px solid #dddddd;
-    box-sizing: border-box;
-    color: #333333;
+    border: 1.5px solid var(--color-border);
+    background-color: var(--color-white);
+    color: var(--color-text);
     border-radius: 3px;
+    box-sizing: border-box;
 }
 
 @media screen and (max-width: 768px){

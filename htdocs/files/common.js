@@ -1,7 +1,14 @@
 
   $(function(){
 
-      // メニュー開閉
+    // ダークモード切り替え
+    if (settings['dark_theme']){
+      $('html').addClass('dark');
+    } else {
+      $('html').removeClass('dark');
+    }
+
+    // メニュー開閉
     $('#nav-open').click(function(event){
       $('#nav-close').addClass('open');
       $('#nav-content').addClass('open');

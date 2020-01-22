@@ -20,7 +20,7 @@
         = initBonChannel($BonDriver_dir);
 	
 	// 時計
-	$clock = date("Y/m/d H:i:s");
+	$clock = date('Y/m/d H:i:s');
 
 	// POSTでフォームが送られてきた場合
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -365,6 +365,18 @@
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} // 括弧終了 ?>
                 <label for="comment_show" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form">
+              <span>ダークモード</span>
+              <div class="toggle-switch">
+<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['dark_theme'] == false){ ?>
+                <input id="dark_theme" class="toggle-input" type="checkbox" value="true" />
+<?php	} else { ?>
+                <input id="dark_theme" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} // 括弧終了 ?>
+                <label for="dark_theme" class="toggle-label"></label>
               </div>
             </div>
 
