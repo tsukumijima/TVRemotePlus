@@ -17,8 +17,12 @@ section {
     z-index: 50;
 }
 
-.dark #search-find-box {
-    background-color: #3DA39C;
+.dark #search-find-box, .dark #search-find-link-box {
+    background-color: #46b2aa;
+}
+
+.dark .search-find-selected {
+    background-color: #4ECDC4;
 }
 
 #search-find-wrap {
@@ -483,7 +487,7 @@ section {
     #search-find-link-box {
         position: fixed;
         background-color: #4ECDC4;
-        top: 111px;
+        top: 114px;
         left: 0px;
         width: 100%;
         border-bottom: 1px solid #4ECDC4;

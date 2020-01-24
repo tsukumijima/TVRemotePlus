@@ -163,7 +163,7 @@
           </div>
           <div id="comment-box">
             <table id="comment-draw-box-header">
-              <tr><th id="comment-time" class="time">時間</th><th class="comment">コメント</th></tr>
+              <tr><th id="comment-time" class="time">時間</th><th id="comment" class="comment">コメント</th></tr>
             </table>
             <table id="comment-draw-box"></table>
           </div>

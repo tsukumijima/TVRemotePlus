@@ -307,7 +307,9 @@
   window.__onGCastApiAvailable = function(isAvailable) {
     if (isAvailable){
       $(window).on('load',function(){
-        cast_init();
+        setTimeout(function() {
+          cast_init();
+        }, 500);
       });
       setInterval(function() {
         $('google-cast-launcher').css('display', 'block');

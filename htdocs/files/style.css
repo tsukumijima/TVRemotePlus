@@ -12,6 +12,7 @@
     --color-border-dark: #272727;
     --color-green: #4ECDC4;
     --color-tweet: #1DA1F2;
+    --color-tweet-disabled: #8ed0f9;
     --color-blue: #007CFF;
     --color-visited: #0163cd;
     --color-dark: #272727;
@@ -32,6 +33,7 @@
     --color-shadow: rgba(10, 10, 10, 0.5);
     --color-border: rgb(56, 68, 77);
     --color-border-dark: rgb(77, 94, 107);
+    --color-tweet-disabled: #4a8bb3;
     --color-dark: #E4E4E4;
     --color-text: rgba(255, 255, 255, 0.87);
     --color-text-light: rgba(255, 255, 255, 0.70);
@@ -895,14 +897,22 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 #comment-draw-box-header {
     display: block;
-    background-color: var(--color-border);
-    height: 43px;
+    background-color: #F5F5F5;
+    height: 40px;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 2;
+}
+
+.dark #comment-draw-box-header {
+    background-color: rgb(56, 68, 77);
+}
+
+.dark #comment-draw-box-header .time {
+    border-right: 1px solid #4d4d4d;
 }
 
 #comment-draw-box {
@@ -914,7 +924,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     overflow-y: scroll;
     position: absolute;
     border-collapse: collapse;
-    top: 43px;
+    top: 40px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -930,6 +940,10 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 }
 #comment-draw-box::-webkit-scrollbar-thumb {
     background: #657586;
+}
+
+#comment-draw-box tbody:first-child .time, #comment-draw-box tbody:first-child .comment {
+    padding-top: 10px;
 }
 
 tbody {
@@ -1306,12 +1320,12 @@ td {
 }
 
 #tweet-submit.disabled {
-    background-color: #8ed0f9;
+    background-color: var(--color-tweet-disabled);
     cursor: default;
 }
 
 #tweet-submit.disabled:hover {
-    background-color: #8ed0f9;
+    background-color: var(--color-tweet-disabled);
 }
 
 @media screen and (max-width: 1000px){
@@ -2069,22 +2083,22 @@ td {
 }
 
 .bluebutton[disabled] {
-    background-color: #8ed0f9;
+    background-color: var(--color-tweet-disabled);
     cursor: auto;
 }
 
 .bluebutton.disabled {
-    background-color: #8ed0f9;
+    background-color: var(--color-tweet-disabled);
     cursor: auto;
 }
 
 .bluebutton[disabled]:hover {
-    background-color: #8ed0f9;
+    background-color: var(--color-tweet-disabled);
     cursor: auto;
 }
 
 .bluebutton.disabled:hover {
-    background-color: #8ed0f9;
+    background-color: var(--color-tweet-disabled);
     cursor: auto;
 }
 
