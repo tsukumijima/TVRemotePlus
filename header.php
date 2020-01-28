@@ -19,7 +19,7 @@
 
 <head>
 <?php	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ ?>
-  <title>録画一覧 - <?php echo $site_title; ?></title>
+  <title>録画番組 - <?php echo $site_title; ?></title>
 <?php	} else if (strpos($backtrace[0]['file'], 'settings.php') !== false){ ?>
   <title>設定 - <?php echo $site_title; ?></title>
 <?php	} else { ?>

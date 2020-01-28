@@ -149,7 +149,7 @@
         if (sortnum == 5){
           $('#search-info').html('再生履歴がありません。録画ファイルを再生するとここに履歴が表示されます。').hide().delay(200).velocity('fadeIn', 500);
         } else {
-          $('#search-info').html('録画ファイルリストがありません。右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
+          $('#search-info').html('録画ファイルリストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
         }
       }
     });
@@ -175,13 +175,18 @@
         dataType: 'json',
         cache: false,
         success: function(data) {
-          $('#rec-new').addClass('search-find-selected');
-          $('#rec-old').removeClass('search-find-selected');
-          $('#name-up').removeClass('search-find-selected');
-          $('#name-down').removeClass('search-find-selected');
-          $('#play-history').removeClass('search-find-selected');
-          sortFileinfo('fileinfo', 1);
-          toastr.success('リストを更新しました。');
+
+          if (data['status'] == 'success'){
+            $('#rec-new').addClass('search-find-selected');
+            $('#rec-old').removeClass('search-find-selected');
+            $('#name-up').removeClass('search-find-selected');
+            $('#name-down').removeClass('search-find-selected');
+            $('#play-history').removeClass('search-find-selected');
+            sortFileinfo('fileinfo', 1);
+            toastr.success('リストを更新しました。');
+          } else {
+            $('#search-info').html('録画リストを更新中です。しばらくお待ちください。');
+          }
         }
       });
     });

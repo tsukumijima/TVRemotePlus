@@ -417,7 +417,7 @@
             </div>
 
             <div class="setting-form">
-              <span>デフォルト設定を使いワンクリックでストリームを開始する</span>
+              <span>デフォルト設定を使い1クリックでストリームを開始する</span>
               <div class="toggle-switch">
 <?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['onclick_stream'] == true){ ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" checked />

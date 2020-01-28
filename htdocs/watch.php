@@ -228,13 +228,18 @@
       dataType: 'json',
       cache: false,
       success: function(data) {
-        $('#rec-new').addClass('search-find-selected');
-        $('#rec-old').removeClass('search-find-selected');
-        $('#name-up').removeClass('search-find-selected');
-        $('#name-down').removeClass('search-find-selected');
-        $('#play-history').removeClass('search-find-selected');
-        sortFileinfo('fileinfo', 1);
-        toastr.success('リストを更新しました。');
+
+        if (data['status'] == 'success'){
+          $('#rec-new').addClass('search-find-selected');
+          $('#rec-old').removeClass('search-find-selected');
+          $('#name-up').removeClass('search-find-selected');
+          $('#name-down').removeClass('search-find-selected');
+          $('#play-history').removeClass('search-find-selected');
+          sortFileinfo('fileinfo', 1);
+          toastr.success('リストを更新しました。');
+        } else {
+            $('#search-info').html('録画リストを更新中です。しばらくお待ちください。');
+        }
       }
     });
   

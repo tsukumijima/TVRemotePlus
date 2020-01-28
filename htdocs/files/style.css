@@ -12,6 +12,7 @@
     --color-shadow: #E0E0E0;
     --color-border: #E5E8EA;
     --color-border-dark: #272727;
+    --color-red: #e91d5d;
     --color-green: #4ECDC4;
     --color-tweet: #1DA1F2;
     --color-tweet-disabled: #8ed0f9;
@@ -57,36 +58,36 @@ body {
     margin: 0px;
 }
 
-/* 共通 */
+/* 本体のスクロールバー */
 
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
     width: 10px;
 }
 
-::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track {
   border-radius: 10px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: rgba(60, 60, 60, 0.5);
   border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
-::-webkit-scrollbar-thumb:hover {
+body::-webkit-scrollbar-thumb:hover {
     background-color: rgba(60, 60, 60, 0.58);
 }
-::-webkit-scrollbar-thumb:active {
+body::-webkit-scrollbar-thumb:active {
     background-color: rgba(60, 60, 60, 0.7);
 }
 
-.dark ::-webkit-scrollbar-thumb {
+.dark body::-webkit-scrollbar-thumb {
     background-color: rgba(141, 153, 161, 0.5);
 }
-.dark ::-webkit-scrollbar-thumb:hover {
+.dark body::-webkit-scrollbar-thumb:hover {
     background-color: rgba(141, 153, 161, 0.42);
 }
-.dark ::-webkit-scrollbar-thumb:active {
+.dark body::-webkit-scrollbar-thumb:active {
     background-color: rgba(141, 153, 161, 0.3);
 }
 
@@ -560,7 +561,7 @@ section {
     top: 0;
     left: 0;
     width: 100%;
-    height: 130%;
+    height: 100%;
     visibility: hidden;
 }
 
@@ -568,7 +569,7 @@ section {
     visibility: visible;
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 1023px){
 
     #nav-open {
         margin-left: 20px;
@@ -590,7 +591,7 @@ section {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 767px){
 
     #main {
         margin-top: 0px;
@@ -600,6 +601,9 @@ section {
     #top {
         position: static;
     }
+}
+
+@media screen and (max-width: 500px){
 
     #nav-open {
         margin-left: 8px;
@@ -707,7 +711,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     opacity: 1;
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 767px){
 
     #menu-content {
         top: 10px;
@@ -731,8 +735,8 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     top: 0;
     left: 0;
     width: 100%;
-    height: 130%;
-    background-color: black;
+    height: 100%;
+    background-color: #000000;
     transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
     opacity: 0;
     visibility: hidden;
@@ -748,7 +752,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     z-index: 300;
     width: 90%;
     max-width: 270px;
-    height: 130%;
+    height: 100%;
     background-color: #272727;
     -webkit-transform: translateX(-105%);
     transform: translateX(-105%);
@@ -793,7 +797,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 .nav-link {
     display: flex;
-    padding: 16px 20px 16px 35px;
+    padding: 16px 16px 16px 35px;
     margin: 0;
     width: 100%;
     font-size: 14px;
@@ -831,10 +835,10 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     box-shadow: 6px 0 25px rgba(0,0,0,.15);
 }
 
-@media screen and (max-width : 768px){
+@media screen and (max-width: 767px){
 
     html.open {
-        position: relative !important;
+        position: fixed!important;
         width: 100%;
         height: 100%;
     }
@@ -975,8 +979,14 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     background: #657586;
 }
 
-#comment-draw-box tbody:first-child .time, #comment-draw-box tbody:first-child .comment {
+#comment-draw-box tr:first-of-type .time,
+#comment-draw-box tr:first-of-type .comment {
     padding-top: 10px;
+}
+
+#comment-draw-box tr:last-of-type .time,
+#comment-draw-box tr:last-of-type .comment {
+    padding-bottom: 10px;
 }
 
 tbody {
@@ -999,6 +1009,7 @@ td {
 
 .time {
     width: 84px;
+    min-height: 28px;
     padding: 3px 0px;
     border-right: 1px solid var(--color-border);
     box-sizing: border-box;
@@ -1014,6 +1025,7 @@ td {
 
 .comment {
     width: calc(100% - 46px);
+    min-height: 28px;
     padding: 3px 12px;
     box-sizing: border-box;
     overflow: hidden;
@@ -1144,7 +1156,7 @@ td {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: black;
+    background-color: #000000;
     opacity: 0;
     visibility: hidden;
 }
@@ -1217,7 +1229,7 @@ td {
     background-color: var(--color-hover-light);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    border-bottom: 2px #1da1f2 solid;
+    border-bottom: 2px var(--color-tweet) solid;
 }
 
 #tweet-hashtag {
@@ -1228,14 +1240,14 @@ td {
     padding-bottom: 4px;
     font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 105%;
-    color: #1b95e0;
+    color: var(--color-tweet);
     outline: none;
     border: 0px;
     background: none;
 }
 
 #tweet-hashtag::placeholder {
-    color: #1b95e0;
+    color: var(--color-tweet);
     opacity: 0.7;
 }
 
@@ -1255,8 +1267,8 @@ td {
 }
 
 #tweet::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background: var(--color-scrollbar);
 }
 #tweet::-webkit-scrollbar-corner {
@@ -1282,7 +1294,7 @@ td {
     transition: all 0.15s ease-out 0.15s;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1023px){
     #tweet-etc div[data-balloon]:after {
         display: none;
     }
@@ -1446,7 +1458,7 @@ td {
     line-height: 150%;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1023px){
 
     #reload:before {
         display: none;
@@ -1457,7 +1469,7 @@ td {
     }
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 767px){
 
     #reload-box {
         margin-top: 6px;
@@ -1516,7 +1528,7 @@ td {
 #epg-channel {
     display: inline-block;
     margin-left: 3px;
-    color: #e91d5d;
+    color: var(--color-red);
 }
 
 #epg-time {
@@ -1593,7 +1605,7 @@ td {
 
 .stream-stop-icon {
     font-size: 26px;
-    color: #e91d5d;
+    color: var(--color-red);
     opacity: 1;
 }
 
@@ -1649,7 +1661,7 @@ td {
     line-height: 17px;
     margin-left: 15px;
     font-size: 13.5px;
-    color: #e91d5d;
+    color: var(--color-red);
 }
 
 .stream-description {
@@ -1716,7 +1728,7 @@ td {
 .error {
     margin-top: 10px;
     margin-bottom: 10px;
-    color: #e8004a;
+    color: var(--color-red);
     font-size: 14px;
     font-weight: bold;
 }

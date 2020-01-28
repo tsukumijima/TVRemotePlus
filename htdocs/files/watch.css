@@ -13,7 +13,7 @@ section {
 
 #search-find-box {
     width: 25%;
-    background-color: #4ECDC4;
+    background-color: var(--color-green);
     z-index: 50;
 }
 
@@ -22,7 +22,7 @@ section {
 }
 
 .dark .search-find-selected {
-    background-color: #4ECDC4;
+    background-color: var(--color-green);
 }
 
 #search-find-wrap {
@@ -63,7 +63,7 @@ section {
     height: calc(1.5em + .75rem + 2px);
     padding: .375rem .75rem;
     font-family: 'Segoe UI','Arial','メイリオ';
-    font-size: 110%;
+    font-size: 15px;
     outline: none;
     border: 1px solid #ced4da;
     border-radius: .25rem;
@@ -108,7 +108,7 @@ section {
 }
 
 .search-find-link span {
-    font-size: 120%;
+    font-size: 17px;
 }
 
 .search-find-selected {
@@ -123,7 +123,7 @@ section {
 
 #search-info {
     padding-bottom: 15px;
-    font-size: 105%;
+    font-size: 17px;
     font-weight: bold;
 }
 
@@ -133,7 +133,7 @@ section {
 }
 
 .error-text {
-    color: #e8004a;
+    color: var(--color-red);
 }
 
 #search-list {
@@ -158,6 +158,7 @@ section {
     width: 30%;
     height: 100%;
     position: relative;
+    box-sizing: border-box;
 }
 
 .search-file-thumb-img {
@@ -212,6 +213,11 @@ section {
     -webkit-user-select: none;
 }
 
+.search-file-download:link, .search-file-download:visited,
+.search-file-encode:link, .search-file-encode:visited {
+    color: #ffffff;
+} 
+
 /*
 @media screen and (min-width: 1025px){
     .search-file-thumb:hover > .search-file-download,
@@ -240,7 +246,9 @@ section {
     width: 70%;
     flex-direction: column;
     font-family: 'Segoe UI','Arial','メイリオ';
-    padding-left: 15px;
+    padding-left: 18px;
+    box-sizing: border-box;
+    line-height: 160%;
 }
 
 .search-file-path, .start_timestamp, .end_timestamp {
@@ -250,7 +258,7 @@ section {
 .search-file-title {
     display: -webkit-box;
     margin-top: 2px;
-    font-size: 120%;
+    font-size: 18.5px;
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
@@ -264,12 +272,11 @@ section {
 
 .search-file-info span {
     display: inline-block;
-    margin-right: 5px;
 }
 
 .search-file-channel {
     display: inline-block;
-    color: #FF5000;
+    color: var(--color-red);
     margin-right: 8px!important;
 }
 
@@ -281,12 +288,13 @@ section {
     color: var(--color-text-gray);
     margin-top: 6px;
     display: -webkit-box;
-    font-size: 85%;
+    font-size: 13.5px;
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+    line-height: 155%;
 }
 
 #search-more-box {
@@ -298,7 +306,7 @@ section {
     color: var(--color-text);
     border-radius: 20px;
     border: 1px solid var(--color-border);
-    margin: 16px 16px 10px 16px;
+    margin: 20px 16px 10px 16px;
     padding: 13px;
     cursor: pointer;
 }
@@ -316,7 +324,7 @@ section {
     color: #70757a;
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 767px){
     html.open {
         position: relative !important;
         width: 100%;
@@ -400,6 +408,10 @@ section {
     .search-find-link i {
         margin-right: 16px;
     }
+
+    .search-file-title {
+        font-size: 17px;
+    }
 }
 
 @media screen and (max-width: 900px){
@@ -416,18 +428,6 @@ section {
         font-size: 20px;
     }
 
-    .search-file-thumb {
-        width: 40%;
-    }
-    
-    .search-file-content {
-        width: 60%;
-    }
-
-    #search-find-form {
-        font-size: 105%;
-    }
-
     #search-find-title {
         padding: 16px 15px 16px 25px;
     }
@@ -437,20 +437,39 @@ section {
     }
 
     .search-find-link span {
-        font-size: 105%;
+        font-size: 15px;
     }
 
     .search-find-link i {
         font-size: 20px;
     }
 
+    .search-file-thumb {
+        width: 40%;
+    }
+    
+    .search-file-content {
+        width: 60%;
+        font-size: 14.5px;
+        line-height: 150%;
+    }
+
+    .search-file-title {
+        font-size: 14.5px;
+    }
+
+    .search-file-info{
+        font-size: 13px;
+    }
+
     .search-file-description {
-        -webkit-line-clamp: 1;
+        margin-top: 3px;
+        font-size: 12px;
     }
 }
 
 
-@media screen and (max-width: 760px){
+@media screen and (max-width: 767px){
     #search-wrap {
         flex-direction: column;
     }
@@ -463,6 +482,10 @@ section {
         width: 100%;
         position: fixed;
         top: 54px;
+    }
+
+    #search-find-link-box {
+        display: none;
     }
 
     #search-find-title {
@@ -486,16 +509,16 @@ section {
     
     #search-find-link-box {
         position: fixed;
-        background-color: #4ECDC4;
+        background-color: var(--color-green);
         top: 114px;
         left: 0px;
         width: 100%;
-        border-bottom: 1px solid #4ECDC4;
+        border-bottom: 1px solid var(--color-green);
     }
 
     #search-box {
         width: 100%;
-        padding: 55px 12px 12px 12px;
+        padding: 125px 30px 30px 30px;
         box-sizing: border-box;
     }
 
@@ -515,16 +538,21 @@ section {
     
     .search-file-content {
         width: 55%;
-        padding-left: 8px;
+        padding-left: 25px;
+        font-size: 16.5px;
     }
     
     .search-file-title {
-        font-size: 90%;
+        font-size: 15px;
         -webkit-line-clamp: 3;
     }
 
     .search-file-info {
-        font-size: 80%;
+        margin-top: 4px;
+    }
+
+    .search-file-description {
+        -webkit-line-clamp: 3;
     }
 }
 
@@ -533,20 +561,36 @@ section {
     #search-box {
         padding: 125px 15px 15px 15px;
     }
-
-    #search-find-link-box {
-        display: none;
-    }
     
     .search-find-link {
         padding: 12px 20px;
     }
+    
+    .search-file-content {
+        padding-left: 12px;
+        font-size: 14.5px;
+        line-height: 125%;
+    }
+    
+    .search-file-title {
+        font-size: 13px;
+        -webkit-line-clamp: 2;
+    }
+
+    .search-file-info {
+        font-size: 11.5px;
+        margin-top: 1px;
+    }
+
+    .search-file-description {
+        -webkit-line-clamp: 1;
+        line-height: 100%;
+    }
+}
+
+@media screen and (max-width: 350px){
 
     .search-file-description {
         display: none;
-    }
-
-    .search-file-channel {
-        font-size: 95%;
     }
 }

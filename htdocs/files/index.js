@@ -306,11 +306,9 @@
   // JavaScript からのキャストに対応しているかどうかのリスナー
   window.__onGCastApiAvailable = function(isAvailable) {
     if (isAvailable){
-      $(window).on('load',function(){
-        setTimeout(function() {
-          cast_init();
-        }, 500);
-      });
+      setTimeout(function() {
+        cast_init();
+      }, 500);
       setInterval(function() {
         $('google-cast-launcher').css('display', 'block');
       }, 1000);
