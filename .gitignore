@@ -28,6 +28,7 @@
 /htdocs/files/info/*
 /htdocs/files/thumb/*
 /htdocs/files/fileinfo.json
+/htdocs/files/fileinfo.json.lock
 /htdocs/files/history.json
 /htdocs/stream/*
 /htdocs/tweet/upload/*

@@ -134,7 +134,7 @@
 
         // 1件も見つからなかった場合
         } else {
-          $('#search-info').html('<span class="error-text">一致する録画ファイルが見つかりませんでした…</span>').hide().delay(200).velocity('fadeIn', 500);
+          $('#search-info').html('<span class="error-text">キーワードに一致する録画番組が見つかりませんでした…</span>').hide().delay(200).velocity('fadeIn', 500);
         }
 
       },
@@ -147,9 +147,9 @@
         $('#search-more-box').remove();
         // エラー吐く
         if (sortnum == 5){
-          $('#search-info').html('再生履歴がありません。録画ファイルを再生するとここに履歴が表示されます。').hide().delay(200).velocity('fadeIn', 500);
+          $('#search-info').html('再生履歴がありません。録画番組を再生するとここに履歴が表示されます。').hide().delay(200).velocity('fadeIn', 500);
         } else {
-          $('#search-info').html('録画ファイルリストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
+          $('#search-info').html('録画リストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
         }
       }
     });
@@ -165,13 +165,13 @@
       $('#search-find-link-box').hide();
     }
 
-    // リストを更新
+    // リストを手動で更新
     $('#list-update').click(function(event){ 	
       toastr.info('リストを更新しています…');
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
       $.ajax({
-        url: '/api/listupdate',
+        url: '/api/listupdate?manual',
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -185,7 +185,7 @@
             sortFileinfo('fileinfo', 1);
             toastr.success('リストを更新しました。');
           } else {
-            $('#search-info').html('録画リストを更新中です。しばらくお待ちください。');
+            $('#search-info').html('録画リストを更新中です。しばらく待ってからリロードしてみてください。');
           }
         }
       });

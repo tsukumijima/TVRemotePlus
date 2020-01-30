@@ -238,7 +238,7 @@
           sortFileinfo('fileinfo', 1);
           toastr.success('リストを更新しました。');
         } else {
-            $('#search-info').html('録画リストを更新中です。しばらくお待ちください。');
+            $('#search-info').html('録画リストを更新中です。しばらく待ってからリロードしてみてください。');
         }
       }
     });

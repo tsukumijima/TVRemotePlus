@@ -371,10 +371,10 @@
             <div class="setting-form">
               <span>ダークモード</span>
               <div class="toggle-switch">
-<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['dark_theme'] == false){ ?>
-                <input id="dark_theme" class="toggle-input" type="checkbox" value="true" />
-<?php	} else { ?>
+<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['dark_theme'] == true){ ?>
                 <input id="dark_theme" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="dark_theme" class="toggle-input" type="checkbox" value="true" /> 
 <?php	} // 括弧終了 ?>
                 <label for="dark_theme" class="toggle-label"></label>
               </div>

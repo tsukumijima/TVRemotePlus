@@ -29,8 +29,8 @@
               if (mm < 10) mm = '0' + mm;
               var time = mm + ':' + ss;            
 
-              html += '<tr class="comment-file"><td class="time" style="width: 62px;" align="center" value="' + videotime+ '">' + time + '</td>'
-                    + '<td class="comment">' + data['data'][i][4].toString() +'</td></tr>';
+              html += '<tbody><tr class="comment-file"><td class="time" style="width: 62px;" align="center" value="' + videotime+ '">' + time + '</td>'
+                    + '<td class="comment">' + data['data'][i][4].toString() +'</td></tr></tbody>';
             }
 
             // コメントを一気にコメント一覧に挿入

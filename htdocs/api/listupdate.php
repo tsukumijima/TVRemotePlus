@@ -49,8 +49,8 @@
 		exit;
 	}
 
-	// 終了時間を計算する関数
-	function end_calc($start, $duration){
+	// 録画終了時刻を計算する関数
+	function calc_end_time($start, $duration){
 
 		// それぞれ切り出す
 		$start_hour = mb_substr($start, 0, 2);
@@ -84,8 +84,8 @@
 		return $end;
 	}
 
-	// 時間を計算する関数
-	function duration_calc($duration){
+	// 録画ファイルの長さ(分)を計算する関数
+	function calc_duration_time($duration){
 
 		// それぞれ切り出す
 		$duration_hour = mb_substr($duration, 0, 2);
@@ -112,11 +112,11 @@
 
 	// $TSfile['data'] にはファイル自体の情報を配列として格納、
 	// $TSfile['info'] にはファイルの情報をキー名を拡張子なしファイル名とした連想配列に格納
-	// $TSfile['data'] は今の所リスト更新毎に $TSinfo['info'] からデータを持ってきて作り直している
-	// このあたりかなりぐっちゃぐちゃなのでそのうち作り直したい
+	// $TSfile['data'] は今の所リスト更新毎に $TSfile['info'] からデータを持ってきて作り直している
+	// このあたりかなりコードぐっちゃぐちゃなのでそのうち作り直したい
 
-	// lockファイルがなければ
-	if (!file_exists($infofile.'.lock')){
+	// lockファイルがない or 手動更新なら
+	if (!file_exists($infofile.'.lock') or isset($_GET['manual'])){
 
 		// lockファイルを作成
 		file_put_contents($infofile.'.lock', '');
@@ -129,14 +129,28 @@
 							glob($TSfile_dir.'/*/*/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE));
 
 		foreach ($search as $key => $value) {
+			
+			// 誤作動の原因になるので変数は破棄しておく
+			unset($ffmpeg_cmd, $ffmpeg_result, $ffmpeg_return,
+				  $rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return, 
+				  $ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
-			$TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value); // 録画ファイル保存フォルダからのパスを含めたファイル名
-			$TSfile['data'][$key]['pathinfo'] = pathinfo($value); // 拡張子なしファイル名など
-			unset($TSfile['data'][$key]['pathinfo']['dirname']); // セキュリティの問題でdirnameは削除
-			$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename'])); // 拡張子なしファイル名を暫定でタイトルに
-			$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']); // HTML抜き
-			$TSfile['data'][$key]['update'] = filemtime($value); // ファイルの更新日時(Unix時間)
-			$md5 = md5($value); // ファイル名のmd5
+			// 録画ファイル保存フォルダからのパスを含めたファイル名
+			$TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
+			// Pathinfo
+			$TSfile['data'][$key]['pathinfo'] = pathinfo($value);
+			// 拡張子なしファイル名を暫定でタイトルにしておく
+			$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']));
+			// タイトル(HTML抜き)
+			$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']);
+			// ファイルの更新日時(Unix時間)
+			$TSfile['data'][$key]['update'] = filemtime($value);
+
+			// dirnameは削除しておく(セキュリティ上の問題)
+			unset($TSfile['data'][$key]['pathinfo']['dirname']);
+
+			// ファイル名のmd5
+			$md5 = md5($value);
 
 			// サムネイルが存在するなら
 			if (file_exists($base_dir.'htdocs/files/thumb/'.$md5.'.jpg')){
@@ -144,8 +158,8 @@
 				$TSfile['data'][$key]['thumb_state'] = 'generated'; // サムネイル生成フラグ
 				$TSfile['data'][$key]['thumb'] = $md5.'.jpg'; // サムネイル画像のパス(拡張子なしファイル名のmd5)
 
-			// 以前サムネイル生成に失敗したなら
-			// サムネイルに失敗した＝不正なTSファイルなので、毎回生成させると時間を食う
+			// 以前サムネイル生成に失敗している場合
+			// サムネイル生成に失敗した＝壊れてるTSファイルなので、毎回生成させると時間を食う
 			} else if (isset($TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['thumb_state']) and 
 					$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['thumb_state'] == 'failed'){
 
@@ -154,15 +168,15 @@
 
 			} else { 
 
-				// ないならデフォルトに
+				// ないならデフォルトにする
 				$TSfile['data'][$key]['thumb'] = 'thumb_default.jpg'; // サムネイル画像のパス
 
 				// ffmpegでサムネイルを生成
-				$cmd = $ffmpeg_path.' -y -ss 72 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
-				exec($cmd, $opt_, $return);
+				$ffmpeg_cmd = $ffmpeg_path.' -y -ss 72 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
+				exec($ffmpeg_cmd, $ffmpeg_result, $ffmpeg_return);
 
 				// 生成成功
-				if ($return === 0){
+				if ($ffmpeg_return === 0){
 
 					// サムネイル生成フラグ
 					$TSfile['data'][$key]['thumb_state'] = 'generated';
@@ -191,29 +205,6 @@
 			$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - (30 * 60); // 分からないので取りあえず30分引いとく
 			$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
 
-			/*
-			// ffprobe で動画情報を取得する
-			if (!isset($TSfile['data'][$key])){
-
-				exec($ffprobe_path.' -y -i '.$value.' -loglevel quiet -show_streams -print_format json', $TSinfo);
-				$TSinfo = json_decode(implode('', $TSinfo), true);
-
-				// 取得した情報を格納
-				$TSfile['data'][$key]['width'] = $TSinfo['streams'][0]['width'];
-				$TSfile['data'][$key]['height'] = $TSinfo['streams'][0]['width'];
-				$TSfile['data'][$key]['codec_video'] = $TSinfo['streams'][0]['codec_name'];
-				$TSfile['data'][$key]['codec_audio'] = $TSinfo['streams'][1]['codec_name'];
-
-				$TSfile['data'][$key]['duration_timestamp'] = $TSinfo['streams'][0]['duration'];
-				$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - $TSfile['data'][$key]['duration_timestamp'];
-				$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
-				$TSfile['data'][$key]['duration'] = date('H:i', $TSfile['data'][$key]['duration_timestamp']);
-				$TSfile['data'][$key]['start'] = date('H:i', $TSfile['data'][$key]['start_timestamp']);
-				$TSfile['data'][$key]['end'] = date('H:i', $TSfile['data'][$key]['end_timestamp']);
-
-			}
-			*/
-
 			// 番組情報が取得できているなら
 			if (isset($TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state']) and 
 				$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state'] == 'generated'){
@@ -239,32 +230,34 @@
 			} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4' and $TSfile['data'][$key]['pathinfo']['extension'] != 'mkv'){
 
 				// rplsinfoでファイル情報を取得
-				$cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
-				exec($cmd, $opt, $return);
+				$rplsinfo_cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
+				exec($rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return);
 
 				// 取得成功
-				if ($return == 0){
+				if ($rplsinfo_return == 0){
 
-					$opt = mb_convert_encoding(implode("\n", $opt), 'UTF-8', 'SJIS'); // 実行結果の配列を連結して一旦文字列に
+					$rplsinfo_result = mb_convert_encoding(implode("\n", $rplsinfo_result), 'UTF-8', 'SJIS'); // 実行結果の配列を連結して一旦文字列に
 					// 正規表現でエラーメッセージを置換する
-					$opt = preg_replace("/番組情報元ファイル.*?は有効なTS, rplsファイルではありません./", '', $opt);
-					$opt = preg_replace("/番組情報元ファイル.*?から有効な番組情報を検出できませんでした./", '', $opt);
-					$opt = preg_replace("/番組情報元ファイル.*?を開くのに失敗しました./", '', $opt);
+					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?は有効なTS, rplsファイルではありません./", '', $rplsinfo_result);
+					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?から有効な番組情報を検出できませんでした./", '', $rplsinfo_result);
+					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?を開くのに失敗しました./", '', $rplsinfo_result);
 				
-					$fileinfo = str_getcsv($opt); // Parseして配列にする
+					$fileinfo = str_getcsv(str_replace('　', ' ', mb_convert_kana($rplsinfo_result, 'asv', 'UTF-8'))); // Parseして配列にする
 
 					// 出力
-					$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', mb_convert_kana($fileinfo[4], 'asv', 'UTF-8'))); // 取得した番組名の方が正確なので修正
-					$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', mb_convert_kana($fileinfo[4], 'asv', 'UTF-8')); // 取得した番組名の方が正確なので修正
+					$TSfile['data'][$key]['title'] = convertSymbol($fileinfo[4]); // 取得した番組名の方が正確なので修正
+					$TSfile['data'][$key]['title_raw'] = $fileinfo[4]; // 取得した番組名の方が正確なので修正
 					$TSfile['data'][$key]['date'] = $fileinfo[0]; // 録画日付
 					$TSfile['data'][$key]['info_state'] = 'generated'; // 番組情報取得フラグ
-					$TSfile['data'][$key]['info'] = str_replace('　', ' ', mb_convert_kana($fileinfo[5], 'asv', 'UTF-8')); // 番組情報
-					$TSfile['data'][$key]['channel'] = str_replace('　', ' ', mb_convert_kana($fileinfo[3], 'asv', 'UTF-8')); //チャンネル名
-					$TSfile['data'][$key]['start_timestamp'] = strtotime($fileinfo[0].' '.$TSfile['data'][$key]['start']); // 開始時刻のタイムスタンプ
-					$TSfile['data'][$key]['end_timestamp'] = strtotime($fileinfo[0].' '.$TSfile['data'][$key]['start']) + (duration_calc($fileinfo[2]) * 60); // 終了時刻のタイムスタンプ
-					$TSfile['data'][$key]['duration'] = duration_calc($fileinfo[2]); // ファイルの時間を算出
+					$TSfile['data'][$key]['info'] = $fileinfo[5]; // 番組情報
+					$TSfile['data'][$key]['channel'] = $fileinfo[3]; //チャンネル名
 					$TSfile['data'][$key]['start'] = substr($fileinfo[1], 0, strlen($fileinfo[1])-3); // 番組の開始時刻
-					$TSfile['data'][$key]['end'] = end_calc($fileinfo[1], duration_calc($fileinfo[2])); // 番組の終了時刻
+					$TSfile['data'][$key]['end'] = calc_end_time($fileinfo[1], calc_duration_time($fileinfo[2])); // 番組の終了時刻
+					$TSfile['data'][$key]['duration'] = calc_duration_time($fileinfo[2]); // ファイルの時間を算出
+					$TSfile['data'][$key]['start_timestamp'] = strtotime($fileinfo[0].' '.$TSfile['data'][$key]['start']); // 開始時刻のタイムスタンプ
+					$TSfile['data'][$key]['end_timestamp'] = strtotime($fileinfo[0].' '.$TSfile['data'][$key]['start']) + (calc_duration_time($fileinfo[2]) * 60); // 終了時刻のタイムスタンプ
+
+					unset($TSfile['data'][$key]['tsinfo_state']);
 
 					// 結果を保存する
 					$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
@@ -273,6 +266,30 @@
 
 				// 結果を保存する
 				$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
+			}
+
+			// この時点で番組情報を取得できていない場合、ffprobeで動画の長さだけでも取得する
+			if ($TSfile['data'][$key]['duration'] === '30?' and !isset($TSfile['data'][$key]['tsinfo_state'])){
+				
+				// コマンドを実行
+				$ffprobe_cmd = $ffprobe_path.' -i "'.$value.'" -loglevel quiet -show_streams -print_format json';
+				exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
+
+				if ($ffprobe_return === 0){
+
+					$TSinfo = json_decode(implode("\n", $ffprobe_result), true);
+
+					$TSfile['data'][$key]['tsinfo_state'] = 'generated';
+
+					// 取得した情報を格納
+					$duration = round($TSinfo['streams'][0]['duration']); // 小数点以下四捨五入
+					$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - $duration;
+					$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
+					$TSfile['data'][$key]['start'] = date('H:i', $TSfile['data'][$key]['start_timestamp']).'?';
+					$TSfile['data'][$key]['end'] = date('H:i', $TSfile['data'][$key]['end_timestamp']).'?';
+					$TSfile['data'][$key]['duration'] = round($duration / 60);
+
+				}
 			}
 		}
 
