@@ -14,6 +14,18 @@
     }
   };
 
+  // フルスクリーンかどうか
+  // フルスクリーンならtrue、そうでないならfalseを返す
+  function isFullScreen(){
+    if ((document.FullscreenElement !== undefined && document.FullscreenElement !== null) || // Firefox
+        (document.webkitFullscreenElement !== undefined && document.webkitFullscreenElement !== null) || // Chrome・Safari など
+        (document.msFullscreenElement !== undefined && document.msFullscreenElement !== null)){ // IE
+      return true; // FullscreenElementに何か入ってる = フルスクリーン中
+    } else {
+      return false; // フルスクリーンではない or フルスクリーン非対応の環境(iOS Safariとか)
+    }
+  }
+
   // ロード時 & リサイズ時に発火
   var timer = false;
   $(window).on('DOMContentLoaded resize', function(event){
@@ -53,13 +65,10 @@
     // 縦画面のみ発動
     if (windowWidth <= 500 && (orientation === 0 || orientation === undefined)
         && (isset(document.getElementById('dplayer-script').previousElementSibling)
-            && document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer')
-        && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
+        && document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()){
       $('#content-wrap').before($('#dplayer'));
-    } else if (windowWidth > 500
-      && (isset(document.getElementById('content-wrap').previousElementSibling)
-          && document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer')
-        && (document.fullscreenElement === null || document.webkitFullscreenElement === null)){
+    } else if (windowWidth > 500 && (isset(document.getElementById('content-wrap').previousElementSibling)
+               && document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()){
       $('#dplayer-script').before($('#dplayer'));
     }
 

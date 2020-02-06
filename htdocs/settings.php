@@ -300,7 +300,7 @@
                 <span>HTTPS 用 URL にアクセス</span>
                 <p>
                   HTTPS 用 URL で TVRemotePlus にアクセスできます<br>
-                  Chrome(iOSのみSafari) でアクセスした場合は、Androidは「TVRemotePlus をホーム画面に追加」から、
+                  Chrome (iPhone・iPad は Safari) で TVRemotePlus にアクセスし、Android は「TVRemotePlus をホーム画面に追加」から、iPhone・iPad は共有ボタンから
                   PC は URL バーの横に「インストール」と出てくるので、それを押してホーム画面やデスクトップに追加し、そこから起動すると PWA モードでネイティブアプリのように利用できます<br>
                   HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
                 </p>

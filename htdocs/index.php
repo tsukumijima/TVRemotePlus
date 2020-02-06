@@ -217,12 +217,12 @@
             </span>
           </div>
 <?php	} else if ($ini[$stream]['state'] == 'File') { ?>
-          <span id="state" style="color: #4ECDC4;" value="<?php echo $ini[$stream]['state']; ?>">● File</span>
           <span id="status"></span>
           <div id="epg-chinfo"> 
+            <span id="state" style="color: #4ECDC4;" value="<?php echo $ini[$stream]['state']; ?>">● File</span>
             <span id="epg-channel"><?php echo $ini[$stream]['filechannel']; ?></span>
-            <span id="epg-time"><?php echo $ini[$stream]['filetime']; ?></span>
           </div>
+          <span id="epg-time"><?php echo $ini[$stream]['filetime']; ?></span>
 <?php	} else { ?>
           <span id="state" style="color: gray;" value="<?php echo $ini[$stream]['state']; ?>">● Offline</span>
           <span id="status"></span>

@@ -286,8 +286,8 @@ select {
 }
 
 @media screen and (max-width: 768px){
-    #setting-user span {
-        width: 75%;
+    #setting-user .toggle-switch {
+        margin-left: 20px;
     }
     input[type="text"], input[type="number"], input[type="url"], input[type="email"], input[type="password"] {
         width: 100%;
@@ -311,6 +311,9 @@ select {
     .setting-form p {
         margin-left: 0px;
         margin-bottom: 15px;
+    }
+    .setting-form span {
+        width: 100%;
     }
 }
 

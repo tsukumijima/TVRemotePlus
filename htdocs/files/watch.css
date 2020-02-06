@@ -60,8 +60,8 @@ section {
 
 #search-find-form {
     width: 75%;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .375rem .75rem;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0px 15px;
     font-family: 'Segoe UI','Arial','メイリオ';
     font-size: 15px;
     outline: none;
@@ -564,6 +564,11 @@ section {
     
     .search-find-link {
         padding: 12px 20px;
+    }
+
+    #search-info {
+        padding-top: 7px;
+        font-size: 15px;
     }
     
     .search-file-content {

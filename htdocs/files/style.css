@@ -216,6 +216,15 @@ pre:empty {
 
 /** フォーム **/
 
+input[type="text"] {
+    -webkit-appearance: none;
+    line-height: 100%;
+}
+
+input[type="text"]::-webkit-input-placeholder {
+    padding-top: 0.2em;
+}
+
 input[type="submit"],
 input[type="button"] {
     -webkit-box-sizing: content-box;
@@ -303,6 +312,7 @@ select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    line-height: 150%;
     height: 35px;
     padding: 6px 12px;
     border: 1.5px solid var(--color-border);
