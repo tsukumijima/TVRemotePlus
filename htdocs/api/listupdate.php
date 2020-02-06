@@ -282,7 +282,11 @@
 					$TSfile['data'][$key]['tsinfo_state'] = 'generated';
 
 					// 取得した情報を格納
-					$duration = round($TSinfo['streams'][0]['duration']); // 小数点以下四捨五入
+					if (isset($TSinfo['streams'][0]['duration'])){
+						$duration = round($TSinfo['streams'][0]['duration']); // 小数点以下四捨五入
+					} else {
+						$duration = 0; // 取得できなかった場合
+					}
 					$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - $duration;
 					$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
 					$TSfile['data'][$key]['start'] = date('H:i', $TSfile['data'][$key]['start_timestamp']).'?';

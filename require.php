@@ -107,7 +107,7 @@ $tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
 
 // rplsinfo の名前とパス
 $rplsinfo_exe =  'rplsinfo-tvrp.exe';
-$rplsinfo_path =  $base_dir.'bin/'.$rplsinfo_exe;
+$rplsinfo_path =  $base_dir.'bin/rplsinfo/'.$rplsinfo_exe;
 
 // ffmpeg の名前とパス
 $ffmpeg_exe =  'ffmpeg-tvrp.exe';
