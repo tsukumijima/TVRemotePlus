@@ -132,6 +132,15 @@
 
   $(function(){
 
+    // キーボードショートカット一覧
+    $('#hotkey').click(function(){
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
+      $('#menu-content').removeClass('open');
+      $('#nav-close').toggleClass('open');
+      $('#hotkey-box').toggleClass('open');
+      $('html').removeClass('open');
+    })
+
     // メニューを引っ込める用
     $('google-cast-launcher').click(function() {
       $('#menu-content').velocity('slideUp', 150);
@@ -195,6 +204,7 @@
       $('#nav-close').removeClass('open');
       $('#broadcast-stream-box').removeClass('open');
       $('#chromecast-box').removeClass('open');
+      $('#hotkey-box').removeClass('open');
       $('html').removeClass('open');
     });
 
@@ -429,6 +439,7 @@
     // ボックスを閉じる
     $('#nav-close').removeClass('open');
     $('#chromecast-box').removeClass('open');
+    $('#hotkey-box').removeClass('open');
     $('html').removeClass('open');
 
     // Chromecast を起動

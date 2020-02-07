@@ -62,34 +62,38 @@ body {
 
 /* 本体のスクロールバー */
 
-body::-webkit-scrollbar {
+.scrollbar {
+    scrollbar-width: thin;
+}
+
+.scrollbar::-webkit-scrollbar {
     width: 10px;
 }
 
-body::-webkit-scrollbar-track {
+.scrollbar::-webkit-scrollbar-track {
   border-radius: 10px;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
 }
 
-body::-webkit-scrollbar-thumb {
+.scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(60, 60, 60, 0.5);
   border-radius: 10px;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
-body::-webkit-scrollbar-thumb:hover {
+.scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(60, 60, 60, 0.58);
 }
-body::-webkit-scrollbar-thumb:active {
+.scrollbar::-webkit-scrollbar-thumb:active {
     background-color: rgba(60, 60, 60, 0.7);
 }
 
-.dark body::-webkit-scrollbar-thumb {
+.dark .scrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(141, 153, 161, 0.5);
 }
-.dark body::-webkit-scrollbar-thumb:hover {
+.dark .scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(141, 153, 161, 0.42);
 }
-.dark body::-webkit-scrollbar-thumb:active {
+.dark .scrollbar::-webkit-scrollbar-thumb:active {
     background-color: rgba(141, 153, 161, 0.3);
 }
 
@@ -705,7 +709,7 @@ section {
 
 google-cast-launcher {
     position: absolute !important;
-    top: 8px;
+    top: 56px;
     left: 0px;
     right: 0px;
     bottom: 56px;
@@ -2028,18 +2032,6 @@ td {
     font-size: 130%;
 }
 
-#chromecast-device-box::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    background: var(--color-scrollbar);
-}
-#chromecast-device-box::-webkit-scrollbar-corner {
-    background: var(--color-scrollbar);
-}
-#chromecast-device-box::-webkit-scrollbar-thumb {
-    background: #B2BEC2;
-}
-
 .chromecast-device {
     display: flex;
     align-items: center;
@@ -2069,6 +2061,138 @@ td {
 .chromecast-type {
     font-size: 85%;
     color: var(--color-text-gray);
+}
+
+/* Hotkeyボックス */
+
+#hotkey-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 400;
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: opacity 0.3s, visibility 0.3s ease-in-out;
+    visibility: hidden;
+    opacity: 0;
+    width: 95%;
+    max-width: 1050px;
+    height: 550px;
+    background-color: var(--color-white);
+    border-radius: 5px;
+    font-size: 16px;
+    will-change: opacity;
+}
+
+#hotkey-box.open {
+    transition-delay: 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+.hotkey-head-box {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 95%;
+    margin-top: 3px;
+    margin-bottom: 13px;
+}
+
+.hotkey-head-box.title {
+    margin-bottom: 12px;
+}
+
+.hotkey-head-box i {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 21px;
+}
+
+.hotkey-head {
+    display: inline-block;
+    margin-left: 7px;
+}
+
+.hotkey-head-sub {
+    display: inline-block;
+    margin-left: auto;
+    font-weight: normal;
+    font-size: 13px;
+}
+
+#hotkey-list-box {
+    display: flex;
+    justify-content: space-between;
+    height: 84%;
+}
+
+.hotkey-list-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 49%;
+    box-sizing: border-box;
+}
+
+.hotkey-list {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.hotkey-list-name {
+    margin-right: auto;
+}
+
+.hotkey-list-name.focus {
+    max-width: 50%;
+}
+
+.hotkey-list-key-box {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    padding-left: 15px;
+}
+
+.hotkey-list-key-box.focus {
+    max-width: 50%;
+}
+
+.hotkey-list-key {
+    padding: 2.5px 4px;
+    background-color: var(--color-hover);
+    border-radius: 5px;
+    margin: 0px 3px;
+}
+
+.hotkey-list-key.alphabet {
+    width: 15px;
+    text-align: center;
+}
+
+.hotkey-list-key i {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 16px;
+    font-size: 12.5px;
+}
+
+@media screen and (max-width: 1023px){
+    #hotkey {
+        display: none;
+    }
+
+    google-cast-launcher {
+        top: 5px;
+    }
 }
 
 /* フォーム */

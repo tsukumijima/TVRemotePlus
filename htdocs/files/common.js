@@ -21,6 +21,7 @@
       $('#broadcast-stream-box').removeClass('open');
       $('#search-stream-box').removeClass('open');
       $('#chromecast-box').removeClass('open');
+      $('#hotkey-box').removeClass('open');
       $('html').removeClass('open');
     });
 
