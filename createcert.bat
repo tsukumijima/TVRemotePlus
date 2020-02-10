@@ -26,7 +26,7 @@ echo     自己署名証明書を作成します。
 echo.
 echo   -------------------------------------------------------------------
 echo.
-cd %~dp0\bin\Apache\bin\
+pushd %~dp0\bin\Apache\bin\
 .\openssl.exe req -new -newkey rsa:2048 -nodes -config ..\conf\openssl.cnf -keyout ..\conf\server.key -out ..\conf\server.crt ^
               -x509 -days 3650 -sha256 -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN=%ip%" -addext "subjectAltName = IP:127.0.0.1,IP:%ip%"
 echo.
@@ -48,5 +48,5 @@ echo     終了するには何かキーを押してください。
 echo.
 echo   -------------------------------------------------------------------
 echo.
-cd %~dp0
+popd
 pause > NUL

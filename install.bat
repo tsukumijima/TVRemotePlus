@@ -1,3 +1,3 @@
 @echo off
-cd .\bin\Apache\bin\
-..\..\PHP\php.exe -c ..\..\PHP\php.ini ..\..\..\install.php
+pushd %~dp0\bin\Apache\bin\
+%~dp0\bin\PHP\php.exe -c %~dp0\bin\PHP\php.ini ..\..\..\install.php

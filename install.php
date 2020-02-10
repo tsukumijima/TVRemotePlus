@@ -290,7 +290,7 @@
 		echo '  -------------------------------------------------------------------'."\n";
 		echo "\n";
 
-		$cmd = 'cd "'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\" && '.
+		$cmd = 'pushd "'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\" && '.
 			   '.\openssl.exe req -new -newkey rsa:2048 -nodes -config ..\conf\openssl.cnf -keyout ..\conf\server.key -out ..\conf\server.crt'.
 			   ' -x509 -days 3650 -sha256 -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN='.$serverip.'" -addext "subjectAltName = IP:127.0.0.1,IP:'.$serverip.'"';
 
