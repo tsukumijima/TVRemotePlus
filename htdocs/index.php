@@ -132,9 +132,9 @@
             </div>
             <div id="tweet-status"></div>
           </div>
-          <form id="tweet-form" action="javascript:void(0)">
+          <form id="tweet-form" action="javascript:void(0)" autocomplete="off">
             <div id="tweet-main">
-              <input id="tweet-hashtag" name="hashtag" type="text" placeholder="#ハッシュタグ" >
+              <input id="tweet-hashtag" name="hashtag" type="text" placeholder="#ハッシュタグ">
               <textarea id="tweet" name="tweet" placeholder="ツイート (Ctrl+Enterで送信)"></textarea>
             </div>
             <div id="tweet-etc">

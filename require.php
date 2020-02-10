@@ -42,7 +42,7 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
 $site_title = 'TVRemotePlus';
 
 // サイトのベース URL
-$site_url = @$scheme.$_SERVER['HTTP_HOST'].'/';
+@$site_url = $scheme.$_SERVER['HTTP_HOST'].'/';
 
 // Twitter API のコールバック URL
 $OAUTH_CALLBACK = $site_url.'tweet/callback.php';

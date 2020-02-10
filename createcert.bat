@@ -27,27 +27,26 @@ echo.
 echo   -------------------------------------------------------------------
 echo.
 cd %~dp0\bin\Apache\bin\
-if not exist ..\conf\openssl.ext (
-  copy ..\conf\openssl.default.ext ..\conf\openssl.ext
-)
-.\openssl.exe genrsa -out ..\conf\server.key 2048
-.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN=%ip%"
-.\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -days 3650 -signkey ..\conf\server.key -extfile ..\conf\openssl.ext
-copy ..\conf\server.crt ..\..\..\htdocs\server.crt
+.\openssl.exe req -new -newkey rsa:2048 -nodes -config ..\conf\openssl.cnf -keyout ..\conf\server.key -out ..\conf\server.crt ^
+              -x509 -days 3650 -sha256 -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN=%ip%" -addext "subjectAltName = IP:127.0.0.1,IP:%ip%"
 echo.
 echo   -------------------------------------------------------------------
 echo.
 if %errorlevel% equ 0 (
+  copy ..\conf\server.crt ..\..\..\htdocs\server.crt > NUL
   echo     自己署名証明書を正常に作成しました。
+  echo.
+  echo     自己署名証明書は ^(TVRemotePlus^)/bin/Apache/conf/ フォルダに作成されています。
+  echo     また、ダウンロード用の証明書は ^(TVRemotePlus^)/htdocs/ フォルダ内にコピーしてあります。
 ) else (
   echo     自己署名証明書の作成に失敗しました…
+  echo.
+  echo     入力したローカル IP アドレスが正しいかどうか確認し、もう一度試してください。
 )
-echo.
-echo     自己署名証明書は (TVRemotePlus)/bin/Apache/conf/ フォルダに作成されています。
-echo     また、ダウンロード用の証明書は (TVRemotePlus)/htdocs/ フォルダ内にコピーしてあります。
 echo.
 echo     終了するには何かキーを押してください。
 echo.
 echo   -------------------------------------------------------------------
 echo.
+cd %~dp0
 pause > NUL

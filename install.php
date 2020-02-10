@@ -222,7 +222,7 @@
 	echo '    TVRemotePlus をインストールしています…'."\n";
 	echo "\n";
 
-	sleep(1);
+	sleep(1); // 1秒
 
 	// フォルダを作る
 	if_mkdir('/');
@@ -248,15 +248,11 @@
 		$tvrp_conf_file = $serverroot.'/config.php';
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
-		$opensslext_conf_file = $serverroot.'/bin/Apache/conf/openssl.ext';
-		$opensslext_default_file = $serverroot.'/bin/Apache/conf/openssl.default.ext';
 
 		// config.default.php を config.php にコピー
 		copy($serverroot.'/config.default.php', $serverroot.'/config.php');
 		// httpd.default.conf を httpd.conf にコピー
 		copy($httpd_default_file, $httpd_conf_file);
-		// openssl.default.ext を openssl.ext にコピー
-		copy($opensslext_default_file, $opensslext_conf_file);
 		
 		// TSTask のコピー
 		if ($bondriver == 2){
@@ -288,22 +284,15 @@
 		$httpd_conf = preg_replace("/Define HTTPS_PORT.*/", 'Define HTTPS_PORT "'.$https_port.'"', $httpd_conf);
 		file_put_contents($httpd_conf_file, $httpd_conf);// 書き込み
 
-		// OpenSSLの拡張設定ファイル
-		$opensslext_conf = file_get_contents($opensslext_conf_file);
-		$opensslext_conf = preg_replace("/subjectAltName = .*/", 'subjectAltName = IP:'.$serverip.'', $opensslext_conf); // 置換		
-		file_put_contents($opensslext_conf_file, $opensslext_conf); // 書き込み
-
 		// HTTPS接続用オレオレ証明書の作成
 		echo '    HTTPS 接続用の自己署名証明書を作成します。'."\n";
 		echo "\n";
 		echo '  -------------------------------------------------------------------'."\n";
 		echo "\n";
 
-		$cmd =  'cd '.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\ && '.
-				'.\openssl.exe genrsa -out ..\conf\server.key 2048 && '.
-				'.\openssl.exe req -new -key ..\conf\server.key -out ..\conf\server.csr -config ..\conf\openssl.cnf'.
-				' -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN='.$serverip.'" && '.
-				'.\openssl.exe x509 -req -in ..\conf\server.csr -out ..\conf\server.crt -days 3650 -signkey ..\conf\server.key -extfile ..\conf\openssl.ext';
+		$cmd = 'cd "'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\" && '.
+			   '.\openssl.exe req -new -newkey rsa:2048 -nodes -config ..\conf\openssl.cnf -keyout ..\conf\server.key -out ..\conf\server.crt'.
+			   ' -x509 -days 3650 -sha256 -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN='.$serverip.'" -addext "subjectAltName = IP:127.0.0.1,IP:'.$serverip.'"';
 
 		exec($cmd, $opt1, $return1);
 		copy($serverroot.'/bin/Apache/conf/server.crt', $serverroot.'/htdocs/server.crt');
@@ -316,13 +305,26 @@
 			echo '    自己署名証明書の作成に失敗しました…'."\n\n";
 			echo '    自己署名証明書が正常に作成されていない場合、Apache の起動に失敗します。'."\n";
 			echo '    インストール先にコピーされている createcert.bat を実行して自己署名証明書を作成するか、'."\n";
-			echo '    再インストールし、'.$serverroot.'/bin/Apache/conf/ に openssl.crt と openssl.key'."\n";
+			echo '    再インストールし、'.$serverroot.'/bin/Apache/conf/ に server.crt と server.key'."\n";
 			echo '    が作成されていることを確認してから TVRemotePlus を起動してください。'."\n";
 		}
 
 		// ショートカット作成
+		// 既にショートカットがある場合は上書きしないようショートカット名を変える
+		if (file_exists(getenv('USERPROFILE').'\Desktop\TVRemotePlus - launch.lnk')){
+			$shortcut_file = '\Desktop\TVRemotePlus - launch (1).lnk';
+			$shortcut_count = 1;
+			while (file_exists(getenv('USERPROFILE').$shortcut_file)){
+				if (file_exists(getenv('USERPROFILE').$shortcut_file)){
+					$shortcut_count++;
+					$shortcut_file = '\Desktop\TVRemotePlus - launch ('.$shortcut_count.').lnk';
+				}
+			}
+		} else {
+			$shortcut_file = '\Desktop\TVRemotePlus - launch.lnk';
+		}
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
-					'$lnk = $shell.CreateShortcut(\"$Home\Desktop\TVRemotePlus - launch.lnk\"); '.
+					'$lnk = $shell.CreateShortcut(\"$Home'.$shortcut_file.'\"); '.
 					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
 					'$lnk.WindowStyle = 7; '.
 					'$lnk.Save()';
@@ -339,19 +341,20 @@
 	echo "\n";
 	echo '    インストールを完了しました。'."\n";
 	echo "\n";
-	sleep(2);
+	sleep(1); // 1秒
 
 	// 新規インストールのみの処理
 	if ($update === false){
 		echo '    セットアップはまだ終わっていません。'."\n\n";
-		echo '    BonDriver と.ch2 ファイルは '.$serverroot .'/bin/TSTask/BonDriver/ に忘れずに入れてください。'."\n\n";
+		echo '    BonDriver と TVTest のチャンネル設定ファイル (.ch2) は '."\n";
+		echo '    '.$serverroot .'/bin/TSTask/BonDriver/ に忘れずに入れてください。'."\n\n";
 		echo '    終わったら、デスクトップのショートカットから TVRemotePlus を起動し、'."\n";
 		echo '    ブラウザから http://'.$serverip.':'.$http_port.'/ へアクセスします。'."\n";
 		echo '    その後、≡ サイドメニュー → 設定 → 環境設定 から必要な箇所を設定してください。'."\n\n";
 		echo '    PWA 機能を使用する場合は、設定ページからダウンロードできる自己署名証明書を'."\n";
 		echo '    あらかじめ端末にインストールした上で、 https://'.$serverip.':'.$https_port.'/ にアクセスしてください。'."\n";
 		echo "\n";
-		sleep(1);
+		usleep(500000); // 0.5秒
 	}
 
 	echo '    終了するには何かキーを押してください。'."\n";

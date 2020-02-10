@@ -526,7 +526,7 @@
 		$channel = getJKchannel($ini[$stream]['filechannel']);
 
 		// チャンネルが-1・空白以外 & ニコニコのログイン情報がセットされてるなら
-		// -1・空白はそのチャンネルが実況にない事を意味します
+		// -1・空白はそのチャンネルが実況にない事を意味する
 		if (isset($channel) and $channel !== '' and $channel !== -1 and !empty($nicologin_mail) and !empty($nicologin_password)){
 
 			// こ↑こ↓でgetflvを叩く

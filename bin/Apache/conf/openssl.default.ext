@@ -1,2 +1,0 @@
-subjectAltName = IP:192.168.1.11
-basicConstraints = critical,CA:true
