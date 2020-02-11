@@ -34,7 +34,8 @@
 				$streamtype = 'application/vnd.apple.mpegurl';
 			}
 
-			$cmd = 'pushd '.str_replace('/', '\\', $base_dir).'bin\Apache\bin\ && start "Chromecast Connect" /min  ..\..\php\php.exe '.$base_dir.'cast/cast.php '.$streamurl.' '.$streamtype.' '.$_GET['ip'].' '.$_GET['port'];
+			$cmd = 'pushd "'.str_replace('/', '\\', $base_dir).'bin\Apache\bin\" && start "Chromecast Connect" /min '.
+				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'cast/cast.php" '.$streamurl.' '.$streamtype.' '.$_GET['ip'].' '.$_GET['port'];
 			// echo $cmd."\n";
 			win_exec($cmd);
 			$cast['cast'] = true;
@@ -58,7 +59,8 @@
 			sleep(1);
 
 			// コマンド実行
-			$cmd = 'pushd '.str_replace('/', '\\', $base_dir).'bin\Apache\bin\ && ..\..\php\php.exe '.$base_dir.'cast/cast.php scan';
+			$cmd = 'pushd "'.str_replace('/', '\\', $base_dir).'bin\Apache\bin\" && '.
+				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'cast/cast.php" scan';
 			// echo $cmd."\n";
 			exec($cmd, $opt2, $return2);
 

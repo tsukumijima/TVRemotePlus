@@ -172,7 +172,7 @@
 				$TSfile['data'][$key]['thumb'] = 'thumb_default.jpg'; // サムネイル画像のパス
 
 				// ffmpegでサムネイルを生成
-				$ffmpeg_cmd = $ffmpeg_path.' -y -ss 72 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
+				$ffmpeg_cmd = '"'.$ffmpeg_path.'" -y -ss 72 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
 				exec($ffmpeg_cmd, $ffmpeg_result, $ffmpeg_return);
 
 				// 生成成功
@@ -230,7 +230,7 @@
 			} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4' and $TSfile['data'][$key]['pathinfo']['extension'] != 'mkv'){
 
 				// rplsinfoでファイル情報を取得
-				$rplsinfo_cmd = $rplsinfo_path.' -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
+				$rplsinfo_cmd = '"'.$rplsinfo_path.'" -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
 				exec($rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return);
 
 				// 取得成功
@@ -272,7 +272,7 @@
 			if ($TSfile['data'][$key]['duration'] === '30?' and !isset($TSfile['data'][$key]['tsinfo_state'])){
 				
 				// コマンドを実行
-				$ffprobe_cmd = $ffprobe_path.' -i "'.$value.'" -loglevel quiet -show_streams -print_format json';
+				$ffprobe_cmd = '"'.$ffprobe_path.'" -i "'.$value.'" -loglevel quiet -show_streams -print_format json';
 				exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
 				if ($ffprobe_return === 0){

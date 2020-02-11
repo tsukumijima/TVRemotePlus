@@ -303,7 +303,8 @@
 		stream_stop($stream);
 
 		// TSTask.exeを起動する
-		$tstask_cmd = 'start /min '.$tstask_path.' /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
+		$tstask_cmd = '"'.$tstask_path.'" /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
+		$tstask_cmd = 'start /min cmd.exe /C "'.win_exec_escape($tstask_cmd).'"';
 		win_exec($tstask_cmd);
 
 		// 変換コマンド切り替え
@@ -312,7 +313,7 @@
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
-				$stream_cmd = $ffmpeg_path.
+				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
 					' -dual_mono_mode main -i "'.$receive.'"'.
@@ -341,7 +342,7 @@
 			case 'QSVEncC':
 
 				// QSVEncC用コマンド
-				$stream_cmd = $qsvencc_path.
+				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -371,7 +372,7 @@
 			case 'NVEncC':
 
 				// NVEncC用コマンド
-				$stream_cmd = $nvencc_path.
+				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -401,7 +402,7 @@
 			case 'VCEEncC':
 	
 				// VCEEncC用コマンド
-				$stream_cmd = $vceencc_path.
+				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
 					' -i "'.$receive.'"'.
@@ -576,7 +577,7 @@
 			case 'ffmpeg':
 
 				// ffmpeg用コマンド
-				$stream_cmd = $ffmpeg_path.
+				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
 					' -dual_mono_mode main -i "'.$filepath.'"'.
@@ -605,7 +606,7 @@
 			case 'QSVEncC':
 
 				// QSVEncC用コマンド
-				$stream_cmd = $qsvencc_path.
+				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -635,7 +636,7 @@
 			case 'NVEncC':
 
 				// NVEncC用コマンド
-				$stream_cmd = $nvencc_path.
+				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
 					' -i "'.$filepath.'"'.
@@ -665,7 +666,7 @@
 			case 'VCEEncC':
 	
 				// VCEEncC用コマンド
-				$stream_cmd = $vceencc_path.
+				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
 					' -i "'.$filepath.'"'.

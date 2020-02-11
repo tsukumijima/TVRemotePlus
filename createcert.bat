@@ -26,7 +26,7 @@ echo     ©ŒÈ–¼Ø–¾‘‚ğì¬‚µ‚Ü‚·B
 echo.
 echo   -------------------------------------------------------------------
 echo.
-pushd %~dp0\bin\Apache\bin\
+pushd "%~dp0\bin\Apache\bin\"
 .\openssl.exe req -new -newkey rsa:2048 -nodes -config ..\conf\openssl.cnf -keyout ..\conf\server.key -out ..\conf\server.crt ^
               -x509 -days 3650 -sha256 -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN=%ip%" -addext "subjectAltName = IP:127.0.0.1,IP:%ip%"
 echo.
