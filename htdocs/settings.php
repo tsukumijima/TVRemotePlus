@@ -494,9 +494,49 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>ライブ再生時にデフォルトで字幕をストリームに含める</span>
+                <span>ライブ配信開始時に現在視聴中のストリームをデフォルトのストリームにする</span>
                 <p>
-                  この設定をオンにすると、ライブ再生時に字幕を表示出来るようになります<br>
+                  この設定をオンにすると、現在視聴中のストリームをライブ配信を開始するときのデフォルトのストリームにします（同時配信機能が追加される前の動作に近い）<br>
+                  この設定をオフにすると、ライブ配信開始時点で空いているストリームをデフォルトのストリームにし、配信中のストリームを選択しないようにします<br>
+                  個人設定の [デフォルト設定を使い1クリックでストリームを開始する] をオンにしている場合は、自動でデフォルトに設定されているストリームでライブ配信を開始します<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="stream_current_live" value="false" />
+<?php	if ($stream_current_live == 'true'){ ?>
+                <input id="stream_current_live" name="stream_current_live" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="stream_current_live" name="stream_current_live" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="stream_current_live" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>ファイル再生開始時に常にメインストリームをデフォルトのストリームにする</span>
+                <p>
+                  この設定をオンにすると、メインストリーム (Stream 1) をファイル再生を開始するときのデフォルトのストリームにします（同時配信機能が追加される前の動作に近い）<br>
+                  この設定をオフにすると、ファイル再生開始時点で空いているストリームをデフォルトのストリームにし、配信中のストリームを選択しないようにします<br>
+                  個人設定の [デフォルト設定を使い1クリックでストリームを開始する] をオンにしている場合は、自動でデフォルトに設定されているストリームでライブ配信を開始します<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="stream_current_file" value="false" />
+<?php	if ($stream_current_file == 'true'){ ?>
+                <input id="stream_current_file" name="stream_current_file" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="stream_current_file" name="stream_current_file" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="stream_current_file" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>ライブ配信時にデフォルトで字幕をストリームに含める</span>
+                <p>
+                  この設定をオンにすると、ライブ配信時に字幕を表示出来るようになります<br>
                   ただし、まれにエラーを吐いてストリームが開始出来ない場合があったり、
                   字幕の無い番組やCMに入った等のタイミングで一部のセグメントのエンコードが遅れ、ストリームがカクつく場合もあります<br>
                   字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオフにして、字幕付きで見たい時だけオンにすることをおすすめします<br>
@@ -518,7 +558,7 @@
                 <span>ファイル再生時にデフォルトで字幕をストリームに含める</span>
                 <p>
                   この設定をオンにすると、ファイル再生時に字幕を表示出来るようになります<br>
-                  ファイル再生時は、基本的にライブ再生時のようなエンコードの問題は起こりません<br>
+                  ファイル再生時は、基本的にライブ配信時のようなエンコードの問題は起こりません<br>
                   ただ、ごく稀に字幕付きでエンコードした事で途中でエンコードが失敗する場合があるため、念のため設定できるようにしています<br>
                   字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオンにして、問題が起きたときのみオフにすることをおすすめします<br>
                 </p>
@@ -585,7 +625,7 @@
                 <span>録画ファイルのあるフォルダ</span>
                 <p>
                   ファイル再生の際に利用します<br>
-                  ネットワークドライブ内のフォルダは認識できないかもしれません<br>
+                  UNC パスなど、特殊なパスは認識できないかもしれません<br>
                 </p>
               </div>
               <input class="text-box" name="TSfile_dir" type="text" value="<?php echo $TSfile_dir; ?>" placeholder="E:/TV-Record/" required />
@@ -901,7 +941,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>HLS セグメントあたりの秒数 (ライブ再生時)</span>
+                <span>HLS セグメントあたりの秒数 (ライブ配信時)</span>
                 <p>
                   通常は変更する必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
                   秒数を 5 (秒) や 10 (秒) などに伸ばすことで、安定して再生できる場合があります<br>
@@ -925,7 +965,7 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>ライブ再生時に HLS プレイリストに載せるセグメントの個数</span>
+                <span>ライブ配信時に HLS プレイリストに載せるセグメントの個数</span>
                 <p>
                   通常は変更する必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
                   秒数を 5 (個) や 10 (個) などに設定することで、安定して再生できる場合があります<br>

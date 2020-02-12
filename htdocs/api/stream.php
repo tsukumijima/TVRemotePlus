@@ -105,13 +105,16 @@
 	}
 
 	// 指定されたファイル
-	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and ($pathinfo['extension'] == 'mp4' or $pathinfo['extension'] == 'mkv')){
+	// ファイルが指定されていてかつファイルが存在していてかつ拡張子が存在していてかつ拡張子がMP4かMKVなら
+	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and
+	    ($pathinfo['extension'] == 'mp4' or $pathinfo['extension'] == 'mkv')){
 
 		loadVideo($TSfile_dir.'/'.$_GET['file'], $pathinfo['extension']);
 		exit();	
 		
-	// MP4・MKVのみ
-	} else if ($ini[$stream]['state'] == 'File' and $ini[$stream]['encoder'] == 'Progressive' and ($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv')){
+	// 指定されたストリームのファイルを出力する(stateがFileでかつMP4・MKVのみ)
+	} else if ($ini[$stream]['state'] == 'File' and $ini[$stream]['encoder'] == 'Progressive' and
+	           ($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv')){
 
 		loadVideo($TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['fileext']);
 		exit();	 

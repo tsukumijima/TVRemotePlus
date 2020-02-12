@@ -93,34 +93,46 @@
             <span>ストリーム：</span>
             <div class="select-wrap">
               <select name="stream">
-<?php	if (!isStreamActive($ini, 1)){ ?>
+<?php	if ($stream_current_file == 'true'){ ?>
                 <option value="1" selected>Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
                 <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
-<?php	} else if (!isStreamActive($ini, 2)){ ?>
+<?php		if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
+<?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
+              <option value="<?php echo $i; ?>">Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
+<?php			} //括弧終了 ?>
+<?php		} //括弧終了 ?>
+<?php	} else { ?>
+<?php		if (!isStreamActive($ini, 1)){ ?>
+                <option value="1" selected>Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+<?php		} else if (!isStreamActive($ini, 2)){ ?>
                 <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
                 <option value="2" selected>Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
-<?php	} else if (!isStreamActive($ini, 3)){ ?>
+<?php		} else if (!isStreamActive($ini, 3)){ ?>
                 <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
                 <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3" selected>Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
-<?php	} else if (!isStreamActive($ini, 4)){ ?>
+<?php		} else if (!isStreamActive($ini, 4)){ ?>
                 <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
                 <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4" selected>Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
-<?php	} //括弧終了 ?>
-<?php	if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
+<?php		} //括弧終了 ?>
+<?php		if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
                 <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
                 <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
-<?php		for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
+<?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
                 <option value="<?php echo $i; ?>"<?php if (!isStreamActive($ini, $i)) echo ' selected'; ?>>Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
+<?php			} //括弧終了 ?>
 <?php		} //括弧終了 ?>
 <?php	} //括弧終了 ?>
               </select>
