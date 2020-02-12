@@ -223,7 +223,7 @@ select {
     background: none transparent;
     vertical-align: middle;
     font-size: 15px;
-    font-family: 'Segoe UI','Arial','メイリオ';
+    font-family: inherit;
     color: inherit;
     -webkit-appearance: button;
     -moz-appearance: button;
@@ -268,7 +268,7 @@ select {
     background: none transparent;
     vertical-align: middle;
     font-size: 15px;
-    font-family: 'Segoe UI','Arial','メイリオ';
+    font-family: inherit;
     color: inherit;
     -webkit-appearance: button;
     -moz-appearance: button;

@@ -62,7 +62,7 @@ section {
     width: 75%;
     height: calc(1.5em + 0.75rem + 2px);
     padding: 0px 15px;
-    font-family: 'Segoe UI','Arial','メイリオ';
+    font-family: inherit;
     font-size: 15px;
     outline: none;
     border: 1px solid #ced4da;
@@ -245,7 +245,7 @@ section {
     display: flex;
     width: 70%;
     flex-direction: column;
-    font-family: 'Segoe UI','Arial','メイリオ';
+    font-family: inherit;
     padding-left: 18px;
     box-sizing: border-box;
     line-height: 160%;
