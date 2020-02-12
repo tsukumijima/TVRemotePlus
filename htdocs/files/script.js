@@ -353,6 +353,9 @@
             $(streamview).find('.stream-channel').empty();
             $(streamview).find('.stream-description').empty();
 
+            // ストリーム開始のセレクトボックスの表示も書き換える
+            $('select[name=stream] option[value=' + streamnum + ']').text('Stream ' + streamnum + ' - Offline');
+
             // 自分のストリームでない&ストリーム1でないなら要素を削除する
             if (stream != streamnum && streamnum != '1'){
               $(streamview).slideUp(400).animate(

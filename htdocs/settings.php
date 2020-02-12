@@ -200,6 +200,9 @@
 				}
 			}
 
+			// 昇順にソート
+			ksort($ini);
+
 			// iniファイル書き込み
 			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
