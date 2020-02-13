@@ -146,9 +146,6 @@
 			// ファイルの更新日時(Unix時間)
 			$TSfile['data'][$key]['update'] = filemtime($value);
 
-			// dirnameは削除しておく(セキュリティ上の問題)
-			unset($TSfile['data'][$key]['pathinfo']['dirname']);
-
 			// ファイル名のmd5
 			$md5 = md5($value);
 
@@ -257,44 +254,90 @@
 					$TSfile['data'][$key]['start_timestamp'] = strtotime($fileinfo[0].' '.$TSfile['data'][$key]['start']); // 開始時刻のタイムスタンプ
 					$TSfile['data'][$key]['end_timestamp'] = strtotime($fileinfo[0].' '.$TSfile['data'][$key]['start']) + (calc_duration_time($fileinfo[2]) * 60); // 終了時刻のタイムスタンプ
 
+					// start_timestamp よりも end_timestamp の方が小さい場合は日付を跨いだと計算し1日足す
+					if ($TSfile['data'][$key]['start_timestamp'] > $TSfile['data'][$key]['end_timestamp']){
+						$TSfile['data'][$key]['end_timestamp'] += 86400;
+					}
+
 					unset($TSfile['data'][$key]['tsinfo_state']);
 
 					// 結果を保存する
 					$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
-
 				}
-
-				// 結果を保存する
-				$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
 			}
 
-			// この時点で番組情報を取得できていない場合、ffprobeで動画の長さだけでも取得する
+			// この時点で番組情報を取得できていない場合、.ts.program.txt からの取得を試みる
 			if ($TSfile['data'][$key]['duration'] === '30?' and !isset($TSfile['data'][$key]['tsinfo_state'])){
+
+				// .ts.program.txt の場所
+				// 録画情報フォルダがセット済み
+				if (!empty($TSinfo_dir)){
+
+					$program_file = $TSinfo_dir.'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
+					$program_file_ = str_replace('\\', '/', $TSfile['data'][$key]['pathinfo']['dirname']).'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
+
+				// 録画情報フォルダが空（録画ファイルと同じフォルダに設定）
+				} else {
+
+					$program_file = str_replace('\\', '/', $TSfile['data'][$key]['pathinfo']['dirname']).'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
+					$program_file_ = $program_file;
+				}
+
+				// 実際に .ts.program.txt があれば取得を実行
+				// 録画情報フォルダがセットされていた場合でも録画フォルダのほうにあればそれを使う（念のため）
+				if (file_exists($program_file) or file_exists($program_file_)){
+
+					// .ts.program.txt を解析
+					$program = programToArray($program_file);
+
+					$TSfile['data'][$key]['title'] = convertSymbol($program['title']); // 取得した番組名の方が正確なので修正
+					$TSfile['data'][$key]['title_raw'] = $program['title']; // 取得した番組名の方が正確なので修正
+					$TSfile['data'][$key]['date'] = $program['date']; // 録画日付
+					$TSfile['data'][$key]['info_state'] = 'generated'; // 番組情報取得フラグ
+					$TSfile['data'][$key]['info'] = $program['info']; // 番組情報
+					$TSfile['data'][$key]['channel'] = $program['channel']; //チャンネル名
+					$TSfile['data'][$key]['start'] = $program['start']; // 番組の開始時刻
+					$TSfile['data'][$key]['end'] = $program['end']; // 番組の終了時刻
+					$TSfile['data'][$key]['duration'] = $program['duration']; // ファイルの時間を算出
+					$TSfile['data'][$key]['start_timestamp'] = $program['start_timestamp']; // 開始時刻のタイムスタンプ
+					$TSfile['data'][$key]['end_timestamp'] = $program['end_timestamp']; // 終了時刻のタイムスタンプ
+
+					unset($TSfile['data'][$key]['tsinfo_state']);
+
+					// 結果を保存する
+					$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
 				
-				// コマンドを実行
-				$ffprobe_cmd = '"'.$ffprobe_path.'" -i "'.$value.'" -loglevel quiet -show_streams -print_format json';
-				exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
+				// ffprobe で動画の長さだけでも取得する
+				} else {
+				
+					// コマンドを実行
+					$ffprobe_cmd = '"'.$ffprobe_path.'" -i "'.$value.'" -loglevel quiet -show_streams -print_format json';
+					exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
-				if ($ffprobe_return === 0){
+					if ($ffprobe_return === 0){
 
-					$TSinfo = json_decode(implode("\n", $ffprobe_result), true);
+						$TSinfo = json_decode(implode("\n", $ffprobe_result), true);
 
-					$TSfile['data'][$key]['tsinfo_state'] = 'generated';
+						$TSfile['data'][$key]['tsinfo_state'] = 'generated';
 
-					// 取得した情報を格納
-					if (isset($TSinfo['streams'][0]['duration'])){
-						$duration = round($TSinfo['streams'][0]['duration']); // 小数点以下四捨五入
-					} else {
-						$duration = 0; // 取得できなかった場合
+						// 取得した情報を格納
+						if (isset($TSinfo['streams'][0]['duration'])){
+							$duration = round($TSinfo['streams'][0]['duration']); // 小数点以下四捨五入
+						} else {
+							$duration = 0; // 取得できなかった場合
+						}
+						$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - $duration;
+						$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
+						$TSfile['data'][$key]['start'] = date('H:i', $TSfile['data'][$key]['start_timestamp']).'?';
+						$TSfile['data'][$key]['end'] = date('H:i', $TSfile['data'][$key]['end_timestamp']).'?';
+						$TSfile['data'][$key]['duration'] = intval(round($duration / 60));
+
 					}
-					$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - $duration;
-					$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
-					$TSfile['data'][$key]['start'] = date('H:i', $TSfile['data'][$key]['start_timestamp']).'?';
-					$TSfile['data'][$key]['end'] = date('H:i', $TSfile['data'][$key]['end_timestamp']).'?';
-					$TSfile['data'][$key]['duration'] = round($duration / 60);
-
 				}
 			}
+			
+			// dirnameは削除しておく(セキュリティ上の問題)
+			unset($TSfile['data'][$key]['pathinfo']['dirname']);
 		}
 
 		// ファイルに保存

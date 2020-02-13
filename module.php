@@ -219,7 +219,85 @@
 		return $records;
 	}
 
-	// ch2を整形して連想配列化する関数
+	// 録画情報ファイル (.ts.program.txt) を解析して配列に格納する関数
+	function programToArray($program_file){
+
+		// .ts.program.txt を取得
+		$program_data = removeBOM(file_get_contents($program_file));
+
+		// 文字コード判定
+		if (!empty(mb_detect_encoding($program_data, 'SJIS, SJIS-WIN, EUC-JP, UTF-8'))){
+			$charset = mb_detect_encoding($program_data, 'SJIS, SJIS-WIN, EUC-JP, UTF-8');
+		} else { // 何故かUTF-16だけ上手く検知されないバグが…
+			$charset = 'UTF-16LE';
+		}
+
+		// 文字コードをUTF-8に (念の為)
+		if ($charset != 'UTF-8') $program_data = mb_convert_encoding($program_data, 'UTF-8', $charset);
+
+		// 取りあえず改行で分割して配列に
+		// ついでに全角英数字を半角に変換
+		$program_array = explode("\r\n", mb_convert_kana($program_data, 'asv', 'UTF-8'));
+
+		// 行ごとに処理
+		foreach ($program_array as $key => $value) {
+
+			switch ($key){
+
+				case 0:
+					$program['time'] = $value;
+					$program['date'] = mb_substr($value, 0, 10);
+					$program['start'] = mb_substr($value, 14, 5);
+					$program['start_timestamp'] = strtotime($program['date'].' '.$program['start']);
+					$program['end'] = mb_substr($value, 20, 5);
+					$program['end_timestamp'] = strtotime($program['date'].' '.$program['end']);
+					// start_timestamp よりも end_timestamp の方が小さい場合は日付を跨いだと計算し1日足す
+					if ($program['start_timestamp'] > $program['end_timestamp']) $program['end_timestamp'] += 86400;
+					$program['duration'] = intval(round(($program['end_timestamp'] - $program['start_timestamp']) / 60));
+					break;
+
+				case 1:
+					$program['channel'] = $value;
+					break;
+
+				case 2:
+					$program['title'] = $value;
+					break;
+
+				case 3:
+					// 空行
+					break;
+
+				case 4:
+					$program['info'] = $value;
+					break;
+
+				case 5:
+					// 空行
+					break;
+
+				default:
+
+					// ジャンル : 以降はいらない情報なので foreach ごとループを抜ける
+					if ($value == 'ジャンル : ') break 2;
+
+					// 定義しておく
+					if (!isset($program['description'])) $program['description'] = '';
+
+					// ジャンル : が現れるまで足し続ける 
+					$program['description'] = $program['description']."\n".$value;
+					
+					break;
+			}
+		}
+
+		// 末尾の改行を除去
+		$program['description'] = rtrim($program['description'], "\n");
+
+		return $program;
+	}
+
+	// ch2を解析して連想配列化する関数
 	function ch2ToArray($ch2_file, $flg){
 
 		// ch2を取得
@@ -233,7 +311,7 @@
 		}
 
 		// ch2の文字コードをUTF-8に
-		$ch2_data = mb_convert_encoding($ch2_rawdata, 'UTF-8', $charset);
+		if ($charset != 'UTF-8') $ch2_data = mb_convert_encoding($ch2_rawdata, 'UTF-8', $charset);
 
 		// 置換
 		$ch2_data = str_replace("\r\n", "\n", $ch2_data); // CR+LFからLFに変換

@@ -636,6 +636,17 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
+                <span>番組情報ファイルのあるフォルダ</span>
+                <p>
+                  ファイル再生の際、番組情報が録画ファイルから取得できない場合 ( MP4 ファイル等) に利用します<br>
+                  フォルダを指定しない場合、録画ファイルと同じファイル名の .ts.program.txt を参照します<br>
+                </p>
+              </div>
+              <input class="text-box" name="TSinfo_dir" type="text" value="<?php echo $TSinfo_dir; ?>" placeholder="E:/TV-Record/録画情報/" />
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
                 <span>EDCB Material WebUI (EMWUI) の API がある URL</span>
                 <p>
                   番組表取得などで利用します<br>

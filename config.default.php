@@ -77,6 +77,12 @@ $BonDriver_default_S = '';
 // 例：$TSfile_dir = 'E:/TV-Record/';
 $TSfile_dir = '';
 
+// 番組情報ファイルのあるフォルダ
+// ファイル再生の際、番組情報が録画ファイルから取得できない場合 ( MP4 ファイル等) に利用します
+// フォルダを指定しない場合、録画ファイルと同じファイル名の .ts.program.txt を参照します
+// 例：$TSinfo_dir = 'E:/TV-Record/録画情報/';
+$TSinfo_dir = '';
+
 // EDCB Material WebUI (EMWUI) の API がある URL を指定します (番組表取得で利用します・変更必須)
 // この機能を利用する場合、EDCB_Material_WebUI を導入しておいてください(APIを番組表取得で利用します)
 // http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/api/ のように指定します
