@@ -1871,10 +1871,11 @@ td {
 
 .broadcast-channel {
     display: inline-block;
+    margin-top: 2px;
     margin-right: 10px;
     font-size: 16.5px;
     overflow: hidden;
-    line-height: 121%;
+    line-height: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
 }

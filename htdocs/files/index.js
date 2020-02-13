@@ -232,23 +232,23 @@
             Object.keys(data['scandata']).forEach(function(key){
 
               // htmlを生成
-              html = html + '<div class="chromecast-device" data-ip="' + data['scandata'][key]['ip'] +'" data-port="' + data['scandata'][key]['port'] +'">' +
-                            '  <i class="fas fa-tv"></i>' +
-                            '  <div class="chromecast-name-box">' +
-                            '    <span class="chromecast-name">' + data['scandata'][key]['friendlyname'] +'</span>' +
-                            '    <span class="chromecast-type">' + data['scandata'][key]['type'] +'</span>' +
-                            '  </div>' +
-                            '</div>';
+              html += `<div class="chromecast-device" data-ip="` + data['scandata'][key]['ip'] + `" data-port="` + data['scandata'][key]['port'] + `">
+                          <i class="fas fa-tv"></i>
+                          <div class="chromecast-name-box">
+                          <span class="chromecast-name">` + data['scandata'][key]['friendlyname'] + `</span>
+                          <span class="chromecast-type">` + data['scandata'][key]['type'] + `</span>
+                        </div>
+                       </div>`;
             });
 
             // 空ならメッセージを入れる
             if (html == ''){
 
               // htmlを生成
-              html = html + '<div class="error">' +
-                            '  キャストするデバイスがありません。<br>' +
-                            '  右上の︙メニューから、デバイスをスキャンしてください。<br>' +
-                            '</div>';
+              html += `<div class="error">
+                          キャストするデバイスがありません。<br>
+                          右上の︙メニューから、デバイスをスキャンしてください。<br>
+                       </div>`;
             }
 
             // 一気に代入

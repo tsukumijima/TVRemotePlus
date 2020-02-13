@@ -62,7 +62,7 @@
 
     });
 
-    // 上までスクロールで戻る
+    // 保存ボタン
     $(window).scroll(function() {
 
       // スクロール位置を取得
@@ -81,7 +81,7 @@
 
     });
 
-    // 保存
+    // 保存する
     $('#save').click(function(){
       $('#setting-env .redbutton').click();
     });

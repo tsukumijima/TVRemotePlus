@@ -9,9 +9,9 @@
 
     // 最初に実行
     if (Cookies.get('twitter_session')){
-      $("#tweet-status").html('<a id="tweet-logout" href="javascript:void(0)">ログアウト</a>');
+      $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)">ログアウト</a>');
     } else {
-      $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth">ログイン</a>');
+      $('#tweet-status').html('<a id="tweet-login" href="/tweet/auth">ログイン</a>');
     }
     
     // Twitterアカウント情報を読み込み
@@ -205,25 +205,26 @@
                 document.getElementsByClassName('broadcast-title-ch' + key)[0].innerHTML != data['onair'][key]['program_name']){
 
               // 書き換え用html
-              var html = '  <div class="broadcast-channel-box">' +
-                        '    <div class="broadcast-channel broadcast-channel-ch' + key + '">' + $('.broadcast-channel-ch' + key).html() + '</div>' +
-                        '    <div class="broadcast-name-box">' +
-                        '      <div class="broadcast-name broadcast-name-ch' + key + '">' + $('.broadcast-name-ch' + key).html() + '</div>' +
-                        '      <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch' + key + '"></span></div>' +
-                        '    </div>' +
-                        '  </div>' +
-                        '  <div class="broadcast-title">' +
-                        '    <span class="broadcast-start-ch' + key + '">' + data['onair'][key]['starttime'] + '</span>' +
-                        '    <span class="broadcast-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
-                        '    <span class="broadcast-end-ch' + key + '">' + data['onair'][key]['endtime'] + '</span>' +
-                        '    <span class="broadcast-title-id broadcast-title-ch' + key + '">' + data['onair'][key]['program_name'] + '</span>' +
-                        '  </div>' +
-                        '  <div class="broadcast-next">' +
-                        '    <span class="broadcast-next-start-ch' + key + '">' + data['onair'][key]['next_starttime'] + '</span>' +
-                        '    <span class="broadcast-next-to-ch' + key + '">' + data['onair'][key]['to'] + '</span>' +
-                        '    <span class="broadcast-next-end-ch' + key + '">' + data['onair'][key]['next_endtime'] + '</span>' +
-                        '    <span class="broadcast-next-title-ch' + key + '">' + data['onair'][key]['next_program_name'] + '</span>' +
-                        '  </div>';
+              var html = `<div class="broadcast-channel-box">
+                            <div class="broadcast-channel broadcast-channel-ch` + key + `">` + $('.broadcast-channel-ch' + key).html() + `</div>
+                              <div class="broadcast-name-box">
+                                <div class="broadcast-name broadcast-name-ch` + key + `">` + $('.broadcast-name-ch' + key).html() + `</div>
+                                <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch` + key + `"></span></div>
+                              </div>
+                            </div>
+                            <div class="broadcast-title">
+                              <span class="broadcast-start-ch` + key + `">` + data['onair'][key]['starttime'] + `</span>
+                              <span class="broadcast-to-ch` + key + `">` + data['onair'][key]['to'] + `</span>
+                              <span class="broadcast-end-ch` + key + `">` + data['onair'][key]['endtime'] + `</span>
+                              <span class="broadcast-title-id broadcast-title-ch` + key + `">` + data['onair'][key]['program_name'] + `</span>
+                            </div>
+                            <div class="broadcast-next">
+                              <span class="broadcast-next-start-ch` + key + `">` + data['onair'][key]['next_starttime'] + `</span>
+                              <span class="broadcast-next-to-ch` + key + `">` + data['onair'][key]['to'] + `</span>
+                              <span class="broadcast-next-end-ch` + key + `">` + data['onair'][key]['next_endtime'] + `</span>
+                              <span class="broadcast-next-title-ch` + key + `">` + data['onair'][key]['next_program_name'] + `</span>
+                            </div>
+                          </div>`;
 
               // 番組情報を書き換え
               document.getElementsByClassName('broadcast-ch' + key)[0].innerHTML = html;

@@ -93,13 +93,13 @@
                   var min = now.getMinutes(); // 分
                   var sec = now.getSeconds(); // 秒
                   if (hour < 10) {
-                    hour = "0" + hour;
+                    hour = '0' + hour;
                   }
                   if (min < 10) {
-                    min = "0" + min;
+                    min = '0' + min;
                   }
                   if (sec < 10) {
-                    sec = "0" + sec;
+                    sec = '0' + sec;
                   }
                   var time = hour + ':' + min + ':' + sec;
 
@@ -123,7 +123,7 @@
               // 768px 以上のみ
               if (document.body.clientWidth > 768){
                 if (scrollflg){
-                  $('#comment-draw-box').velocity('scroll', { container: $("#comment-draw-box"), duration: 250, offset: $('#comment-draw-box')[0].scrollHeight});
+                  $('#comment-draw-box').velocity('scroll', { container: $('#comment-draw-box'), duration: 250, offset: $('#comment-draw-box')[0].scrollHeight});
                 }
               }
             }
