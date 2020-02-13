@@ -11,8 +11,8 @@ NVIDIAのNVEncを使用してエンコードを行うAviutlの出力プラグインです。
 NVEncによるハードウェア高速エンコードを目指します。
 
 【基本動作環境】
-Windows 7,8,8.1,10 (x86/x64)
-Aviutl 0.99g4 以降
+Windows 10 (x86/x64)
+Aviutl 1.00 以降
 NVEncが載ったハードウェア
   NVIDIA製 GPU GeForce Kepler世代以降 (GT/GTX 6xx 以降)
   ※GT 63x, 62x等はFermi世代のリネームであるため非対応なものがあります。
@@ -240,6 +240,42 @@ NVIDIA グラフィックドライバ 436.02
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.02.11 (4.64)
+[NVEncC]
+・lookaheadを使用した場合に不要なエラーメッセージが表示されていたのを修正。
+
+2020.02.10 (4.63)
+[NVEncC]
+・mux時の動作の安定性を向上し、シーク時に不安定になる症状を改善。
+・起動時の初期化動作の安定化。起動時に異常終了することがあるのを改善。
+・--interlace autoが使えない状態だったのを修正。
+・--chromalocの設定結果がおかしかったのを修正。
+・エンコードを中断した際に、まれにフリーズしてしまうのを修正。
+・デバッグ用ログ出力の拡充。
+・ログに文字化けしている箇所があったのを修正。
+
+2020.02.01 (4.62)
+[NVEncC]
+・colormatrix等の情報を入力ファイルからコピーする機能を追加。
+  --colormtarix auto
+  --colorprim auto
+  --transfer auto
+  --chromaloc auto
+  --colorrange auto
+  また、vpp-colorspaceでも使用可能。
+・avsw/avhw読み込み時に、フレームごとにインタレかどうかを判定してインタレ解除を行うオプションを追加。(--interlace auto)
+・インタレ対応のyuv422→yuv420変換がないため、yuv444を経由するように。
+・HEVCエンコ時に、high tierの存在しないlevelが設定された場合、main tierに修正するように。
+・ssim/psnr計算の安定性向上。
+・4.60から--vpp-subburnのscaleオプションが動作しなくなっていたのを修正。
+・vpp-subburnを使用した場合の頑健性向上。
+・ログに常に出力ファイル名を表示するように。
+・VUI情報、mastering dsiplay, maxcllの情報をログに表示するように。
+
+[NVEnc.auo]
+・NVEncCとの連携のための実装を変更。
+  たまに緑のフレームが入ったりする(?)という問題に対処できているとよいが…。
+
 2020.01.16 (4.61)
 [NVEncC]
 ・コピーすべきmaxcll/maxfallの情報がない時に、--master-display copyや--max-cll copyを使用してmkv出力すると
