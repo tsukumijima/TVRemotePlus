@@ -854,7 +854,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 @media screen and (max-width: 767px){
 
     html.open {
-        position: fixed!important;
+        /* position: fixed!important; */
         width: 100%;
         height: 100%;
     }
@@ -975,6 +975,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     border-bottom: 8px solid var(--color-border);
     color: var(--color-text);
     overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;   
     position: absolute;
     border-collapse: collapse;
     top: 40px;
@@ -1819,6 +1820,7 @@ td {
     text-shadow: none;
     text-align: left;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 @media screen and (min-width: 1024px){
@@ -1871,11 +1873,10 @@ td {
 
 .broadcast-channel {
     display: inline-block;
-    margin-top: 2px;
     margin-right: 10px;
     font-size: 16.5px;
     overflow: hidden;
-    line-height: 100%;
+    line-height: 120%;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
@@ -1897,7 +1898,7 @@ td {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    line-height: 100%;
+    line-height: 120%;
 }
 
 .broadcast-jikkyo {

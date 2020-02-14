@@ -312,121 +312,121 @@
 
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_T as $i => $value){ // 地デジchの数だけ繰り返す ?>
-              <form class="broadcast-wrap" method="post">
+              <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
+                    data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
 
                 <input type="hidden" name="state" value="ONAir">
-                <div class="broadcast-channel-id"><?php echo $i; ?></div>
 
-                <button type="button" class="broadcast">
+                <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
-                  <div class="broadcast-content broadcast-ch<?php echo $i; ?>">
+                  <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%02d', $i); ?></div>
+                      <div class="broadcast-channel">Ch: <?php echo sprintf('%02d', $i); ?></div>
                       <div class="broadcast-name-box">
-                        <div class="broadcast-name broadcast-name-ch<?php echo $i; ?>"><?php echo $value; ?></div>
-                        <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
+                        <div class="broadcast-name"><?php echo $value; ?></div>
+                        <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
                       </div>
                     </div>
                     <div class="broadcast-title">
-                      <span class="broadcast-start-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-to-ch<?php echo $i; ?>">～</span>
-                      <span class="broadcast-end-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-title-id broadcast-title-ch<?php echo $i; ?>">取得中です…</span>
+                      <span class="broadcast-start">00:00</span>
+                      <span class="broadcast-to">～</span>
+                      <span class="broadcast-end">00:00</span>
+                      <span class="broadcast-title-id">取得中です…</span>
                     </div>
                     <div class="broadcast-next">
-                      <span class="broadcast-next-start-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-next-to-ch<?php echo $i; ?>">～</span>
-                      <span class="broadcast-next-end-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-next-title-ch<?php echo $i; ?>">取得中です…</span>
+                      <span">00:00</span>
+                      <span>～</span>
+                      <span>00:00</span>
+                      <span>取得中です…</span>
                     </div>
                   </div>
-                </button>
+                </div>
                 
                 <div class="progressbar">
-                  <div class="progress progress-ch<?php echo $i; ?>"></div>
+                  <div class="progress"></div>
                 </div>
 
-              </form>
+              </div>
 <?php	} //括弧終了 ?>
             </nav>
 
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_S as $i => $value){ // BSchの数だけ繰り返す ?>
-              <form class="broadcast-wrap" method="post">
+              <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
+                    data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
 
                 <input type="hidden" name="state" value="ONAir">
-                <div class="broadcast-channel-id"><?php echo $i; ?></div>
 
-                <button type="button" class="broadcast">
+                <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
-                  <div class="broadcast-content broadcast-ch<?php echo $i; ?>">
+                  <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%03d', $i); ?></div>
+                      <div class="broadcast-channel">Ch: <?php echo sprintf('%02d', $i); ?></div>
                       <div class="broadcast-name-box">
-                        <div class="broadcast-name broadcast-name-ch<?php echo $i; ?>"><?php echo $value; ?></div>
-                        <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
+                        <div class="broadcast-name"><?php echo $value; ?></div>
+                        <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
                       </div>
                     </div>
                     <div class="broadcast-title">
-                      <span class="broadcast-start-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-to-ch<?php echo $i; ?>">～</span>
-                      <span class="broadcast-end-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-title-id broadcast-title-ch<?php echo $i; ?>">取得中です…</span>
+                      <span class="broadcast-start">00:00</span>
+                      <span class="broadcast-to">～</span>
+                      <span class="broadcast-end">00:00</span>
+                      <span class="broadcast-title-id">取得中です…</span>
                     </div>
                     <div class="broadcast-next">
-                      <span class="broadcast-next-start-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-next-to-ch<?php echo $i; ?>">～</span>
-                      <span class="broadcast-next-end-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-next-title-ch<?php echo $i; ?>">取得中です…</span>
+                      <span">00:00</span>
+                      <span>～</span>
+                      <span>00:00</span>
+                      <span>取得中です…</span>
                     </div>
                   </div>
-                </button>
+                </div>
                 
                 <div class="progressbar">
-                  <div class="progress progress-ch<?php echo $i; ?>"></div>
+                  <div class="progress"></div>
                 </div>
 
-              </form>
+              </div>
 <?php	} //括弧終了 ?>
             </nav>
 
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_CS as $i => $value){ // CSchの数だけ繰り返す ?>
-              <form class="broadcast-wrap" method="post">
+              <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
+                    data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
 
                 <input type="hidden" name="state" value="ONAir">
-                <div class="broadcast-channel-id"><?php echo $i; ?></div>
 
-                <button type="button" class="broadcast">
+                <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
-                  <div class="broadcast-content broadcast-ch<?php echo $i; ?>">
+                  <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel broadcast-channel-ch<?php echo $i; ?>">Ch: <?php echo sprintf('%03d', $i); ?></div>
+                      <div class="broadcast-channel">Ch: <?php echo sprintf('%03d', $i); ?></div>
                       <div class="broadcast-name-box">
-                        <div class="broadcast-name broadcast-name-ch<?php echo $i; ?>"><?php echo $value; ?></div>
-                        <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch<?php echo $i; ?>"> - </span></div>
+                        <div class="broadcast-name"><?php echo $value; ?></div>
+                        <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
                       </div>
                     </div>
                     <div class="broadcast-title">
-                      <span class="broadcast-start-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-to-ch<?php echo $i; ?>">～</span>
-                      <span class="broadcast-end-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-title-id broadcast-title-ch<?php echo $i; ?>">取得中です…</span>
+                      <span class="broadcast-start">00:00</span>
+                      <span class="broadcast-to">～</span>
+                      <span class="broadcast-end">00:00</span>
+                      <span class="broadcast-title-id">取得中です…</span>
                     </div>
                     <div class="broadcast-next">
-                      <span class="broadcast-next-start-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-next-to-ch<?php echo $i; ?>">～</span>
-                      <span class="broadcast-next-end-ch<?php echo $i; ?>">00:00</span>
-                      <span class="broadcast-next-title-ch<?php echo $i; ?>">取得中です…</span>
+                      <span">00:00</span>
+                      <span>～</span>
+                      <span>00:00</span>
+                      <span>取得中です…</span>
                     </div>
                   </div>
-                </button>
+                </div>
                 
                 <div class="progressbar">
-                  <div class="progress progress-ch<?php echo $i; ?>"></div>
+                  <div class="progress"></div>
                 </div>
 
-              </form>
+              </div>
 <?php	} //括弧終了 ?>
             </nav>
 

@@ -132,7 +132,8 @@
 
   $(function(){
 
-    // キーボードショートカット一覧
+    // ***** キーボードショートカット一覧 *****
+
     $('#hotkey').click(function(){
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
@@ -140,6 +141,8 @@
       $('#hotkey-box').toggleClass('open');
       $('html').removeClass('open');
     })
+
+    // ***** キャスト関連 *****
 
     // メニューを引っ込める用
     $('google-cast-launcher').click(function() {
@@ -166,49 +169,6 @@
       }
     });
 
-    // 再生開始ボックス
-    $('body').on('click','.broadcast-wrap',function(){
-      $('#broadcast-stream-title').html($(this).find('.broadcast-channel').html() + ' ' + $(this).find('.broadcast-name').html());
-      $('#broadcast-stream-info').html($(this).find('.broadcast-title-id').html());
-      $('#broadcast-stream-channel').val($(this).find('.broadcast-channel-id').text());
-      // 地デジ・BSCS判定
-      if ($(this).find('.broadcast-channel-id').text() < 55){
-        $('#broadcast-BonDriver-T').show();
-        $('#broadcast-BonDriver-T').find('select').prop('disabled', false);
-        $('#broadcast-BonDriver-S').hide();
-        $('#broadcast-BonDriver-S').find('select').prop('disabled', true);
-      } else {
-        $('#broadcast-BonDriver-S').show();
-        $('#broadcast-BonDriver-S').find('select').prop('disabled', false);
-        $('#broadcast-BonDriver-T').hide();
-        $('#broadcast-BonDriver-T').find('select').prop('disabled', true);
-      }
-      // 開閉
-      $('#nav-close').addClass('open');
-      $('#broadcast-stream-box').addClass('open');
-      $('html').addClass('open');
-      // ワンクリックでストリーム開始する場合
-      if (settings['onclick_stream']){
-        $('#broadcast-stream-box').hide();
-        $('.bluebutton').click();
-      }
-    });
-
-    // 再生開始
-    $('.bluebutton').click(function(){
-      $('.bluebutton').addClass('disabled');
-    });
-
-    // キャンセル
-    $('.redbutton').click(function(event){
-      $('#nav-close').removeClass('open');
-      $('#broadcast-stream-box').removeClass('open');
-      $('#chromecast-box').removeClass('open');
-      $('#hotkey-box').removeClass('open');
-      $('html').removeClass('open');
-    });
-
-    // キャスト関連
     $('#cast-toggle').click(function(){
 
       // キャスト画面

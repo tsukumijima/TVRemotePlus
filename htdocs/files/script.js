@@ -201,44 +201,38 @@
 
             // 変化がある場合のみ書き換え
             // 特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
-            if (document.getElementsByClassName('broadcast-start-ch' + key)[0].innerHTML != data['onair'][key]['starttime'] ||
-                document.getElementsByClassName('broadcast-title-ch' + key)[0].innerHTML != data['onair'][key]['program_name']){
+            if (document.querySelector('#ch' + key + ' .broadcast-start').innerHTML != data['onair'][key]['starttime'] ||
+                document.querySelector('#ch' + key + ' .broadcast-title').innerHTML != data['onair'][key]['program_name']){
 
               // 書き換え用html
               var html = `<div class="broadcast-channel-box">
-                            <div class="broadcast-channel broadcast-channel-ch` + key + `">` + $('.broadcast-channel-ch' + key).html() + `</div>
+                            <div class="broadcast-channel">` + document.getElementById('ch' + key).dataset.channel + `</div>
                               <div class="broadcast-name-box">
-                                <div class="broadcast-name broadcast-name-ch` + key + `">` + $('.broadcast-name-ch' + key).html() + `</div>
-                                <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi-ch` + key + `"></span></div>
+                                <div class="broadcast-name">` + document.getElementById('ch' + key).dataset.name + `</div>
+                                <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi">` + data['onair'][key]['ikioi'] + `</span></div>
                               </div>
                             </div>
                             <div class="broadcast-title">
-                              <span class="broadcast-start-ch` + key + `">` + data['onair'][key]['starttime'] + `</span>
-                              <span class="broadcast-to-ch` + key + `">` + data['onair'][key]['to'] + `</span>
-                              <span class="broadcast-end-ch` + key + `">` + data['onair'][key]['endtime'] + `</span>
-                              <span class="broadcast-title-id broadcast-title-ch` + key + `">` + data['onair'][key]['program_name'] + `</span>
+                              <span class="broadcast-start">` + data['onair'][key]['starttime'] + `</span>
+                              <span class="broadcast-to">` + data['onair'][key]['to'] + `</span>
+                              <span class="broadcast-end">` + data['onair'][key]['endtime'] + `</span>
+                              <span class="broadcast-title-id">` + data['onair'][key]['program_name'] + `</span>
                             </div>
                             <div class="broadcast-next">
-                              <span class="broadcast-next-start-ch` + key + `">` + data['onair'][key]['next_starttime'] + `</span>
-                              <span class="broadcast-next-to-ch` + key + `">` + data['onair'][key]['to'] + `</span>
-                              <span class="broadcast-next-end-ch` + key + `">` + data['onair'][key]['next_endtime'] + `</span>
-                              <span class="broadcast-next-title-ch` + key + `">` + data['onair'][key]['next_program_name'] + `</span>
+                              <span>` + data['onair'][key]['next_starttime'] + `</span>
+                              <span>` + data['onair'][key]['to'] + `</span>
+                              <span>` + data['onair'][key]['next_endtime'] + `</span>
+                              <span>` + data['onair'][key]['next_program_name'] + `</span>
                             </div>
                           </div>`;
 
               // 番組情報を書き換え
-              document.getElementsByClassName('broadcast-ch' + key)[0].innerHTML = html;
-            }
-
-            // 実況勢いが変化していれば書き換え
-            var ikioi = document.getElementsByClassName('broadcast-ikioi-ch' + key)[0];
-            if (ikioi.textContent.toString() !== data['onair'][key]['ikioi'].toString()){
-              ikioi.textContent = data['onair'][key]['ikioi'];
+              document.querySelector('#ch' + key + ' .broadcast-content').innerHTML = html;
             }
 
             // プログレスバー
             var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
-            document.getElementsByClassName('progress-ch' + key)[0].style.width = percent + '%';
+            document.querySelector('#ch' + key + ' .progress').style.width = percent + '%';
 
           }
 
@@ -322,6 +316,52 @@
       });
       return status;
     }()), 10000);
+
+
+    // ***** ストリーム開始 *****
+
+    // 再生開始ボックス
+    $('body').on('click','.broadcast-wrap',function(){
+      var $elem = $(this);
+      $('#broadcast-stream-title').html($elem.data('channel') + ' ' + $elem.data('name'));
+      $('#broadcast-stream-info').html($elem.find('.broadcast-title-id').html());
+      $('#broadcast-stream-channel').val($elem.data('ch'));
+      // 地デジ・BSCS判定
+      if ($elem.data('ch') < 55){
+        $('#broadcast-BonDriver-T').show();
+        $('#broadcast-BonDriver-T').find('select').prop('disabled', false);
+        $('#broadcast-BonDriver-S').hide();
+        $('#broadcast-BonDriver-S').find('select').prop('disabled', true);
+      } else {
+        $('#broadcast-BonDriver-S').show();
+        $('#broadcast-BonDriver-S').find('select').prop('disabled', false);
+        $('#broadcast-BonDriver-T').hide();
+        $('#broadcast-BonDriver-T').find('select').prop('disabled', true);
+      }
+      // 開閉
+      $('#nav-close').addClass('open');
+      $('#broadcast-stream-box').addClass('open');
+      $('html').addClass('open');
+      // ワンクリックでストリーム開始する場合
+      if (settings['onclick_stream']){
+        $('#broadcast-stream-box').hide();
+        $('.bluebutton').click();
+      }
+    });
+
+    // 再生開始
+    $('.bluebutton').click(function(){
+      $('.bluebutton').addClass('disabled');
+    });
+
+    // キャンセル
+    $('.redbutton').click(function(event){
+      $('#nav-close').removeClass('open');
+      $('#broadcast-stream-box').removeClass('open');
+      $('#chromecast-box').removeClass('open');
+      $('#hotkey-box').removeClass('open');
+      $('html').removeClass('open');
+    });
 
 
     // ***** ストリーム終了・遷移 *****
