@@ -8,13 +8,20 @@
       $('html').removeClass('dark');
     }
 
-    // メニュー開閉
+    // 参考: https://qiita.com/yukiTTT/items/773356c2483b96c9d4e0
+    function handleTouchMove(event) {
+      event.preventDefault();
+    }
+
+    // メニュー開
     $('#nav-open').click(function(event){
       $('#nav-close').addClass('open');
       $('#nav-content').addClass('open');
-      $('html').addClass('open');
+      //スクロール禁止
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
     });
 
+    // メニュー閉
     $('#nav-close').click(function(event){
       $('#nav-close').removeClass('open');
       $('#nav-content').removeClass('open');
@@ -22,7 +29,8 @@
       $('#search-stream-box').removeClass('open');
       $('#chromecast-box').removeClass('open');
       $('#hotkey-box').removeClass('open');
-      $('html').removeClass('open');
+      //スクロール復帰
+      document.removeEventListener('touchmove', handleTouchMove, { passive: false });
     });
 
     // サブメニューボタン開閉
@@ -30,6 +38,13 @@
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').toggleClass('open');
       $('#menu-close').toggleClass('open');
+      if ($('#menu-content').is(':visible')){
+        //スクロール復帰
+        document.removeEventListener('touchmove', handleTouchMove, { passive: false });
+      } else {
+        //スクロール禁止
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      }
     });
 
     // サブメニューとサブメニューボタン以外クリックでサブメニューを引っ込める
@@ -38,6 +53,8 @@
         $('#menu-content').velocity('slideUp', 150);
         $('#menu-content').removeClass('open');
         $('#menu-close').removeClass('open');
+        //スクロール禁止
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
       }
     });
 
@@ -45,6 +62,8 @@
       $('#menu-content').velocity('slideUp', 150);
       $('#menu-content').removeClass('open');
       $('#menu-close').removeClass('open');
+      //スクロール禁止
+      document.addEventListener('touchmove', handleTouchMove, { passive: false });
     });
 
     // パスワード開閉

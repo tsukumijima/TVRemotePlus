@@ -315,8 +315,6 @@
               <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
                     data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
 
-                <input type="hidden" name="state" value="ONAir">
-
                 <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
                   <div class="broadcast-content">
@@ -355,8 +353,6 @@
               <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
                     data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
 
-                <input type="hidden" name="state" value="ONAir">
-
                 <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
                   <div class="broadcast-content">
@@ -394,8 +390,6 @@
 <?php	foreach ($ch_CS as $i => $value){ // CSchの数だけ繰り返す ?>
               <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
                     data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
-
-                <input type="hidden" name="state" value="ONAir">
 
                 <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
