@@ -1,4 +1,9 @@
 
+  // 参考: https://qiita.com/yukiTTT/items/773356c2483b96c9d4e0
+  function handleTouchMove(event) {
+    event.preventDefault();
+  }
+
   $(function(){
 
     // ダークモード切り替え
@@ -6,11 +11,6 @@
       $('html').addClass('dark');
     } else {
       $('html').removeClass('dark');
-    }
-
-    // 参考: https://qiita.com/yukiTTT/items/773356c2483b96c9d4e0
-    function handleTouchMove(event) {
-      event.preventDefault();
     }
 
     // メニュー開
@@ -49,12 +49,13 @@
 
     // サブメニューとサブメニューボタン以外クリックでサブメニューを引っ込める
     $(document).click(function(event) {
-      if (!$(event.target).closest('#menu-button').length && !$(event.target).closest('#menu-content').length){
+      // menu-content が開いてるときだけ
+      if (!$(event.target).closest('#menu-button').length && !$(event.target).closest('#menu-content').length && $('#menu-content').is(':visible')){
         $('#menu-content').velocity('slideUp', 150);
         $('#menu-content').removeClass('open');
         $('#menu-close').removeClass('open');
-        //スクロール禁止
-        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        //スクロール復帰
+        document.removeEventListener('touchmove', handleTouchMove, { passive: false });
       }
     });
 

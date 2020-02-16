@@ -338,7 +338,7 @@ section {
     bottom: 0;
     z-index: 400;
     margin: auto;
-    padding: 20px;
+    padding: 20px 20px 18px 20px;
     box-sizing: border-box;
     transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
@@ -373,20 +373,12 @@ section {
     margin-top: 5px;
 }
 
-#button-box {
-    position: absolute !important;
-    right: 0px !important;
-    bottom: 0px !important;
-}
-
 @media screen and (max-width: 500px){
     #search-stream-box {
-        height: 455px;
+        height: 454px;
     }
-    @-moz-document url-prefix() {
-        #search-stream-box {
-            height: 370px;
-        }
+    .android.chrome #search-stream-box {
+        height: 439px;
     }
 }
 

@@ -749,7 +749,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 130%; /* スマホでURLバーが出入りしたときに途切れないように */
     background-color: #000000;
     transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
     opacity: 0;
@@ -1931,7 +1931,7 @@ td {
     bottom: 0;
     z-index: 400;
     margin: auto;
-    padding: 20px;
+    padding: 20px 20px 18px 20px;
     box-sizing: border-box;
     transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
@@ -1967,10 +1967,14 @@ td {
     margin-top: 5px;
 }
 
-.broadcast-button-box {
-    position: absolute !important;
-    right: 0px !important;
-    bottom: 0px !important;
+#button-box.broadcast-button-box {
+    margin-top: 24px;
+    margin-bottom: 0px;
+    justify-content: flex-end;
+}
+
+#button-box.broadcast-button-box button:last-of-type {
+    margin-right: 0px;
 }
 
 /* Chromecastボックス */
@@ -2205,12 +2209,11 @@ td {
 
 @media screen and (max-width: 500px){
     #broadcast-stream-box {
-        height: 525px;
+        height: 531px;
     }
-    @-moz-document url-prefix() {
-        #broadcast-stream-box {
-            height: 525px;
-        }
+    
+    .android.chrome #broadcast-stream-box {
+        height: 513px;
     }
 
     .form {

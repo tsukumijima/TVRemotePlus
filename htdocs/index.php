@@ -575,7 +575,7 @@
       </svg>
         <span id="chromecast-title">キャストするデバイス</span>
       </span>
-      <div id="chromecast-device-box" class="scrollbar">
+      <div id="chromecast-device-box">
       </div>
       <div id="button-box" class="broadcast-button-box">
         <button class="redbutton" type="button"><i class="fas fa-times"></i>キャンセル</button>

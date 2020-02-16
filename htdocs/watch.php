@@ -184,7 +184,7 @@
             </div>
           </div>
 
-          <div id="button-box">
+          <div id="button-box" class="broadcast-button-box">
             <button class="bluebutton" type="submit"><i class="fas fa-play"></i>再生する</button>
             <button class="redbutton" type="button"><i class="fas fa-times"></i>キャンセル</button>
           </div>

@@ -100,7 +100,8 @@
                           <div class="search-file-title">` + fileinfo[i]['title'] + `</div>
                           <div class="search-file-info">
                             <span class="search-file-channel">` + fileinfo[i]['channel'] + `</span>
-                            <span>` + fileinfo[i]['date'] + `</span> <span>` + fileinfo[i]['start'] + ` ～ ` + fileinfo[i]['end'] + ` (` + fileinfo[i]['duration'] + `分)</span>
+                            <span class="search-file-date">` + fileinfo[i]['date'] + `</span>
+                            <span class="search-file-time">` + fileinfo[i]['start'] + ` ～ ` + fileinfo[i]['end'] + ` (` + fileinfo[i]['duration'] + `分)</span>
                          </div>
                           <div class="search-file-description">
                             ` + fileinfo[i]['info'] + `
@@ -292,16 +293,17 @@
     $('body').on('click','.search-file-box',function(){
 
       // 怒涛のDOM追加
-      $('#search-stream-title').html($(this).find('.search-file-title').html());
-      $('#search-stream-info').text($(this).find('.search-file-time').text());
-      $('#stream-filepath').val($(this).find('.search-file-path').text());
-      $('#stream-filetitle').val($(this).find('.search-file-title').html());
-      $('#stream-fileinfo').val($(this).find('.search-file-description').html());
-      $('#stream-fileext').val($(this).find('.search-file-ext').text().toLowerCase());
-      $('#stream-filechannel').val($(this).find('.search-file-channel').text());
-      $('#stream-filetime').val($(this).find('.search-file-time').text());
-      $('#stream-start_timestamp').val($(this).find('.start_timestamp').text());
-      $('#stream-end_timestamp').val($(this).find('.end_timestamp').text());
+      var $elem = $(this);
+      $('#search-stream-title').html($elem.find('.search-file-title').html());
+      $('#search-stream-info').text($elem.find('.search-file-date').text() + ' ' + $elem.find('.search-file-time').text());
+      $('#stream-filepath').val($elem.find('.search-file-path').text());
+      $('#stream-filetitle').val($elem.find('.search-file-title').html());
+      $('#stream-fileinfo').val($elem.find('.search-file-description').html());
+      $('#stream-fileext').val($elem.find('.search-file-ext').text().toLowerCase());
+      $('#stream-filechannel').val($elem.find('.search-file-channel').text());
+      $('#stream-filetime').val($elem.find('.search-file-time').text());
+      $('#stream-start_timestamp').val($elem.find('.start_timestamp').text());
+      $('#stream-end_timestamp').val($elem.find('.end_timestamp').text());
       $('#nav-close').toggleClass('open');
       $('#search-stream-box').toggleClass('open');
       $('html').toggleClass('open');
