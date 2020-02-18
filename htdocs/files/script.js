@@ -121,7 +121,7 @@
           }
 
           document.getElementById('status').textContent = data['status'];
-          console.log('status: ' + data['status']);
+          // console.log('status: ' + data['status']);
         }
 
       });

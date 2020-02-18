@@ -55,6 +55,7 @@
               }
               
               // 下にスクロールするかどうか判定
+              var windowWidth = document.body.clientWidth;
               var scrollElement = document.getElementById('comment-draw-box');
               var scrollTop = scrollElement.scrollTop + scrollElement.clientHeight;
               var scrollHeight = scrollElement.scrollHeight;
@@ -105,26 +106,31 @@
 
                   // コメントをウインドウに出す
                   // 768px 以上のみ
-                  if (document.body.clientWidth > 768){
+                  if (windowWidth > 768){
                     document.getElementById('comment-draw-box').insertAdjacentHTML('beforeend',
-                    '<tbody><tr><td class="time" align="center">' + time + '</td><td class="comment">' + danmaku['text'] +'</td></tr></tbody>');
+                       `<tbody class="comment-live">
+                          <tr>
+                            <td class="time" align="center">` + time + `</td>
+                            <td class="comment">` + danmaku['text'] + `</td>
+                          </tr>
+                        </tbody>`);
                   }
 
-                  // コメント描画
-                  // 再生時のみ
+                  // コメント描画 (再生時のみ)
                   if (!dp.video.paused){
                     dp.danmaku.draw(danmaku);
                   }
-              
                 }
               }
 
               // コメント欄を下にアニメーション
               // 768px 以上のみ
-              if (document.body.clientWidth > 768){
-                if (scrollflg){
-                  $('#comment-draw-box').velocity('scroll', { container: $('#comment-draw-box'), duration: 250, offset: $('#comment-draw-box')[0].scrollHeight});
-                }
+              if (windowWidth > 768 && scrollflg){
+                $('#comment-draw-box').velocity('scroll', {
+                  container: $('#comment-draw-box'),
+                  duration: 250,
+                  offset: $('#comment-draw-box')[0].scrollHeight
+                });
               }
             }
           });
@@ -154,7 +160,11 @@
 
     // コメントスクロールボタンがクリックされた時
     $('#comment-scroll').click(function(){
-      $('#comment-draw-box').velocity('scroll', { container: $("#comment-draw-box"), duration: 1000, offset: $('#comment-draw-box')[0].scrollHeight});
+      $('#comment-draw-box').velocity('scroll', {
+        container: $('#comment-draw-box'),
+        duration: 1000,
+        offset: $('#comment-draw-box')[0].scrollHeight
+      });
       document.getElementById('comment-scroll').style.visibility = 'hidden';
       document.getElementById('comment-scroll').style.opacity = 0;
     });

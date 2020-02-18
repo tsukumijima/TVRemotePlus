@@ -126,7 +126,7 @@
 			$jkthread = array('');
 		}
 
-		return array($jkthread, $jkthread_info);
+		return @array($jkthread, $jkthread_info);
 	}
 
 	// 位置を解析して数値にする関数

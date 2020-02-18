@@ -56,6 +56,7 @@ body {
     background-color: var(--color-background);
     color: var(--color-text);
     margin: 0px;
+    overflow-x: hidden;
 }
 
 /* 本体のスクロールバー */
@@ -288,7 +289,7 @@ input::-moz-focus-inner, button::-moz-focus-inner {
     z-index: 150;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1025px){
     #scroll:hover {
         background-color: #46b2aa;
     }
@@ -583,7 +584,7 @@ section {
     visibility: visible;
 }
 
-@media screen and (max-width: 1023px){
+@media screen and (min-width: 1024px){
 
     #nav-open {
         margin-left: 20px;
@@ -958,19 +959,20 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 }
 
 #comment-draw-box {
-    font-size: 90%;
     display: block;
-    border-left: 1px solid var(--color-border);
-    border-bottom: 8px solid var(--color-border);
-    color: var(--color-text);
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;   
     position: absolute;
-    border-collapse: collapse;
+    overflow-y: scroll;
     top: 40px;
     left: 0;
     right: 0;
     bottom: 0;
+    border-collapse: collapse;
+    border-left: 1px solid var(--color-border);
+    border-bottom: 8px solid var(--color-border);
+    color: var(--color-text);
+    font-size: 90%;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
 }
 
 #comment-draw-box::-webkit-scrollbar {
@@ -1013,6 +1015,10 @@ td {
     word-break: break-all;
 }
 
+.comment-file {
+    cursor: pointer;
+}
+
 .time {
     width: 84px;
     min-height: 28px;
@@ -1021,12 +1027,14 @@ td {
     box-sizing: border-box;
 }
 
-.comment-file {
-    cursor: pointer;
+.comment-file .time {
+    width: 62px;
 }
 
-.comment-file:hover {
-    color: var(--color-blue);
+@media screen and (min-width: 1025px){
+    .comment-file:hover {
+        color: var(--color-blue);
+    }
 }
 
 .comment {
@@ -1060,7 +1068,7 @@ td {
     z-index: 150;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1025px){
     #comment-scroll:hover {
         background-color: #46b2aa;
     }
@@ -1300,7 +1308,7 @@ td {
     transition: all 0.15s ease-out 0.15s;
 }
 
-@media screen and (max-width: 1023px){
+@media screen and (max-width: 1024px){
     #tweet-etc div[data-balloon]:after {
         display: none;
     }
@@ -1464,7 +1472,7 @@ td {
     line-height: 150%;
 }
 
-@media screen and (max-width: 1023px){
+@media screen and (min-width: 1024px){
 
     #reload:before {
         display: none;
@@ -1583,6 +1591,7 @@ td {
     transition: background-color ease 0.3s;
     text-align: left;
     user-select: none;
+    -webkit-user-select: none;
     cursor: pointer;
 }
 
@@ -1681,7 +1690,7 @@ td {
     text-overflow: ellipsis;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1025px){
     .stream-view:hover {
         background-color: var(--color-hover);
     }
@@ -1763,7 +1772,7 @@ td {
     transition: ease 0.3s !important;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1025px){
     .broadcast-button:hover {
         background: var(--color-hover);
     }
@@ -1812,7 +1821,7 @@ td {
     box-sizing: border-box;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1025px){
     .broadcast-wrap:hover {
         background-color: var(--color-hover);
     }
@@ -2182,7 +2191,7 @@ td {
     font-size: 12.5px;
 }
 
-@media screen and (max-width: 1023px){
+@media screen and (max-width: 1024px){
     #hotkey {
         display: none;
     }
@@ -2314,7 +2323,7 @@ td {
     justify-content: center;
     align-items: center;
     height: 48px;
-    margin: 0;
+    margin: 0 auto;
     background-color: var(--color-blue);
     color: white;
     font-size: 15px;

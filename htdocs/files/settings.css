@@ -355,7 +355,7 @@ select {
     z-index: 150;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1025px){
     #save:hover {
         background-color: #ca0040;
     }
