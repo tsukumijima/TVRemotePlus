@@ -462,7 +462,7 @@
                 </p>
               </div>
               <div class="select-wrap">
-                <select name="quality_default">
+                <select name="quality_default" required>
                   <option value="1080p-high"<?php if ($quality_default == '1080p-high') echo ' selected'; ?>>1080p-high (1920×1080)</option>
                   <option value="1080p"<?php if ($quality_default == '1080p' or $quality_default == '') echo ' selected'; ?>>1080p (1440×1080)</option>
                   <option value="810p"<?php if ($quality_default == '810p') echo ' selected'; ?>>810p (1440×810)</option>
