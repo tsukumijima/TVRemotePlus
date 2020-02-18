@@ -135,7 +135,8 @@ pre:empty {
     pre::-webkit-scrollbar-corner {
         background: var(--color-scrollbar);
     }
-    pre::-webkit-scrollbar-thumb {    width: 8px;
+    pre::-webkit-scrollbar-thumb {
+        width: 8px;
         height: 8px;
         background: #657586;
     }
@@ -584,7 +585,7 @@ section {
     visibility: visible;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (max-width: 1024px){
 
     #nav-open {
         margin-left: 20px;
@@ -1336,7 +1337,7 @@ td {
     background-color: rgba(29, 161, 242, 0.1);
 }
 
-@media screen and (max-width : 768px){
+@media screen and (max-width: 768px){
 
     #tweet-picture:hover, #tweet-picture-comment:hover, #tweet-reset:hover {
         background-color: none;
@@ -1472,7 +1473,7 @@ td {
     line-height: 150%;
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (max-width: 1024px){
 
     #reload:before {
         display: none;

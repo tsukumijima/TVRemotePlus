@@ -162,7 +162,7 @@
     $('#comment-scroll').click(function(){
       $('#comment-draw-box').velocity('scroll', {
         container: $('#comment-draw-box'),
-        duration: 1000,
+        duration: 300,
         offset: $('#comment-draw-box')[0].scrollHeight
       });
       document.getElementById('comment-scroll').style.visibility = 'hidden';

@@ -13,15 +13,6 @@
     }
   }
 
-  // 自動スクロールボタンを表示する関数
-  function showAutoScrollButton(){
-    // 手動スクロール中
-    auto = false;
-    // ボタンを表示
-    document.getElementById('comment-scroll').style.visibility = 'visible';
-    document.getElementById('comment-scroll').style.opacity = 1;
-  }
-
   // ロード時 & リサイズ時に発火
   $(window).on('load resize', function(event){
 
@@ -149,7 +140,7 @@
       // スクロール
       $('.comment-file[data-time=' + Math.floor(dp.video.currentTime) + ']').eq(count).velocity('scroll', {
         container: $('#comment-draw-box'),
-        duration: 250,
+        duration: 300,
         offset: -$('#comment-draw-box')[0].clientHeight,
       });
 
