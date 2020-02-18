@@ -266,8 +266,9 @@
 		}
 
 		// 状態設定ファイルを初期化
-		$jsonfile = $serverroot.'/data/setting.json';
-		$json = array('state' => 'Offline');
+		$jsonfile = $serverroot.'/data/settings.json';
+		$json['1']['state'] = 'Offline';
+		$json['1']['channel'] = '0';
 		if (!file_exists($jsonfile)) file_put_contents($jsonfile, json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 		// TVRemotePlusの設定ファイル
