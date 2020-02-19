@@ -191,7 +191,7 @@
 		if (!file_exists($csvfile)) return false;
 
 		// 行頭と行末の改行・BOM削除・UTF-8へ変換
-		file_put_contents($csvfile, trim(removeBOM(mb_convert_encoding(file_get_contents($csvfile), 'UTF-8', $encoding))));
+		file_put_contents($csvfile, str_replace('yadif=0:-1:1,', 'yadif=0:-1:1.', trim(removeBOM(mb_convert_encoding(file_get_contents($csvfile), 'UTF-8', $encoding)))));
 	
 		// SplFileObject()を使用してCSVロード
 		$file = new SplFileObject($csvfile);
