@@ -92,8 +92,9 @@
 	echo '      半角スペースを含むパスは正常に動作しなくなる原因となるため、避けてください。'."\n";
 	echo "\n";
 	echo '      インストールするフォルダ：';
-	// TVRemotePlusのインストールフォルダ
+	// TVRemotePlusをインストールするフォルダ
 	$serverroot = trim(fgets(STDIN));
+	$serverroot = str_replace('"', '', $serverroot);
 	echo "\n";
 	// 空だったら
 	if (empty($serverroot)){
@@ -102,6 +103,7 @@
 			echo "\n";
 			echo '     インストールするフォルダ：';
 			$serverroot = trim(fgets(STDIN));
+			$serverroot = str_replace('"', '', $serverroot);
 			echo "\n";
 		}
 	}
@@ -187,6 +189,7 @@
 		echo '      録画ファイルのあるフォルダ：';
 		// 録画ファイルのあるフォルダ
 		$TSfile_dir = trim(fgets(STDIN));
+		$TSfile_dir = str_replace('"', '', $TSfile_dir);
 		echo "\n";
 		// 空だったら
 		if (empty($TSfile_dir)){
@@ -195,6 +198,7 @@
 				echo "\n";
 				echo '      録画ファイルのあるフォルダ：';
 				$TSfile_dir = trim(fgets(STDIN));
+				$TSfile_dir = str_replace('"', '', $TSfile_dir);
 				echo "\n";
 			}
 		}
@@ -205,6 +209,7 @@
 				echo "\n";
 				echo '      録画ファイルのあるフォルダ：';
 				$TSfile_dir = trim(fgets(STDIN));
+				$TSfile_dir = str_replace('"', '', $TSfile_dir);
 				echo "\n";
 			}
 		}
