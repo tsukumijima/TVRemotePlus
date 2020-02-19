@@ -4,6 +4,20 @@
     event.preventDefault();
   }
 
+  // クリックされた部分がスクロールバーかどうかをevent情報から返す関数
+  function isClickScrollbar(event){
+
+    var target_width = event.currentTarget.offsetWidth
+    var scrollbar_width = target_width - event.currentTarget.clientWidth;
+    var x = event.clientX -  event.currentTarget.getBoundingClientRect().left;
+
+    if (target_width - x < scrollbar_width){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   $(function(){
 
     // ダークモード切り替え

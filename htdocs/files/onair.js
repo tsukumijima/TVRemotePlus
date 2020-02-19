@@ -1,6 +1,7 @@
   $(function(){
 
     var res = ''; // 初回だけ空にする
+    var autoscroll = true;  // 自動スクロール中かどうか
 
     // jQueryでSleep
     function wait(sec) {
@@ -25,6 +26,7 @@
         cache: false,
         success: function(data) {
 
+          var windowWidth = document.body.clientWidth;
           var danmaku = {}; 
           res = data["last_res"];
           last_res = data["res"];
@@ -52,21 +54,6 @@
                 } else {
                   var length = data['data'].length;
                 }
-              }
-              
-              // 下にスクロールするかどうか判定
-              var windowWidth = document.body.clientWidth;
-              var scrollElement = document.getElementById('comment-draw-box');
-              var scrollTop = scrollElement.scrollTop + scrollElement.clientHeight;
-              var scrollHeight = scrollElement.scrollHeight;
-              if (scrollHeight - scrollTop < 50){
-                var scrollflg = true;
-                document.getElementById('comment-scroll').style.visibility = 'hidden';
-                document.getElementById('comment-scroll').style.opacity = 0;
-              } else {
-                var scrollflg = false;
-                document.getElementById('comment-scroll').style.visibility = 'visible';
-                document.getElementById('comment-scroll').style.opacity = 1;
               }
 
               for (i = 0; i < length; i++){
@@ -125,12 +112,19 @@
 
               // コメント欄を下にアニメーション
               // 768px 以上のみ
-              if (windowWidth > 768 && scrollflg){
-                $('#comment-draw-box').velocity('scroll', {
-                  container: $('#comment-draw-box'),
-                  duration: 250,
-                  offset: $('#comment-draw-box')[0].scrollHeight
+              if (windowWidth > 768 && autoscroll){
+
+                // 要素を取得
+                var $comment = $('.comment-live:last');
+                var $commentbox = $('#comment-draw-box');
+
+                // コメントまでスクロールする
+                $comment.velocity('scroll', {
+                  container: $commentbox,
+                  duration: 150,
+                  offset: -$commentbox.height() + $comment.height(),
                 });
+
               }
             }
           });
@@ -139,34 +133,39 @@
       return status;
     }()),500);
 
-    // コメント一覧スクロール時
-    $('#comment-draw-box').scroll(function() {
+    // マウスホイール or スワイプ or mousedown
+    $('#comment-draw-box').on('wheel touchmove mousedown', function(){
+      
+      // 手動スクロール中
+      autoscroll = false;
 
-      // スクロール位置を取得
-      var scrollElement = document.getElementById('comment-draw-box');
-      var scrollTop = scrollElement.scrollTop + scrollElement.clientHeight;
-      var scrollHeight = scrollElement.scrollHeight;
-
-      // 表示・非表示
-      if (scrollHeight - scrollTop < 50){
-        document.getElementById('comment-scroll').style.visibility = 'hidden';
-        document.getElementById('comment-scroll').style.opacity = 0;
-      } else {
-        document.getElementById('comment-scroll').style.visibility = 'visible';
-        document.getElementById('comment-scroll').style.opacity = 1;
-      }
+      // ボタンを表示
+      document.getElementById('comment-scroll').style.visibility = 'visible';
+      document.getElementById('comment-scroll').style.opacity = 1;
 
     });
 
     // コメントスクロールボタンがクリックされた時
     $('#comment-scroll').click(function(){
-      $('#comment-draw-box').velocity('scroll', {
-        container: $('#comment-draw-box'),
+      
+      // 自動スクロールに戻す
+      autoscroll = true;
+
+      // 要素を取得
+      var $comment = $('.comment-live:last');
+      var $commentbox = $('#comment-draw-box');
+
+      // コメントまでスクロールする
+      $comment.velocity('scroll', {
+        container: $commentbox,
         duration: 300,
-        offset: $('#comment-draw-box')[0].scrollHeight
+        offset: -$commentbox.height() + $comment.height(),
       });
+
+      // ボタンを非表示
       document.getElementById('comment-scroll').style.visibility = 'hidden';
       document.getElementById('comment-scroll').style.opacity = 0;
+
     });
   
   });

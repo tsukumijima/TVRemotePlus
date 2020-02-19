@@ -1,18 +1,4 @@
 
-  // クリックされた部分がスクロールバーかどうかをevent情報から返す関数
-  function isClickScrollbar(event){
-
-    var target_width = event.currentTarget.offsetWidth
-    var scrollbar_width = target_width - event.currentTarget.clientWidth;
-    var x = event.clientX -  event.currentTarget.getBoundingClientRect().left;
-
-    if (target_width - x < scrollbar_width){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // ロード時 & リサイズ時に発火
   $(window).on('load resize', function(event){
 
@@ -79,14 +65,14 @@
     // コメントスクロール・progressbar
     var time = 0; // 秒数を記録
     var count = 0; // 同じ秒数の要素をカウント
-    var auto = true;  // 自動スクロール中かどうか
+    var autoscroll = true;  // 自動スクロール中かどうか
     $('.dplayer-video-current').on('timeupdate seeking', function(){
 
       var current = Math.floor(dp.video.currentTime); // 小数点以下は切り捨て
       if (time != current) count = 0; // カウントをリセット
 
-      // 手動でスクロールしていないなら
-      if (auto){
+      // 自動スクロール中なら
+      if (autoscroll){
 
         // ボタンを非表示
         document.getElementById('comment-scroll').style.visibility = 'hidden';
@@ -95,22 +81,26 @@
         // 768px以上 & その秒数にコメントが存在する & 重複していない
         if (document.body.clientWidth > 768 && $('.comment-file[data-time=' + current + ']').length){
 
+          // 要素を取得
+          var $comment = $('.comment-file[data-time=' + current + ']').eq(count);
+          var $commentbox = $('#comment-draw-box');
+
           // コメントまでスクロールする
-          $('.comment-file[data-time=' + current + ']').eq(count).velocity('scroll', {
-            container: $('#comment-draw-box'),
+          $comment.velocity('scroll', {
+            container: $commentbox,
             duration: 150,
-            offset: -$('#comment-draw-box')[0].clientHeight,
+            offset: -$commentbox.height() + $comment.height(),
           });
 
           // 値を保存しておく
           count++;
           time = current;
-          scroll = $('#comment-draw-box').scrollTop();
+          scroll = $commentbox.scrollTop();
 
         }
       } else {
 
-        auto = false;
+        autoscroll = false;
         // ボタンを表示
         document.getElementById('comment-scroll').style.visibility = 'visible';
         document.getElementById('comment-scroll').style.opacity = 1;
@@ -124,24 +114,31 @@
 
     // マウスホイール or スワイプ or mousedown
     $('#comment-draw-box').on('wheel touchmove mousedown', function(){
+      
       // 手動スクロール中
-      auto = false;
+      autoscroll = false;
+
       // ボタンを表示
       document.getElementById('comment-scroll').style.visibility = 'visible';
       document.getElementById('comment-scroll').style.opacity = 1;
+
     });
 
     // コメントスクロールボタンがクリックされたとき
     $('#comment-scroll').click(function(){
       
       // 自動スクロールに戻す
-      auto = true;
+      autoscroll = true;
+
+      // 要素を取得
+      var $comment = $('.comment-file[data-time=' + Math.floor(dp.video.currentTime) + ']').eq(count);
+      var $commentbox = $('#comment-draw-box');
 
       // スクロール
-      $('.comment-file[data-time=' + Math.floor(dp.video.currentTime) + ']').eq(count).velocity('scroll', {
-        container: $('#comment-draw-box'),
+      $comment.velocity('scroll', {
+        container: $commentbox,
         duration: 300,
-        offset: -$('#comment-draw-box')[0].clientHeight,
+        offset: -$commentbox.height() + $comment.height(),
       });
 
       // ボタンを非表示
