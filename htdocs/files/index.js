@@ -28,6 +28,7 @@
 
   // ロード時 & リサイズ時に発火
   var timer = false;
+  var lastWindowWidth = document.documentElement.clientWidth;
   $(window).on('DOMContentLoaded resize', function(event){
 
     // ロード時のみ発火
@@ -104,29 +105,34 @@
           
       }
 
-      // 既に初期化されていたら一旦破棄する
-      if (typeof slideTab !== 'undefined'){
-        slideTabButton.destroy(false, true);
-        slideTab.destroy(false, true);
-      }
-
-      // タブを初期化
-      slideTab = new Swiper('#broadcast-tab-box', {
-        slidesPerView: 'auto',
-        watchSlidesVisibility: true,
-        watchSlidesProgress: true,
-        updateOnWindowResize: true,
-        slideActiveClass: 'swiper-slide-active'
-      });
-      slideTabButton = new Swiper('#broadcast-box', {
-        autoHeight: true,
-        thumbs: {
-          swiper: slideTab
+      // DOMContentLoaded or resize(横方向)
+      if (event.type == 'DOMContentLoaded' || (event.type == 'resize' && lastWindowWidth != windowWidth)){
+        
+        lastWindowWidth = windowWidth; // 記録しておく
+      
+        // 既に初期化されているなら一旦破棄する
+        if (typeof slideTab !== 'undefined'){
+          slideTabButton.destroy(false, true);
+          slideTab.destroy(false, true);
         }
-      });
 
+        // タブを初期化
+        slideTab = new Swiper('#broadcast-tab-box', {
+          slidesPerView: 'auto',
+          watchSlidesVisibility: true,
+          watchSlidesProgress: true,
+          updateOnWindowResize: true,
+          slideActiveClass: 'swiper-slide-active'
+        });
+        slideTabButton = new Swiper('#broadcast-box', {
+          autoHeight: true,
+          thumbs: {
+            swiper: slideTab
+          }
+        });
+
+      }
     }, 200);
-
   });
 
 
