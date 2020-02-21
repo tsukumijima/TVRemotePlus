@@ -3,8 +3,6 @@
 	// モジュール読み込み
 	require_once ('../../require.php');
 
-	// ini_set('display_errors', 0);
-
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');
 
@@ -19,8 +17,8 @@
 	// セッション開始
 	session_start();
 
-	// twitterOAuthの読み込み
-	require "twitteroauth/autoload.php";
+	// TwitterOAuthの読み込み
+	require_once ( 'twitteroauth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	// コンシューマーキーが空ならエラー吐く

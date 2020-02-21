@@ -17,8 +17,8 @@
 	// セッション開始
 	session_start();
 
-	// twitterOAuthの読み込み
-	require "twitteroauth/autoload.php";
+	// TwitterOAuthの読み込み
+	require_once ( 'twitteroauth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	if (!isset($_GET['denied'])){ // deniedでないなら

@@ -631,7 +631,7 @@
 					// vposからミリ秒部分だけ取り出す
 					$vpos = floatval('0.'.substr($jkthread[$i]['vpos'], -3, 3));
 					// 秒を計算
-					$sec = ($jkthread[$i]['date'] - $start_timestamp) + $vpos - 2;
+					$sec = ($jkthread[$i]['date'] - $start_timestamp) + $vpos;
 					// 万が一マイナスになった場合は0にする
 					if ($sec < 0) $sec = 0;
 		

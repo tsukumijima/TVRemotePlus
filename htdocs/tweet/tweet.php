@@ -2,8 +2,6 @@
 
 	// モジュール読み込み
 	require_once ('../../require.php');
-	
-	// ini_set('display_errors', 0);
 
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');
@@ -19,8 +17,8 @@
 	// セッション開始
 	session_start();
 
-	// twitterOAuthの読み込み
-	require "twitteroauth/autoload.php";
+	// TwitterOAuthの読み込み
+	require_once ( 'twitteroauth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	if (isset($_SESSION['oauth_token']) and isset($_SESSION['oauth_token_secret'])){ //OAuthトークンがセッションにあるなら
@@ -32,32 +30,34 @@
 			$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET,
 			$_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
-			// 前にハッシュつけたツイートのタイムスタンプを取得
-			$now_tweet = time();
+			// 現在のタイムスタンプ
+			$now_tweettime = time();
 
-			// ファイルがあるなら
+			// 以前ハッシュタグ付きツイートをしたときのタイムスタンプ
 			if (file_exists($tweet_time_file)){
-				$previous_tweet = file_get_contents($tweet_time_file);
+				$previous_tweettime = file_get_contents($tweet_time_file);
 			} else {
-				$previous_tweet = 0;
+				$previous_tweettime = 0;
 			}
 
 			// ハッシュタグ処理
 			if ($_POST['hashtag'] !== ''){ // 空でないなら
+
 				$hashtag = '';
 				$hashtag_text = explode(' ', str_replace('　', ' ', $_POST['hashtag'])); //スペースで分割
+
 				// ハッシュタグの数だけ
 				foreach ($hashtag_text as $i => $value) {
-					if (strpos($hashtag_text[$i], '#') === false){ // ハッシュタグ付いてなかったら
+					if (strpos($hashtag_text[$i], '#') === false){ // # が付いてなかったら
 						$hashtag_text[$i] = '#'.$hashtag_text[$i]; // それぞれ付けておく
 					}
 					$hashtag = $hashtag.$hashtag_text[$i].' ';
 				}
 
 				// 現在のタイムスタンプと前のタイムスタンプが指定した秒数空いてるならハッシュタグを付ける
-				// シャドウバン対策です、60秒以内(？)にハッシュタグつけて連投するとShadowBanされるみたいです
-				// echo 'ハッシュタグ付きツイートの差: '.($now_tweet - $previous_tweet).'秒 ';
-				if (($now_tweet - $previous_tweet) > $tweet_time){
+				// シャドウバン対策です、60秒以内(？)にハッシュタグつけて連投すると Search Ban されるらしい
+				// echo 'ハッシュタグ付きツイートの差: '.($now_tweettime - $previous_tweettime).'秒 ';
+				if (($now_tweettime - $previous_tweettime) > $tweet_time){
 
 					// 間隔が空いててハッシュタグあるならハッシュタグもつける
 					$tweet_text = $hashtag."\n".$_POST['tweet'];
@@ -75,15 +75,18 @@
 				$tweet_text = $_POST['tweet'];
 			}
 
-			if (isset($_POST['tweet']) and !isset($_POST['picture'])){ //画像とTweetが添付されてるなら
+			// 画像とツイートが添付されている場合のみ
+			if (isset($_POST['tweet']) and !isset($_POST['picture'])){
 
-				if(is_uploaded_file($_FILES['picture']['tmp_name'])){ //うｐしたはずの画像が存在するなら
+				// アップロードしたはずの画像が存在するなら
+				if (is_uploaded_file($_FILES['picture']['tmp_name'])){
 
 					// アップロード処理
-					$picture = $tweet_upload.'/Capture_'.date('Ymd-his').'.jpg'; //うｐするファイルパス
+					$picture = $tweet_upload.'/Capture_'.date('Ymd-His').'.jpg'; // アップロードするパス
 					
+					// アップロードディレクトリに保存
 					if (move_uploaded_file($_FILES['picture']['tmp_name'], $picture)){
-						// 一旦アップロードディレクトリに保存してTwitterに画像をアップロード
+						// Twitterに画像をアップロード
 						$media = $connection->upload('media/upload', ['media' => $picture]);
 					} else {
 						echo '<span class="tweet-failed">画像の投稿に失敗しました：投稿に失敗しました…</span>';
@@ -94,7 +97,7 @@
 
 					// 投稿後に画像を削除するなら
 					if ($tweet_delete == 'true'){
-						// 削除
+						// ファイルを削除
 						unlink($picture);
 					}
 
@@ -109,7 +112,7 @@
 					exit(1);
 				}
 
-			} else if (isset($_POST['tweet'])){ //画像はないけどTweetはある
+			} else if (isset($_POST['tweet'])){ //画像はないけどツイートはある
 				$tweet_type = 'ツイート';
 
     			// ツイートの内容を設定
@@ -122,7 +125,8 @@
 				exit(1);
 			}
 
-			// ツイートする、$resultにはbool型で実行結果が出力される
+			// ツイートする
+			// $resultにはbool型で実行結果が出力される
 			$result = $connection->post('statuses/update', $tweet);
 		
 		} catch(Exception $e) {
@@ -135,24 +139,40 @@
 
 		if($result and !isset($result->errors) and !isset($info->errors)){
 			echo $tweet_type.'：投稿に成功しました。';
-		} else if (isset($result->errors) and ($result->errors[0]->code == 32 or $result->errors[0]->code == 135)){
-			echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
-		} else if (isset($result->errors) and $result->errors[0]->code == 89){
-			echo '<span class="tweet-failed">トークンが期限切れです(再ログインしてください)：投稿に失敗しました…</span>';
-		} else if (isset($result->errors) and $result->errors[0]->code == 185){
-			echo '<span class="tweet-failed">ツイート数の上限に達しています：投稿に失敗しました…</span>';
-		} else if (isset($result->errors) and $result->errors[0]->code == 187){
-			echo '<span class="tweet-failed">ツイートが重複しています：投稿に失敗しました…</span>';
-		} else if (isset($result->errors) and $result->errors[0]->code == 231){
-			echo '<span class="tweet-failed">ログインを確認して下さい(再ログインしてください)：投稿に失敗しました…</span>';
-		} else if (isset($result->errors) and $result->errors[0]->code == 261){
-			echo '<span class="tweet-failed">TwitterAPIアプリが凍結されています：投稿に失敗しました…</span>';
-		} else if (isset($result->errors) and $result->errors[0]->code == 326){
-			echo '<span class="tweet-failed">アカウントが一時的にロックされています：投稿に失敗しました…</span>';
+		} else if (isset($result->errors)){
+			switch ($result->errors[0]->code) {
+				case 32:
+					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
+					break;
+				case 135:
+					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
+					break;
+				case 89:
+					echo '<span class="tweet-failed">トークンが期限切れです(再ログインしてください)：投稿に失敗しました…</span>';
+					break;
+				case 185:
+					echo '<span class="tweet-failed">ツイート数の上限に達しています：投稿に失敗しました…</span>';
+					break;
+				case 187:
+					echo '<span class="tweet-failed">ツイートが重複しています：投稿に失敗しました…</span>';
+					break;
+				case 231:
+					echo '<span class="tweet-failed">ログインを確認してください(再ログインしてください)：投稿に失敗しました…</span>';
+					break;
+				case 261:
+					echo '<span class="tweet-failed">TwitterAPI アプリが凍結されています：投稿に失敗しました…</span>';
+					break;
+				case 261:
+					echo '<span class="tweet-failed">アカウントが一時的にロックされています：投稿に失敗しました…</span>';
+					break;
+				default:
+					echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
+					break;
+			}
 		} else {
 			echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
 		}
 
 	} else { //セッションがない場合
-		echo '<a id="tweet-login" href="/tweet/auth.php">ツイートするにはTwitterでログインして下さい</a>';
+		echo '<a id="tweet-login" href="/tweet/auth.php">ツイートするには Twitter でログインして下さい</a>';
 	}
