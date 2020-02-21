@@ -47,7 +47,7 @@
 			// ストリームを終了させる
 			stream_stop($stream);
 
-			// ONAirなら
+			// File
 			if ($ini[$stream]['state'] == 'File'){
 
 				// 連想配列に格納
@@ -60,8 +60,11 @@
 				if ($_POST['start_timestamp']) $ini[$stream]['start_timestamp'] = $_POST['start_timestamp'];
 				if ($_POST['end_timestamp']) $ini[$stream]['end_timestamp'] = $_POST['end_timestamp'];
 				if ($_POST['quality']) $ini[$stream]['quality'] = $_POST['quality'];
+				else $ini[$stream]['quality'] = $quality_default;
 				if ($_POST['encoder']) $ini[$stream]['encoder'] = $_POST['encoder'];
+				else $ini[$stream]['quality'] = $encoder_default;
 				if ($_POST['subtitle']) $ini[$stream]['subtitle'] = $_POST['subtitle'];
+				else $ini[$stream]['quality'] = $subtitle_default;
 
 				// jsonからデコードして代入
 				if (file_exists($infofile)){
@@ -120,13 +123,17 @@
 
 				}
 
+			// ON Air
 			} else if ($ini[$stream]['state'] == 'ONAir'){
 
 				// 連想配列に格納
 				if ($_POST['channel']) $ini[$stream]['channel'] = strval($_POST['channel']);
 				if ($_POST['quality']) $ini[$stream]['quality'] = $_POST['quality'];
+				else $ini[$stream]['quality'] = $quality_default;
 				if ($_POST['encoder']) $ini[$stream]['encoder'] = $_POST['encoder'];
+				else $ini[$stream]['quality'] = $encoder_default;
 				if ($_POST['subtitle']) $ini[$stream]['subtitle'] = $_POST['subtitle'];
+				else $ini[$stream]['quality'] = $subtitle_default;
 				if ($_POST['BonDriver']) $ini[$stream]['BonDriver'] = $_POST['BonDriver'];
 
 				// BonDriverのデフォルトを要求される or 何故かBonDriverが空
@@ -148,7 +155,7 @@
 					copy($standby_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 				}
 
-			// Offlineなら
+			// Offline
 			} else if ($_POST['state'] == 'Offline'){
 
 				if (!isset($_POST['allstop'])){
