@@ -32,11 +32,21 @@
 		return $text;
 	}
 
-	// [新]とかをHTML化
-	function convertSymbol($string){
-		$string = str_replace('[', '<span class="mark">', $string);
-		$string = str_replace(']', '</span>', $string);
-		return $string;
+	// [字] などをhtmlで修飾する関数
+	function decorateMark($string){
+
+		// 参考：https://github.com/xtne6f/EDCB/blob/work-plus-s/EpgDataCap3/EpgDataCap3/ARIB8CharDecode.h
+		$marktable = array('[HV]','[SD]','[Ｐ]','[Ｗ]','[MV]','[手]','[二]','[字]','[双]','[デ]','[Ｓ]','[Ｂ]','[Ｎ]','[天]','[交]','[映]','[無]','[料]','[・]',
+					  '[前]','[後]','[再]','[新]','[初]','[終]','[生]','[販]','[声]','[吹]','[PPV]');
+		
+		foreach ($marktable as $value) {
+			if (strpos($string, $value) !== false){
+				$mark = str_replace('[', '', str_replace(']', '', $value)); // $value から [] を取る
+				$string = str_replace($value, '<span class="mark">'.$mark.'</span>', $string); // 置換
+			}
+		}
+
+		return $string; // 置換後の文字列を帰す
 	}
 
 	// basic認証関連

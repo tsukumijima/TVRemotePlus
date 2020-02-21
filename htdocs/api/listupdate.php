@@ -140,7 +140,7 @@
 			// Pathinfo
 			$TSfile['data'][$key]['pathinfo'] = pathinfo($value);
 			// 拡張子なしファイル名を暫定でタイトルにしておく
-			$TSfile['data'][$key]['title'] = convertSymbol(str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']));
+			$TSfile['data'][$key]['title'] = decorateMark(str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']));
 			// タイトル(HTML抜き)
 			$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']);
 			// ファイルの更新日時(Unix時間)
@@ -242,7 +242,7 @@
 					$fileinfo = str_getcsv(str_replace('　', ' ', mb_convert_kana($rplsinfo_result, 'asv', 'UTF-8'))); // Parseして配列にする
 
 					// 出力
-					$TSfile['data'][$key]['title'] = convertSymbol($fileinfo[4]); // 取得した番組名の方が正確なので修正
+					$TSfile['data'][$key]['title'] = decorateMark($fileinfo[4]); // 取得した番組名の方が正確なので修正
 					$TSfile['data'][$key]['title_raw'] = $fileinfo[4]; // 取得した番組名の方が正確なので修正
 					$TSfile['data'][$key]['date'] = $fileinfo[0]; // 録画日付
 					$TSfile['data'][$key]['info_state'] = 'generated'; // 番組情報取得フラグ
@@ -290,7 +290,7 @@
 					// .ts.program.txt を解析
 					$program = programToArray($program_file);
 
-					$TSfile['data'][$key]['title'] = convertSymbol($program['title']); // 取得した番組名の方が正確なので修正
+					$TSfile['data'][$key]['title'] = decorateMark($program['title']); // 取得した番組名の方が正確なので修正
 					$TSfile['data'][$key]['title_raw'] = $program['title']; // 取得した番組名の方が正確なので修正
 					$TSfile['data'][$key]['date'] = $program['date']; // 録画日付
 					$TSfile['data'][$key]['info_state'] = 'generated'; // 番組情報取得フラグ

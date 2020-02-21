@@ -140,12 +140,12 @@
 			'starttime' => $starttime, 
 			'to' => '～', 
 			'endtime' => $endtime, 
-			'program_name' => convertSymbol($program_name),
-			'program_info' => convertSymbol($program_info),
+			'program_name' => decorateMark($program_name),
+			'program_info' => decorateMark($program_info),
 			'next_starttime' => $next_starttime, 
 			'next_endtime' => $next_endtime, 
-			'next_program_name' => convertSymbol($next_program_name),
-			'next_program_info' => convertSymbol($next_program_info),
+			'next_program_name' => decorateMark($next_program_name),
+			'next_program_info' => decorateMark($next_program_info),
 		);
 	}
 
