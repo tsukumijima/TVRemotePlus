@@ -35,7 +35,7 @@
           $('#search-info').html(fileinfo.length + '件ヒットしました。').hide().delay(200).velocity('fadeIn', 500);
         }
 
-        //console.log(fileinfo);
+        // console.log(fileinfo);
   
         switch (sortnum){
           case 1:
