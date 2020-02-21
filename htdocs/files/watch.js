@@ -27,7 +27,7 @@
           var fileinfo = $.grep(fileinfo,
             function(a, b) {
               // 正規表現
-              regexp = new RegExp('.*' + text + '.*', 'g');
+              regexp = new RegExp('.*' + text + '.*', 'ig');
               // 配列にフィルターをかける
               return a.title.match(regexp);
             }
