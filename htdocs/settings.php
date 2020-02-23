@@ -30,7 +30,7 @@
 			$stream = strval($_POST['stream']);
 		} else {
 			$stream = '1';
-    }
+		}
 
 		// 設定ファイル読み込み
 		$ini = json_decode(file_get_contents($inifile), true);
@@ -39,12 +39,13 @@
 		// もし存在するなら$iniの連想配列に格納
 		if (isset($_POST['state'])) $ini[$stream]['state'] = $_POST['state'];
 
+		// 環境設定設定時に処理を行わないようにする
+		// 2行目の条件文は重複してストリームを再起動しないための措置
 		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or 
 			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream'.$stream.'.m3u8') > 20)){
 
-			// 通常のストリーム開始処理
-
-			// ストリームを終了させる
+			// 一旦現在のストリームを終了する
+			// state に関わらず実行
 			stream_stop($stream);
 
 			// File
@@ -104,8 +105,8 @@
 				// 再生履歴をファイルに保存
 				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
-				// MP4(progressive)は除外
-				if (!($ini[$stream]['fileext'] == 'mp4' and $ini[$stream]['encoder'] == 'Progressive')){
+				// MP4・MKV(progressive)は除外
+				if (!(($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv') and $ini[$stream]['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
 					$stream_cmd = stream_file($stream, $TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
@@ -119,8 +120,7 @@
 
 				} else {
 
-					$cmd = 'Progressive';
-
+					$stream_cmd = 'Progressive';
 				}
 
 			// ON Air
@@ -165,17 +165,19 @@
 						
 					// 強制でチャンネルを0に設定する
 					$ini[$stream]['channel'] = '0';
-						
-					// 配信休止中用のプレイリスト
-					if ($silent == 'true'){
-						copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
-					} else {
-						copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
-					}
 
-					// Stream 1 以外ならキーごと削除する
-					if ($stream != '1'){
+					// 配信休止中用のプレイリスト (Stream 1のみ)
+					if ($stream == '1'){
+						if ($silent == 'true'){
+							copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+						} else {
+							copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+						}
+					// Stream 1 以外なら配列のキーごと削除する
+					// m3u8 も削除
+					} else {
 						unset($ini[$stream]);
+						@unlink($base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 					}
 
 				} else {
@@ -192,16 +194,19 @@
 						$ini[$key]['state'] = 'Offline';
 						$ini[$key]['channel'] = '0';
 							
-						// 配信休止中用のプレイリスト
-						if ($silent == 'true'){
-							copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
-						} else {
-							copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
-						}
 
-						// Stream 1 以外ならキーごと削除する
-						if ($key != '1'){
+						// 配信休止中用のプレイリスト (Stream 1のみ)
+						if ($key == '1'){
+							if ($silent == 'true'){
+								copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
+							} else {
+								copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$key.'.m3u8');
+							}
+						// Stream 1 以外なら配列のキーごと削除する
+						// m3u8 も削除
+						} else {
 							unset($ini[$key]);
+							@unlink($base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 						}
 					}
 				}
@@ -1007,7 +1012,7 @@
           </h2>
 
 <?php		if (!isset($_POST['setting-env'])){ ?>
-<?php			if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){ ?>
+<?php			if ($_POST['state'] == 'ONAir' or $_POST['state'] == 'File'){ ?>
           <h3 class="blue">
             <i class="fas fa-video"></i>ストリーム開始
 <?php			} else { ?>
@@ -1018,27 +1023,31 @@
 
           <div class="setting-form-wrap">
             <p>ストリーム設定を保存しました。</p>
-<?php			if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'){ ?>
+<?php			if ($_POST['state'] == 'ONAir' or $_POST['state'] == 'File'){ ?>
             <p>
               ストリームを開始します。<br>
               なお、ストリームの起動には数秒かかります。<br>
               再生が開始されない場合、数秒待ってからリロードしてみて下さい。<br>
             </p>
 <?php			} else { ?>
-            <p>ストリーミングを終了します。</p>
+            <p>ストリームを終了します。</p>
 <?php			} //括弧終了 ?>
-            <p>稼働状態：<?php echo $ini[$stream]['state']; ?></p>
-            <p>ストリーム：<?php echo $stream; ?></p>
-<?php			if ($ini[$stream]['state'] == 'ONAir'){ ?>
+            <p>稼働状態：<?php echo $_POST['state']; ?></p>
+<?php			if (!isset($_POST['allstop'])){ ?>
+            <p>ストリーム：Stream <?php echo $stream; ?></p>
+<?php			} else { ?>
+            <p>ストリーム：全てのストリーム</p>
+<?php			} //括弧終了 ?>
+<?php			if ($_POST['state'] == 'ONAir'){ ?>
             <p>チャンネル：<?php echo $ch[$ini[$stream]['channel']]; ?></p>
             <p>動画の画質：<?php echo $ini[$stream]['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini[$stream]['encoder']; ?></p>
             <p>字幕の表示：<?php echo $ini[$stream]['subtitle']; ?></p>
-            <p>使用BonDriver：<?php echo $ini[$stream]['BonDriver']; ?></p>
+            <p>使用 BonDriver：<?php echo $ini[$stream]['BonDriver']; ?></p>
             <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
-            <p>TSTask起動コマンド：<?php echo $tstask_cmd; ?></p>
+            <p>TSTask 起動コマンド：<?php echo $tstask_cmd; ?></p>
 
-<?php			} else if ($ini[$stream]['state'] == 'File'){ ?>
+<?php			} else if ($_POST['state'] == 'File'){ ?>
             <p>タイトル：<?php echo $ini[$stream]['filetitle']; ?></p>
             <p>動画の画質：<?php echo $ini[$stream]['quality']; ?></p>
             <p>エンコーダー：<?php echo $ini[$stream]['encoder']; ?></p>

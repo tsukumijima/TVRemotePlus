@@ -204,7 +204,7 @@
 
         <div id="epg-subinfo">
 <?php	if ($ini[$stream]['state'] == 'ONAir'){ ?>
-          <span id="state" style="color: #007cff;" value="<?php echo $ini[$stream]['state']; ?>">● ON Air</span>
+          <span id="state" style="color: #007cff;" value="ONAir">● ON Air</span>
           <span id="status"></span>
           <div id="epg-chinfo"> 
 <?php		if ($ini[$stream]['channel'] < 55){ ?>
@@ -219,12 +219,12 @@
 <?php	} else if ($ini[$stream]['state'] == 'File') { ?>
           <span id="status"></span>
           <div id="epg-chinfo"> 
-            <span id="state" style="color: #4ECDC4;" value="<?php echo $ini[$stream]['state']; ?>">● File</span>
+            <span id="state" style="color: #4ECDC4;" value="File">● File</span>
             <span id="epg-channel"><?php echo $ini[$stream]['filechannel']; ?></span>
           </div>
           <span id="epg-time"><?php echo $ini[$stream]['filetime']; ?></span>
 <?php	} else { ?>
-          <span id="state" style="color: gray;" value="<?php echo $ini[$stream]['state']; ?>">● Offline</span>
+          <span id="state" style="color: gray;" value="Offline">● Offline</span>
           <span id="status"></span>
           <div id="epg-chinfo">
             <span id="epg-time">
@@ -532,11 +532,11 @@
         </div>
 
         <div class="setBonDriver form">
-          <span>使用BonDriver：</span>
+          <span>使用 BonDriver：</span>
           <div id="broadcast-BonDriver-T" class="select-wrap">
             <select name="BonDriver">
 <?php		if (!empty($BonDriver_default_T)){ ?>
-              <option value="default">デフォルトのBonDriver</option>
+              <option value="default">デフォルトの BonDriver</option>
 <?php		} //括弧終了 ?>
 <?php		foreach ($BonDriver_dll_T as $i => $value){ //chの数だけ繰り返す ?>
               <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
@@ -546,7 +546,7 @@
           <div id="broadcast-BonDriver-S" class="select-wrap">
             <select name="BonDriver">
 <?php		if (!empty($BonDriver_default_S)){ ?>
-              <option value="default">デフォルトのBonDriver</option>
+              <option value="default">デフォルトの BonDriver</option>
 <?php		} //括弧終了 ?>
 <?php		foreach ($BonDriver_dll_S as $i => $value){ //chの数だけ繰り返す ?>
               <option value="<?php echo $value; ?>"><?php echo $value; ?></option>

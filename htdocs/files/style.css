@@ -1942,7 +1942,7 @@ td {
     bottom: 0;
     z-index: 400;
     margin: auto;
-    padding: 20px 20px 18px 20px;
+    padding: 20px 22px;
     box-sizing: border-box;
     transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
@@ -1979,7 +1979,7 @@ td {
 }
 
 #button-box.broadcast-button-box {
-    margin-top: 24px;
+    margin-top: 22px;
     margin-bottom: 0px;
     justify-content: flex-end;
 }
@@ -2215,11 +2215,20 @@ td {
 
 .form span {
     display: inline-block;
-    margin-right: 10px;
+    width: 36%;
+}
+
+.form .select-wrap {
+    width: 100%;
+}
+
+.form select {
+    width: 100%;
 }
 
 @media screen and (max-width: 500px){
     #broadcast-stream-box {
+        padding: 20px 18px;
         height: 531px;
     }
     
@@ -2233,6 +2242,7 @@ td {
     }
 
     .form span {
+        width: 100%;
         margin-bottom: 5px;
     }
 }

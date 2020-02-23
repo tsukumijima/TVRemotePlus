@@ -50,7 +50,8 @@
 	// ついでにストリーム状態を判定する
 	if (isset($ini[$stream]) and ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File')){
 
-		if (!($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive')){
+		if (!((!isset($ini[$stream]['fileext']) or ($ini[$stream]['fileext'] != 'mp4' or $ini[$stream]['fileext'] != 'mkv')) and
+		       $ini[$stream]['state'] == 'File' and $ini[$stream]['encoder'] == 'Progressive')){
 
 			// 比較元のm3u8
 			if ($silent == 'true') $standby = file_get_contents($standby_silent_m3u8);

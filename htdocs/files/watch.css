@@ -338,7 +338,7 @@ section {
     bottom: 0;
     z-index: 400;
     margin: auto;
-    padding: 20px 20px 18px 20px;
+    padding: 20px 22px;
     box-sizing: border-box;
     transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
@@ -373,8 +373,13 @@ section {
     margin-top: 5px;
 }
 
+.form span {
+    width: 30%;
+}
+
 @media screen and (max-width: 500px){
     #search-stream-box {
+        padding: 20px 18px;
         height: 454px;
     }
     .android.chrome #search-stream-box {

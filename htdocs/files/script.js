@@ -87,6 +87,10 @@
           // 状態を隠しHTMLに書き出して変化してたらリロードする
           if ((data['status'] != status) && status != ''){
 
+            if (document.getElementById('state').value === undefined){
+              document.getElementById('state').value = data['state'];
+            }
+
             // stateが同じの場合のみ読み込みし直し
             if ((document.getElementById('state').value == data['state']) &&
               (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
@@ -465,11 +469,11 @@
       if ($('#tweet-account-box').css('visibility') === 'hidden' && (event.type === 'mouseenter' || event.type === 'touchstart')){
         $('#tweet-account-box').css('visibility', 'visible');
         $('#tweet-account-box').css('opacity', 1);
-        console.log('visible')
+        // console.log('visible')
       } else {
         $('#tweet-account-box').css('visibility', 'hidden');
         $('#tweet-account-box').css('opacity', 0);
-        console.log('hidden')
+        // console.log('hidden')
       }
     });
 

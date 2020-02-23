@@ -143,7 +143,7 @@
 			echo "\n";
 
 			// ストリームを停止する
-			stream_stop();
+			stream_stop($stream);
 
 			// 配信休止中用のプレイリスト
 			if ($silent == 'true'){
@@ -296,11 +296,6 @@
 				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 		}
-
-		// 内部処理
-
-		// 一旦すべてタスクを切る
-		stream_stop($stream);
 
 		// TSTask.exeを起動する
 		$tstask_cmd = '"'.$tstask_path.'" /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
@@ -565,11 +560,6 @@
 				$volume = 2.0; // 音量(元の音量の何倍か)
 			break;
 		}
-
-		// 内部処理
-
-		// 一旦すべてタスクを切る
-		stream_stop($stream);
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
