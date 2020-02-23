@@ -27,7 +27,7 @@ if (!empty($_SERVER['HTTPS'])){
 }
 
 // リバースプロキシからのアクセスかどうか判定
-if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
+if (isset($_SERVER['HTTP_X_FORWARDED_HOST']) or isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
 	// リバースプロキシからのアクセス
 	$reverse_proxy = true;
 } else {
@@ -134,6 +134,9 @@ $vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 
 // config.php を読み込む
 require_once (dirname(__FILE__).'/config.php');
+
+// $reverse_proxy_url が空でないかを確かめるため
+// 敢えて設定を読み込んだ後に処理を行う
 
 // リバースプロキシからのアクセス時は site_url と OAUTH_CALLBACK を差し替える
 if ($reverse_proxy and !empty($reverse_proxy_url)){

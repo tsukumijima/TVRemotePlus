@@ -36,12 +36,14 @@
 	function decorateMark($string){
 
 		// 参考：https://github.com/xtne6f/EDCB/blob/work-plus-s/EpgDataCap3/EpgDataCap3/ARIB8CharDecode.h
-		$marktable = array('[HV]','[SD]','[Ｐ]','[Ｗ]','[MV]','[手]','[二]','[字]','[双]','[デ]','[Ｓ]','[Ｂ]','[Ｎ]','[天]','[交]','[映]','[無]','[料]','[・]',
-					  '[前]','[後]','[再]','[新]','[初]','[終]','[生]','[販]','[声]','[吹]','[PPV]');
+		$marktable = array('[HV]','[SD]','[Ｐ]','[Ｗ]','[MV]','[手]','[二]','[字]','[双]','[デ]','[Ｓ]','[Ｂ]','[Ｎ]','[天]', '[交]','[映]',
+						   '[無]','[料]','[・]','[前]','[後]','[再]','[新]','[初]','[終]','[生]','[販]','[声]','[吹]','[PPV]','[SS]','[無料]',
+						   '[英]','[韓]','[中]','[字/日英]','(二)','(字)','(再)');
 		
 		foreach ($marktable as $value) {
 			if (strpos($string, $value) !== false){
 				$mark = str_replace('[', '', str_replace(']', '', $value)); // $value から [] を取る
+				$mark = str_replace('(', '', str_replace(')', '', $mark)); // $mark から () を取る
 				$string = str_replace($value, '<span class="mark">'.$mark.'</span>', $string); // 置換
 			}
 		}
