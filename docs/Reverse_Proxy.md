@@ -119,13 +119,15 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter "/watch/" "/tvrp/watch/";
             sub_filter '"start_url": "/"' '"start_url": "/tvrp/"';
             sub_filter 'href="/"' 'href="/tvrp/"';
-            sub_filter 'data-url="/"' 'data-url="/tvrp/"';
+            sub_filter 'data-url="/' 'data-url="/tvrp/';
             sub_filter "URL='/'" "URL='/tvrp/'";
             sub_filter "/serviceWorker.js" "/tvrp/serviceWorker.js";
             sub_filter "Cookies.set('settings', json)" "Cookies.set('settings', json, {path: '/tvrp/'})";
           
             proxy_cookie_path / /tvrp/;
             proxy_set_header Accept-Encoding "";
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-For $remote_addr;
             proxy_pass http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/;
         }
     }
