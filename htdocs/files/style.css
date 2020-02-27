@@ -151,7 +151,7 @@ pre:empty {
 .mark {
     position: relative;
     border: 1px solid #C51162;
-    font-family: "HG丸ｺﾞｼｯｸM-PRO","Roboto","Helvetica","Arial",sans-serif;
+    font-family: "HG丸ｺﾞｼｯｸM-PRO","Segoe UI","Arial",sans-serif;
     font-weight: bold;
     font-size: 80%;
     color: #FFF;
@@ -168,6 +168,7 @@ pre:empty {
     height: 3px;
     background-color: #4ECDC444;
     margin-bottom: 15px;
+    overflow: hidden;
 }
 
 .progress {
