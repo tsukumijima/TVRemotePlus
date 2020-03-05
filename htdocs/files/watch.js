@@ -11,7 +11,9 @@
         // 透明にする
         $('#search-list').css('opacity', 0);
         // 中身を空にしてリセットする
-        $('#search-info').empty();
+        if ($('#search-info').html().indexOf('更新中') === -1){
+          $('#search-info').empty();
+        }
         if (flg != 'more'){
           $('#search-list').empty();
         }

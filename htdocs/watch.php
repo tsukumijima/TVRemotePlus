@@ -241,6 +241,8 @@
       cache: false,
       success: function(data) {
 
+        console.log('a')
+
         if (data['status'] == 'success'){
           $('#rec-new').addClass('search-find-selected');
           $('#rec-old').removeClass('search-find-selected');

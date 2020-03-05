@@ -493,7 +493,7 @@
 					// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
 					if ($value[4] != 2 and $value[8] == 1){
 						// 全角は半角に直す
-						// 衝突回避でリモコン番号が衝突したら元番号 + 10にする
+						// 衝突回避でリモコン番号が衝突したら元番号 + 20にする
 						if (empty($ch_T[strval($value[3])])){
 							// チャンネル名
 							$ch_T[strval($value[3])] = mb_convert_kana($value[0], 'asv');
@@ -505,14 +505,19 @@
 							$tsid_T[strval($value[3])] = mb_convert_kana($value[7], 'asv');
 						// 衝突した場合
 						} else {
+							// 20以降のリモコン番号にしさらに被ってたら+20する
+							$chcount = 20;
+							while(!empty($ch_T[strval($value[3] + $chcount)])){
+								$chcount += 20; // 足す
+							}
 							// チャンネル名
-							$ch_T[strval($value[3] + 10)] = mb_convert_kana($value[0], 'asv');
+							$ch_T[strval($value[3] + $chcount)] = mb_convert_kana($value[0], 'asv');
 							// サービスID(SID)
-							$sid_T[strval($value[3] + 10)] = mb_convert_kana($value[5], 'asv');
+							$sid_T[strval($value[3] + $chcount)] = mb_convert_kana($value[5], 'asv');
 							// ネットワークID(NID・ONID)
-							$onid_T[strval($value[3] + 10)] = mb_convert_kana($value[6], 'asv');
+							$onid_T[strval($value[3] + $chcount)] = mb_convert_kana($value[6], 'asv');
 							// トランスポートストリームID(TSID)
-							$tsid_T[strval($value[3] + 10)] = mb_convert_kana($value[7], 'asv');
+							$tsid_T[strval($value[3] + $chcount)] = mb_convert_kana($value[7], 'asv');
 						}
 					}
 				}

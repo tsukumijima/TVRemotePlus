@@ -135,7 +135,7 @@
           <form id="tweet-form" action="javascript:void(0)" autocomplete="off">
             <div id="tweet-main">
               <input id="tweet-hashtag" name="hashtag" type="text" placeholder="#ハッシュタグ">
-              <textarea id="tweet" name="tweet" placeholder="ツイート (Ctrl+Enterで送信)"></textarea>
+              <textarea id="tweet" name="tweet" placeholder="ツイート (Ctrl + Enterで送信)"></textarea>
             </div>
             <div id="tweet-etc">
               <div id="tweet-picture" data-balloon="キャプチャ (Alt+1)" data-balloon-pos="up">
@@ -312,14 +312,27 @@
 
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_T as $i => $value){ // 地デジchの数だけ繰り返す ?>
+<?php		// リモコン番号が被ってるチャンネル
+			// もうちょっとスマートに実装したかったけどうまくいかなかったのでハードコード
+			if ($i > 60){
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 60).'1-3';
+			} else if ($i > 40){
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 40).'1-2';
+			} else if ($i > 20){
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 20).'1-1';
+			// 通常
+			} else {
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i).'1';
+			}
+?>
               <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
-                    data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
+                    data-channel="<?php echo $ch_T_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel">Ch: <?php echo sprintf('%02d', $i); ?></div>
+                      <div class="broadcast-channel"><?php echo $ch_T_channel; ?></div>
                       <div class="broadcast-name-box">
                         <div class="broadcast-name"><?php echo $value; ?></div>
                         <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
@@ -350,14 +363,15 @@
 
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_S as $i => $value){ // BSchの数だけ繰り返す ?>
+<?php		$ch_S_channel = 'Ch: '.sprintf('%03d', $i); ?>
               <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
-                    data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
+                    data-channel="<?php echo $ch_S_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel">Ch: <?php echo sprintf('%02d', $i); ?></div>
+                      <div class="broadcast-channel"><?php echo $ch_S_channel; ?></div>
                       <div class="broadcast-name-box">
                         <div class="broadcast-name"><?php echo $value; ?></div>
                         <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
@@ -388,14 +402,15 @@
 
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_CS as $i => $value){ // CSchの数だけ繰り返す ?>
+<?php		$ch_CS_channel = 'Ch: '.sprintf('%03d', $i); ?>
               <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
-                    data-channel="Ch: <?php echo sprintf('%02d', $i); ?>" data-name="<?php echo $value; ?>">
+                    data-channel="<?php echo $ch_CS_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
                   <i class="broadcast-img material-icons">tv</i>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel">Ch: <?php echo sprintf('%03d', $i); ?></div>
+                      <div class="broadcast-channel"><?php echo $ch_CS_channel; ?></div>
                       <div class="broadcast-name-box">
                         <div class="broadcast-name"><?php echo $value; ?></div>
                         <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
