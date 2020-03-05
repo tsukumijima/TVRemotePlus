@@ -78,7 +78,15 @@
 ?>
 
   <script>
-    settings = { twitter_show:true, comment_show:true, dark_theme:false, comment_size:35, comment_delay:5, onclick_stream:false };
+    settings = {
+      twitter_show: true,
+      comment_show: true,
+      dark_theme: false,
+      subchannel_show: false,
+      comment_size: 35,
+      comment_delay: 5,
+      onclick_stream: false
+    };
     if (Cookies.get('settings') != undefined){
       settings = JSON.parse(Cookies.get('settings'));
     }

@@ -362,7 +362,7 @@
             <div class="setting-form">
               <span>Twitter 投稿フォーム</span>
               <div class="toggle-switch">
-<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['twitter_show'] == false){ ?>
+<?php	if (isSettingsItem('twitter_show', false)){ ?>
                 <input id="twitter_show" class="toggle-input" type="checkbox" value="true" />
 <?php	} else { ?>
                 <input id="twitter_show" class="toggle-input" type="checkbox" value="true" checked />
@@ -374,7 +374,7 @@
             <div class="setting-form">
               <span>コメント一覧</span>
               <div class="toggle-switch">
-<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_show'] == false){ ?>
+<?php	if (isSettingsItem('comment_show', false)){ ?>
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" />
 <?php	} else { ?>
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" checked />
@@ -386,7 +386,7 @@
             <div class="setting-form">
               <span>ダークモード</span>
               <div class="toggle-switch">
-<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['dark_theme'] == true){ ?>
+<?php	if (isSettingsItem('dark_theme', true)){ ?>
                 <input id="dark_theme" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="dark_theme" class="toggle-input" type="checkbox" value="true" /> 
@@ -395,21 +395,33 @@
               </div>
             </div>
 
+          <div class="setting-form">
+            <span>サブチャンネル</span>
+            <div class="toggle-switch">
+<?php	if (isSettingsItem('subchannel_show', true)){ ?>
+              <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+              <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" /> 
+<?php	} // 括弧終了 ?>
+              <label for="subchannel_show" class="toggle-label"></label>
+            </div>
+          </div>
+
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
 
             <div class="setting-form setting-select">
               <span>コメントのフォントサイズ</span>
               <div class="select-wrap">
                 <select id="comment_size" required>
-<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_size'] == '42'){ ?>
+<?php	if (isSettingsItem('comment_size', '42')){ ?>
                   <option value="42" selected>大きめ</option>
                   <option value="35">ふつう</option>
                   <option value="28">小さめ</option>
-<?php	} else if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_size'] == '35'){ ?>
+<?php	} else if (isSettingsItem('comment_size', '35')){ ?>
                   <option value="42">大きめ</option>
                   <option value="35" selected>ふつう</option>
                   <option value="28">小さめ</option>
-<?php	} else if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['comment_size'] == '28'){ ?>
+<?php	} else if (isSettingsItem('comment_size', '28')){ ?>
                   <option value="42">大きめ</option>
                   <option value="35">ふつう</option>
                   <option value="28" selected>小さめ</option>
@@ -424,8 +436,8 @@
 
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（秒）</span>
-<?php	if (isset($_COOKIE['settings']) and isset(json_decode($_COOKIE['settings'], true)['comment_delay'])){ ?>
-              <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="<?php echo json_decode($_COOKIE['settings'], true)['comment_delay']; ?>" required />
+<?php	if (isSettingsItem('comment_delay')){ ?>
+              <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="<?php echo isSettingsItem('comment_delay'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="5" required />
 <?php	} // 括弧終了 ?>
@@ -434,7 +446,7 @@
             <div class="setting-form">
               <span>デフォルト設定を使い1クリックでストリームを開始する</span>
               <div class="toggle-switch">
-<?php	if (isset($_COOKIE['settings']) and json_decode($_COOKIE['settings'], true)['onclick_stream'] == true){ ?>
+<?php	if (isSettingsItem('onclick_stream', true)){ ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" />

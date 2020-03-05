@@ -179,10 +179,9 @@
             $('#name-up').removeClass('search-find-selected');
             $('#name-down').removeClass('search-find-selected');
             $('#play-history').removeClass('search-find-selected');
+            $('#search-info').empty();
             sortFileinfo('fileinfo', 1);
             toastr.success('リストを更新しました。');
-          } else {
-            $('#search-info').html('録画リストを更新中です。しばらく待ってからリロードしてみてください。');
           }
         }
       });

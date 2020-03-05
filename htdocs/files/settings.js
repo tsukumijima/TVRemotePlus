@@ -22,14 +22,23 @@
       event.preventDefault();
       $('.bluebutton').attr('disabled', true);
 
+      // 設定を保存
       var settings = {};
       settings['twitter_show'] = $('#twitter_show').prop('checked');
       settings['comment_show'] = $('#comment_show').prop('checked');
       settings['dark_theme'] = $('#dark_theme').prop('checked');
+      settings['subchannel_show'] = $('#subchannel_show').prop('checked');
       settings['comment_size'] = $('#comment_size').val();
       settings['comment_delay'] = $('#comment_delay').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');
-      console.log(settings);
+
+      // ダークモード切り替え
+      if (settings['dark_theme']){
+        $('html').addClass('dark');
+      } else {
+        $('html').removeClass('dark');
+      }
+
       var json = JSON.stringify(settings);
       Cookies.set('settings', json, { expires: 365 });
       toastr.success('個人設定を保存しました。');

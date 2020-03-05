@@ -166,6 +166,28 @@
 		}
 	}
 
+	// Cookie内の設定に指定の項目が指定された値であるかどうかを確認する関数
+	// あれば true・ないもしくは設定自体が存在しない場合は false を返す
+	// matchを省略した場合はその項目の値を返す
+	function isSettingsItem($item, $match = ''){
+		if (isset($_COOKIE['settings'])){
+			$settings = json_decode($_COOKIE['settings'], true);
+			if (isset($settings[$item])){
+				if ($settings[$item] == $match){
+					return true;
+				} else if ($match === ''){ // === にしないとbool値が '' と判断されることが…
+					return $settings[$item];
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
 	// ニコニコ実況IDをチャンネル名から取得する関数
 	function getJKchannel($channel){
 		global $base_dir;
@@ -490,19 +512,19 @@
 				foreach ($BonDriver_ch2_T as $key => $value) {
 
 					// サービス状態が1の物のみセットする
-					// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
-					if ($value[4] != 2 and $value[8] == 1){
+					// あとワンセグ(192)・データ放送(192)・ラジオチャンネル(2)・サブチャンネルはセットしない
+					if ($value[4] != 192 and $value[4] != 2 and $value[8] == 1){
 						// 全角は半角に直す
 						// 衝突回避でリモコン番号が衝突したら元番号 + 20にする
 						if (empty($ch_T[strval($value[3])])){
 							// チャンネル名
-							$ch_T[strval($value[3])] = mb_convert_kana($value[0], 'asv');
+							$ch_T[strval($value[3] . '_1')] = mb_convert_kana($value[0], 'asv');
 							// サービスID(SID)
-							$sid_T[strval($value[3])] = mb_convert_kana($value[5], 'asv');
+							$sid_T[strval($value[3] . '_1')] = mb_convert_kana($value[5], 'asv');
 							// ネットワークID(NID・ONID)
-							$onid_T[strval($value[3])] = mb_convert_kana($value[6], 'asv');
+							$onid_T[strval($value[3] . '_1')] = mb_convert_kana($value[6], 'asv');
 							// トランスポートストリームID(TSID)
-							$tsid_T[strval($value[3])] = mb_convert_kana($value[7], 'asv');
+							$tsid_T[strval($value[3] . '_1')] = mb_convert_kana($value[7], 'asv');
 						// 衝突した場合
 						} else {
 							// 20以降のリモコン番号にしさらに被ってたら+20する
@@ -511,14 +533,29 @@
 								$chcount += 20; // 足す
 							}
 							// チャンネル名
-							$ch_T[strval($value[3] + $chcount)] = mb_convert_kana($value[0], 'asv');
+							$ch_T[strval($value[3] + $chcount . '_1')] = mb_convert_kana($value[0], 'asv');
 							// サービスID(SID)
-							$sid_T[strval($value[3] + $chcount)] = mb_convert_kana($value[5], 'asv');
+							$sid_T[strval($value[3] + $chcount . '_1')] = mb_convert_kana($value[5], 'asv');
 							// ネットワークID(NID・ONID)
-							$onid_T[strval($value[3] + $chcount)] = mb_convert_kana($value[6], 'asv');
+							$onid_T[strval($value[3] + $chcount . '_1')] = mb_convert_kana($value[6], 'asv');
 							// トランスポートストリームID(TSID)
-							$tsid_T[strval($value[3] + $chcount)] = mb_convert_kana($value[7], 'asv');
+							$tsid_T[strval($value[3] + $chcount . '_1')] = mb_convert_kana($value[7], 'asv');
 						}
+					// サブチャンネルをセット (サブチャンネル表示がオンになっている場合のみ)
+					} else if ($value[4] != 192 and $value[4] != 2 and isSettingsItem('subchannel_show', true)){
+						// リモコン番号が被らないよう 6_2・6_3 のようにする
+						$subchcount = 2;
+						while(!empty($ch_T[strval($value[3] .'_'. $subchcount)])){
+							$subchcount++; // 足す
+						}
+						// チャンネル名
+						$ch_T[strval($value[3] .'_'. $subchcount)] = mb_convert_kana($value[0], 'asv');
+						// サービスID(SID)
+						$sid_T[strval($value[3] .'_'. $subchcount)] = mb_convert_kana($value[5], 'asv');
+						// ネットワークID(NID・ONID)
+						$onid_T[strval($value[3] .'_'. $subchcount)] = mb_convert_kana($value[6], 'asv');
+						// トランスポートストリームID(TSID)
+						$tsid_T[strval($value[3] .'_'. $subchcount)] = mb_convert_kana($value[7], 'asv');
 					}
 				}
 
@@ -550,8 +587,10 @@
 				foreach ($BonDriver_ch2_S as $key => $value) {
 
 					// サービス状態が1の物のみセットする
-					// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
-					if ($value[4] != 2 and $value[8] == 1 and !isset($ch_S[strval($value[5])])){
+					// あとワンセグ(192)・データ放送(192)・ラジオチャンネル(2)はセットしない
+					// サブチャンネルはサブチャンネル表示がオンになっている場合のみ
+					if ($value[4] != 192 and $value[4] != 2 and
+						(($value[8] == 1 and !isset($ch_S[strval($value[5])])) or isSettingsItem('subchannel_show', true))){
 						// 全角は半角に直す
 						// チャンネル名
 						$ch_S[strval($value[5])] = mb_convert_kana($value[0], 'asv');
@@ -576,8 +615,10 @@
 				// CS用チャンネルをセット
 				foreach ($BonDriver_ch2_CS as $key => $value) {
 					// サービス状態が1の物のみセットする
-					// あとサブチャンネル・ラジオチャンネル・データ放送はセットしない
-					if ($value[4] != 2 and $value[8] == 1 and !isset($ch_CS[strval($value[5])])){
+					// あとワンセグ(192)・データ放送(192)・ラジオチャンネル(2)はセットしない
+					// サブチャンネルはサブチャンネル表示がオンになっている場合のみ
+					if ($value[4] != 192 and $value[4] != 2 and
+						(($value[8] == 1 and !isset($ch_CS[strval($value[5])])) or isSettingsItem('subchannel_show', true))){
 						// 全角は半角に直す
 						// BS-TBSとQVCバッティング問題
 						if (intval($value[5]) !== 161){

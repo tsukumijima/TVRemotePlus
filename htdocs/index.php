@@ -314,18 +314,19 @@
 <?php	foreach ($ch_T as $i => $value){ // 地デジchの数だけ繰り返す ?>
 <?php		// リモコン番号が被ってるチャンネル
 			// もうちょっとスマートに実装したかったけどうまくいかなかったのでハードコード
+			$subchcount = substr($i, -1);
 			if ($i > 60){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 60).'1-3';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 60).$subchcount.'-3';
 			} else if ($i > 40){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 40).'1-2';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 40).$subchcount.'-2';
 			} else if ($i > 20){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 20).'1-1';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 20).$subchcount.'-1';
 			// 通常
 			} else {
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i).'1';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', $i).$subchcount;
 			}
 ?>
-              <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
+              <div id="ch<?php echo str_replace('.', '_', $i); ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
                     data-channel="<?php echo $ch_T_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
