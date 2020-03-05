@@ -139,6 +139,17 @@
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
+<?php	if (isSettingsItem('subchannel_show', true)){ ?>
+      <div id="subchannel-hide" class="menu-link" aria-label="メインチャンネルのみ番組表に表示します" data-balloon-pos="up">
+        <i class="fas fa-broadcast-tower"></i>
+        <span class="menu-link-href">サブチャンネルを隠す</span>
+      </div>
+<?php	} else { ?>
+      <div id="subchannel-show" class="menu-link" aria-label="サブチャンネルを番組表に表示します" data-balloon-pos="up">
+        <i class="fas fa-broadcast-tower"></i>
+        <span class="menu-link-href">サブチャンネルを表示</span>
+      </div>
+<?php	} // 括弧終了 ?>
       <div id="hotkey" class="menu-link" aria-label="キーボードショートカットの一覧を表示します" data-balloon-pos="up">
         <i class="fas fa-keyboard"></i>
         <span class="menu-link-href">ショートカット一覧</span>

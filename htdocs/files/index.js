@@ -138,15 +138,50 @@
 
   $(function(){
 
+    // ***** サブチャンネル *****
+
+    $('#subchannel-show').click(function(){
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
+      $('#menu-content').removeClass('open');
+      $('#menu-close').toggleClass('open');
+      $('#nav-close').toggleClass('open');
+      $('html').removeClass('open');
+      // Cookieに書き込み
+      settings['subchannel_show'] = true;
+      var json = JSON.stringify(settings);
+      Cookies.set('settings', json, { expires: 365 });
+      // リロード
+      setTimeout(function(){
+        location.reload();
+      }, 300);
+    });
+
+    $('#subchannel-hide').click(function(){
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
+      $('#menu-content').removeClass('open');
+      $('#menu-close').toggleClass('open');
+      $('#nav-close').toggleClass('open');
+      $('html').removeClass('open');
+      // Cookieに書き込み
+      settings['subchannel_show'] = false;
+      var json = JSON.stringify(settings);
+      Cookies.set('settings', json, { expires: 365 });
+      // リロード
+      setTimeout(function(){
+        location.reload();
+      }, 300);
+    });
+
     // ***** キーボードショートカット一覧 *****
 
     $('#hotkey').click(function(){
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
       $('#menu-content').removeClass('open');
       $('#nav-close').toggleClass('open');
+      $('#menu-close').toggleClass('open');
       $('#hotkey-box').toggleClass('open');
       $('html').removeClass('open');
-    })
+    });
 
     // ***** キャスト関連 *****
 

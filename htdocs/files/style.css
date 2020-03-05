@@ -660,7 +660,7 @@ section {
     position: fixed;
     top: 46px;
     right: 2vw;
-    width: 210px;
+    width: 225px;
     background-color: var(--color-menu);
     border-radius: 8px;
     box-shadow: -1px 4px 2px 0 rgba(0,0,0,.14),
@@ -710,7 +710,7 @@ section {
 
 google-cast-launcher {
     position: absolute !important;
-    top: 56px;
+    top: 104px;
     left: 0px;
     right: 0px;
     bottom: 56px;
@@ -1067,7 +1067,7 @@ td {
     -webkit-tap-highlight-color: transparent;
     border-radius: 50%;
     cursor: pointer;
-    z-index: 150;
+    z-index: 90;
 }
 
 @media screen and (min-width: 1025px){
@@ -2200,7 +2200,7 @@ td {
     }
 
     google-cast-launcher {
-        top: 5px;
+        top: 56px;
     }
 }
 
