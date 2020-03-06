@@ -20,6 +20,8 @@
 
 		// jsonを削除
 		@unlink($infofile);
+		// ロックファイルを削除
+		unlink($infofile.'.lock');
 
 		$json = array(
 			'api' => 'listupdate',

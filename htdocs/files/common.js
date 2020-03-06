@@ -49,7 +49,7 @@
 
     // サブメニューボタン開閉
     $('#menu-button').click(function(event){
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
+      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 160);
       $('#menu-content').toggleClass('open');
       $('#menu-close').toggleClass('open');
       if ($('#menu-content').is(':visible')){
@@ -65,7 +65,7 @@
     $(document).click(function(event) {
       // menu-content が開いてるときだけ
       if (!$(event.target).closest('#menu-button').length && !$(event.target).closest('#menu-content').length && $('#menu-content').is(':visible')){
-        $('#menu-content').velocity('slideUp', 150);
+        $('#menu-content').velocity('slideUp', 160);
         $('#menu-content').removeClass('open');
         $('#menu-close').removeClass('open');
         //スクロール復帰
