@@ -326,7 +326,11 @@
 		}
 
 		// 末尾の改行を除去
-		$program['description'] = rtrim($program['description'], "\n");
+		if (isset($program['description'])){
+			$program['description'] = rtrim($program['description'], "\n");
+		} else {
+			$program['description'] = '';
+		}
 
 		return $program;
 	}

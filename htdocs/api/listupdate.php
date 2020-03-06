@@ -21,7 +21,7 @@
 		// jsonを削除
 		@unlink($infofile);
 		// ロックファイルを削除
-		unlink($infofile.'.lock');
+		@unlink($infofile.'.lock');
 
 		$json = array(
 			'api' => 'listupdate',
@@ -346,7 +346,7 @@
 		file_put_contents($infofile, json_encode($TSfile, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 		// lockファイルを削除
-		unlink($infofile.'.lock');
+		@unlink($infofile.'.lock');
 
 		$json = array(
 			'api' => 'listupdate',
