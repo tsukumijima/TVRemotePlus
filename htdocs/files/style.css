@@ -574,7 +574,7 @@ section {
 
 #menu-close {
     position: fixed;
-    z-index: 90;
+    z-index: 200;
     top: 0;
     left: 0;
     width: 100%;
@@ -759,6 +759,21 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     visibility: hidden;
 }
 
+/* 黒い透明のやつ (全体にかかるやつ) */
+
+#cover {
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 130%; /* スマホでURLバーが出入りしたときに途切れないように */
+    background-color: #000000;
+    transition: opacity 0.3s, visibility 0.3s cubic-bezier(.4,0,.4,1);
+    opacity: 0;
+    visibility: hidden;
+}
+
 /* サイドメニュー */
 
 #nav-content {
@@ -840,7 +855,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 /* メニューボタンが押されたら表示 */
 
-#nav-close.open {
+#nav-close.open, #cover.open {
     transition-delay: 0s;
     opacity: 0.5;
     visibility: visible;

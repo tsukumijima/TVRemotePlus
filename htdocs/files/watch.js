@@ -154,6 +154,9 @@
 
   $(function(){
 
+    // カバーを隠す
+    $('#cover').removeClass('open');
+
     // 最初に表示させる
     sortFileinfo('fileinfo', 1);
 
@@ -165,8 +168,6 @@
     // リストを手動で更新
     $('#list-update').click(function(event){ 	
       toastr.info('リストを更新しています…');
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
       $.ajax({
         url: '/api/listupdate?manual',
         dataType: 'json',
@@ -188,9 +189,7 @@
     });
 
     // リストをリセット
-    $('#list-reset').click(function(event){ 	
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
+    $('#list-reset').click(function(event){
       $.ajax({
         url: '/api/listupdate?list_reset',
         dataType: 'json',
@@ -203,9 +202,7 @@
     });
 
     // 再生履歴をリセット
-    $('#history-reset').click(function(event){ 	
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
+    $('#history-reset').click(function(event){
       $.ajax({
         url: '/api/listupdate?history_reset',
         dataType: 'json',

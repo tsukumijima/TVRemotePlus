@@ -185,7 +185,7 @@
           <div id="epg-title">取得中…</div>
 <?php	} //括弧終了 ?>
           <div id="reload-box">
-            <a id="reload" aria-label="再生が止まった時に押してください" data-balloon-pos="up" href="" onClick="location.reload(true);">
+            <a id="reload" aria-label="再生が止まった時に押してください" data-balloon-pos="up">
               <span id="clock"><?php echo $clock; ?></span>
               <i class="fas fa-redo-alt"></i>
             </a>

@@ -117,8 +117,12 @@
             // それ以外は諸々問題があるので一旦リロード
             } else {
               if (data['status'] == 'failed'){
-                setTimeout('location.reload(true)', 3000);
+                setTimeout(function(){
+                  $('#cover').addClass('open');
+                  location.reload(true);
+                }, 3000);
               } else {
+                $('#cover').addClass('open');
                 location.reload(true);
               }
             }

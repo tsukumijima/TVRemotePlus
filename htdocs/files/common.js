@@ -19,15 +19,22 @@
   }
 
   $(function(){
+    
+    // ***** リンク *****
+    $('a[href]:not(a[target="_blank"]), .stream-view, button[type="submit"]').click(function(event){
+      if (!event.target.classList.contains('stream-stop-icon')){
+        $('#cover').addClass('open');
+      }
+    });
 
-    // ダークモード切り替え
+    // ***** ダークモード *****
     if (settings['dark_theme']){
       $('html').addClass('dark');
     } else {
       $('html').removeClass('dark');
     }
 
-    // メニュー開
+    // ***** メニュー開 *****
     $('#nav-open').click(function(event){
       $('#nav-close').addClass('open');
       $('#nav-content').addClass('open');
@@ -35,7 +42,7 @@
       document.addEventListener('touchmove', handleTouchMove, { passive: false });
     });
 
-    // メニュー閉
+    // ***** メニュー閉 *****
     $('#nav-close').click(function(event){
       $('#nav-close').removeClass('open');
       $('#nav-content').removeClass('open');
@@ -47,7 +54,7 @@
       document.removeEventListener('touchmove', handleTouchMove, { passive: false });
     });
 
-    // サブメニューボタン開閉
+    // ***** サブメニューボタン開閉 *****
     $('#menu-button').click(function(event){
       $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 160);
       $('#menu-content').toggleClass('open');
@@ -61,36 +68,25 @@
       }
     });
 
-    // サブメニューとサブメニューボタン以外クリックでサブメニューを引っ込める
-    $(document).click(function(event) {
-      // menu-content が開いてるときだけ
-      if (!$(event.target).closest('#menu-button').length && !$(event.target).closest('#menu-content').length && $('#menu-content').is(':visible')){
-        $('#menu-content').velocity('slideUp', 160);
-        $('#menu-content').removeClass('open');
-        $('#menu-close').removeClass('open');
-        //スクロール復帰
-        document.removeEventListener('touchmove', handleTouchMove, { passive: false });
-      }
-    });
-
-    $('#menu-close').click(function(){
-      $('#menu-content').velocity('slideUp', 150);
+    // サブメニューかサブメニューボタン以外クリックでサブメニューを引っ込める
+    $('.menu-link, google-cast-launcher, #menu-close').click(function(){
+      $('#menu-content').velocity('slideUp', 160);
       $('#menu-content').removeClass('open');
       $('#menu-close').removeClass('open');
-      //スクロール禁止
-      document.addEventListener('touchmove', handleTouchMove, { passive: false });
+      //スクロール復帰
+      document.removeEventListener('touchmove', handleTouchMove, { passive: false });
     });
 
-    // パスワード開閉
+    // ***** パスワード開閉 *****
     $('.password-box-input').click(function(){
       $('.password-box-input').toggleClass('fa-eye-slash');
       $('.password-box-input').toggleClass('fa-eye');
       var input = $(this).prev("input");
       // type切替
-      if (input.attr("type") == "password") {
-          input.attr("type", "text");
+      if (input.attr('type') == 'password') {
+          input.attr('type', 'text');
       } else {
-          input.attr("type", "password");
+          input.attr('type', 'password');
       }
     });
 

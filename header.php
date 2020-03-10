@@ -251,6 +251,11 @@
       </span>
     </a>
   </nav>
+<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
+  <div id="cover" class="open"></div>
+<?php	} else { ?>
+  <div id="cover"></div>
+<?php	} // 括弧終了 ?>
   <div id="nav-close"></div>
   <div id="menu-close"></div>
   

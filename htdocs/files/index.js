@@ -137,15 +137,18 @@
 
 
   $(function(){
+    
+    // ***** リロードボタン *****
+
+    $('#reload').click(function(){
+      $('#cover').addClass('open');
+      location.reload(true);
+    });
 
     // ***** サブチャンネル *****
 
     $('#subchannel-show').click(function(){
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
-      $('#menu-close').toggleClass('open');
       $('#nav-close').toggleClass('open');
-      $('html').removeClass('open');
       // Cookieに書き込み
       settings['subchannel_show'] = true;
       var json = JSON.stringify(settings);
@@ -157,11 +160,7 @@
     });
 
     $('#subchannel-hide').click(function(){
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
-      $('#menu-close').toggleClass('open');
       $('#nav-close').toggleClass('open');
-      $('html').removeClass('open');
       // Cookieに書き込み
       settings['subchannel_show'] = false;
       var json = JSON.stringify(settings);
@@ -175,22 +174,11 @@
     // ***** キーボードショートカット一覧 *****
 
     $('#hotkey').click(function(){
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
       $('#nav-close').toggleClass('open');
-      $('#menu-close').toggleClass('open');
       $('#hotkey-box').toggleClass('open');
-      $('html').removeClass('open');
     });
 
     // ***** キャスト関連 *****
-
-    // メニューを引っ込める用
-    $('google-cast-launcher').click(function() {
-      $('#menu-content').velocity('slideUp', 150);
-      $('#menu-content').removeClass('open');
-      $('#menu-close').removeClass('open');
-    });
 
     $.ajax({
       url: '/api/chromecast/' + stream,
@@ -215,8 +203,6 @@
       // キャスト画面
       if ($('#cast-toggle > .menu-link-href').text() == 'キャストを開始'){
 
-        $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-        $('#menu-content').removeClass('open');
         $('#nav-close').toggleClass('open');
         $('#chromecast-box').toggleClass('open');
         $('html').removeClass('open');
@@ -260,9 +246,6 @@
 
       // キャスト終了
       } else if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
-        
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-        $('#menu-content').removeClass('open');
 
         $.ajax({
           url: '/api/chromecast/' + stream + '?cmd=stop',
@@ -295,8 +278,6 @@
     });
 
     $('#cast-scan').click(function(){
-      $('#menu-content').velocity($('#menu-content').is(':visible') ? 'slideUp' : 'slideDown', 150);
-      $('#menu-content').removeClass('open');
       toastr.info('スキャンしています…');
       $.ajax({
         url: '/api/chromecast/' + stream + '?cmd=scan',
