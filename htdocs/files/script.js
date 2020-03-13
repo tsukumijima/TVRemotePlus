@@ -335,7 +335,7 @@
       $('#broadcast-stream-info').html($elem.find('.broadcast-title-id').html());
       $('#broadcast-stream-channel').val($elem.data('ch'));
       // 地デジ・BSCS判定
-      if ($elem.data('ch') < 55){
+      if ($('.swiper-slide-thumb-active').text() == '地デジ'){
         $('#broadcast-BonDriver-T').show();
         $('#broadcast-BonDriver-T').find('select').prop('disabled', false);
         $('#broadcast-BonDriver-S').hide();
