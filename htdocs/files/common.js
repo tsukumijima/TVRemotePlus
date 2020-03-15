@@ -22,7 +22,7 @@
     
     // ***** リンク *****
     $('a[href]:not(a[target="_blank"]), .stream-view, button[type="submit"]').click(function(event){
-      if (!event.target.classList.contains('stream-stop-icon')){
+      if (!event.target.classList.contains('stream-stop-icon') && !event.target.classList.contains('setting')){
         $('#cover').addClass('open');
       }
     });

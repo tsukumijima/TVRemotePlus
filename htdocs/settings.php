@@ -349,7 +349,7 @@
             <h3 class="blue">
               <i class="fas fa-user-cog"></i>個人設定
               <div id="button-box">
-                <button class="bluebutton" type="submit">
+                <button class="bluebutton setting" type="submit">
                   <i class="fas fa-save"></i>保存する
                 </button>
               </div>
@@ -465,7 +465,7 @@
             <h3 class="red">
               <i class="fas fa-tools"></i>環境設定
               <div id="button-box">
-                <button class="redbutton" type="submit">
+                <button class="redbutton setting" type="submit">
                   <i class="fas fa-save"></i>保存する
                 </button>
               </div>
