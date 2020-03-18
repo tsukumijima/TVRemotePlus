@@ -143,7 +143,7 @@
             <span>動画の画質：</span>
             <div class="select-wrap">
             	<select name="quality">
-                <option value="<?php echo $quality_default; ?>" data-value="<?php echo $quality_default; ?>" data-text="デフォルト (<?php echo $quality_default; ?>)">デフォルト (<?php echo $quality_default; ?>)</option>
+                <option name="quality_default" value="<?php echo $quality_default; ?>" data-value="<?php echo $quality_default; ?>" data-text="デフォルト (<?php echo $quality_default; ?>)">デフォルト (<?php echo $quality_default; ?>)</option>
                 <option value="1080p-high">1080p-high (1920×1080)</option>
                 <option value="1080p">1080p (1440×1080)</option>
                 <option value="810p">810p (1440×810)</option>
@@ -160,11 +160,11 @@
             <span>エンコード：</span>
             <div class="select-wrap">
               <select name="encoder">
-                <option value="<?php echo $encoder_default; ?>" data-value="<?php echo $encoder_default; ?>" data-text="デフォルト (<?php echo $encoder_default; ?>)">デフォルト (<?php echo $encoder_default; ?>)</option>
-                <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
-                <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
-                <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
-                <option value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
+                <option name="encoder_default" value="<?php echo $encoder_default; ?>" data-value="<?php echo $encoder_default; ?>" data-text="デフォルト (<?php echo $encoder_default; ?>)">デフォルト (<?php echo $encoder_default; ?>)</option>
+                <option name="ffmpeg" value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
+                <option name="QSVEncC" value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
+                <option name="NVEncC" value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
+                <option name="VCEEncC" value="VCEEncC">VCEEncC (ハードウェアエンコーダー)</option>
               </select>
             </div>
           </div>
@@ -240,9 +240,6 @@
       dataType: 'json',
       cache: false,
       success: function(data) {
-
-        console.log('a')
-
         if (data['status'] == 'success'){
           $('#rec-new').addClass('search-find-selected');
           $('#rec-old').removeClass('search-find-selected');

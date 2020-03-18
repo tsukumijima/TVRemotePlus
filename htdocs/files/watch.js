@@ -307,23 +307,23 @@
       $('html').toggleClass('open');
 
       // MP4・MKVの場合
-      var select_channel = $('.setchannel.form select').children('option')[0];
-      var select_encoder = $('.setencoder.form select').children('option')[0];
-      if (($('#stream-fileext').val() == 'mp4' || $('#stream-fileext').val() == 'mkv') && select_channel.textContent != 'デフォルト (Original)'){
-        select_channel.setAttribute('value', 'Original');
-        select_channel.textContent = 'デフォルト (Original)';
-        select_channel.insertAdjacentHTML('afterend', '<option id="stream-original" value="Original">Original (元画質)</option>');
-        select_encoder.setAttribute('value', 'Progressive');
-        select_encoder.textContent = 'デフォルト (Progressive)';
-        select_encoder.insertAdjacentHTML('afterend', '<option id="stream-progressive" value="Progressive">Progressive (プログレッシブダウンロード)</option>');
-      // それ以外
-      } else if ($('#stream-fileext').val() == 'ts'){
-        select_channel.setAttribute('value', select_channel.getAttribute('data-value'));
-        select_channel.textContent = select_channel.getAttribute('data-text');
-        $('#stream-original').remove();
-        select_encoder.setAttribute('value', select_encoder.getAttribute('data-value'));
-        select_encoder.textContent = select_encoder.getAttribute('data-text');
-        $('#stream-progressive').remove();
+      // この辺クソコード、保守もうむりしんどい
+      if (($('#stream-fileext').val() == 'mp4' || $('#stream-fileext').val() == 'mkv') && $('option[name=quality_default]').text() != 'デフォルト (Original)'){
+        changeToProgressiveEncoder();
+        // プログレッシブオプションを追加
+        $('option[name=quality_default]').after('<option name="Original" value="Original">Original (元画質)</option>');
+        $('option[name=encoder_default]').after('<option name="Progressive" value="Progressive">Progressive (プログレッシブダウンロード)</option>');
+        // デフォルトオプションの値と表示を変更
+        $('option[name=quality_default').val('Original');
+        $('option[name=quality_default').text('デフォルト (Original)');
+      } else {
+        changeToNormalEncoder();
+        // プログレッシブオプションを削除
+        $('option[name=Original]').remove();
+        $('option[name=Progressive]').remove();
+        // デフォルトオプションの値と表示を戻す
+        $('option[name=quality_default').val($('option[name=quality_default').data('value'));
+        $('option[name=quality_default').text($('option[name=quality_default').data('text'));
       }
 
       // ワンクリックでストリーム開始する場合
@@ -333,6 +333,48 @@
       }
 
     });
+
+    // プログレッシブとそれ以外の切り替え周り
+    $('select[name=quality]').change(function(event){
+      console.log('changed')
+      if ($(this).val() == 'Original'){
+        console.log('Original')
+        changeToProgressiveEncoder();
+      } else {
+        console.log('Original以外')
+        changeToNormalEncoder();
+      }
+    });
+
+
+    function changeToProgressiveEncoder(){
+      // プログレッシブ以外を無効化
+      $('option[name=Progressive]').prop('disabled', false);
+      $('option[name=ffmpeg]').prop('disabled', true);
+      $('option[name=QSVEncC]').prop('disabled', true);
+      $('option[name=NVEncC]').prop('disabled', true);
+      $('option[name=VCEEncC]').prop('disabled', true);
+      // デフォルトオプションの値と表示を変更
+      $('option[name=encoder_default').val('Progressive');
+      $('option[name=encoder_default').text('デフォルト (Progressive)');
+      // デフォルトオプションを既定で選択する
+      $('option[name=encoder_default').prop('selected', true);
+    }
+
+    function changeToNormalEncoder(){
+      // プログレッシブ以外を無効化
+      $('option[name=Progressive]').prop('disabled', true);
+      $('option[name=ffmpeg]').prop('disabled', false);
+      $('option[name=QSVEncC]').prop('disabled', false);
+      $('option[name=NVEncC]').prop('disabled', false);
+      $('option[name=VCEEncC]').prop('disabled', false);
+      // デフォルトオプションの値と表示を戻す
+      $('option[name=encoder_default').val($('option[name=encoder_default').data('value'));
+      $('option[name=encoder_default').text($('option[name=encoder_default').data('text'));
+      // デフォルトオプションを既定で選択する
+      $('option[name=encoder_default').prop('selected', true);
+    }
+
 
     // サムネイルクリック時
     $('body').on('click','.search-file-thumb',function(event){

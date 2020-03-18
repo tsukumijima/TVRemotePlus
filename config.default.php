@@ -35,6 +35,15 @@ $quality_default = '1080p'; // 1080p-high・1080p・810p・720p・540p・360p・
 // QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 環境、VCEEncC は AMD の Radeon GPU でしか利用できません
 $encoder_default = 'QSVEncC'; // ffmpeg・QSVEncC・NVEncC・VCEEncC から選択
 
+// BonDriver は (TVRemotePlusをインストールしたフォルダ)/bin/TSTask/BonDriver/ に配置してください
+// デフォルトの BonDriver (地デジ用・変更必須)
+// 例：$BonDriver_default_T = 'BonDriver_Proxy_T.dll';
+$BonDriver_default_T = '';
+
+// デフォルトの BonDriver (BS用・変更必須)
+// 例：$BonDriver_default_S = 'BonDriver_Proxy_S.dll';
+$BonDriver_default_S = '';
+
 // ライブ配信開始時に現在視聴中のストリームをデフォルトのストリームにする (する… true しない… false )
 // この設定をオンにすると、現在視聴中のストリームをライブ配信を開始するときのデフォルトのストリームにします（同時配信機能が追加される前の動作に近い）
 // この設定をオフにすると、ライブ配信開始時点で空いているストリームをデフォルトのストリームにし、配信中のストリームを選択しないようにします
@@ -61,15 +70,6 @@ $subtitle_default = 'false';
 // デフォルトはオンにして、問題が起きたときのみオフにすることを推奨します
 // 字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能です
 $subtitle_file_default = 'true';
-
-// BonDriver は (TVRemotePlusをインストールしたフォルダ)/bin/TSTask/BonDriver/ に配置してください
-// デフォルトの BonDriver (地デジ用・変更必須)
-// 例：$BonDriver_default_T = 'BonDriver_Proxy_T.dll';
-$BonDriver_default_T = '';
-
-// デフォルトの BonDriver (BS用・変更必須)
-// 例：$BonDriver_default_S = 'BonDriver_Proxy_S.dll';
-$BonDriver_default_S = '';
 
 // 録画ファイルのあるフォルダ (変更必須)
 // ファイル再生の際に利用します
@@ -106,8 +106,8 @@ $setting_hide = 'false';
 $silent = 'true';
 
 // 再生履歴を何件まで保持するか
-// デフォルトは10件です
-$history_keep = 10;
+// デフォルトは15件です
+$history_keep = 15;
 
 // TVRemotePlus のアップデートを確認するか
 // 鬱陶しい場合・TVRemotePlusの読み込みが遅い場合はオフにしてください

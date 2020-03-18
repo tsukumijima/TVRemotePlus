@@ -521,6 +521,52 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
+                <span>デフォルトの BonDriver (地デジ用)</span>
+                <p>
+                  デフォルトで利用する BonDriver (地デジ用) です<br>
+                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
+                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
+                  Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
+                </p>
+              </div>
+              <div class="select-wrap">
+                <select name="BonDriver_default_T" required>
+<?php		foreach ($BonDriver_dll_T as $i => $value){ //chの数だけ繰り返す ?>
+<?php			if ($value == $BonDriver_default_T){ ?>
+                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
+<?php			} else { ?>
+                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+<?php			} //括弧終了 ?>
+<?php		} //括弧終了 ?>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>デフォルトの BonDriver (BS・CS用)</span>
+                <p>
+                  デフォルトで利用する BonDriver (BS・CS用) です<br>
+                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
+                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
+                  BonDriver_Spinel よりも BonDriver_Proxy の方がストリーム開始にかかる時間は短くなります<br>
+                </p>
+              </div>
+              <div class="select-wrap">
+                <select name="BonDriver_default_S" required>
+<?php		foreach ($BonDriver_dll_S as $i => $value){ //chの数だけ繰り返す ?>
+<?php			if ($value == $BonDriver_default_S){ ?>
+                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
+<?php			} else { ?>
+                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+<?php			} //括弧終了 ?>
+<?php		} //括弧終了 ?>
+                </select>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
                 <span>ライブ配信開始時に現在視聴中のストリームをデフォルトのストリームにする</span>
                 <p>
                   この設定をオンにすると、現在視聴中のストリームをライブ配信を開始するときのデフォルトのストリームにします（同時配信機能が追加される前の動作に近い）<br>
@@ -598,52 +644,6 @@
                 <input id="subtitle_file_default" name="subtitle_file_default" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="subtitle_file_default" class="toggle-label"></label>
-              </div>
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>デフォルトの BonDriver (地デジ用)</span>
-                <p>
-                  デフォルトで利用する BonDriver (地デジ用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
-                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
-                  Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
-                </p>
-              </div>
-              <div class="select-wrap">
-                <select name="BonDriver_default_T" required>
-<?php		foreach ($BonDriver_dll_T as $i => $value){ //chの数だけ繰り返す ?>
-<?php			if ($value == $BonDriver_default_T){ ?>
-                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
-<?php			} else { ?>
-                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
-<?php			} //括弧終了 ?>
-<?php		} //括弧終了 ?>
-                </select>
-              </div>
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content">
-                <span>デフォルトの BonDriver (BS・CS用)</span>
-                <p>
-                  デフォルトで利用する BonDriver (BS・CS用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
-                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
-                  BonDriver_Spinel よりも BonDriver_Proxy の方がストリーム開始にかかる時間は短くなります<br>
-                </p>
-              </div>
-              <div class="select-wrap">
-                <select name="BonDriver_default_S" required>
-<?php		foreach ($BonDriver_dll_S as $i => $value){ //chの数だけ繰り返す ?>
-<?php			if ($value == $BonDriver_default_S){ ?>
-                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
-<?php			} else { ?>
-                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
-<?php			} //括弧終了 ?>
-<?php		} //括弧終了 ?>
-                </select>
               </div>
             </div>
 
@@ -738,10 +738,10 @@
               <div class="setting-content">
                 <span>再生履歴を保持する件数</span>
                 <p>
-                  新規インストール時のデフォルトは10件です<br>
+                  新規インストール時のデフォルトは15件です<br>
                 </p>
               </div>
-              <input class="text-box" name="history_keep" type="number" min="1" max="100" placeholder="10" value="<?php echo $history_keep; ?>" required />
+              <input class="text-box" name="history_keep" type="number" min="1" max="100" placeholder="15" value="<?php echo $history_keep; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -967,11 +967,12 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>UDP送信時の開始ポート番号</span>
+                <span>UDP 送信時の開始ポート番号</span>
                 <p>
                   通常は変更する必要はありません<br>
-                  エンコーダーがすぐ落ちてしまう場合、UDP送信ポートが他のソフトとバッティングしている可能性があります<br>
-                  その場合は、UDP送信ポートを空いているポートに変更してください<br>
+                  実際に利用されるポート番号は（ここで設定したポート番号）+（選択したストリーム番号）になります<br>
+                  エンコーダーがすぐ落ちてしまう場合、UDP 送信ポートが他のソフトとバッティングしている可能性があります<br>
+                  その場合は、UDP 送信ポートを空いているポートに変更してください<br>
                 </p>
               </div>
               <input class="text-box" name="udp_port" type="number" min="1" max="40000" placeholder="8200" value="<?php echo $udp_port; ?>" required />
