@@ -18,9 +18,8 @@
 /data/twitter_session/*
 /data/session/*
 /data/comment.json
-/data/nico.cookie
+/data/niconico.cookie
 /data/settings.json
-/data/tweet_time.txt
 /data/*.log
 /modules/Cast/cast.json
 /modules/cast/scan.json

@@ -76,10 +76,7 @@ $inifile = $base_dir.'data/settings.json';
 $commentfile = $base_dir.'data/comment.json';
 
 // ニコニコのログイン Cookie 保存ファイルのパス
-$cookiefile = $base_dir.'data/nico.cookie';
-
-// ツイートのタイムスタンプ記録ファイルのパス
-$tweet_time_file = $base_dir.'data/tweet_time.txt';
+$cookiefile = $base_dir.'data/niconico.cookie';
 
 // オフライン時の m3u8 のパス
 $offline_m3u8 = $base_dir.'data/offline.m3u8';

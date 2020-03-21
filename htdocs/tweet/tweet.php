@@ -30,12 +30,15 @@
 			$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET,
 			$_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
+			// CookieからJSONを取得
+			$cookie = json_decode($_COOKIE['twitter'], true);
+
 			// 現在のタイムスタンプ
 			$now_tweettime = time();
 
 			// 以前ハッシュタグ付きツイートをしたときのタイムスタンプ
-			if (file_exists($tweet_time_file)){
-				$previous_tweettime = file_get_contents($tweet_time_file);
+			if (isset($cookie['tweet_latest']) and !empty($cookie['tweet_latest'])){
+				$previous_tweettime = $cookie['tweet_latest'];
 			} else {
 				$previous_tweettime = 0;
 			}
@@ -62,8 +65,9 @@
 					// 間隔が空いててハッシュタグあるならハッシュタグもつける
 					$tweet_text = $hashtag."\n".$_POST['tweet'];
 					
-					// ハッシュタグついてるのでタイムスタンプをファイルに記録する
-					file_put_contents($tweet_time_file, time());
+					// ハッシュタグついてるのでタイムスタンプをCookieに記録する
+					$cookie['tweet_latest'] = time();
+					setcookie('twitter', json_encode($cookie, JSON_UNESCAPED_UNICODE), time() + 7776000, '/');
 
 				} else { 
 					// 指定した秒数空いてないのでハッシュタグを無効化
