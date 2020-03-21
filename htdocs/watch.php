@@ -7,7 +7,7 @@
 	ob_start();
 
 	// ヘッダー読み込み
-	require_once ('../header.php');
+	require_once ('../modules/header.php');
 
 	echo '    <pre id="debug">';
 

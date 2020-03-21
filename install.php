@@ -233,18 +233,15 @@
 	if_mkdir('/');
 	if_copy ('/config.default.php', true);
 	if_copy ('/createcert.bat', true);
-	if_copy ('/header.php', true);
 	if_copy ('/LICENSE.txt', true);
-	if_copy ('/module.php', true);
 	if_copy ('/README.md', true);
-	if_copy ('/require.php', true);
 	if_copy ('/stream.bat', true);
-	if_copy ('/stream.php', true);
 	if_copy ('/bin', true);
 	if_copy ('/cast', true);
 	if_copy ('/data', true);
 	if_copy ('/docs', true);
 	if_copy ('/htdocs', true);
+	if_copy ('/modules', true);
 
 	// 新規インストールのみの処理
 	if ($update === false){
@@ -301,7 +298,7 @@
 			   ' -x509 -days 3650 -sha256 -subj "/C=JP/ST=Tokyo/O=TVRemotePlus/CN='.$serverip.'" -addext "subjectAltName = IP:127.0.0.1,IP:'.$serverip.'"';
 
 		exec($cmd, $opt1, $return1);
-		copy($serverroot.'/bin/Apache/conf/server.crt', $serverroot.'/htdocs/server.crt');
+		copy($serverroot.'/bin/Apache/conf/server.crt', $serverroot.'/htdocs/files/TVRemotePlus.crt');
 		echo "\n";
 		echo '  -------------------------------------------------------------------'."\n";
 		echo "\n";

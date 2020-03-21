@@ -1,7 +1,7 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../../require.php');
+	require_once ('../../modules/require.php');
 
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');

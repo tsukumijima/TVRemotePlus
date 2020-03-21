@@ -10,10 +10,10 @@
 date_default_timezone_set('Asia/Tokyo');
 
 // べースディレクトリ(フォルダ)
-$base_dir = str_replace('\\', '/', dirname(__FILE__)).'/';
+$base_dir = str_replace('/modules', '', str_replace('\\', '/', dirname(__FILE__)).'/');
 
 // バージョン
-$version = file_get_contents(dirname(__FILE__).'/data/version.txt');
+$version = file_get_contents($base_dir.'data/version.txt');
 
 // HTTPSアクセスかどうか
 if (!empty($_SERVER['HTTPS'])){
@@ -133,7 +133,7 @@ $vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 // ***** 設定読み込み *****
 
 // config.php を読み込む
-require_once (dirname(__FILE__).'/config.php');
+require_once ($base_dir.'/config.php');
 
 // $reverse_proxy_url が空でないかを確かめるため
 // 敢えて設定を読み込んだ後に処理を行う

@@ -1,7 +1,7 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../../require.php');
+	require_once ('../../modules/require.php');
 
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');
@@ -18,7 +18,7 @@
 	session_start();
 
 	// TwitterOAuthの読み込み
-	require_once ( 'twitteroauth/autoload.php');
+	require_once ('../../modules/twitteroauth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	if (isset($_SESSION['oauth_token']) and isset($_SESSION['oauth_token_secret'])){ //OAuthトークンがセッションにあるなら
@@ -80,6 +80,10 @@
 
 				// アップロードしたはずの画像が存在するなら
 				if (is_uploaded_file($_FILES['picture']['tmp_name'])){
+
+					if (empty($tweet_upload)){
+						$tweet_upload = $base_dir.'data/upload/';
+					}
 
 					// アップロード処理
 					$picture = $tweet_upload.'/Capture_'.date('Ymd-His').'.jpg'; // アップロードするパス
@@ -166,7 +170,7 @@
 					echo '<span class="tweet-failed">アカウントが一時的にロックされています：投稿に失敗しました…</span>';
 					break;
 				default:
-					echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
+					echo '<span class="tweet-failed">投稿に失敗しました… (code: '.$result->errors[0]->code.')　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
 					break;
 			}
 		} else {

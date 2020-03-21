@@ -136,7 +136,7 @@ $tweet_time = 60;
 // 画像付きツイートを投稿する際に一度アップロードする画像の保存フォルダ
 // デフォルトの upload/ に設定すると、(TVRemotePlusをインストールしたフォルダ)\htdocs\tweet\upload\ に保存されます
 // 例：$tweet_upload = 'E:/TV-Capture/';
-$tweet_upload = 'upload/';
+$tweet_upload = '';
 
 // 画像付きツイートを投稿する際に一度アップロードした画像を削除するかどうか
 // 削除するなら true 、削除しないなら false です

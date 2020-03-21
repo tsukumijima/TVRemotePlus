@@ -1,8 +1,8 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../../require.php');
-	require_once ('../../module.php');
+	require_once ('../../modules/require.php');
+	require_once ('../../modules/module.php');
 
 	// BonDriverとチャンネルを取得
 	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver

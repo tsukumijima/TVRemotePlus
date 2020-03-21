@@ -33,11 +33,11 @@ echo.
 echo   -------------------------------------------------------------------
 echo.
 if %errorlevel% equ 0 (
-  copy ..\conf\server.crt ..\..\..\htdocs\server.crt > NUL
+  copy ..\conf\server.crt ..\..\..\htdocs\files\TVRemotePlus.crt > NUL
   echo     自己署名証明書を正常に作成しました。
   echo.
   echo     自己署名証明書は ^(TVRemotePlus^)/bin/Apache/conf/ フォルダに作成されています。
-  echo     また、ダウンロード用の証明書は ^(TVRemotePlus^)/htdocs/ フォルダ内にコピーしてあります。
+  echo     また、ダウンロード用の証明書は ^(TVRemotePlus^)/htdocs/files/ フォルダ内にコピーしてあります。
 ) else (
   echo     自己署名証明書の作成に失敗しました…
   echo.

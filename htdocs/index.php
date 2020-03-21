@@ -4,7 +4,7 @@
 	ob_start();
 
 	// ヘッダー読み込み
-	require_once ('../header.php');
+	require_once ('../modules/header.php');
 
 	echo '    <pre id="debug">';
 
@@ -115,6 +115,7 @@
           </script>
         </div>
 
+<?php	if (isSettingsItem('twitter_show', true)){ ?>
         <div id="tweet-account-box">
           <div id="tweet-account">
             <img id="tweet-account-icon" src="/files/account_default.jpg">
@@ -153,9 +154,11 @@
           </form>
           <div class="line"></div>
         </div>
+<?php	} //括弧終了 ?>
         <div id="tweet-close"></div>
       </div>
 
+<?php	if (isSettingsItem('comment_show', true)){ ?>
       <div id="sidebar">
         <div id="comment-box-wrap">
           <div id="comment-box-header">
@@ -172,6 +175,7 @@
           </div>
         </div>
       </div>
+<?php	} //括弧終了 ?>
     </div>
 
     <div id="description">

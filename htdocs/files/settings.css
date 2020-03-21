@@ -301,6 +301,9 @@ select {
         width: 100%;
         margin-left: 0px;
     }
+    #setting-user .select-wrap, #setting-user .text-box {
+        width: 135px;
+    }
     .setting-content {
         width: 100%;
     }
@@ -313,7 +316,7 @@ select {
         margin-bottom: 15px;
     }
     .setting-form span {
-        width: 100%;
+        width: calc(100% - 135px);
     }
 }
 
@@ -329,6 +332,9 @@ select {
     }
     .setting-select span {
         margin-bottom: 10px;
+    }
+    .setting-form span {
+        width: 100%;
     }
 }
 

@@ -1,8 +1,8 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../../require.php');
-	require_once ('../../module.php');
+	require_once ('../../modules/require.php');
+	require_once ('../../modules/module.php');
 	
 	// 設定ファイルのパス
 	$castfile = $base_dir.'cast/cast.json';

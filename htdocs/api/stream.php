@@ -1,8 +1,8 @@
 <?php
 
 	// モジュール読み込み
-	require_once ('../../require.php');
-	require_once ('../../module.php');
+	require_once ('../../modules/require.php');
+	require_once ('../../modules/module.php');
 
     // ストリーム番号を取得
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);

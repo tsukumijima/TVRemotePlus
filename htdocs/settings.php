@@ -4,10 +4,10 @@
 	ob_start();
 
 	// ヘッダー読み込み
-	require_once ('../header.php');
+	require_once ('../modules/header.php');
   
 	// モジュール読み込み
-	require_once ('../stream.php');
+	require_once ('../modules/stream.php');
 
 	echo '    <pre id="debug">';
 
@@ -305,7 +305,7 @@
                   証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#PWA%20%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="blank">こちら</a> を参照してください<br>
                 </p>
               </div>
-              <a class="download" href="/server.crt">
+              <a class="download" href="/files/TVRemotePlus.crt">
                 <i class="fas fa-download"></i>
               </a>
             </div>
@@ -811,11 +811,11 @@
               <div class="setting-content">
                 <span>画像付きツイートを投稿する時に一度アップロードする画像の保存フォルダ</span>
                 <p>
-                新規インストール時のデフォルトの upload/ に設定すると、(TVRemotePlusをインストールしたフォルダ)/htdocs/tweet/upload/ に自動で保存されます<br>
-                ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、適宜録画用 HDD 内のフォルダを指定しておくのも良いと思います<br>
+                空に設定すると、自動で (TVRemotePlusをインストールしたフォルダ)/data/upload/ に保存されます<br>
+                ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、適宜録画用の HDD 内のフォルダを指定しておくのも良いと思います<br>
                 </p>
               </div>
-              <input class="text-box" name="tweet_upload" type="text" value="<?php echo $tweet_upload; ?>" placeholder="E:/TV-Capture/" required />
+              <input class="text-box" name="tweet_upload" type="text" value="<?php echo $tweet_upload; ?>" placeholder="E:/TV-Capture/" />
             </div>
 
             <div class="setting-form setting-input">
