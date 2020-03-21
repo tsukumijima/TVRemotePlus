@@ -7,7 +7,7 @@
 // your Chromecast through your firewall. Preferably with port forwarding
 // from a different port address.
 
-@require_once (str_replace('cast', '', dirname(__FILE__)).'require.php');
+@require_once (str_replace('Cast', '', dirname(__FILE__)).'require.php');
 require_once ('Chromecast.php');
 
 // 引数確認

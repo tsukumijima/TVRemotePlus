@@ -22,8 +22,8 @@
 /data/settings.json
 /data/tweet_time.txt
 /data/*.log
-/cast/cast.json
-/cast/scan.json
+/modules/Cast/cast.json
+/modules/cast/scan.json
 /htdocs/server.crt
 /htdocs/files/info/*
 /htdocs/files/thumb/*

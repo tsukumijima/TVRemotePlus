@@ -35,7 +35,7 @@
 			}
 
 			$cmd = 'pushd "'.str_replace('/', '\\', $base_dir).'bin\Apache\bin\" && start "Chromecast Connect" /min '.
-				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'cast/cast.php" '.$streamurl.' '.$streamtype.' '.$_GET['ip'].' '.$_GET['port'];
+				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'modules/Cast/cast.php" '.$streamurl.' '.$streamtype.' '.$_GET['ip'].' '.$_GET['port'];
 			// echo $cmd."\n";
 			win_exec($cmd);
 			$cast['cast'] = true;
@@ -60,7 +60,7 @@
 
 			// コマンド実行
 			$cmd = 'pushd "'.str_replace('/', '\\', $base_dir).'bin\Apache\bin\" && '.
-				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'cast/cast.php" scan';
+				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'modules/Cast/cast.php" scan';
 			// echo $cmd."\n";
 			exec($cmd, $opt2, $return2);
 
