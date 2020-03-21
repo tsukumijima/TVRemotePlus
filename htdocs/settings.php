@@ -395,17 +395,29 @@
               </div>
             </div>
 
-          <div class="setting-form">
-            <span>サブチャンネル</span>
-            <div class="toggle-switch">
+            <div class="setting-form">
+              <span>サブチャンネル</span>
+              <div class="toggle-switch">
 <?php	if (isSettingsItem('subchannel_show', true)){ ?>
-              <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" checked />
+                <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-              <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" /> 
+                <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" /> 
 <?php	} // 括弧終了 ?>
-              <label for="subchannel_show" class="toggle-label"></label>
+                <label for="subchannel_show" class="toggle-label"></label>
+              </div>
             </div>
-          </div>
+
+            <div class="setting-form">
+              <span>録画番組のリスト表示</span>
+              <div class="toggle-switch">
+<?php	if (isSettingsItem('list_view', true)){ ?>
+                <input id="list_view" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="list_view" class="toggle-input" type="checkbox" value="true" /> 
+<?php	} // 括弧終了 ?>
+                <label for="list_view" class="toggle-label"></label>
+              </div>
+            </div>
 
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
 

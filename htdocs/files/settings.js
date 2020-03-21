@@ -28,6 +28,7 @@
       settings['comment_show'] = $('#comment_show').prop('checked');
       settings['dark_theme'] = $('#dark_theme').prop('checked');
       settings['subchannel_show'] = $('#subchannel_show').prop('checked');
+      settings['list_view'] = $('#list_view').prop('checked');
       settings['comment_size'] = $('#comment_size').val();
       settings['comment_delay'] = $('#comment_delay').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');

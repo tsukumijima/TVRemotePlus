@@ -70,7 +70,7 @@
 <?php	} //括弧終了 ?>
         <div id="search-info">
         </div>
-        <div id="search-list">
+        <div id="search-list"<?php if (isSettingsItem('list_view', true)) echo 'class="list"'; ?>>
         </div>
       </div>
 

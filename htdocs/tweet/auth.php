@@ -18,7 +18,7 @@
 	session_start();
 
 	// TwitterOAuthの読み込み
-	require_once ('../../modules/twitteroauth/autoload.php');
+	require_once ('../../modules/TwitterOAuth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	// コンシューマーキーが空ならエラー吐く

@@ -83,6 +83,7 @@
       comment_show: true,
       dark_theme: false,
       subchannel_show: false,
+      list_view: false,
       comment_size: 35,
       comment_delay: 5,
       onclick_stream: false
@@ -173,6 +174,17 @@
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
+<?php	if (isSettingsItem('list_view', true)){ ?>
+      <div id="normal-view" class="menu-link" aria-label="録画一覧を通常通り表示します" data-balloon-pos="up">
+        <i class="fas fa-th-list"></i>
+        <span class="menu-link-href">通常表示に切り替え</span>
+      </div>
+<?php	} else { ?>
+      <div id="list-view" class="menu-link" aria-label="録画番組を細いリストで表示します" data-balloon-pos="up">
+        <i class="fas fa-list"></i>
+        <span class="menu-link-href">リスト表示に切り替え</span>
+      </div>
+<?php	} // 括弧終了 ?>
       <div id="list-update" class="menu-link">
         <i class="fas fa-redo-alt"></i>
         <span class="menu-link-href">リストを更新</span>

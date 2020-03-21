@@ -377,7 +377,7 @@
 
 
     // サムネイルクリック時
-    $('body').on('click','.search-file-thumb',function(event){
+    $('body').on('click', '.search-file-thumb', function(event){
       if ($(window).width() <= 1024){
         event.stopPropagation()
         $(this).find('.search-file-encode').toggleClass('open');
@@ -386,12 +386,12 @@
     });
 
     // ダウンロードボタン
-    $('body').on('click','.search-file-download',function(event){
+    $('body').on('click', '.search-file-download', function(event){
       event.stopPropagation();
     });
 
     // エンコードボタン
-    $('body').on('click','.search-file-encode',function(event){
+    $('body').on('click', '.search-file-encode', function(event){
       event.stopPropagation();
     });
 
@@ -406,5 +406,41 @@
       $('#search-stream-box').removeClass('open');
       $('html').removeClass('open');
     });
+
+    // ***** リスト表示 / 通常表示 *****
+
+    $('body').on('click', '#list-view', function(){
+      // Cookieに書き込み
+      settings['list_view'] = true;
+      var json = JSON.stringify(settings);
+      Cookies.set('settings', json, { expires: 365 });
+      // 再表示
+      sortFileinfo('fileinfo', 1, 'search');
+      setTimeout(function(){
+        $('#search-list').addClass('list');
+        $('#list-view span').text('通常表示に切り替え');
+        $('#list-view i').removeClass('fa-list').addClass('fa-th-list');
+        $('#list-view').attr('aria-label', '録画番組を通常通り表示します');
+        $('#list-view').attr('id', 'normal-view');
+        toastr.success('リスト表示に切り替えました。');
+      }, 300);
+    });
+
+    $('body').on('click', '#normal-view', function(){
+      // Cookieに書き込み
+      settings['list_view'] = false;
+      var json = JSON.stringify(settings);
+      Cookies.set('settings', json, { expires: 365 });
+      // 再表示
+      sortFileinfo('fileinfo', 1, 'search');
+      setTimeout(function(){
+        $('#search-list').removeClass('list');
+        $('#normal-view span').text('リスト表示に切り替え');
+        $('#normal-view i').removeClass('fa-th-list').addClass('fa-list');
+        $('#normal-view').attr('aria-label', '録画番組を細いリストで表示します');
+        $('#normal-view').attr('id', 'list-view');
+        toastr.success('通常表示に切り替えました。');
+      }, 300);
+    });    
 
   });

@@ -161,6 +161,10 @@ section {
     box-sizing: border-box;
 }
 
+.list .search-file-thumb {
+    width: 17%;
+}
+
 .search-file-thumb-img {
     display: block;
     width: 100%;
@@ -252,6 +256,10 @@ section {
     line-height: 160%;
 }
 
+.list .search-file-content {
+    width: 83%;
+}
+
 .search-file-path, .start_timestamp, .end_timestamp {
     display: none;
 }
@@ -265,6 +273,10 @@ section {
     -webkit-box-orient: vertical;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
+}
+
+.list .search-file-title {
+    -webkit-line-clamp: 1;
 }
 
 .search-file-info {
@@ -284,7 +296,7 @@ section {
 .search-file-description {
     color: var(--color-text-gray);
     margin-top: 6px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     display: -webkit-box;
     font-size: 13.5px;
     overflow: hidden;
@@ -293,6 +305,10 @@ section {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-height: 155%;
+}
+
+.list .search-file-description {
+    -webkit-line-clamp: 1;
 }
 
 #search-more-box {
@@ -442,11 +458,19 @@ section {
     .search-file-thumb {
         width: 40%;
     }
+
+    .list .search-file-thumb {
+        width: 22%;
+    }
     
     .search-file-content {
         width: 60%;
         font-size: 14.5px;
         line-height: 150%;
+    }
+
+    .list .search-file-content {
+        width: 78%;
     }
 
     .search-file-title {
@@ -525,6 +549,10 @@ section {
         width: 45%;
     }
 
+    .list .search-file-thumb {
+        width: 20%;
+    }
+
     .search-file-ext {
         font-size: 10px;
         width: 28px;
@@ -535,6 +563,11 @@ section {
         width: 55%;
         padding-left: 25px;
         font-size: 16.5px;
+    }
+
+    .list .search-file-content {
+        width: 80%;
+        line-height: 125%;
     }
     
     .search-file-title {
@@ -566,11 +599,19 @@ section {
         padding-top: 7px;
         font-size: 15px;
     }
+
+    .list .search-file-thumb {
+        width: 25%;
+    }
     
     .search-file-content {
         padding-left: 12px;
         font-size: 14.5px;
         line-height: 125%;
+    }
+
+    .list .search-file-content {
+        width: 75%;
     }
     
     .search-file-title {
@@ -578,14 +619,32 @@ section {
         -webkit-line-clamp: 2;
     }
 
+    .list .search-file-title {
+        font-size: 12px;
+        margin-top: 0px;
+    }
+
     .search-file-info {
         font-size: 11.5px;
         margin-top: 1px;
     }
 
+    .list .search-file-info {
+        font-size: 10px;
+    }
+
+    .list .search-file-channel {
+        margin-right: 1px !important;
+    }
+
     .search-file-description {
         -webkit-line-clamp: 1;
         line-height: 100%;
+    }
+
+    .list .search-file-description {
+        font-size: 10px;
+        letter-spacing: 0.08em;
     }
 }
 

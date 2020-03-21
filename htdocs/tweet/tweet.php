@@ -18,7 +18,7 @@
 	session_start();
 
 	// TwitterOAuthの読み込み
-	require_once ('../../modules/twitteroauth/autoload.php');
+	require_once ('../../modules/TwitterOAuth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	if (isset($_SESSION['oauth_token']) and isset($_SESSION['oauth_token_secret'])){ //OAuthトークンがセッションにあるなら
