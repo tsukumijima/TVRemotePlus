@@ -612,6 +612,7 @@ section {
 
     .list .search-file-content {
         width: 75%;
+        line-height: 110%;
     }
     
     .search-file-title {
@@ -620,7 +621,7 @@ section {
     }
 
     .list .search-file-title {
-        font-size: 12px;
+        font-size: 13px;
         margin-top: 0px;
     }
 
@@ -643,8 +644,9 @@ section {
     }
 
     .list .search-file-description {
-        font-size: 10px;
-        letter-spacing: 0.08em;
+        margin-top: 1px;
+        font-size: 11.5px;
+        letter-spacing: 0.01em;
     }
 }
 

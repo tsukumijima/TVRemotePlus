@@ -289,58 +289,6 @@
           <p>
             <?php echo $site_title; ?> の設定を Web 上から行えます。<br>
           </p>
-
-          <div class="setting-form-wrap">
-<?php	if (!$reverse_proxy){ ?>
-
-            <h3 class="green"><i class="fas fa-tablet-alt"></i>PWA・HTTPS</h3>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content large">
-                <span>HTTPS アクセス用の自己署名証明書のダウンロード</span>
-                <p>
-                  PWA (Progressive Web Apps) 機能を利用する場合は、HTTPS でのアクセスが必須です<br>
-                  そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
-                  右 or 下のダウンロードボタンから証明書 (server.crt) をダウンロードしてください<br>
-                  証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#PWA%20%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="blank">こちら</a> を参照してください<br>
-                </p>
-              </div>
-              <a class="download" href="/files/TVRemotePlus.crt">
-                <i class="fas fa-download"></i>
-              </a>
-            </div>
-
-            <div class="setting-form setting-input">
-              <div class="setting-content large">
-                <span>HTTPS 用 URL にアクセス</span>
-                <p>
-                  HTTPS 用 URL で TVRemotePlus にアクセスできます<br>
-                  Chrome (iPhone・iPad は Safari) で TVRemotePlus にアクセスし、Android は「TVRemotePlus をホーム画面に追加」から、iPhone・iPad は共有ボタンから
-                  PC は URL バーの横に「インストール」と出てくるので、それを押してホーム画面やデスクトップに追加し、そこから起動すると PWA モードでネイティブアプリのように利用できます<br>
-                  HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
-                </p>
-              </div>
-              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo $https_port; ?>/">
-                <i class="fas fa-external-link-alt"></i>
-              </a>
-            </div>
-
-<?php		if (!empty($reverse_proxy_url)){ ?>
-            <div class="setting-form setting-input">
-              <div class="setting-content large">
-                <span>リバースプロキシ用 URL にアクセス</span>
-                <p>
-                  リバースプロキシ用 URL で TVRemotePlus にアクセスできます<br>
-                </p>
-              </div>
-              <a class="download" href="<?php echo $reverse_proxy_url; ?>">
-                <i class="fas fa-external-link-alt"></i>
-              </a>
-            </div>
-<?php		} // 括弧終了 ?>
-            
-          </div>
-<?php	} // 括弧終了 ?>
           
           <form id="setting-user" class="setting-form-wrap">
 
@@ -1027,7 +975,60 @@
               <input class="text-box" name="hlslive_list" type="number" min="1" max="60" placeholder="4" value="<?php echo $hlslive_list; ?>" required />
             </div>
 
-          </form>
+		  </form>
+		  
+
+		  <?php	if (!$reverse_proxy){ ?>
+          <div id="setting-other" class="setting-form-wrap">
+
+            <h3 class="green"><i class="fas fa-tablet-alt"></i>PWA・HTTPS</h3>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content large">
+                <span>HTTPS アクセス用の自己署名証明書のダウンロード</span>
+                <p>
+                  PWA (Progressive Web Apps) 機能を利用する場合は、HTTPS でのアクセスが必須です<br>
+                  そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
+                  右 or 下のダウンロードボタンから証明書 (server.crt) をダウンロードしてください<br>
+                  証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#PWA%20%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="_blank">こちら</a> を参照してください<br>
+                </p>
+              </div>
+              <a class="download" href="/files/TVRemotePlus.crt" download>
+                <i class="fas fa-download"></i>
+              </a>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content large">
+                <span>HTTPS 用 URL にアクセス</span>
+                <p>
+                  HTTPS 用 URL で TVRemotePlus にアクセスできます<br>
+                  Chrome (iPhone・iPad は Safari) で TVRemotePlus にアクセスし、Android は「TVRemotePlus をホーム画面に追加」から、iPhone・iPad は共有ボタンから
+                  PC は URL バーの横に「インストール」と出てくるので、それを押してホーム画面やデスクトップに追加し、そこから起動すると PWA モードでネイティブアプリのように利用できます<br>
+                  HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
+                </p>
+              </div>
+              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo $https_port; ?>/">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+
+<?php		if (!empty($reverse_proxy_url)){ ?>
+            <div class="setting-form setting-input">
+              <div class="setting-content large">
+                <span>リバースプロキシ用 URL にアクセス</span>
+                <p>
+                  リバースプロキシ用 URL で TVRemotePlus にアクセスできます<br>
+                </p>
+              </div>
+              <a class="download" href="<?php echo $reverse_proxy_url; ?>">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+<?php		} // 括弧終了 ?>
+            
+          </div>
+<?php	} // 括弧終了 ?>
 <?php	} // 括弧終了 ?>
 
 <?php	} else { // POSTの場合 ?>

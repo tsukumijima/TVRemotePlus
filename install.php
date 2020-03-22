@@ -243,16 +243,19 @@
 	if_copy ('/htdocs', true);
 	if_copy ('/modules', true);
 
+	// 設定ファイル
+	$tvrp_conf_file = $serverroot.'/config.php';
+	$tvrp_default_file = $serverroot.'/config.default.php';
+
 	// 新規インストールのみの処理
 	if ($update === false){
 
-		// 設定ファイル
-		$tvrp_conf_file = $serverroot.'/config.php';
+		// Apache の設定ファイル
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
 
 		// config.default.php を config.php にコピー
-		copy($serverroot.'/config.default.php', $serverroot.'/config.php');
+		copy($tvrp_default_file, $tvrp_conf_file);
 		// httpd.default.conf を httpd.conf にコピー
 		copy($httpd_default_file, $httpd_conf_file);
 		
@@ -338,6 +341,73 @@
 		
 		echo "\n";
 
+	// アップデート処理
+	} else {
+
+		// 古い設定ファイルを読み込む
+		require_once ($tvrp_conf_file);
+
+		// config.default.php を config.php にコピー
+		copy($tvrp_default_file, $tvrp_conf_file);
+
+		// 設定を配列に格納
+		$config['quality_default'] = $quality_default;
+		$config['encoder_default'] = $encoder_default;
+		$config['BonDriver_default_T'] = $BonDriver_default_T;
+		$config['BonDriver_default_S'] = $BonDriver_default_S;
+		$config['stream_current_live'] = $stream_current_live;
+		$config['stream_current_file'] = $stream_current_file;
+		$config['subtitle_default'] = $subtitle_default;
+		$config['subtitle_file_default'] = $subtitle_file_default;
+		$config['TSfile_dir'] = $TSfile_dir;
+		$config['TSinfo_dir'] = $TSinfo_dir;
+		$config['EDCB_http_url'] = $EDCB_http_url;
+		$config['reverse_proxy_url'] = $reverse_proxy_url;
+		$config['setting_hide'] = $setting_hide;
+		$config['silent'] = $silent;
+		$config['history_keep'] = $history_keep;
+		$config['update_confirm'] = $update_confirm;
+		$config['nicologin_mail'] = $nicologin_mail;
+		$config['nicologin_password'] = $nicologin_password;
+		$config['tweet_time'] = $tweet_time;
+		$config['tweet_upload'] = $tweet_upload;
+		$config['tweet_delete'] = $tweet_delete;
+		$config['CONSUMER_KEY'] = $CONSUMER_KEY;
+		$config['CONSUMER_SECRET'] = $CONSUMER_SECRET;
+		$config['basicauth'] = $basicauth;
+		$config['basicauth_user'] = $basicauth_user;
+		$config['basicauth_password'] = $basicauth_password;
+		$config['setting_redirect'] = $setting_redirect;
+		$config['output_encodelog'] = $output_encodelog;
+		$config['TSTask_shutdown'] = $TSTask_shutdown;
+		$config['udp_port'] = $udp_port;
+		$config['hlslive_time'] = $hlslive_time;
+		$config['hlsfile_time'] = $hlsfile_time;
+		$config['hlslive_list'] = $hlslive_list;
+
+		// 配列で回す
+		foreach ($config as $key => $value) {
+
+			// シングルクォーテーションを取る（セキュリティ対策）
+			$value = str_replace('\'', '', $value);
+
+			// 数値化できるものは数値に変換しておく
+			if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
+				$set = intval($value);
+			} else {
+				$set = '\''.strval($value).'\'';
+			}
+
+			// バックスラッシュ(\)を見つけたらスラッシュに変換
+			if (strpos($set, '\\') !== false){
+				$set = str_replace('\\', '/', $set);
+			}
+			
+			// config.php を書き換え
+			$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+			file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
+
+		}
 	}
 
 	echo '  -------------------------------------------------------------------'."\n";

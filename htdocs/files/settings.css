@@ -247,16 +247,15 @@ select {
 }
 
 .password-box-input {
-    z-index: 1;
     position: absolute;
+    top: 11px;
     right: 15px;
-    top: 0;
     width: 20px;
-    height: 35px;
+    height: 15px;
     margin: 0 !important;
-    line-height: 39px;
     color: #7F878C;
     cursor: pointer;
+    z-index: 1;
 }
 
 .password-box {

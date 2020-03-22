@@ -21,7 +21,7 @@
   $(function(){
     
     // ***** リンク *****
-    $('a[href]:not(a[target="_blank"]), .stream-view, button[type="submit"]').click(function(event){
+    $('a[href]:not(a[target="_blank"]):not(a[download]), .stream-view, button[type="submit"]').click(function(event){
       if (!event.target.classList.contains('stream-stop-icon') && !event.target.classList.contains('setting')){
         $('#cover').addClass('open');
       }
