@@ -237,7 +237,6 @@
 	if_copy ('/README.md', true);
 	if_copy ('/stream.bat', true);
 	if_copy ('/bin', true);
-	if_copy ('/cast', true);
 	if_copy ('/data', true);
 	if_copy ('/docs', true);
 	if_copy ('/htdocs', true);
@@ -385,7 +384,10 @@
 		@$config['hlsfile_time'] = $hlsfile_time;
 		@$config['hlslive_list'] = $hlslive_list;
 
-		// 配列で回す
+
+		// 新しくコピーした設定ファイルに以前の設定をインポートする
+		$tvrp_conf = file_get_contents($tvrp_conf_file);
+
 		foreach ($config as $key => $value) {
 
 			// シングルクォーテーションを取る（セキュリティ対策）
@@ -405,9 +407,9 @@
 			
 			// config.php を書き換え
 			$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
-			file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
-
 		}
+
+		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
 	}
 
 	echo '  -------------------------------------------------------------------'."\n";

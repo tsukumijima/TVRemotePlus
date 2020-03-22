@@ -2,15 +2,6 @@
 
 // ******** 設定 ********
 
-//タイムゾーンを日本に
-date_default_timezone_set('Asia/Tokyo');
-
-// べースディレクトリ(フォルダ)
-$base_dir = str_replace('\\', '/', dirname(__FILE__)).'/';
-
-// TVRemotePlus 内で利用する変数を読み込み
-require_once (dirname(__FILE__).'/require.php');
-
 // ↓↓↓↓↓ ここから編集箇所 ↓↓↓↓↓
 
 
@@ -134,7 +125,7 @@ $nicologin_password = '';
 $tweet_time = 60;
 
 // 画像付きツイートを投稿する際に一度アップロードする画像の保存フォルダ
-// デフォルトの upload/ に設定すると、(TVRemotePlusをインストールしたフォルダ)\htdocs\tweet\upload\ に保存されます
+// 空に設定すると、自動で (TVRemotePlusをインストールしたフォルダ)/data/upload/ に保存されます
 // 例：$tweet_upload = 'E:/TV-Capture/';
 $tweet_upload = '';
 
@@ -149,7 +140,7 @@ $tweet_delete = 'false';
 
 // コンシューマーキー(変更必須)
 // 例：$CONSUMER_KEY =  'XXXXXXXXXXXXXXXXXXXXXXXXX';
-$CONSUMER_KEY =  '';
+$CONSUMER_KEY = '';
 
 // コンシューマーシークレットキー(変更必須)
 // 例：$CONSUMER_SECRET = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
@@ -192,7 +183,7 @@ $TSTask_shutdown = 'false';
 // UDP 送信時の開始ポート番号
 // エンコードソフトが落ちてしまう場合、ポートがバッティングしている可能性が高いです。
 // その場合は、ここの値を空いているポートに変更してください。
-$udp_port = 8201;
+$udp_port = 8200;
 
 // HLS セグメントあたりの秒数
 // 基本は変える必要はありませんが、外部から視聴する場合でネットワークが不安定な場合、
