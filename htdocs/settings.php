@@ -403,6 +403,15 @@
 <?php	} // 括弧終了 ?>
             </div>
 
+            <div class="setting-form setting-select">
+              <span>一度に表示する録画番組の件数（個）</span>
+<?php	if (isSettingsItem('list_view_number')){ ?>
+              <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?php echo isSettingsItem('list_view_number'); ?>" required />
+<?php	} else { ?>
+              <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="30" required />
+<?php	} // 括弧終了 ?>
+            </div>
+
             <div class="setting-form">
               <span>デフォルト設定を使い1クリックでストリームを開始する</span>
               <div class="toggle-switch">

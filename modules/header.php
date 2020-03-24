@@ -86,6 +86,7 @@
       list_view: false,
       comment_size: 35,
       comment_delay: 5,
+      list_view_number: 30,
       onclick_stream: false
     };
     if (Cookies.get('settings') === undefined){
@@ -196,7 +197,7 @@
         <i class="fas fa-trash-restore-alt"></i>
         <span class="menu-link-href">リストをリセット</span>
       </div>
-      <div id="hisory-reset" class="menu-link">
+      <div id="history-reset" class="menu-link">
         <i class="fas fa-trash-alt"></i>
         <span class="menu-link-href">再生履歴をリセット</span>
       </div>

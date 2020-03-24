@@ -31,6 +31,7 @@
       settings['list_view'] = $('#list_view').prop('checked');
       settings['comment_size'] = $('#comment_size').val();
       settings['comment_delay'] = $('#comment_delay').val();
+      settings['list_view_number'] = $('#list_view_number').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');
 
       // ダークモード切り替え
