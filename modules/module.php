@@ -36,9 +36,14 @@
 	function decorateMark($string){
 
 		// 参考：https://github.com/xtne6f/EDCB/blob/work-plus-s/EpgDataCap3/EpgDataCap3/ARIB8CharDecode.h
-		$marktable = array('[HV]','[SD]','[Ｐ]','[Ｗ]','[MV]','[手]','[二]','[字]','[双]','[デ]','[Ｓ]','[Ｂ]','[Ｎ]','[天]', '[交]','[映]',
-						   '[無]','[料]','[・]','[前]','[後]','[再]','[新]','[初]','[終]','[生]','[販]','[声]','[吹]','[PPV]','[SS]','[無料]',
-						   '[英]','[韓]','[中]','[字/日英]','(二)','(字)','(再)');
+		//      https://ja.wikipedia.org/wiki/%E7%95%AA%E7%B5%84%E8%A1%A8
+		//      http://www.motoyafont.jp/embedded-font/arib.html
+		$marktable = array(
+			'[新]','[終]','[再]','[交]','[映]','[手]','[声]','[多]','[副]','[字]','[文]','[CC]','[OP]','[二]','[S]','[B]','[SS]','[無]','[無料]',
+			'[C]','[S1]','[S2]','[S3]','[MV]','[双]','[デ]','[D]','[N]','[W]','[P]','[H]','[HV]','[SD]','[天]','[解]','[料]','[前]','[後]',
+			'[初]','[生]','[販]','[吹]','[PPV]','[演]','[移]','[他]','[収]','[・]','[英]','[韓]','[中]','[字/日英]','(二)','(字)','(再)',
+			'[3D]','[2K]','[4K]','[8K]','[5.1]','[7.1]','[22.2]','[60P]','[120P]','[d]','[HC]','[HDR]','[SHV]','[UHD]','[VOD]','[配]'
+		);
 		
 		foreach ($marktable as $value) {
 			if (strpos($string, $value) !== false){
@@ -151,7 +156,7 @@
 	}
 
 	// ストリームかアクティブかどうかを返す関数
-	function isStreamActive($ini, $num){
+	function isStreamActive($ini, $num, $default = false){
 
 		$num = strval($num);
 
@@ -162,7 +167,12 @@
 				return false;
 			}
 		} else {
-			return false;
+			// 値が存在しない場合に返す真偽値
+			if ($default){
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 

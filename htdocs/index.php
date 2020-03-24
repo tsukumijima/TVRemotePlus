@@ -115,7 +115,7 @@
           </script>
         </div>
 
-<?php	if (isSettingsItem('twitter_show', true)){ ?>
+<?php	if (isSettingsItem('twitter_show', true, true)){ ?>
         <div id="tweet-account-box">
           <div id="tweet-account">
             <img id="tweet-account-icon" src="/files/account_default.jpg">
@@ -158,7 +158,7 @@
         <div id="tweet-close"></div>
       </div>
 
-<?php	if (isSettingsItem('comment_show', true)){ ?>
+<?php	if (isSettingsItem('comment_show', true, true)){ ?>
       <div id="sidebar">
         <div id="comment-box-wrap">
           <div id="comment-box-header">

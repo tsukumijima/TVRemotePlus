@@ -88,7 +88,10 @@
       comment_delay: 5,
       onclick_stream: false
     };
-    if (Cookies.get('settings') != undefined){
+    if (Cookies.get('settings') === undefined){
+      var json = JSON.stringify(settings);
+      Cookies.set('settings', json, { expires: 365 });
+    } else {
       settings = JSON.parse(Cookies.get('settings'));
     }
     if (settings['dark_theme']){

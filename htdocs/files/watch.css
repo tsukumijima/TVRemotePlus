@@ -398,6 +398,9 @@ section {
         padding: 20px 18px;
         height: 454px;
     }
+    .ios.safari #search-stream-box {
+        height: 466px;
+    }
     .android.chrome #search-stream-box {
         height: 439px;
     }
@@ -647,6 +650,11 @@ section {
         margin-top: 1px;
         font-size: 11.5px;
         letter-spacing: 0.01em;
+    }
+
+    .form span {
+        width: 100%;
+        margin-bottom: 5px;
     }
 }
 
