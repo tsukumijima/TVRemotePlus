@@ -35,8 +35,8 @@ TVRemotePlus のポートはデフォルトの 8000・8100 としています（
 https://example.com/ でアクセスする場合は、<Location /tvrp/></Location> と RequestHeader unset Accept-Encoding から下の書き換え関連の項目を適宜コメントアウトしてください。  
 予め、前述のように Let's Encrypt でアクセス出来る事が前提です。
 
-この他、mod_proxy mod_proxy_http mod_headers mod_substitute（いずれも Apache の拡張機能）を利用します。  
-Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、  
+この他、mod_filter mod_proxy mod_proxy_http mod_headers mod_substitute（いずれも Apache の拡張機能）を利用します。  
+Ubuntu であれば `a2enmod filter proxy proxy_http headers substitute` と実行、  
 その他の環境であれば　httpd.conf のコメントアウトを適宜解除するなどして、拡張機能を予め有効化しておいてください。
 
     <IfModule mod_ssl.c>
@@ -53,7 +53,7 @@ Ubuntu であれば `a2enmod proxy proxy_http headers substitute` と実行、
       ProxyRequests off
       SSLProxyEngine on
       <Location /tvrp/>
-        # require mod_proxy mod_proxy_http mod_headers mod_substitute (use a2enmod)
+        # require mod_filter mod_proxy mod_proxy_http mod_headers mod_substitute (use a2enmod)
         ProxyPass http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/
         ProxyPassReverse http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/
         ProxyPassReverseCookieDomain (TVRemotePlusをインストールしたPCのローカルIPアドレス):8000 example.com
