@@ -109,7 +109,7 @@
 				if (!(($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv') and $ini[$stream]['encoder'] == 'Progressive')){
 
 					// ストリーミング開始
-					$stream_cmd = stream_file($stream, $TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
+					$stream_cmd = stream_file($stream, $TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['fileext'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
 
 					// 準備中用の動画を流すためにm3u8をコピー
 					if ($silent == 'true'){

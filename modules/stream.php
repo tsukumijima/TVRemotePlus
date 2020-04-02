@@ -172,7 +172,7 @@
 		
 	}
 
-	// ライブ放送のストリームを開始する関数
+	// ライブ配信を開始する関数
 	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
 		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $output_encodelog;
 		
@@ -442,11 +442,20 @@
 		return array($stream_cmd, $tstask_cmd);
 	}
 
-	// ファイル再生のストリームを開始する関数
-	function stream_file($stream, $filepath, $quality, $encoder, $subtitle){
+	// ファイル再生を開始する関数
+	function stream_file($stream, $filepath, $extension, $quality, $encoder, $subtitle){
 		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time, $base_dir, $output_encodelog;
 		
 		// 設定
+
+		// dual_mono_mode
+		if ($extension == 'mp4' or $extension == 'mkv'){
+			$dual_mono_mode_ffmpeg = '';
+			$dual_mono_mode_other = '';
+		} else {
+			$dual_mono_mode_ffmpeg = '-dual_mono_mode main';
+			$dual_mono_mode_other = '#dual_mono_mode=main';
+		}
 
 		// 字幕切り替え
 		switch ($subtitle) {
@@ -570,7 +579,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' -dual_mono_mode main -i "'.$filepath.'"'.
+					' '.$dual_mono_mode_ffmpeg.' main -i "'.$filepath.'"'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -612,7 +621,7 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
 					// 音声
-					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec aac'.$dual_mono_mode_other.' --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
@@ -642,7 +651,7 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
-					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec aac'.$dual_mono_mode_other.' --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
@@ -672,7 +681,7 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --interlace tff --vpp-afs preset=default --profile Main'.
 					// 音声
-					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec aac'.$dual_mono_mode_other.' --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
