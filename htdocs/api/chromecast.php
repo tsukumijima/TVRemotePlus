@@ -5,8 +5,8 @@
 	require_once ('../../modules/module.php');
 	
 	// 設定ファイルのパス
-	$castfile = $base_dir.'cast/cast.json';
-	$scanfile = $base_dir.'cast/scan.json';
+	$castfile = $base_dir.'modules/Cast/cast.json';
+	$scanfile = $base_dir.'modules/Cast/scan.json';
 
     // ストリーム番号を取得
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
