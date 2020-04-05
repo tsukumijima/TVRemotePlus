@@ -464,7 +464,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 また、QSVEncC を利用する場合は Intel QSV に対応した GPU が、NVEncC を利用する場合は NVIDIA GPU が、VCEEncC を利用する場合は AMD の Radeon GPU が必要です。
 
 - Apache（ 2.4.41・Web サーバー）
-- PHP（ 7.3.12・実行環境）
+- PHP（ 7.4.4・実行環境）
 - TSTask（ 0.2.0(patch)・テレビ放送の受信、UDP 送信に利用）
 - rplsinfo（ 1.5.1・TSファイル内の番組情報取得に利用）
 - ffmpeg（ 4.1.4・UDP 受信 → エンコードに利用）

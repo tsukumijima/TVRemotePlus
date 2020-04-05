@@ -2007,24 +2007,18 @@ td {
 /* Chromecastボックス */
 
 #chromecast-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 400;
-    margin: auto;
-    padding: 20px;
-    box-sizing: border-box;
     transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
     opacity: 0;
-    width: 95%;
-    max-width: 500px;
-    height: 230px;
-    background-color: var(--color-white);
-    border-radius: 5px;
-    font-size: 16px;
     will-change: opacity;
 }
 
@@ -2042,14 +2036,24 @@ td {
     margin-bottom: 10px;
 }
 
+#chromecast-wrap {
+    display: block;
+    width: 95%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: var(--color-white);
+    box-sizing: border-box;
+}
+
 #chromecast-title {
     display: inline-block;
     margin-left: 10px;
 }
 
 #chromecast-device-box {
-    height: 110px;
-    overflow-y: scroll;
+    min-height: 110px;
 }
 
 #chromecast-device-box i {

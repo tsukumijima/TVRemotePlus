@@ -2,10 +2,33 @@
 	
 	// ***** 各種モジュール関数 *****
 
-	// Windows用非同期コマンド実行関数
-	function win_exec($cmd){
-		$fp = popen($cmd.' > nul', 'r');
-		pclose($fp);
+	// Windows用コマンド実行関数
+	// proc_open を用いることで非同期でも実行できるようにする
+	function win_exec($cmd, $log = null, $errorlog = null){
+
+		$descriptorspec[0] = array('pipe', 'r');
+		if ($log !== null){
+			$descriptorspec[1] = array('file', $log);
+		} else {
+			$descriptorspec[1] = array('pipe', 'w');
+		}
+		if ($errorlog !== null){
+			$descriptorspec[2] = array('file', $errorlog);
+		} else {
+			$descriptorspec[2] = array('pipe', 'w');
+		}
+
+		$option = array(
+			'bypass_shell' => false,
+			'blocking_pipes' => false,
+			'create_new_console' => false,
+			'create_process_group' => false,
+		);
+
+		$proc = proc_open($cmd, $descriptorspec, $pipes, null, null, $option);
+
+		proc_close($proc);
+
 	}
 
 	// Windowsコマンド用に文字列をエスケープする関数

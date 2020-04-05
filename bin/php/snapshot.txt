@@ -1,9 +1,9 @@
 This snapshot was automatically generated on
-Tue, 19 Nov 2019 14:57:10 +0000
+Tue, 17 Mar 2020 15:02:40 +0000
 
-Version: 7.3.12
+Version: 7.4.4
 Branch: HEAD
-Build: C:\php-snap-build\php73\vc15\x64\obj\Release_TS
+Build: C:\php-snap-build\php74\vc15\x64\obj\Release_TS
 
 Built-in Extensions
 ===========================
@@ -44,6 +44,10 @@ mysqli
 
 
 Dependency information:
+Module: php7ts.dll
+===========================
+	imagehlp.dll
+
 Module: php_curl.dll
 ===========================
 	libcrypto-1_1-x64.dll
@@ -79,22 +83,22 @@ Module: php_ftp.dll
 
 Module: php_intl.dll
 ===========================
-	icuuc64.dll
-	icuin64.dll
-	icuio64.dll
+	icuuc65.dll
+	icuin65.dll
+	icuio65.dll
 
-Module: icuuc64.dll
+Module: icuuc65.dll
 ===========================
-	icudt64.dll
+	icudt65.dll
 
-Module: icuin64.dll
+Module: icuin65.dll
 ===========================
-	icuuc64.dll
+	icuuc65.dll
 
-Module: icuio64.dll
+Module: icuio65.dll
 ===========================
-	icuuc64.dll
-	icuin64.dll
+	icuuc65.dll
+	icuin65.dll
 
 Module: php_ldap.dll
 ===========================
@@ -124,7 +128,15 @@ Module: php_sodium.dll
 ===========================
 	libsodium.dll
 
+Module: php_sqlite3.dll
+===========================
+	libsqlite3.dll
+
 Module: php_pdo_pgsql.dll
 ===========================
 	libpq.dll
+
+Module: php_pdo_sqlite.dll
+===========================
+	libsqlite3.dll
 

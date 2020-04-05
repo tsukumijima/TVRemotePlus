@@ -178,6 +178,35 @@
       $('#hotkey-box').toggleClass('open');
     });
 
+    // ***** 終了時に行う処理 *****
+
+    /*
+    // リロードと終了との区別ができないので諦めた
+    // Ajax
+    $(window).on('beforeunload', function(event){
+
+      console.log('unloaded');
+
+      $.ajax({
+        url: '/settings/',
+        type: 'post',
+        data: {state: 'Offline', stream: stream},
+        cache: false,
+        async: false,
+        success: function(data) {
+        }
+      });
+
+      // 最近ではunload時にAjaxが実行できなくなっているらしいので
+      // Navigator.sendBeacon() を使う
+      var payload = new FormData();
+      payload.append('state', 'Offline');
+      payload.append('stream', stream);
+      navigator.sendBeacon('/settings/', payload)
+
+    });
+    */
+
     // ***** キャスト関連 *****
 
     $.ajax({
