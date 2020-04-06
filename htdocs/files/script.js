@@ -172,9 +172,11 @@
               document.getElementById('epg-endtime').textContent = data['stream'][stream]['endtime'];
               
               if (data['stream'][stream]['ch'] < 55){
-                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['stream'][stream]['ch'], 2) + ' ' + data['stream'][stream]['channel'];
+                document.getElementById('epg-channel').textContent =
+                    'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
               } else {
-                document.getElementById('epg-channel').textContent = 'Ch: ' + zeroPadding(data['stream'][stream]['ch'], 3) + ' ' + data['stream'][stream]['channel'];
+                document.getElementById('epg-channel').textContent =
+                    'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
               }
               document.getElementById('epg-title').innerHTML = data['stream'][stream]['program_name'];
               document.getElementById('epg-info').innerHTML = data['stream'][stream]['program_info'];

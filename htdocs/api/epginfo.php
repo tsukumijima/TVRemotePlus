@@ -132,6 +132,7 @@
 
 		return array(
 			'ch' => intval($chnum),
+			'ch_str' => strval($chnum),
 			'tsid' => intval($tsid),
 			'channel' => $channel,
 			'ikioi'=> $ikioi,
@@ -187,14 +188,38 @@
 		if ($ini[$key]['state'] == 'ONAir'){
 
 			// 番組情報を取得
-			$epginfo['stream'][$key] = $epginfo['onair'][$ini[$key]['channel']];
+			if (isset($epginfo['onair'][$ini[$key]['channel']])){
+				$epginfo['stream'][$key] = $epginfo['onair'][$ini[$key]['channel']];
+			// サブチャンネルをオフにした後にサブチャンネルのストリームが残っている場合用
+			} else {
+				$epginfo['stream'][$key] = array(
+					'state' => $ini[$key]['state'],
+					'status' => $status,
+					'ch' => intval($ini[$key]['channel']),
+					'ch_str' => strval($ini[$key]['channel']),
+					'tsid' => '',
+					'channel' => 'チャンネル名を取得できませんでした',
+					'timestamp' => '', 
+					'duration' => '', 
+					'starttime' => '', 
+					'to' => '', 
+					'endtime' => '', 
+					'program_name' => '番組情報を取得できませんでした',
+					'program_info' => 'サブチャンネルの番組情報を表示するには、サブチャンネルが番組表に表示されている必要があります。<br>'.
+					                  '右上の︙メニュー →［サブチャンネルを表示］から表示を切り替えられます。',
+					'next_starttime' => '', 
+					'next_endtime' => '', 
+					'next_program_name' => '番組情報を取得できませんでした',
+					'next_program_info' => '',
+				);
+			}
 
 			// ステータス
 			$epginfo['stream'][$key]['state'] = $ini[$key]['state'];
 			$epginfo['stream'][$key]['status'] = $status;
 
 			// チャンネル名が取得出来なかったら代入
-			if ($epginfo['stream'][$key]['channel'] == 'チャンネル名を取得できませんでした'){
+			if (isset($ch[$ini[$key]['channel']]) and $epginfo['stream'][$key]['channel'] == 'チャンネル名を取得できませんでした'){
 				$epginfo['stream'][$key]['channel'] = $ch[$ini[$key]['channel']];
 			}
 
@@ -221,6 +246,7 @@
 				'state' => $ini[$key]['state'],
 				'status' => $status,
 				'ch' => 0,
+				'ch_str' => '0',
 				'tsid' => 0,
 				'channel' => '',
 				'timestamp' => '', 

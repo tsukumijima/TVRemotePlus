@@ -213,7 +213,13 @@
 	    intval($ini[$stream]['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認 (jk0もはじく)
 
 		// 実況IDを取得
-		$channel = getJKchannel($ch[$ini[$stream]['channel']]);
+		if (isset($ch[$ini[$stream]['channel']])){
+			$channel = getJKchannel($ch[$ini[$stream]['channel']]);
+		} else if ($ch[intval($ini[$stream]['channel']).'_1']){
+			$channel = getJKchannel($ch[intval($ini[$stream]['channel']).'_1']);
+		} else {
+			$channel = -2;
+		}
 		$getflv = nicologin($basegetflv.'jk'.$channel, false); // getflvを叩く
 
 		// 取得した結果(クエリ)をParseして配列に格納する
@@ -420,7 +426,13 @@
 			file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
 			// 実況IDを取得
-			$channel = getJKchannel($ch[$ini[$stream]['channel']]);
+			if (isset($ch[$ini[$stream]['channel']])){
+				$channel = getJKchannel($ch[$ini[$stream]['channel']]);
+			} else if ($ch[intval($ini[$stream]['channel']).'_1']){
+				$channel = getJKchannel($ch[intval($ini[$stream]['channel']).'_1']);
+			} else {
+				$channel = -2;
+			}
 			$getflv = nicologin($basegetflv.'jk'.$channel, false); // getflvを叩く
 
 			// 取得した結果(クエリ)をParseして配列に格納する

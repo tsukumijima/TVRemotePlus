@@ -38,7 +38,7 @@
 
 	// ONAirのみ
 	if ($ini[$stream]['state'] == 'ONAir'){
-		$channel = $ch[strval($ini[$stream]['channel'])];
+		$channel = @$ch[strval($ini[$stream]['channel'])];
 	}
 
 	// stream.m3u8がない場合
@@ -212,7 +212,7 @@
           <span id="status"></span>
           <div id="epg-chinfo"> 
 <?php		if ($ini[$stream]['channel'] < 55){ ?>
-            <span id="epg-channel">Ch: <?php echo sprintf('%02d', $ini[$stream]['channel']).' '.$channel; ?></span>
+            <span id="epg-channel">Ch: <?php echo sprintf('%03d', str_replace('_', '', $ini[$stream]['channel'])).' '.$channel; ?></span>
 <?php		} else { //括弧終了 ?>
             <span id="epg-channel">Ch: <?php echo sprintf('%03d', $ini[$stream]['channel']).' '.$channel; ?></span>
 <?php		} //括弧終了 ?>
@@ -269,7 +269,7 @@
             <div class="stream-info">
               <div class="stream-title"><?php echo $value['state'] == 'Offline' ? '配信休止中…' : '取得中…'; ?></div>
               <div class="stream-channel">
-                <?php echo $value['state'] == 'File' ? $value['filechannel'] : ($value['state'] == 'ONAir' ? $ch[strval($value['channel'])] : '') ?>
+                <?php echo $value['state'] == 'File' ? $value['filechannel'] : ($value['state'] == 'ONAir' ? @$ch[strval($value['channel'])] : '') ?>
               </div>
               <div class="stream-description"></div>
             </div>
