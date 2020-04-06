@@ -21,6 +21,7 @@
 /data/niconico.cookie
 /data/settings.json
 /data/*.log
+/logs/*
 /modules/Cast/cast.json
 /modules/cast/scan.json
 /htdocs/server.crt

@@ -298,7 +298,8 @@
 		}
 
 		// TSTask.exeを起動する
-		$tstask_cmd = '"'.$tstask_path.'" /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.' /d '.$BonDriver.' /sendservice 1';
+		$tstask_cmd = '"'.$tstask_path.'" /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
+		              ' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
 		$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).'"';
 		win_exec($tstask_cmd);
 
@@ -427,7 +428,7 @@
 
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true'){
-			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'data/stream'.$stream.'.log 2>&1"';
+			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
 		} else {
 			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).'"';
 		}
@@ -695,7 +696,7 @@
 
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true'){
-			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'data/stream'.$stream.'.log 2>&1"';
+			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
 		} else {
 			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).'"';
 		}
