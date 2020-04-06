@@ -320,14 +320,14 @@
 			// もうちょっとスマートに実装したかったけどうまくいかなかったのでハードコード
 			$subchcount = substr($i, -1);
 			if ($i > 60){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 60).$subchcount.'-3';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i) - 60).$subchcount.'-3';
 			} else if ($i > 40){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 40).$subchcount.'-2';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i) - 40).$subchcount.'-2';
 			} else if ($i > 20){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i - 20).$subchcount.'-1';
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i) - 20).$subchcount.'-1';
 			// 通常
 			} else {
-				$ch_T_channel = 'Ch: '.sprintf('%02d', $i).$subchcount;
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i)).$subchcount;
 			}
 ?>
               <div id="ch<?php echo str_replace('.', '_', $i); ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"

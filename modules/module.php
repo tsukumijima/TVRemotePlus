@@ -385,7 +385,11 @@
 		}
 
 		// ch2の文字コードをUTF-8に
-		if ($charset != 'UTF-8') $ch2_data = mb_convert_encoding($ch2_rawdata, 'UTF-8', $charset);
+		if ($charset != 'UTF-8'){
+			$ch2_data = mb_convert_encoding($ch2_rawdata, 'UTF-8', $charset);
+		} else {
+			$ch2_data = $ch2_rawdata;
+		}
 
 		// 置換
 		$ch2_data = str_replace("\r\n", "\n", $ch2_data); // CR+LFからLFに変換
@@ -433,16 +437,16 @@
 			// BS
 			} else if ($flg == 'BS'){
 				if (preg_match("/;#SPACE\(.\,BS\)/", $ch2_data)){
-					$ch2_data = preg_replace("/;#SPACE\(.\,UHF\).*;#SPACE\(.\,BS\)/s", "", $ch2_data); // 地上波を削除
-					$ch2_data = preg_replace("/;#SPACE\(.\,CS110\).*$/s", "", $ch2_data); // CSを削除
+					$ch2_data = preg_replace("/;#SPACE\(.\,(UHF|GR|地上D)\).*;#SPACE\(.\,BS\)/s", "", $ch2_data); // 地上波を削除
+					$ch2_data = preg_replace("/;#SPACE\(.\,(CS|CS110)\).*$/s", "", $ch2_data); // CSを削除
 				} else {
 					$ch2_data = '';
 				}
 			// CS
 			} else if ($flg == 'CS') {
-				if (preg_match("/;#SPACE\(.\,CS110\)/", $ch2_data)){
-					$ch2_data = preg_replace("/;#SPACE\(.\,UHF\).*;#SPACE\(.\,CS110\)/s", "", $ch2_data); // 地上波・BSを削除（混合チューナー用）
-					$ch2_data = preg_replace("/;#SPACE\(.\,BS\).*;#SPACE\(.\,CS110\)/s", "", $ch2_data); // BSを削除
+				if (preg_match("/;#SPACE\(.\,(CS|CS110)\)/", $ch2_data)){
+					$ch2_data = preg_replace("/;#SPACE\(.\,(UHF|GR|地上D)\).*;#SPACE\(.\,(CS|CS110)\)/s", "", $ch2_data); // 地上波・BSを削除（混合チューナー用）
+					$ch2_data = preg_replace("/;#SPACE\(.\,BS\).*;#SPACE\(.\,(CS|CS110)\)/s", "", $ch2_data); // BSを削除
 				} else {
 					$ch2_data = '';
 				}
@@ -556,7 +560,7 @@
 					if ($value[4] != 192 and $value[4] != 2 and $value[8] == 1){
 						// 全角は半角に直す
 						// 衝突回避でリモコン番号が衝突したら元番号 + 20にする
-						if (empty($ch_T[strval($value[3])])){
+						if (empty($ch_T[strval($value[3] . '_1')])){
 							// チャンネル名
 							$ch_T[strval($value[3] . '_1')] = mb_convert_kana($value[0], 'asv');
 							// サービスID(SID)
