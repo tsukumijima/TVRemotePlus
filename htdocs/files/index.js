@@ -372,7 +372,7 @@
           // 端末はミュートにする
           dp.video.muted = true;
           // 音量を半分にする
-          dp.video.volume = 0.5;
+          dp.video.volume = 0.7;
           
           // シークを通知
           $('#dplayer').addClass('dplayer-seeking');
@@ -412,67 +412,6 @@
       }
     );
 
-  }
-
-  // サーバー経由で Chromecast を初期化・起動する関数
-  function cast_server_init(elem){
-
-    var state = document.getElementById('state').value;
-
-    toastr.info('キャストを開始しています…');
-
-    // 動画を一旦止める
-    dp.video.pause();
-    // 端末はミュートにする
-    dp.video.muted = true;
-    // 音量を半分にする
-    dp.video.volume = 0.5;
-
-    // シークを通知
-    $('#dplayer').addClass('dplayer-seeking');
-    // ローディング表示
-    $('#dplayer').addClass('dplayer-loading');
-    // 動画表示を消す
-    dp.video.style.transition = 'opacity 0.3s ease';
-    dp.video.style.opacity = 0;
-
-    // キャスト端末の名前
-    var castName = $(elem).find('.chromecast-name').text();
-    
-    // 「〇〇で再生しています」を出す
-    if (!$('.dplayer-casting').length){
-      $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
-    } else if ($('.dplayer-casting').text() !== castName + 'で再生しています'){
-      $('.dplayer-casting').text(castName + 'で再生しています');
-    }
-    $('.dplayer-casting').css('opacity', 0.7);
-
-    // ボックスを閉じる
-    $('#nav-close').removeClass('open');
-    $('#chromecast-box').removeClass('open');
-    $('#hotkey-box').removeClass('open');
-    $('html').removeClass('open');
-
-    // Chromecast を起動
-    $.ajax({
-      url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(elem).attr('data-ip') + '&port=' + $(elem).attr('data-port'),
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-
-        if (data['status'] == 'play'){
-
-          $('#cast-toggle > .menu-link-href').text('キャストを終了');
-
-          // 制御は別の関数に投げる
-          cast_server_control(state);
-
-        } else {
-          toastr.error('キャストの開始に失敗しました…');
-        }
-
-      }
-    });
   }
 
   // JavaScript から Chromecast を制御する関数
@@ -609,6 +548,67 @@
     );
   }
 
+  // サーバー経由で Chromecast を初期化・起動する関数
+  function cast_server_init(elem){
+
+    var state = document.getElementById('state').value;
+
+    toastr.info('キャストを開始しています…');
+
+    // 動画を一旦止める
+    dp.video.pause();
+    // 端末はミュートにする
+    dp.video.muted = true;
+    // 音量を半分にする
+    dp.video.volume = 0.7;
+
+    // シークを通知
+    $('#dplayer').addClass('dplayer-seeking');
+    // ローディング表示
+    $('#dplayer').addClass('dplayer-loading');
+    // 動画表示を消す
+    dp.video.style.transition = 'opacity 0.3s ease';
+    dp.video.style.opacity = 0;
+
+    // キャスト端末の名前
+    var castName = $(elem).find('.chromecast-name').text();
+    
+    // 「〇〇で再生しています」を出す
+    if (!$('.dplayer-casting').length){
+      $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
+    } else if ($('.dplayer-casting').text() !== castName + 'で再生しています'){
+      $('.dplayer-casting').text(castName + 'で再生しています');
+    }
+    $('.dplayer-casting').css('opacity', 0.7);
+
+    // ボックスを閉じる
+    $('#nav-close').removeClass('open');
+    $('#chromecast-box').removeClass('open');
+    $('#hotkey-box').removeClass('open');
+    $('html').removeClass('open');
+
+    // Chromecast を起動
+    $.ajax({
+      url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(elem).attr('data-ip') + '&port=' + $(elem).attr('data-port'),
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+
+        if (data['status'] == 'play'){
+
+          $('#cast-toggle > .menu-link-href').text('キャストを終了');
+
+          // 制御は別の関数に投げる
+          cast_server_control(state);
+
+        } else {
+          toastr.error('キャストの開始に失敗しました…');
+        }
+
+      }
+    });
+  }
+
   // サーバー経由で Chromecast を制御する関数
   function cast_server_control(state){
 
@@ -621,8 +621,6 @@
     // ローディング表示を消す
     $('#dplayer').removeClass('dplayer-loading');
 
-    dp.pause();
-
     // ファイル再生のみ
     if (state == 'File'){
 
@@ -633,6 +631,7 @@
         cache: false,
         success: function(data) {
           dp.video.muted = true;
+          dp.pause();
         }
       });
 

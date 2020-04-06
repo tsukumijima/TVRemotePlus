@@ -2053,7 +2053,7 @@ td {
 }
 
 #chromecast-device-box {
-    min-height: 110px;
+    min-height: 75px;
 }
 
 #chromecast-device-box i {

@@ -404,7 +404,7 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>一度に表示する録画番組の件数（個）</span>
+              <span>一度に表示する番組の件数（個）</span>
 <?php	if (isSettingsItem('list_view_number')){ ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?php echo isSettingsItem('list_view_number'); ?>" required />
 <?php	} else { ?>
@@ -900,18 +900,18 @@
                 <span>エンコード時のログをファイルに書き出す</span>
                 <p>
                   この設定がオンの場合、エンコード時のログを (TVRemotePlus)/data/stream(ストリーム番号).log に書き出します（デフォルトはオフです）<br>
-                  出力をログとしてファイルに書き出すため、タスクバーに表示されるウインドウにはタイトルに (エンコーダー名) Streaming... と表示されるだけで何も出力されなくなります<br>
+                  出力をログとしてファイルに書き出すため、タスクバーに表示されるウインドウには何も出力されなくなります<br>
                   エンコーダーが途中で落ちる場合はこの設定をオンにし、書き出されたログを確認してみてください<br>
                 </p>
               </div>
               <div class="toggle-switch">
-                <input type="hidden" name="output_encodelog" value="false" />
-<?php	if ($output_encodelog == 'true'){ ?>
-                <input id="output_encodelog" name="output_encodelog" class="toggle-input" type="checkbox" value="true" checked />
+                <input type="hidden" name="encoder_log" value="false" />
+<?php	if ($encoder_log == 'true'){ ?>
+                <input id="encoder_log" name="encoder_log" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="output_encodelog" name="output_encodelog" class="toggle-input" type="checkbox" value="true" />
+                <input id="encoder_log" name="encoder_log" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
-                <label for="output_encodelog" class="toggle-label"></label>
+                <label for="encoder_log" class="toggle-label"></label>
               </div>
             </div>
 

@@ -209,11 +209,12 @@
 	}
 
 	// コメントの取得
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini[$stream]['state'] == 'ONAir' and intval($ini[$stream]['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認(jk0もはじく)
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini[$stream]['state'] == 'ONAir' and
+	    intval($ini[$stream]['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認 (jk0もはじく)
 
 		// 実況IDを取得
 		$channel = getJKchannel($ch[$ini[$stream]['channel']]);
-		$getflv = nicologin($basegetflv.'jk'.$channel, false); //こ↑こ↓でgetflvを叩く
+		$getflv = nicologin($basegetflv.'jk'.$channel, false); // getflvを叩く
 
 		// 取得した結果(クエリ)をParseして配列に格納する
 		parse_str($getflv, $getflv_param);
@@ -242,109 +243,128 @@
 				$ikioi = '';
 			}
 
-			if (!isset($_GET['res'])){ //resパラメータがないなら
+			// チャンネルが存在する場合のみ
+			if (isset($channel) and $channel !== -1 and $channel !== -2){
 
-				// コメントサーバのresを取得するURL
-				$jkthread_res_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
+				if (!isset($_GET['res'])){ //resパラメータがないなら
 
-				$jkthread_xml = simplexml_load_file($jkthread_res_URL);
+					// コメントサーバのresを取得するURL
+					$jkthread_res_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
+
+					$jkthread_xml = simplexml_load_file($jkthread_res_URL);
+
+					// APIを解析
+					list($jkthread_res, $jkthread_res_info) = getJKthread($jkthread_xml);
+
+					if (isset($jkthread_res_info['last_res'])){ //last_resがあれば代入
+						$last_res = $jkthread_res_info['last_res'];
+					} else { //なかったら0にしとく
+						$last_res = 0;
+					}
+
+				} else { //resパラメータがあるなら
+					$last_res = intval($_GET['res']); //そのまま代入
+				}
+
+				$last_res_request = $last_res + 1; //リクエストする時にlast_resがそのままだとコメが重複するので+1する
+				
+				// コメントサーバから実況を取得するURL
+				$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
+								'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
+
+				// XMLでAPIを叩く
+				$jkthread_xml = simplexml_load_file($jkthread_url);
 
 				// APIを解析
-				list($jkthread_res, $jkthread_res_info) = getJKthread($jkthread_xml);
+				list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
 
-				if (isset($jkthread_res_info['last_res'])){ //last_resがあれば代入
-					$last_res = $jkthread_res_info['last_res'];
-				} else { //なかったら0にしとく
-					$last_res = 0;
+				// jkthreadから取得したres
+				if (isset($jkthread_info['last_res'])){
+					$res = intval($jkthread_info['last_res']);
+				} else {
+					$res = 0;
 				}
 
-			} else { //resパラメータがあるなら
-				$last_res = intval($_GET['res']); //そのまま代入
-			}
+				// まずresのパラメータが存在していて
+				// かつresが空でなくて
+				// かつ受け取ったresがAPIのresと同じだったら(新しいコメがなかったら)
+				if (isset($_GET['res']) and !$_GET['res'] == '' and $res != $last_res){
 
-			$last_res_request = $last_res + 1; //リクエストする時にlast_resがそのままだとコメが重複するので+1する
-			
-			// コメントサーバから実況を取得するURL
-			$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
-							'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
+					// jkthread をDPlayer用 danmaku 形式に変換する
+					for ($i = 0; $i < count($jkthread); $i++) { 
 
-			// XMLでAPIを叩く
-			$jkthread_xml = simplexml_load_file($jkthread_url);
-
-			// APIを解析
-			list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
-
-			// jkthreadから取得したres
-			if (isset($jkthread_info['last_res'])){
-				$res = intval($jkthread_info['last_res']);
-			} else {
-				$res = 0;
-			}
-
-			// まずresのパラメータが存在していて
-			// かつresが空でなくて
-			// かつ受け取ったresがAPIのresと同じだったら(新しいコメがなかったら)
-			if (isset($_GET['res']) and !$_GET['res'] == '' and $res != $last_res){
-
-				// jkthread をDPlayer用 danmaku 形式に変換する
-				for ($i = 0; $i < count($jkthread); $i++) { 
-
-					// 自分のコメントを表示しない
-					// commentとコメント内容が同じ & フラグが立っていない場合
-					if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
-						// 自分のコメントだったら
-						if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
-							$jkthread[$i]['content'] = ''; // 空にする
-							$comment_ini['comment_readed'] = true; //フラグをtrueに
+						// 自分のコメントを表示しない
+						// commentとコメント内容が同じ & フラグが立っていない場合
+						if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
+							// 自分のコメントだったら
+							if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
+								$jkthread[$i]['content'] = ''; // 空にする
+								$comment_ini['comment_readed'] = true; //フラグをtrueに
+							}
+						} else { // iniが空だったら再設定しておく
+							$comment_ini['comment'] = ' ';
+							$comment_ini['comment_readed'] = false;
 						}
-					} else { // iniが空だったら再設定しておく
-						$comment_ini['comment'] = ' ';
-						$comment_ini['comment_readed'] = false;
+
+						// iniファイル書き込み
+						file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+						// オプションを解析する
+						if (isset($jkthread[$i]['mail'])){ //空でないなら
+							$option = str_replace('184', '', $jkthread[$i]['mail']);
+						} else {
+							$option = '';
+						}
+
+						// 位置を取得
+						$position = getPosition($option);
+						
+						// 色を取得
+						$color = getColor($option);
+
+						$danmaku[$i] = array(
+							'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
+							$position, // 場所(上・スクロール・下)をインポート
+							$color, // 色をインポート
+							$jkthread[$i]['user_id'], //ユーザーIDをインポート
+							$jkthread[$i]['content'], //コメントをインポート
+						);
 					}
 
-					// iniファイル書き込み
-					file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-
-					// オプションを解析する
-					if (isset($jkthread[$i]['mail'])){ //空でないなら
-						$option = str_replace('184', '', $jkthread[$i]['mail']);
-					} else {
-						$option = '';
-					}
-
-					// 位置を取得
-					$position = getPosition($option);
-					
-					// 色を取得
-					$color = getColor($option);
-
-					$danmaku[$i] = array(
-						'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
-						$position, // 場所(上・スクロール・下)をインポート
-						$color, // 色をインポート
-						$jkthread[$i]['user_id'], //ユーザーIDをインポート
-						$jkthread[$i]['content'], //コメントをインポート
-					);
+				} else { //そうでなかったらdanmakuをnullにする
+					$danmaku[0] = null;
 				}
 
-			} else { //そうでなかったらdanmakuをnullにする
-				$danmaku[0] = null;
-			}
+				// 出力JSON
+				$json = array(
+					'api' => 'jikkyo',
+					'type' => 'load',
+					'ikioi' => $ikioi,
+					'channel' => 'jk'.$channel,
+					'res' => $last_res,
+					'last_res' => $res,
+					//'jkthread' => $jkthread,
+					//'jkthread_url'=> $jkthread_url,
+					'code' => 0,
+					'version' => 3,
+					'data' => $danmaku,
+				);
 
-			// 出力JSON
-			$json = array(
-				'api' => 'jikkyo',
-				'type' => 'load',
-				'ikioi' => $ikioi,
-				'channel' => 'jk'.$channel,
-				'res' => $last_res,
-				'last_res' => $res,
-				//'jkthread' => $jkthread,
-				//'jkthread_url'=> $jkthread_url,
-				'code' => 0,
-				'version' => 3,
-				'data' => $danmaku,
-			);
+			} else {
+
+				// 出力JSON
+				$json = array(
+					'api' => 'jikkyo',
+					'type' => 'load',
+					'ikioi' => $ikioi,
+					'channel' => 'jk'.$channel,
+					'res' => 0,
+					'last_res' => 0,
+					'code' => 0,
+					'version' => 3,
+					'data' => null,
+				);
+			}
 
 		// エラー発生時
 		} else {
@@ -401,7 +421,7 @@
 
 			// 実況IDを取得
 			$channel = getJKchannel($ch[$ini[$stream]['channel']]);
-			$getflv = nicologin($basegetflv.'jk'.$channel, false); //こ↑こ↓でgetflvを叩く
+			$getflv = nicologin($basegetflv.'jk'.$channel, false); // getflvを叩く
 
 			// 取得した結果(クエリ)をParseして配列に格納する
 			parse_str($getflv, $getflv_param);
@@ -525,11 +545,11 @@
 		// 実況IDを取得
 		$channel = getJKchannel($ini[$stream]['filechannel']);
 
-		// チャンネルが-1・空白以外 & ニコニコのログイン情報がセットされてるなら
-		// -1・空白はそのチャンネルが実況にない事を意味する
-		if (isset($channel) and $channel !== '' and $channel !== -1 and !empty($nicologin_mail) and !empty($nicologin_password)){
+		// チャンネルが-1・-2以外 & ニコニコのログイン情報がセットされてるなら
+		// -1・-2はそのチャンネルがニコニコ実況にない事を意味する
+		if (isset($channel) and $channel !== -1 and $channel !== -2 and !empty($nicologin_mail) and !empty($nicologin_password)){
 
-			// こ↑こ↓でgetflvを叩く
+			// getflvを叩く
 			$getflv = nicologin($basegetflv.'jk'.$channel.'&start_time='.$start_timestamp.'&end_time='.$end_timestamp, false);
 
 			// 取得した結果(クエリ)をParseして配列に格納する
@@ -654,15 +674,22 @@
 
 			} else { // ログイン失敗
 
-				// エラーコードなど
+				// エラーコード
 				$code = 200;
 				$danmaku = null;
 			}
 
 		// -1が出た場合
+		} else if ($channel === -1){
+
+			// -1 の場合はエラーにしない
+			$code = 0;
+			$danmaku = null;
+
+		// その他のエラー
 		} else {
 
-			// エラーコードなど
+			// エラーコード
 			$code = 100;
 			$danmaku = null;
 		}

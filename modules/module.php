@@ -223,10 +223,10 @@
 
 	// ニコニコ実況IDをチャンネル名から取得する関数
 	function getJKchannel($channel){
-		global $base_dir;
+		global $ch_sidfile;
 
 		// ch_sid.txtを改行ごとに区切って配列にする
-		$ch_sid = explode("\n", removeBOM(file_get_contents($base_dir.'data/ch_sid.txt')));
+		$ch_sid = explode("\n", removeBOM(file_get_contents($ch_sidfile)));
 
 		// 配列を回す
 		foreach ($ch_sid as $key => $value) {
@@ -246,9 +246,12 @@
 			// チャンネル名が一致したら
 			if ($channel == $jkch or preg_match($match, $channel) or preg_match($match2, $channel) or preg_match($match3, $channel)){
 				// 実況IDを返す
-				return $ch_sid[$key][0];
+				return intval($ch_sid[$key][0]);
 			}
 		}
+
+		// チャンネル名が一致しなかった
+		return -2;
 	}
 
 	// CSVファイルを読み込む関数
@@ -260,7 +263,7 @@
 		// 行頭と行末の改行・BOM削除・UTF-8へ変換
 		file_put_contents($csvfile, str_replace('yadif=0:-1:1,', 'yadif=0:-1:1.', trim(removeBOM(mb_convert_encoding(file_get_contents($csvfile), 'UTF-8', $encoding)))));
 	
-		// SplFileObject()を使用してCSVロード
+		// SplFileObject()を使用してCSVをロード
 		$file = new SplFileObject($csvfile);
 		$file->setFlags(
 			SplFileObject::READ_CSV |

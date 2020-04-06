@@ -174,7 +174,7 @@
 
 	// ライブ配信を開始する関数
 	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
-		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $output_encodelog;
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log;
 		
 		// 設定
 
@@ -426,7 +426,7 @@
 		}
 
 		// ログを書き出すかどうか
-		if ($output_encodelog == 'true'){
+		if ($encoder_log == 'true'){
 			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'data/stream'.$stream.'.log 2>&1"';
 		} else {
 			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).'"';
@@ -444,7 +444,7 @@
 
 	// ファイル再生を開始する関数
 	function stream_file($stream, $filepath, $extension, $quality, $encoder, $subtitle){
-		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time, $base_dir, $output_encodelog;
+		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log;
 		
 		// 設定
 
@@ -694,7 +694,7 @@
 		}
 
 		// ログを書き出すかどうか
-		if ($output_encodelog == 'true'){
+		if ($encoder_log == 'true'){
 			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).' > '.$base_dir.'data/stream'.$stream.'.log 2>&1"';
 		} else {
 			$stream_cmd = 'start "'.$encoder.' Encoding..." /B /min cmd.exe /C "'.win_exec_escape($stream_cmd).'"';

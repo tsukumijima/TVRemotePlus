@@ -36,6 +36,7 @@ echo '  Cast URL: '.$argv[1]."\n";
 echo '  Cast Type: '.$argv[2]."\n\n";
 
 $cc->DMP->play($argv[1], 'BUFFERED', $argv[2], true, 0);
+$cc->DMP->SetVolume(0.7);
 $cc->DMP->UnMute();
 
 // 通知
