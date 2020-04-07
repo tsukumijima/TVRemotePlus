@@ -897,11 +897,10 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>エンコード時のログをファイルに書き出す</span>
+                <span>エンコーダーのログをファイルに書き出す</span>
                 <p>
-                この設定がオンの場合、エンコード時のログを (TVRemotePlus)/logs/stream(ストリーム番号).encoder.log に書き出します（デフォルトはオンです）<br>
-                  出力をログとしてファイルに書き出すため、タスクバーに表示されるウインドウには何も出力されなくなります<br>
-                  エンコーダーが途中で落ちる場合はこの設定をオンにし、書き出されたログを確認してみてください<br>
+                  この設定がオンの場合、エンコーダーのログを (TVRemotePlus)/logs/stream(ストリーム番号).encoder.log に書き出します（デフォルトはオンです）<br>
+                  エンコーダーが途中で落ちる場合はこの設定をオンにし、logs フォルダに書き出されたログを確認してみてください<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -917,10 +916,30 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
+                <span>エンコーダーのウインドウを表示する</span>
+                <p>
+                  この設定がオンの場合、エンコーダーのコンソールウインドウを表示します（デフォルトはオフです）<br>
+                  [エンコーダーのログをファイルに書き出す] がオンの場合は、コンソールウインドウには何も出力されなくなります<br>
+                  エンコードが不安定な場合はこの設定をオンにした上で [エンコーダーのログをファイルに書き出す] をオフにし、ウインドウが表示される（起動されている）かどうか、エンコードが止まっていないかを確認してみてください<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="encoder_window" value="false" />
+<?php	if ($encoder_window == 'true'){ ?>
+                <input id="encoder_window" name="encoder_window" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="encoder_window" name="encoder_window" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="encoder_window" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
                 <span>ストリーム終了時に TSTask を強制終了する</span>
                 <p>
-                  TSTask がうまく終了しない・ゾンビプロセス化する場合のみオンにしてください<br>
-                  強制終了させると TSTask・TSTaskCentre の動作がおかしくなる場合があるので、できるだけオフにしておく事をおすすめします<br>
+                  TSTask が終了できない・ゾンビプロセス化する場合のみオンにしてください<br>
+                  強制終了させると TSTaskCentre の動作がおかしくなる場合があるので、できるだけオフにしておく事をおすすめします<br>
                 </p>
               </div>
               <div class="toggle-switch">
