@@ -378,6 +378,7 @@
 		@$config['basicauth_password'] = $basicauth_password;
 		@$config['setting_redirect'] = $setting_redirect;
 		@$config['encoder_log'] = $encoder_log;
+		@$config['encoder_window'] = $encoder_window;
 		@$config['TSTask_shutdown'] = $TSTask_shutdown;
 		@$config['udp_port'] = $udp_port;
 		@$config['hlslive_time'] = $hlslive_time;

@@ -112,7 +112,7 @@
 					// ツイートの内容を設定
 					$tweet = array(
 						'status' => $tweet_text,
-						'media_ids' => implode(',', [$media->media_id_string])
+						'media_ids' => implode(',', [@$media->media_id_string])
 					);
 
 				} else {
@@ -152,26 +152,53 @@
 				case 32:
 					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
 					break;
-				case 135:
-					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
+				case 63:
+					echo '<span class="tweet-failed">アカウントが停止されています：投稿に失敗しました…</span>';
+					break;
+				case 64:
+					echo '<span class="tweet-failed">アカウントが停止されています：投稿に失敗しました…</span>';
+					break;
+				case 88:
+					echo '<span class="tweet-failed">レート制限を超えました：投稿に失敗しました…</span>';
 					break;
 				case 89:
-					echo '<span class="tweet-failed">トークンが期限切れです(再ログインしてください)：投稿に失敗しました…</span>';
+					echo '<span class="tweet-failed">トークンが期限切れです (再ログインしてください)：投稿に失敗しました…</span>';
+					break;
+				case 99:
+					echo '<span class="tweet-failed">OAuth 資格情報を確認できません (再ログインしてください)：投稿に失敗しました…</span>';
+					break;
+				case 135:
+					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
 					break;
 				case 185:
 					echo '<span class="tweet-failed">ツイート数の上限に達しています：投稿に失敗しました…</span>';
 					break;
+				case 186:
+					echo '<span class="tweet-failed">ツイートが長過ぎます：投稿に失敗しました…</span>';
+					break;
 				case 187:
 					echo '<span class="tweet-failed">ツイートが重複しています：投稿に失敗しました…</span>';
+					break;
+				case 226:
+					echo '<span class="tweet-failed">このアクションを完了できません：投稿に失敗しました…</span>';
 					break;
 				case 231:
 					echo '<span class="tweet-failed">ログインを確認してください(再ログインしてください)：投稿に失敗しました…</span>';
 					break;
 				case 261:
-					echo '<span class="tweet-failed">TwitterAPI アプリが凍結されています：投稿に失敗しました…</span>';
+					echo '<span class="tweet-failed">Twitter API アプリが凍結されています：投稿に失敗しました…</span>';
 					break;
 				case 261:
 					echo '<span class="tweet-failed">アカウントが一時的にロックされています：投稿に失敗しました…</span>';
+					break;
+				case 326:
+					echo '<span class="tweet-failed">アカウントが一時的にロックされています：投稿に失敗しました…</span>';
+					break;
+				case 415:
+					echo '<span class="tweet-failed">コールバック URL が承認されていません：投稿に失敗しました…</span>';
+					break;
+				case 416:
+					echo '<span class="tweet-failed">Twitter API アプリが無効化されています：投稿に失敗しました…</span>';
 					break;
 				default:
 					echo '<span class="tweet-failed">投稿に失敗しました… (code: '.$result->errors[0]->code.')　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
