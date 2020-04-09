@@ -1,0 +1,9 @@
+{
+    "Chromecast-f5ea8d9e7026c37fea084716fd5f6619._googlecast._tcp.local": {
+        "port": 8009,
+        "ip": "192.168.1.26",
+        "target": "f5ea8d9e-7026-c37f-ea08-4716fd5f6619.local",
+        "friendlyname": "リビングルーム",
+        "type": "Chromecast"
+    }
+}
