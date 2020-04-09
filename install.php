@@ -240,6 +240,7 @@
 	if_copy ('/data', true);
 	if_copy ('/docs', true);
 	if_copy ('/htdocs', true);
+	if_copy ('/logs', true);
 	if_copy ('/modules', true);
 
 	// 設定ファイル
@@ -329,10 +330,11 @@
 			$shortcut_file = '\Desktop\TVRemotePlus - launch.lnk';
 		}
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
-					'$lnk = $shell.CreateShortcut(\"$Home'.$shortcut_file.'\"); '.
-					'$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
-					'$lnk.WindowStyle = 7; '.
-					'$lnk.Save()';
+					  '$lnk = $shell.CreateShortcut(\"$Home'.$shortcut_file.'\"); '.
+					  '$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
+					  '$lnk.WorkingDirectory = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\"'.
+					  '$lnk.WindowStyle = 7; '.
+					  '$lnk.Save()';
 		exec('powershell -Command "'.$powershell.'"', $opt2, $return2);
 		echo "\n";
 		if ($return2 == 0) echo '    ショートカットを作成しました。'."\n";
@@ -391,23 +393,28 @@
 
 		foreach ($config as $key => $value) {
 
-			// シングルクォーテーションを取る（セキュリティ対策）
-			$value = str_replace('\'', '', $value);
+			// 空でなければ
+			if (!empty($value)){
 
-			// 数値化できるものは数値に変換しておく
-			if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
-				$set = intval($value);
-			} else {
-				$set = '\''.strval($value).'\'';
-			}
+				// シングルクォーテーションを取る（セキュリティ対策）
+				$value = str_replace('\'', '', $value);
 
-			// バックスラッシュ(\)を見つけたらスラッシュに変換
-			if (strpos($set, '\\') !== false){
-				$set = str_replace('\\', '/', $set);
+				// 数値化できるものは数値に変換しておく
+				if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
+					$set = intval($value);
+				} else {
+					$set = '\''.strval($value).'\'';
+				}
+
+				// バックスラッシュ(\)を見つけたらスラッシュに変換
+				if (strpos($set, '\\') !== false){
+					$set = str_replace('\\', '/', $set);
+				}
+				
+				// config.php を書き換え
+				$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+				
 			}
-			
-			// config.php を書き換え
-			$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
 		}
 
 		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み

@@ -25,6 +25,7 @@
 /modules/Cast/cast.json
 /modules/cast/scan.json
 /htdocs/server.crt
+/htdocs/phpinfo.php
 /htdocs/files/info/*
 /htdocs/files/thumb/*
 /htdocs/files/fileinfo.json
