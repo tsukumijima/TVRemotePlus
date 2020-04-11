@@ -253,11 +253,16 @@
 		// Apache の設定ファイル
 		$httpd_conf_file = $serverroot.'/bin/Apache/conf/httpd.conf';
 		$httpd_default_file = $serverroot.'/bin/Apache/conf/httpd.default.conf';
+		// PHP の設定ファイル
+		$php_ini_file = $serverroot.'/bin/PHP/php.ini';
+		$php_default_file = $serverroot.'/bin/PHP/php.default.ini';
 
 		// config.default.php を config.php にコピー
 		copy($tvrp_default_file, $tvrp_conf_file);
 		// httpd.default.conf を httpd.conf にコピー
 		copy($httpd_default_file, $httpd_conf_file);
+		// php.default.ini を php.ini にコピー
+		copy($php_default_file, $php_ini_file);
 		
 		// TSTask のコピー
 		if ($bondriver == 2){
@@ -276,21 +281,31 @@
 		$json['1']['channel'] = '0';
 		if (!file_exists($jsonfile)) file_put_contents($jsonfile, json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
-		// TVRemotePlusの設定ファイル
+		// TVRemotePlus の設定ファイル
 		$tvrp_conf = file_get_contents($tvrp_conf_file);
-		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.mb_convert_encoding($TSfile_dir, 'UTF-8', 'SJIS, SJIS-WIN').'\';', $tvrp_conf); // 置換
-		file_put_contents($tvrp_conf_file, $tvrp_conf); // 書き込み
+		// 置換
+		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.mb_convert_encoding($TSfile_dir, 'UTF-8', 'SJIS, SJIS-WIN').'\';', $tvrp_conf);
+		// 書き込み
+		file_put_contents($tvrp_conf_file, $tvrp_conf);
 
-		// Apacheの設定ファイル
+		// Apache の設定ファイル
 		$httpd_conf = file_get_contents($httpd_conf_file);
 		// 置換
 		$httpd_conf = preg_replace("/Define SRVROOT.*/", 'Define SRVROOT "'.$serverroot.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define SRVIP.*/", 'Define SRVIP "'.$serverip.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define HTTP_PORT.*/", 'Define HTTP_PORT "'.$http_port.'"', $httpd_conf);
 		$httpd_conf = preg_replace("/Define HTTPS_PORT.*/", 'Define HTTPS_PORT "'.$https_port.'"', $httpd_conf);
-		file_put_contents($httpd_conf_file, $httpd_conf);// 書き込み
+		// 書き込み
+		file_put_contents($httpd_conf_file, $httpd_conf);
 
-		// HTTPS接続用オレオレ証明書の作成
+		// PHP の設定ファイル
+		$php_ini = file_get_contents($php_ini_file);
+		// 置換
+		$php_ini = preg_replace('/^extension_dir =.*/m', 'extension_dir = "'.mb_convert_encoding($serverroot.'/bin/PHP/ext/', 'UTF-8', 'SJIS, SJIS-WIN').'"', $php_ini);
+		// 書き込み
+		file_put_contents($php_ini_file, $php_ini);
+
+		// HTTPS 接続用オレオレ証明書の作成
 		echo '    HTTPS 接続用の自己署名証明書を作成します。'."\n";
 		echo "\n";
 		echo '  -------------------------------------------------------------------'."\n";

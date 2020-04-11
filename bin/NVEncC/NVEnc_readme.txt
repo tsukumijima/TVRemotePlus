@@ -97,6 +97,10 @@ Aviutlを起動し、「その他」>「出力プラグイン情報」にNVEncがあるか確かめます。
  http://www.bunkus.org/videotools/mkvtoolnix/
  
 <音声エンコーダ>
+ [ffmpeg     (AAC, AC3, mp3エンコーダとして使用)]
+ https://ffmpeg.zeranoe.com/builds/
+ http://blog.k-tai-douga.com/
+
  [neroaacenc (AACエンコーダ)]
  http://www.nero.com/jpn/downloads-nerodigital-nero-aac-codec.php
  
@@ -114,9 +118,6 @@ Aviutlを起動し、「その他」>「出力プラグイン情報」にNVEncがあるか確かめます。
  
  [lame       (mp3エンコーダ)]
  http://www.rarewares.org/mp3-lame-bundle.php
- 
- [ffmpeg     (AC3エンコーダとして使用)]
- http://blog.k-tai-douga.com/
  
  [oggenc2    (ogg Vorbis, mkv専用)]
  http://www.rarewares.org/ogg-oggenc.php 
@@ -143,11 +144,11 @@ iniファイルの音声やmuxerのコマンドラインを調整してみてください。
 
 
 【ビルドについて】
-ビルドにはVC++2015が必要です。
+ビルドにはVC++2019が必要です。
 
 また、その他に以下のものも必要です。
 
-CUDA 5.0 toolkit以降
+CUDA 10.2 toolkit
 http://developer.nvidia.com/cuda/cuda-toolkit
 
 DirectX SDK
@@ -163,7 +164,7 @@ http://msdn.microsoft.com/ja-jp/windows/hardware/hh852365.aspx
 コーディングが汚いとか言わないで。
 
 【コンパイル環境】
-VC++ 2015 Community
+VC++ 2019 Community
 
 
 【検証環境 2014.03～】
@@ -235,11 +236,70 @@ NVIDIA グラフィックドライバ 419.35
 NVIDIA グラフィックドライバ 419.67
 NVIDIA グラフィックドライバ 419.67
 NVIDIA グラフィックドライバ 436.02
+NVIDIA グラフィックドライバ 442.19
+NVIDIA グラフィックドライバ 445.75
 
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.03.25 (4.69)
+[NVEncC]
+・ドライバ445.75で、不必要なエラーメッセージが表示される問題に対策。
+・HEVCのYUV444出力時のプロファイルを修正。
+・ffmpeg関連のdllを更新。
+  libopusのビルドを修正。
+  dav1d 0.5.2 -> 0.6.0
+  bzip2 1.0.6 -> 1.0.8
+
+[NVEnc.auo]
+・ffmpeg_audenc.exeを更新。
+・L-SMASHを下記のブランチのコードをいただいて更新。
+  https://github.com/nekopanda/l-smash/tree/fast
+
+2020.03.07 (4.68)
+[NVEncC]
+・avsw/avhw読み込み時の入力オプションを指定するオプションを追加。( --input-option )
+・trueHDなどの一部音声がうまくmuxできないのを改善。
+・4.66から、vpp-yadifの出力が異常となってしまう問題への対策。
+
+[NVEnc.auo]
+・4.67での変更が特にAviutlで自動フィールドシフトを使用した場合に正常に動作しなかったのを修正。
+
+[NVEnc.auo]
+・NVEnc.auoから出力するときに、Aviutlのウィンドウを最小化したり元に戻すなどするとフレームが化ける問題を修正。
+
+2020.03.01 (4.67)
+[NVEncC]
+・NVEnc.auoの修正に対応する変更を実施。
+
+[NVEnc.auo]
+・NVEnc.auoから出力するときに、Aviutlのウィンドウを最小化したり元に戻すなどするとフレームが化ける問題を修正。
+
+2020.02.29 (4.66)
+[NVEncC]
+・新たなノイズ除去フィルタを追加する。(--vpp-smooth)
+・HEVCでも自動での最大ビットレート上限の設定にrefを参照するように。
+・vpp-subburnに動画ファイルのタイムスタンプに対する補正を行うかを指定するパラメータを追加する。(vid_ts_offset)
+・vpp-subburnで、動画のtimestampが0始まりでなかった場合の時刻調整の誤りを修正。
+・vpp-colorspaceでcolorrangeのみの変換を可能に。
+
+[NVEnc.auo]
+・簡易インストーラの安定動作を目指した改修。
+  必要な実行ファイルをダウンロードしてインストールする形式から、
+  あらかじめ同梱した実行ファイルを展開してインストールする方式に変更する。
+・デフォルトの音声エンコーダをffmpegによるAACに変更。
+・NVEnc.auoの設定画面のタブによる遷移順を調整。
+
+2020.02.20 (4.65)
+[NVEncC]
+・コマンドラインの指定ミスの際のエラーメッセージを改善。
+・caption2assが正常に動作しないケースがあったのを修正。
+・必要ドライバのバージョンを更新。
+
+[NVEnc.auo]
+・ビットレート上限の解放。
+
 2020.02.11 (4.64)
 [NVEncC]
 ・lookaheadを使用した場合に不要なエラーメッセージが表示されていたのを修正。

@@ -294,10 +294,16 @@
               if (elem === undefined){
 
                 // 親要素を追加
-                streamview = `<button class="stream-view stream-view-` + key + `" type="button" data-num="` + key + `" data-url="/` + key + `/">` + streamview + `</button>`;
+                streamview = `<div class="stream-view stream-view-` + key + `" type="button" data-num="` + key + `" data-url="/` + key + `/" style="display: none; opacity: 0;">` + streamview + `</div>`;
 
                 // 新規で要素を作る
                 document.getElementById('stream-view-box').insertAdjacentHTML('beforeend', streamview);
+
+                // スライドダウン
+                $('.stream-view-' + key).slideDown(400).animate(
+                  { opacity: 1 },
+                  { queue: false, duration: 400, easing: 'swing' }
+                );
 
               } else {
 

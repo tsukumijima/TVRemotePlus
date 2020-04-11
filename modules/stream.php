@@ -26,7 +26,7 @@
 
 		echo "\n";
 		echo ' ---------------------------------------------------'."\n";
-		echo '           TVRemotePlus-Cmdline '.$version."\n";
+		echo '           TVRemotePlus-CommandLine '.$version."\n";
 		echo ' ---------------------------------------------------'."\n";
 
 		if ($argc < 3){
@@ -39,7 +39,7 @@
 
 		// ストリーム開始の引数：
 		// stream.bat ONAir (ストリーム番号) (チャンネル番号)
-		// stream.bat ONAir (ストリーム番号) (チャンネル番号) (動画の画質) (エンコーダー) (字幕データ (true ならオン・false ならオフ)) (BonDriver)
+		// stream.bat ONAir (ストリーム番号) (チャンネル番号) (動画の画質) (エンコーダー) (字幕データ (true ならオン・false ならオフ)) (使用 BonDriver)
 
 		// ストリーム開始の場合
 		if ($argv[1] == 'ONAir'){
@@ -51,18 +51,22 @@
 			$ini[$stream]['state'] = 'ONAir';
 			
 			// チャンネル
-			if (isset($argv[3]) and isset($ch[$argv[3]])){ // チャンネルが存在するかチェック
-				$ini[$stream]['channel'] = $argv[3];
-			} else if (!isset($ch[$argv[3]])){
-				echo ' ---------------------------------------------------'."\n";
-				echo '   Error: Channel '.$argv[2].' Not found.'."\n";
-				echo '   Please Retry... m(__)m'."\n";
-				echo ' ---------------------------------------------------'."\n";
-				exit(1);
+			if (isset($argv[3])){
+				if (isset($ch[$argv[3]])){ // チャンネルが存在するかチェック
+					$ini[$stream]['channel'] = $argv[3];
+				} else if (!isset($ch[$argv[3]]) and isset($ch[$argv[3].'_1'])){ // サブチャンネル対応の仕様変更への対応
+					$ini[$stream]['channel'] = $argv[3].'_1';
+				} else {
+					echo ' ---------------------------------------------------'."\n";
+					echo '   Error: Channel '.$argv[3].' not found.'."\n";
+					echo '   Please retry... m(__)m'."\n";
+					echo ' ---------------------------------------------------'."\n";
+					exit(1);
+				}
 			} else {
 				echo ' ---------------------------------------------------'."\n";
 				echo '   Error: Argument is missing.'."\n";
-				echo '   Please Retry... m(__)m'."\n";
+				echo '   Please retry... m(__)m'."\n";
 				echo ' ---------------------------------------------------'."\n";
 				exit(1);
 			}
@@ -70,34 +74,35 @@
 			// ↓ は指定されていなかったらデフォルト値を使う
 
 			// 動画の画質
-			if (isset($argv[4])) $ini[$stream]['quality'] = $argv[4];
+			if (isset($argv[4]) and $argv[4] != 'default') $ini[$stream]['quality'] = $argv[4];
 			else $ini[$stream]['quality'] = $quality_default;
 
 			// エンコーダー
-			if (isset($argv[5])) $ini[$stream]['encoder'] = $argv[5];
+			if (isset($argv[5]) and $argv[5] != 'default') $ini[$stream]['encoder'] = $argv[5];
 			else $ini[$stream]['encoder'] = $encoder_default;
 
 			// 字幕データ
-			if (isset($argv[6])) $ini[$stream]['subtitle'] = $argv[6];
+			if (isset($argv[6]) and $argv[6] != 'default') $ini[$stream]['subtitle'] = $argv[6];
 			else $ini[$stream]['subtitle'] = $subtitle_default;
 
 			// BonDriver
-			if (!isset($argv[7]) or $argv[5] == 'default'){
-				if (intval($ini[$stream]['channel']) >= 100 or intval($ini[$stream]['channel']) === 55){ // チャンネルの値が100より上(=BS・CSか・ショップチャンネルは055なので例外指定)
+			if (!isset($argv[7]) or $argv[7] == 'default'){
+				// チャンネルの値が100より上(=BS・CSか・ショップチャンネルは055なので例外指定)
+				if (intval($ini[$stream]['channel']) >= 100 or intval($ini[$stream]['channel']) === 55){
 					$ini[$stream]['BonDriver'] = $BonDriver_default_S;
 				} else { // 地デジなら
 					$ini[$stream]['BonDriver'] = $BonDriver_default_T;
 				}
-			} else { // デフォルトでないなら
-				$ini[$stream]['BonDriver'] = $argv[3];
+			} else { // デフォルトでないなら引数の値を使う
+				$ini[$stream]['BonDriver'] = $argv[7];
 			}
 
 			// ストリーム開始表示
 			echo '   Starting stream...'."\n\n";
-			echo '   Stream:   '.$stream."\n";
-			echo '   Channel:   '.$ini[$stream]['channel']."\n";
-			echo '   sid:       '.$sid[$ini[$stream]['channel']]."\n";
-			echo '   tsid:      '.$tsid[$ini[$stream]['channel']]."\n";
+			echo '   Stream   : '.$stream."\n";
+			echo '   Channel  : '.$ini[$stream]['channel']."\n";
+			echo '   sid      : '.$sid[$ini[$stream]['channel']]."\n";
+			echo '   tsid     : '.$tsid[$ini[$stream]['channel']]."\n";
 			echo '   Quality  : '.$ini[$stream]['quality']."\n";
 			echo '   Encoder  : '.$ini[$stream]['encoder']."\n";
 			echo '   Subtitle : '.$ini[$stream]['subtitle']."\n";
@@ -106,7 +111,7 @@
 			echo "\n";
 
 			// ストリームを開始する
-			stream_start($ini[$stream]['channel'], $sid[$ini[$stream]['channel']], $tsid[$ini[$stream]['channel']], $ini[$stream]['BonDriver'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
+			stream_start($stream, $ini[$stream]['channel'], $sid[$ini[$stream]['channel']], $tsid[$ini[$stream]['channel']], $ini[$stream]['BonDriver'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
 
 			// 準備中用の動画を流すためにm3u8をコピー
 			if ($silent == 'true'){
@@ -118,12 +123,12 @@
 			// ファイル書き込み
 			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
-			echo "\n";
 			echo ' ---------------------------------------------------'."\n";
 			echo '   Stream started.'."\n";
 			echo '   Processing completed.'."\n";
 			echo ' ---------------------------------------------------'."\n";
 			exit();
+
 
 		// ストリーム終了の引数：
 		// stream.bat Offline (ストリーム番号)
@@ -155,7 +160,6 @@
 			// ファイル書き込み
 			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
-			echo "\n";
 			echo ' ---------------------------------------------------'."\n";
 			echo '   Stream stoped.'."\n";
 			echo '   Processing completed.'."\n";
@@ -165,7 +169,7 @@
 			
 			echo ' ---------------------------------------------------'."\n";
 			echo '   Error: Argument is missing or too many.'."\n";
-			echo '   Please Retry... m(__)m'."\n";
+			echo '   Please retry... m(__)m'."\n";
 			echo ' ---------------------------------------------------'."\n";
 			exit(1);
 		}
