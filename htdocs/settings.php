@@ -127,14 +127,14 @@
 			} else if ($ini[$stream]['state'] == 'ONAir'){
 
 				// 連想配列に格納
-				if ($_POST['channel']) $ini[$stream]['channel'] = strval($_POST['channel']);
-				if ($_POST['quality']) $ini[$stream]['quality'] = $_POST['quality'];
+				if (isset($_POST['channel'])) $ini[$stream]['channel'] = strval($_POST['channel']);
+				if (isset($_POST['quality'])) $ini[$stream]['quality'] = $_POST['quality'];
 				else $ini[$stream]['quality'] = $quality_default;
-				if ($_POST['encoder']) $ini[$stream]['encoder'] = $_POST['encoder'];
-				else $ini[$stream]['quality'] = $encoder_default;
-				if ($_POST['subtitle']) $ini[$stream]['subtitle'] = $_POST['subtitle'];
-				else $ini[$stream]['quality'] = $subtitle_default;
-				if ($_POST['BonDriver']) $ini[$stream]['BonDriver'] = $_POST['BonDriver'];
+				if (isset($_POST['encoder'])) $ini[$stream]['encoder'] = $_POST['encoder'];
+				else $ini[$stream]['encoder'] = $encoder_default;
+				if (isset($_POST['subtitle'])) $ini[$stream]['subtitle'] = $_POST['subtitle'];
+				else $ini[$stream]['subtitle'] = $subtitle_default;
+				if (isset($_POST['BonDriver'])) $ini[$stream]['BonDriver'] = $_POST['BonDriver'];
 
 				// BonDriverのデフォルトを要求される or 何故かBonDriverが空
 				if ($ini[$stream]['BonDriver'] == 'default' or empty($ini[$stream]['BonDriver'])){
@@ -160,10 +160,11 @@
 
 				if (!isset($_POST['allstop'])){
 
-					// 念のためもう一回ストリーミング終了関数を起動
+					// ストリームを終了
 					stream_stop($stream);
-						
-					// 強制でチャンネルを0に設定する
+
+					// Offline に設定する
+					$ini[$stream]['state'] = 'Offline';
 					$ini[$stream]['channel'] = '0';
 
 					// 配信休止中用のプレイリスト (Stream 1のみ)
@@ -182,7 +183,7 @@
 
 				} else {
 
-					// 念のためもう一回ストリーミング終了関数を起動
+					// ストリームを全て終了
 					stream_stop($stream, true);
 
 					// ストリーム番号ごとに実行
@@ -190,10 +191,9 @@
 
 						$key = strval($key);
 					
-						// 強制で全てのストリームをOfflineに設定
+						// 全てのストリームを Offline に設定する
 						$ini[$key]['state'] = 'Offline';
 						$ini[$key]['channel'] = '0';
-							
 
 						// 配信休止中用のプレイリスト (Stream 1のみ)
 						if ($key == '1'){
@@ -931,6 +931,25 @@
                 <input id="encoder_window" name="encoder_window" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="encoder_window" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>TSTask の起動時に TSTaskCentre も起動する</span>
+                <p>
+                  この設定がオンの場合、TSTask の起動時に TSTaskCentre（TSTask のクライアントプログラム）も一緒に起動します（デフォルトはオフです）<br>
+                  正常に放送が受信できているか、TSTask が起動できているか確認したい場合などにオンにしてみてください<br>
+                </p>
+              </div>
+              <div class="toggle-switch">
+                <input type="hidden" name="TSTask_window" value="false" />
+<?php	if ($TSTask_window == 'true'){ ?>
+                <input id="TSTask_window" name="TSTask_window" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="TSTask_window" name="TSTask_window" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="TSTask_window" class="toggle-label"></label>
               </div>
             </div>
 

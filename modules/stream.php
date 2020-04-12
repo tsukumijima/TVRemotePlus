@@ -52,9 +52,10 @@
 			
 			// チャンネル
 			if (isset($argv[3])){
-				if (isset($ch[$argv[3]])){ // チャンネルが存在するかチェック
-					$ini[$stream]['channel'] = $argv[3];
-				} else if (!isset($ch[$argv[3]]) and isset($ch[$argv[3].'_1'])){ // サブチャンネル対応の仕様変更への対応
+				$channel = intval($argv[3]);
+				if (isset($ch[$channel])){ // チャンネルが存在するかチェック
+					$ini[$stream]['channel'] = $channel;
+				} else if (!isset($ch[$channel]) and isset($ch[$channel.'_1'])){ // サブチャンネル対応の仕様変更への対応
 					$ini[$stream]['channel'] = $argv[3].'_1';
 				} else {
 					echo ' ---------------------------------------------------'."\n";
@@ -101,14 +102,17 @@
 			echo '   Starting stream...'."\n\n";
 			echo '   Stream   : '.$stream."\n";
 			echo '   Channel  : '.$ini[$stream]['channel']."\n";
-			echo '   sid      : '.$sid[$ini[$stream]['channel']]."\n";
-			echo '   tsid     : '.$tsid[$ini[$stream]['channel']]."\n";
+			echo '   SID      : '.$sid[$ini[$stream]['channel']]."\n";
+			echo '   TSID     : '.$tsid[$ini[$stream]['channel']]."\n";
 			echo '   Quality  : '.$ini[$stream]['quality']."\n";
 			echo '   Encoder  : '.$ini[$stream]['encoder']."\n";
 			echo '   Subtitle : '.$ini[$stream]['subtitle']."\n";
 			echo '   BonDriver: '.$ini[$stream]['BonDriver']."\n";
 			echo ' ---------------------------------------------------'."\n";
 			echo "\n";
+
+			// ストリームを終了する
+			stream_stop($stream);
 
 			// ストリームを開始する
 			stream_start($stream, $ini[$stream]['channel'], $sid[$ini[$stream]['channel']], $tsid[$ini[$stream]['channel']], $ini[$stream]['BonDriver'], $ini[$stream]['quality'], $ini[$stream]['encoder'], $ini[$stream]['subtitle']);
@@ -147,14 +151,25 @@
 			echo ' ---------------------------------------------------'."\n";
 			echo "\n";
 
-			// ストリームを停止する
+			// ストリームを終了する
 			stream_stop($stream);
+						
+			// Offline に設定する
+			$ini[$stream]['state'] = 'Offline';
+			$ini[$stream]['channel'] = '0';
 
-			// 配信休止中用のプレイリスト
-			if ($silent == 'true'){
-				copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+			// 配信休止中用のプレイリスト (Stream 1のみ)
+			if ($stream == '1'){
+				if ($silent == 'true'){
+					copy($offline_silent_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+				} else {
+					copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+				}
+			// Stream 1 以外なら配列のキーごと削除する
+			// m3u8 も削除
 			} else {
-				copy($offline_m3u8, $base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
+				unset($ini[$stream]);
+				@unlink($base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 			}
 
 			// ファイル書き込み
@@ -178,7 +193,7 @@
 
 	// ライブ配信を開始する関数
 	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle){
-		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window;
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window, $TSTask_window;
 		
 		// 設定
 
@@ -302,7 +317,7 @@
 		}
 
 		// TSTask.exeを起動する
-		$tstask_cmd = '"'.$tstask_path.'" /min /xclient- /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
+		$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 		              ' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
 		$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).'"';
 		win_exec($tstask_cmd);
