@@ -201,7 +201,7 @@
 		$stream_port = $udp_port + intval($stream);
 
 		// UDP受信スキーム
-		$receive = 'udp://127.0.0.1:'.$stream_port.'?pkt_size=262144&fifo_size=1000000';
+		$receive = 'udp://127.0.0.1:'.$stream_port.'?pkt_size=262144&fifo_size=1000000&overrun_nonfatal=1';
 
 		// 字幕切り替え
 		switch ($subtitle) {

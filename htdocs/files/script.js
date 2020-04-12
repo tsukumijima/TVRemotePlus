@@ -470,7 +470,7 @@
           if (limit >= 0){
             $('#tweet-submit').prop('disabled', false).removeClass('disabled');
           }
-          $('#tweet-status').html('クリップボードの画像を選択しました。');
+          $('#tweet-status').html('クリップボードの画像を取り込みました。');
         }
       }
     });
@@ -569,15 +569,21 @@
     $(document).keydown(function(event){
 
       // tabキー
-      if (event.which == 9){
+      if (event.which === 9){
         // フォーカス
         event.preventDefault();
-        console.log($(':focus').is('#tweet'))
         if($(':focus').is('#tweet')) {
           $('#tweet').blur();
         } else {
           $('#tweet').focus();
         }
+      }
+
+      // ?キー
+      if (document.activeElement.id != 'tweet' && event.key == '?'){
+        event.preventDefault();
+        $('#hotkey-box').toggleClass('open');
+        $('#nav-close').toggleClass('open');
       }
 
       // Alt(or option)キー
@@ -731,7 +737,7 @@
           if (limit > 0){
             $('#tweet-submit').prop('disabled', false).removeClass('disabled');
           }
-          $('#tweet-status').html('キャプチャした画像を選択しました。');
+          $('#tweet-status').html('コメント付きでキャプチャした画像を選択しました。');
         }, "image/jpeg", 1);
       });
     }

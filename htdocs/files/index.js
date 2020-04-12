@@ -178,6 +178,15 @@
       $('#hotkey-box').toggleClass('open');
     });
 
+    $('#hotkey-box').click(function(event){
+      $('#nav-close').removeClass('open');
+      $('#hotkey-box').removeClass('open');
+    });
+
+    $('#hotkey-wrap').click(function(event){
+      event.stopPropagation();
+    });
+
     // ***** 終了時に行う処理 *****
 
     /*
@@ -208,6 +217,15 @@
     */
 
     // ***** キャスト関連 *****
+
+    $('#chromecast-box').click(function(event){
+      $('#nav-close').removeClass('open');
+      $('#chromecast-box').removeClass('open');
+    });
+
+    $('#chromecast-wrap').click(function(event){
+      event.stopPropagation();
+    });
 
     $.ajax({
       url: '/api/chromecast/' + stream,

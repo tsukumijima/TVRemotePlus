@@ -2094,24 +2094,18 @@ td {
 /* Hotkeyボックス */
 
 #hotkey-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 400;
-    margin: auto;
-    padding: 20px;
-    box-sizing: border-box;
     transition: opacity 0.3s, visibility 0.3s ease-in-out;
     visibility: hidden;
     opacity: 0;
-    width: 95%;
-    max-width: 1050px;
-    height: 550px;
-    background-color: var(--color-white);
-    border-radius: 5px;
-    font-size: 16px;
     will-change: opacity;
 }
 
@@ -2119,6 +2113,17 @@ td {
     transition-delay: 0s;
     visibility: visible;
     opacity: 1;
+}
+
+#hotkey-wrap {
+    display: block;
+    width: 95%;
+    max-width: 1050px;
+    padding: 18px 22px;
+    border-radius: 5px;
+    font-size: 15px;
+    background-color: var(--color-white);
+    box-sizing: border-box;
 }
 
 .hotkey-head-box {
@@ -2211,6 +2216,10 @@ td {
     align-items: center;
     width: 16px;
     font-size: 12.5px;
+}
+
+#hotkey-box .broadcast-button-box {
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 1024px){

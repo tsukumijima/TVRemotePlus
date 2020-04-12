@@ -605,151 +605,177 @@
     </div>
 
     <div id="hotkey-box">
-      <div class="hotkey-head-box title">
-        <i class="fas fa-keyboard"></i>
-        <span class="hotkey-head">キーボードショートカット一覧</span>
-        <span class="hotkey-head-sub">(＊) … ツイート入力フォーム以外にフォーカスした状態</span>
-      </div>
-      <div id="hotkey-list-box">
-        <div class="hotkey-list-wrap">
-          <div class="hotkey-head-box">
-            <i class="fas fa-play" style="font-size: 13.5px;"></i>
-            <span class="hotkey-head">再生</span>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">再生 / 一時停止の切り替え</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Space</div>
+      <div id="hotkey-wrap">
+        <div class="hotkey-head-box title">
+          <i class="fas fa-keyboard"></i>
+          <span class="hotkey-head">キーボードショートカット一覧</span>
+          <span class="hotkey-head-sub">(＊) … ツイート入力フォーム以外にフォーカスした状態</span>
+        </div>
+        <div id="hotkey-list-box">
+          <div class="hotkey-list-wrap">
+            <div class="hotkey-head-box">
+              <i class="fas fa-play" style="font-size: 13.5px;"></i>
+              <span class="hotkey-head">再生</span>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">再生 / 一時停止の切り替え</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Space</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">5秒巻き戻し</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">5秒早送り</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">15秒巻き戻し</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Ctrl (or Command)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">15秒早送り</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Ctrl (or Command)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">30秒巻き戻し</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Shift</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">30秒早送り</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Shift</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">60秒巻き戻し</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">60秒早送り</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">音量を10%上げる</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(プレイヤーにフォーカス)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-up"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">音量を10%下げる</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(プレイヤーにフォーカス)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-down"></i></div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">字幕の表示 / 非表示の切り替え</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">J</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">コメントの表示 / 非表示の切り替え</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">K</div>
+              </div>
             </div>
           </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">5秒巻き戻し</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+          <div class="hotkey-list-wrap">
+            <div class="hotkey-head-box">
+              <i class="fas fa-home"></i>
+              <span class="hotkey-head">全般</span>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">5秒早送り</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">全画面のオン / オフの切り替え</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">F</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">15秒巻き戻し</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Ctrl</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ブラウザ全画面のオン / オフの切り替え</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">W</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">15秒早送り</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Ctrl</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ピクチャーインピクチャーのオン / オフの切り替え（対応ブラウザのみ）</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">P</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">30秒巻き戻し</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Shift</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ストリームを同期する（ライブ配信時のみ）</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">S</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">30秒早送り</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Shift</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">コメント入力フォームを表示してフォーカスする</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">C</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">60秒巻き戻し</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Alt</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">キーボードショートカットの一覧を表示する</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">?</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">60秒早送り</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Alt</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+            <div class="hotkey-head-box">
+              <i class="fab fa-twitter"></i>
+              <span class="hotkey-head">ツイート</span>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">音量を10%上げる</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(プレイヤーにフォーカス)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-up"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ツイート入力フォームにフォーカスする / フォーカスを外す</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Tab</div>
+              </div>
             </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">音量を10%下げる</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(プレイヤーにフォーカス)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-down"></i></div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ストリームをキャプチャする</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">1</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ストリームをコメント付きでキャプチャする</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">2</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">キャプチャとツイートをリセットする</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">3</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">クリップボードの画像を取り込む</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(ツイート入力フォームにフォーカス)</div> + <div class="hotkey-list-key">Ctrl (or Command)</div> + <div class="hotkey-list-key alphabet">V</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="hotkey-list-wrap">
-          <div class="hotkey-head-box">
-            <i class="fas fa-home"></i>
-            <span class="hotkey-head">全般</span>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">全画面のオン / オフの切り替え</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">F</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">ブラウザ全画面のオン / オフの切り替え</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">W</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">ピクチャーインピクチャーのオン / オフの切り替え（対応ブラウザのみ）</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">P</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">ストリームを同期する（ライブ配信時のみ）</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">S</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">コメント入力フォームを表示してフォーカスする</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">C</div>
-            </div>
-          </div>
-          <div class="hotkey-head-box">
-            <i class="fab fa-twitter"></i>
-            <span class="hotkey-head">ツイート</span>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">ツイート入力フォームにフォーカスする / フォーカスを外す</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Tab</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">ストリームをキャプチャする</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">1</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">ストリームをコメント付きでキャプチャする</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">2</div>
-            </div>
-          </div>
-          <div class="hotkey-list">
-            <div class="hotkey-list-name">キャプチャとツイートをリセットする</div>
-            <div class="hotkey-list-key-box">
-              <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">3</div>
-            </div>
-          </div>
+        <div id="button-box" class="broadcast-button-box">
+          <button class="redbutton" type="button"><i class="fas fa-times"></i>閉じる</button>
         </div>
-      </div>
-      <div id="button-box" class="broadcast-button-box">
-        <button class="redbutton" type="button"><i class="fas fa-times"></i>閉じる</button>
       </div>
     </div>
 
