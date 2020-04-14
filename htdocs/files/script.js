@@ -9,20 +9,20 @@
 
     // 最初に実行
     if (Cookies.get('twitter_session')){
-      $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)">ログアウト</a>');
+      $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
     } else {
-      $('#tweet-status').html('<a id="tweet-login" href="/tweet/auth">ログイン</a>');
+      $('#tweet-status').html('<a id="tweet-login" href="/tweet/auth"><i class="fas fa-sign-in-alt"></i>ログイン</a>');
     }
     
     // Twitterアカウント情報を読み込み
     twitter = {account_name:'ログインしていません', account_id:'', account_icon:'/files/account_default.jpg'};
-    if (Cookies.get('twitter') != undefined){
+    if (Cookies.get('twitter') != undefined){ // Cookieがあれば読み込む
       twitter = JSON.parse(Cookies.get('twitter'));
-      $('#tweet-account-icon').attr('src', twitter['account_icon']);
-      $('#tweet-account-name').text(twitter['account_name']);
-      $('#tweet-account-name').attr('href', 'https://twitter.com/' + twitter['account_id']);
-      $('#tweet-account-id').text('@' + twitter['account_id']);
     }
+    $('#tweet-account-icon').attr('src', twitter['account_icon']);
+    $('#tweet-account-name').text(twitter['account_name']);
+    $('#tweet-account-name').attr('href', 'https://twitter.com/' + twitter['account_id']);
+    $('#tweet-account-id').text('@' + twitter['account_id']);
 
     // ***** 視聴数カウント・ストリーム状態把握 *****
 
@@ -563,10 +563,15 @@
     });
 
     // tabキーが押されたとき：フォーカス
+    // ?キー：ショートカット一覧
     // Alt + 1キーが押された時：キャプチャ
     // Alt + 2キーが押された時：コメント付きキャプチャ
     // Alt + 3キーが押された時：フォームリセット
+    // Ctrl + Enter：ツイート送信
     $(document).keydown(function(event){
+      
+      // クロスブラウザ対応用
+      var event = event || window.event;
 
       // tabキー
       if (event.which === 9){
@@ -607,17 +612,8 @@
           break;
         }
       }
-    });
 
-    // ツイートボタンが押された時にツイートを送信する
-    $('#tweet-submit').click(function(event){
-      tweet_send(event);
-    });
-
-    // Ctrl + Enterキーが押された時にツイートを送信する
-    $('#tweet-form').keydown(function(event){
-      // クロスブラウザ対応用
-      var event = event || window.event;
+      // Ctrl + Enterキーが押された時にツイートを送信する
       // limit内なら
       if ((limit < 140 || file != null) && limit >= 0){
         // Ctrl(or Command) + Enterキーなら送信
@@ -627,6 +623,12 @@
           }
         }
       }
+
+    });
+
+    // ツイートボタンが押された時にツイートを送信する
+    $('#tweet-submit').click(function(event){
+      tweet_send(event);
     });
 
 
@@ -1019,6 +1021,7 @@
       })
       .done(function(data) {
         file = null;
+        limit = 140;
         $('#tweet').val(null);
         $('#tweet-file').val(null);
         $("#tweet-status").html(data);
@@ -1042,9 +1045,9 @@
       $('#content-box').show();
       $('#footer').show();
       if (Cookies.get('twitter_session')){
-        $("#tweet-status").html('<a id="tweet-logout" href="javascript:void(0)">ログアウト</a>');
+        $("#tweet-status").html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
       } else {
-        $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth">ログイン</a>');
+        $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth"><i class="fas fa-sign-in-alt"></i>ログイン</a>');
       }
     }
     

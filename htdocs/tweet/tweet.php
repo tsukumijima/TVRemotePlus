@@ -201,13 +201,13 @@
 					echo '<span class="tweet-failed">Twitter API アプリが無効化されています：投稿に失敗しました…</span>';
 					break;
 				default:
-					echo '<span class="tweet-failed">投稿に失敗しました… (code: '.$result->errors[0]->code.')　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
+					echo '<span class="tweet-failed">投稿に失敗しました… (code: '.$result->errors[0]->code.')　<a id="tweet-login" href="/tweet/auth.php"><i class="fas fa-sign-in-alt"></i>再ログイン</a></span>';
 					break;
 			}
 		} else {
-			echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
+			echo '<span class="tweet-failed">投稿に失敗しました…　<a id="tweet-login" href="/tweet/auth.php"><i class="fas fa-sign-in-alt"></i>再ログイン</a></span>';
 		}
 
 	} else { //セッションがない場合
-		echo '<a id="tweet-login" href="/tweet/auth.php">ツイートするには Twitter でログインして下さい</a>';
+		echo '<a id="tweet-login" href="/tweet/auth.php"><i class="fas fa-sign-in-alt"></i>ツイートするには Twitter でログインしてください</a>';
 	}

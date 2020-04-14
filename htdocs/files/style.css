@@ -1245,6 +1245,11 @@ td {
     text-decoration: none;
 }
 
+#tweet-login i, #tweet-logout i {
+    display: inline-block;
+    margin-right: 5px;
+}
+
 #tweet-form {
     width: 100%;
     margin-top: 2px;

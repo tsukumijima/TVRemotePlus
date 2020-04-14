@@ -34,5 +34,5 @@
 	session_destroy();
 
 	// 出力
-	echo '<span class="tweet-failed">ログアウトしました。　<a id="tweet-login" href="/tweet/auth.php">再ログイン</a></span>';
+	echo '<span class="tweet-failed">ログアウトしました。　<a id="tweet-login" href="/tweet/auth.php"><i class="fas fa-sign-in-alt"></i>再ログイン</a></span>';
 
