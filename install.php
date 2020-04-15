@@ -117,6 +117,7 @@
 		echo '      アップデートモードでインストールします。'."\n";
 		echo '      このままアップデートモードでインストールするには 1 を、'."\n";
 		echo '      全て新規インストールする場合は 2 を入力してください。'."\n";
+		echo "\n";
 		echo '      Enter キーで次に進む場合、自動でアップデートモードを選択します。'."\n";
 		echo "\n";
 		echo '      インストールモード：';
@@ -138,6 +139,7 @@
 		echo '      インストーラーで検知したローカル IP アドレスは '.getHostByName(getHostName()).' です。'."\n";
 		echo '      判定が間違っている場合もあります (VPN 等を使っていて複数の仮想デバイスがある場合など)'."\n";
 		echo '      その場合、メインで利用しているローカル IP アドレスを ipconfig で調べ、入力してください。'."\n";
+		echo "\n";
 		echo '      よくわからない場合は、Enter キーを押し、次に進んでください。'."\n";
 		echo "\n";
 		echo '      ローカル IP アドレス：';
@@ -149,11 +151,12 @@
 		}
 		echo "\n";
 
-		echo '    3. 必要な場合、TVRemotePlus が利用するポートを設定して下さい。'."\n";
+		echo '    3. 必要な場合、TVRemotePlus が利用するポートを設定してください。'."\n";
 		echo "\n";
 		echo '      通常は、ブラウザの URL 欄から http://'.$serverip.':8000 でアクセスできます。'."\n";
 		echo '      この 8000 の番号を変えたい場合は、ポート番号を入力してください。'."\n";
 		echo '      HTTPS 接続時はポート番号が ここで設定した番号 + 100 になります。'."\n";
+		echo "\n";
 		echo '      よくわからない場合は、Enter キーを押し、次に進んでください。'."\n";
 		echo "\n";
 		echo '      利用ポート番号：';
@@ -166,12 +169,13 @@
 		$https_port = $http_port + 100; // SSL用ポート
 		echo "\n";
 
-		echo '    4. TVTest の BonDriver は 32bit ですか？ 64bit ですか？'."\n";
+		echo '    4. お使いの TVTest の BonDriver は 32bit ですか？ 64bit ですか？'."\n";
 		echo "\n";
 		echo '      32bit の場合は 1 、64bit の場合は 2 と入力してください。'."\n";
-		echo '      この項目で 32bit 版・64bit 版どちらの TSTask を使うかが決まります。'."\n";
-		echo '      インストール終了後、お使いの TVTest の BonDriver と ch2 ファイルを、'."\n";
+		echo '      この設定で 32bit 版・64bit 版どちらの TSTask を使うかが決まります。'."\n";
+		echo '      インストール終了後、お使いの TVTest の BonDriver と ch2 ファイルを'."\n";
 		echo '      '.$serverroot.'/bin/TSTask/BonDriver/ にコピーしてください。'."\n";
+		echo "\n";
 		echo '      Enter キーで次に進む場合、自動で 32bit の TSTask を選択します。'."\n";
 		echo "\n";
 		echo '      TVTest の BonDriver：';
@@ -181,10 +185,31 @@
 		if ($bondriver != 2) $bondriver = 1;
 		echo "\n";
 
-		echo '    5. 録画ファイルのあるフォルダを指定します。'."\n";
+		echo '    5. EDCB Material WebUI (EMWUI) の API がある URL を入力してください。'."\n";
+		echo "\n";
+		echo '      通常は http://(EDCBのあるPCのIPアドレス):5510/api/ になっています。'."\n";
+		echo '      EDCB Material WebUI のポートやフォルダ構成を変更していたり、'."\n";
+		echo '      EDCB が別の PC に入っている場合は、適宜設定を変更してください。'."\n";
+		echo "\n";
+		echo '      Enter キーで次に進む場合、同じ PC に EDCB が導入されていると仮定し、'."\n";
+		echo '      自動で http://'.$serverip.':5510/api/ に設定します。'."\n";
+		echo '      この設定は ≡ サイドメニュー → 設定 → 環境設定 からも変更できます。'."\n";
+		echo "\n";
+		echo '      EMWUI の API がある URL：';
+		// TVTestのBonDriver
+		$EDCB_http_url = trim(fgets(STDIN));
+		// 判定
+		if (empty($EDCB_http_url)){
+			$EDCB_http_url = 'http://'.$serverip.':5510/api/';
+		}
+		echo "\n";
+
+		echo '    6. 録画ファイルのあるフォルダを指定します。'."\n";
 		echo "\n";
 		echo '      フォルダをドラッグ&ドロップするか、フォルダパスを入力してください。'."\n";
 		echo '      なお、特殊なパス (UNCパス等) の場合、正常に動作しない可能性があります。'."\n";
+		echo "\n";
+		echo '      この設定は ≡ サイドメニュー → 設定 → 環境設定 からも変更できます。'."\n";
 		echo "\n";
 		echo '      録画ファイルのあるフォルダ：';
 		// 録画ファイルのあるフォルダ
@@ -284,6 +309,7 @@
 		// TVRemotePlus の設定ファイル
 		$tvrp_conf = file_get_contents($tvrp_conf_file);
 		// 置換
+		$tvrp_conf = preg_replace('/^\$EDCB_http_url =.*/m', '$EDCB_http_url = \''.mb_convert_encoding($EDCB_http_url, 'UTF-8', 'SJIS, SJIS-WIN').'\';', $tvrp_conf);
 		$tvrp_conf = preg_replace('/^\$TSfile_dir =.*/m', '$TSfile_dir = \''.mb_convert_encoding($TSfile_dir, 'UTF-8', 'SJIS, SJIS-WIN').'\';', $tvrp_conf);
 		// 書き込み
 		file_put_contents($tvrp_conf_file, $tvrp_conf);
@@ -347,7 +373,7 @@
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
 					  '$lnk = $shell.CreateShortcut(\"$Home'.$shortcut_file.'\"); '.
 					  '$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
-					  '$lnk.WorkingDirectory = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\"'.
+					  '$lnk.WorkingDirectory = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\"; '.
 					  '$lnk.WindowStyle = 7; '.
 					  '$lnk.Save()';
 		exec('powershell -Command "'.$powershell.'"', $opt2, $return2);

@@ -18,97 +18,24 @@
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
+	// 自己署名証明書の許可用
+	// 参考：https://blog.hanhans.net/2018/06/16/simplexml-load-file/
+	$context = stream_context_create(array('ssl' => array(
+		'allow_self_signed'=> true,
+		'verify_peer' => false,
+	)));
+
+	// コンテキストを読み込む
+	libxml_set_streams_context($context);
+
 	// 番組情報を取得する関数
 	function getEpgInfo($ch, $jkchannels, $chnum, $sid, $onid, $tsid){
-		global  $EDCB_http_url;
 		
-		// 番組表API読み込み
-		$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
-
-		// チャンネル名
-		if (isset($epg->items->eventinfo[0]->service_name)){
-			$channel = mb_convert_kana(strval($epg->items->eventinfo[0]->service_name), 'asv');
-		} else {
-			$channel = 'チャンネル名を取得できませんでした';
-		}
-
-		// 現在の番組
-		if (isset($epg->items->eventinfo[0]->startTime)){
-			$starttime = $epg->items->eventinfo[0]->startDate.' '.$epg->items->eventinfo[0]->startTime;
-		} else {
-			$starttime = date('Y/m/d').'00:00:00';
-		}
-		if (isset($epg->items->eventinfo[0]->duration)){
-			$duration = $epg->items->eventinfo[0]->duration;
-		} else {
-			$duration = '0000';
-		}
-		if (isset($epg->items->eventinfo[0]->event_name)){
-			//文字列に変換してさらに半角に変換して改行をbrにする
-			$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'asv')); 
-		} else {
-			if (isset($epg->items->eventinfo[0]->service_name)){
-				$program_name = '放送休止';
-			} else {
-				$program_name = '番組情報を取得できませんでした';
-			}
-		}
-		if (isset($epg->items->eventinfo[0]->event_text)){
-			//文字列に変換してさらに半角に変換して改行をbrにする
-			$program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_text), 'asv'));
-		} else {
-			if (isset($epg->items->eventinfo[0]->service_name)){
-				$program_info = '放送休止';
-			} else {
-				$program_info = '番組情報を取得できませんでした';
-			}
-		}
-
-		// 次の番組
-		if (isset($epg->items->eventinfo[1]->startTime)){
-			$next_starttime = $epg->items->eventinfo[0]->startDate.' '.$epg->items->eventinfo[1]->startTime;
-		} else {
-			$next_starttime = date('Y/m/d').'00:00:00';
-		}
-		if (isset($epg->items->eventinfo[1]->duration)){
-			$next_duration = $epg->items->eventinfo[1]->duration;
-		} else {
-			$next_duration = '0000';
-		}
-		if (isset($epg->items->eventinfo[1]->event_name)){
-			//文字列に変換してさらに半角に変換して改行をbrにする
-			$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv')); 
-		} else {
-			if (isset($epg->items->eventinfo[1]->service_name)){
-				$next_program_name = '放送休止';
-			} else {
-				$next_program_name = '番組情報を取得できませんでした';
-			}
-		}
-		if (isset($epg->items->eventinfo[1]->event_text)){
-			//文字列に変換してさらに半角に変換して改行をbrにする
-			$next_program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_text), 'asv'));
-		} else {
-			if (isset($epg->items->eventinfo[1]->service_name)){
-				$next_program_info = '放送休止';
-			} else {
-				$next_program_info = '番組情報を取得できませんでした';
-			}
-		}
-
-		// 開始/終了時間の解析
-		$starttimestamp = strtotime($starttime); //タイムスタンプに変換
-		$next_starttimestamp = strtotime($next_starttime); //タイムスタンプに変換
-		$endtimestamp = $starttimestamp + $duration; // 秒数を足す
-		$next_endtimestamp = $next_starttimestamp + $duration; // 秒数を足す
-		$starttime = date("H:i", $starttimestamp);
-		$next_starttime = date("H:i", $next_starttimestamp);
-		$endtime = date("H:i", $endtimestamp);
-		$next_endtime = date("H:i", $next_endtimestamp);
+		global $EDCB_http_url;
 
 		// 実況IDを取得する
 		$jkch = getJKchannel($ch[$chnum]);
-		
+
 		if (!empty($jkchannels)){
 			// 実況勢いを先に取得しておいたデータから見つけて代入
 			foreach ($jkchannels->channel as $i => $value) {
@@ -130,24 +57,132 @@
 			$ikioi = ' - ';
 		}
 
-		return array(
-			'ch' => intval($chnum),
-			'ch_str' => strval($chnum),
-			'tsid' => intval($tsid),
-			'channel' => $channel,
-			'ikioi'=> $ikioi,
-			'timestamp' => $starttimestamp, 
-			'duration' => $endtimestamp - $starttimestamp, 
-			'starttime' => $starttime, 
-			'to' => '～', 
-			'endtime' => $endtime, 
-			'program_name' => decorateMark($program_name),
-			'program_info' => decorateMark($program_info),
-			'next_starttime' => $next_starttime, 
-			'next_endtime' => $next_endtime, 
-			'next_program_name' => decorateMark($next_program_name),
-			'next_program_info' => decorateMark($next_program_info),
-		);
+		if (!empty($EDCB_http_url)){
+		
+			// 番組表API読み込み
+			$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
+
+			// チャンネル名
+			if (isset($epg->items->eventinfo[0]->service_name)){
+				$channel = mb_convert_kana(strval($epg->items->eventinfo[0]->service_name), 'asv');
+			} else {
+				$channel = 'チャンネル名を取得できませんでした';
+			}
+
+			// 現在の番組
+			if (isset($epg->items->eventinfo[0]->startTime)){
+				$starttime = $epg->items->eventinfo[0]->startDate.' '.$epg->items->eventinfo[0]->startTime;
+			} else {
+				$starttime = date('Y/m/d').'00:00:00';
+			}
+			if (isset($epg->items->eventinfo[0]->duration)){
+				$duration = $epg->items->eventinfo[0]->duration;
+			} else {
+				$duration = '0000';
+			}
+			if (isset($epg->items->eventinfo[0]->event_name)){
+				//文字列に変換してさらに半角に変換して改行をbrにする
+				$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'asv')); 
+			} else {
+				if (isset($epg->items->eventinfo[0]->service_name)){
+					$program_name = '放送休止';
+				} else {
+					$program_name = '番組情報を取得できませんでした';
+				}
+			}
+			if (isset($epg->items->eventinfo[0]->event_text)){
+				//文字列に変換してさらに半角に変換して改行をbrにする
+				$program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_text), 'asv'));
+			} else {
+				if (isset($epg->items->eventinfo[0]->service_name)){
+					$program_info = '放送休止';
+				} else {
+					$program_info = '番組情報を取得できませんでした';
+				}
+			}
+
+			// 次の番組
+			if (isset($epg->items->eventinfo[1]->startTime)){
+				$next_starttime = $epg->items->eventinfo[0]->startDate.' '.$epg->items->eventinfo[1]->startTime;
+			} else {
+				$next_starttime = date('Y/m/d').'00:00:00';
+			}
+			if (isset($epg->items->eventinfo[1]->duration)){
+				$next_duration = $epg->items->eventinfo[1]->duration;
+			} else {
+				$next_duration = '0000';
+			}
+			if (isset($epg->items->eventinfo[1]->event_name)){
+				//文字列に変換してさらに半角に変換して改行をbrにする
+				$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv')); 
+			} else {
+				if (isset($epg->items->eventinfo[1]->service_name)){
+					$next_program_name = '放送休止';
+				} else {
+					$next_program_name = '番組情報を取得できませんでした';
+				}
+			}
+			if (isset($epg->items->eventinfo[1]->event_text)){
+				//文字列に変換してさらに半角に変換して改行をbrにする
+				$next_program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_text), 'asv'));
+			} else {
+				if (isset($epg->items->eventinfo[1]->service_name)){
+					$next_program_info = '放送休止';
+				} else {
+					$next_program_info = '番組情報を取得できませんでした';
+				}
+			}
+
+			// 開始/終了時間の解析
+			$starttimestamp = strtotime($starttime); //タイムスタンプに変換
+			$next_starttimestamp = strtotime($next_starttime); //タイムスタンプに変換
+			$endtimestamp = $starttimestamp + $duration; // 秒数を足す
+			$next_endtimestamp = $next_starttimestamp + $duration; // 秒数を足す
+			$starttime = date("H:i", $starttimestamp);
+			$next_starttime = date("H:i", $next_starttimestamp);
+			$endtime = date("H:i", $endtimestamp);
+			$next_endtime = date("H:i", $next_endtimestamp);
+
+			return array(
+				'ch' => intval($chnum),
+				'ch_str' => strval($chnum),
+				'tsid' => intval($tsid),
+				'channel' => $channel,
+				'ikioi'=> $ikioi,
+				'timestamp' => $starttimestamp, 
+				'duration' => $endtimestamp - $starttimestamp, 
+				'starttime' => $starttime, 
+				'to' => '～', 
+				'endtime' => $endtime, 
+				'program_name' => decorateMark($program_name),
+				'program_info' => decorateMark($program_info),
+				'next_starttime' => $next_starttime, 
+				'next_endtime' => $next_endtime, 
+				'next_program_name' => decorateMark($next_program_name),
+				'next_program_info' => decorateMark($next_program_info),
+			);
+
+		} else {
+
+			return array(
+				'ch' => intval($chnum),
+				'ch_str' => strval($chnum),
+				'tsid' => intval($tsid),
+				'channel' => 'チャンネル名を取得できませんでした',
+				'ikioi'=> $ikioi,
+				'duration' => '', 
+				'starttime' => '00:00', 
+				'to' => '～', 
+				'endtime' => '00:00', 
+				'program_name' => '番組情報を取得できませんでした',
+				'program_info' => '番組情報を表示するには、EDCB Material WebUI の API がある URL が設定されている必要があります。<br>'.
+								  '左上の ≡ サイドメニュー → 設定 → 環境設定 から設定できます。',
+				'next_starttime' => '00:00', 
+				'next_endtime' => '00:00', 
+				'next_program_name' => '番組情報を取得できませんでした',
+				'next_program_info' => '',
+			);
+		}
 	}
 
 	$epginfo['api'] = 'epginfo';
