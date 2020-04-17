@@ -663,7 +663,7 @@
 					// vposからミリ秒部分だけ取り出す
 					$vpos = floatval('0.'.substr($jkthread[$i]['vpos'], -3, 3));
 					// 秒を計算
-					$sec = ($jkthread[$i]['date'] - $start_timestamp) + $vpos;
+					$sec = ($jkthread[$i]['date'] - $start_timestamp) + $vpos + intval(isSettingsItem('comment_file_delay')); // 遅延分を足す
 					// 万が一マイナスになった場合は0にする
 					if ($sec < 0) $sec = 0;
 		

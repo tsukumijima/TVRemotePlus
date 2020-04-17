@@ -86,6 +86,7 @@
       list_view: false,
       comment_size: 35,
       comment_delay: 5,
+      comment_file_delay: 0,
       list_view_number: 30,
       onclick_stream: false
     };

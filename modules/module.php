@@ -202,13 +202,14 @@
 	// Cookie内の設定に指定の項目が指定された値であるかどうかを確認する関数
 	// あれば true・ないもしくは設定自体が存在しない場合は false を返す
 	// matchを省略した場合はその項目の値を返す
-	function isSettingsItem($item, $match = ''){
+	function isSettingsItem($item, $match = null, $default = false){
+		// Cookieが存在する
 		if (isset($_COOKIE['settings'])){
 			$settings = json_decode($_COOKIE['settings'], true);
 			if (isset($settings[$item])){
-				if ($settings[$item] == $match){
+				if ($settings[$item] === $match){
 					return true;
-				} else if ($match === ''){ // === にしないとbool値が '' と判断されることが…
+				} else if ($match === null){ // === にしないとおかしくなることが
 					return $settings[$item];
 				} else {
 					return false;
@@ -216,8 +217,9 @@
 			} else {
 				return false;
 			}
+		// Cookie が存在しない
 		} else {
-			return false;
+			return $default; // default に指定した値を返す
 		}
 	}
 

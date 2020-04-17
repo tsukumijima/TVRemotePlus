@@ -2305,7 +2305,7 @@ td {
     outline: none;
     border-radius: 4px;
     border-style: none;
-    background-color: var(--color-tweet);
+    background-color: var(--color-blue);
     transition: all  0.1s ease;
     cursor: pointer;
 }
