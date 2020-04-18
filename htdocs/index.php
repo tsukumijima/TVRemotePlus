@@ -694,13 +694,13 @@
             <div class="hotkey-list">
               <div class="hotkey-list-name">字幕の表示 / 非表示の切り替え</div>
               <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">J</div>
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">S</div>
               </div>
             </div>
             <div class="hotkey-list">
               <div class="hotkey-list-name">コメントの表示 / 非表示の切り替え</div>
               <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">K</div>
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">D</div>
               </div>
             </div>
           </div>
@@ -730,7 +730,7 @@
             <div class="hotkey-list">
               <div class="hotkey-list-name">ストリームを同期する（ライブ配信時のみ）</div>
               <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">S</div>
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">L</div>
               </div>
             </div>
             <div class="hotkey-list">
