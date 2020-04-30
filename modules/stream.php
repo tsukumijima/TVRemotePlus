@@ -316,6 +316,11 @@
 			break;
 		}
 
+		// 既にTSTaskのログがあれば削除する
+		if (file_exists($base_dir.'logs/stream'.$stream.'.tstask.log')){
+			unlink($base_dir.'logs/stream'.$stream.'.tstask.log');
+		}
+
 		// TSTask.exeを起動する
 		$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 		              ' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
@@ -447,6 +452,10 @@
 
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true'){
+			// 既にエンコーダーのログがあれば削除する
+			if (file_exists($base_dir.'logs/stream'.$stream.'.encoder.log')){
+				unlink($base_dir.'logs/stream'.$stream.'.encoder.log');
+			}
 			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($stream_cmd).
 			              ' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
 		} else {
