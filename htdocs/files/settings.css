@@ -62,7 +62,7 @@ h2 {
 h2:before {
     content:  '';
     width: 85%;
-    height: 3px;
+    height: 3.1px;
     background-color: #4ECDC4;
     display: block;
     position: absolute;
@@ -92,7 +92,7 @@ h3 {
 h3:before {
     content:  '';
     width: 85%;
-    height: 3px;
+    height: 3.1px;
     display: block;
     position: absolute;
     left: 0;

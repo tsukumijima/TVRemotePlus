@@ -107,6 +107,12 @@
                   if (!dp.video.paused){
                     dp.danmaku.draw(danmaku);
                   }
+
+                  // コメント数が500を超えたら
+                  if (document.getElementsByClassName('comment-live').length >= 500){
+                    // 古いコメントを削除
+                    document.getElementsByClassName('comment-live')[0].parentNode.removeChild(document.getElementsByClassName('comment-live')[0]);
+                  }
                 }
               }
 
@@ -126,6 +132,7 @@
                 });
 
               }
+
             }
           });
         }

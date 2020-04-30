@@ -31,7 +31,7 @@
   <!-- Style -->
   <link rel="manifest" href="/manifest.json">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap">
   <link rel="stylesheet" type="text/css" href="/files/toastr.min.css">
