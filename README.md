@@ -485,7 +485,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 - ffmpeg（ 4.1.4・UDP 受信 → エンコードに利用）
 - ffprobe（ 4.1.4・録画ファイルの情報取得に利用）
 - QSVEncC（ 3.28・UDP 受信 → ハードウェアエンコードに利用）
-- NVEncC（ 4.69・UDP 受信 → ハードウェアエンコードに利用）
+- NVEncC（ 5.00・UDP 受信 → ハードウェアエンコードに利用）
 - VCEEncC（ 5.01・UDP 受信 → ハードウェアエンコードに利用）
 
 ## 動作環境
@@ -512,7 +512,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
   - サーバー：Windows7 Professional 64bit (Desktop) + PLEX PX-Q3PE4
     - スペック：
       - CPU：Core i7-2600K
-      - GPU：NVIDIA Geforce GTX 1660Ti
+      - GPU：Intel Graphics 3000・NVIDIA Geforce GTX 1660Ti
       - RAM：8GB
     - PX-Q3PE4 の兄弟機種である PX-W3PE4・PX-W3U4・PX-Q3U4 でも同様に使えると思います
     - PT 系はこちらに環境がないので微妙です…

@@ -61,76 +61,16 @@ NVEncを使用したことによる、いかなる損害・トラブルについても責任を負いません。
 
 【NVEnc 使用方法 (手動)】
 1. 
-以下のものをインストールしてください。
-
-Visual Studio 2015 の Visual C++ 再頒布可能パッケージ (x86) 
-https://www.microsoft.com/ja-jp/download/details.aspx?id=48145
-
-.NET Framework 4.5がインストールされていない場合、インストールしてください。
-通常はWindows Updateでインストールされ、またCatalyst Control Centerでも使用されているため、
-インストールの必要はありません。
-
-.NET Framework 4.5 (x86)
-http://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe
-
-.NET Framework 4.5 (x86) 言語パック
-http://download.microsoft.com/download/9/1/2/9125E189-97A4-4364-860C-09A0F96F6FB2/NDP452-KB2901907-x86-x64-AllOS-JPN.exe
+NVEnc.auo、NVEnc.ini、NVEnc_stgフォルダ をAviutlのpluginフォルダにコピーします。
 
 2. 
-NVEnc.NVEnc.ini、NVEnc_stgフォルダ をAviutlのpluginフォルダにコピーします。
-
-3. 
 Aviutlを起動し、「その他」>「出力プラグイン情報」にNVEncがあるか確かめます。
 ここでNVEncの表示がない場合、1.で必要なものを忘れている、あるいは失敗したなどが考えられます。
+ 
+3.
+NVEncの設定画面を開き、NVEncCの場所を指定します。
 
-4. 必要な実行ファイルを集めます。
-   以下に実行ファイル名とダウンロード場所を列挙します。
-   実行ファイルは32bit/64bitともに可です。
-<主要エンコーダ・muxer>
- [qaac/refalac (AAC/ALACエンコーダ)]
- http://sites.google.com/site/qaacpage/
- 
- [L-SMASH (mp4出力時に必要)]
- http://pop.4-bit.jp/
- 
- [mkvmerge (mkv出力時に必要)]
- http://www.bunkus.org/videotools/mkvtoolnix/
- 
-<音声エンコーダ>
- [ffmpeg     (AAC, AC3, mp3エンコーダとして使用)]
- https://ffmpeg.zeranoe.com/builds/
- http://blog.k-tai-douga.com/
-
- [neroaacenc (AACエンコーダ)]
- http://www.nero.com/jpn/downloads-nerodigital-nero-aac-codec.php
- 
- [FAW(fawcl) (FakeAACWave(偽装wav)解除)]
- http://2sen.dip.jp/cgi-bin/friioup/upload.cgi?search=FakeAacWav&sstart=0001&send=9999
- 
- [faw2aac.auo (FakeAACWave(偽装wav)解除)]
- http://www.rutice.net/FAW2aac
-
- [qtaacenc   (AACエンコーダ, 要QuickTime)]
- http://tmkk.pv.land.to/qtaacenc/
- 
- [ext_bs     (PVシリーズAAC抽出)]
- http://www.sakurachan.org/soft/mediatools/
- 
- [lame       (mp3エンコーダ)]
- http://www.rarewares.org/mp3-lame-bundle.php
- 
- [oggenc2    (ogg Vorbis, mkv専用)]
- http://www.rarewares.org/ogg-oggenc.php 
- 
- [mp4alsrm23 (MPEG4 ALS (MPEG4 Audio Lossless Coding))]
- http://www.nue.tu-berlin.de/menue/forschung/projekte/beendete_projekte/mpeg-4_audio_lossless_coding_als/parameter/en/
- ※Reference Software のとこにある MPEG-4 ALS codec for Windows - mp4alsRM23.exe
- 
-5.
-NVEncの設定画面を開き、各実行ファイルの場所を指定します。
-あと適当に設定します。
-
-6.
+4.
 エンコード開始。気長に待ちます。
 
 
@@ -141,23 +81,6 @@ NVEnc.iniを書き換えることにより、
 
 デフォルトの設定では不十分だと思った場合は、
 iniファイルの音声やmuxerのコマンドラインを調整してみてください。
-
-
-【ビルドについて】
-ビルドにはVC++2019が必要です。
-
-また、その他に以下のものも必要です。
-
-CUDA 10.2 toolkit
-http://developer.nvidia.com/cuda/cuda-toolkit
-
-DirectX SDK
-http://www.microsoft.com/en-us/download/details.aspx?id=6812
-※VC++2010再頒布パッケージ(x86/x64)がすでに入っていると、インストールに失敗する場合があります。
-  その場合は、VC++2010再頒布パッケージ(x86/x64)を一度アンインストールし、後でインストールし直すことでインストールできます。
-
-Windows DDK
-http://msdn.microsoft.com/ja-jp/windows/hardware/hh852365.aspx
 
 
 
@@ -243,6 +166,23 @@ NVIDIA グラフィックドライバ 445.75
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.04.18 (5.00)
+[NVEncC]
+・動画を回転/転置するフィルタを追加。( --vpp-rotate, --vpp-transform)
+・エンコード遅延を抑制するオプションを追加。( --lowlatency )
+  エンコードのパフォーマンス(スループット)が落ちるので、あまり意味はない。
+・hdr10plusのメタ情報をそのままコピーするオプションを追加。(--dhdr10-info copy)
+  現状制限事項が多いので注意。
+  - avsw/avhwのみ。
+  - avhwはraw streamなどtimestampが取得できない場合、正常に動作しない。
+・音声デコーダやエンコーダへのオプション指定が誤っていた場合に、
+  エラーで異常終了するのではなく、警告を出して継続するよう変更。
+・--chapterがavsw/avhw利用時にしか効かなかったのを修正。
+
+[NVEnc.auo]
+・NVEnc.auoで内部エンコーダを使用するモードを追加。
+  こちらの動作をデフォルトにし、外部エンコーダを使うほうはオプションに。
+
 2020.03.25 (4.69)
 [NVEncC]
 ・ドライバ445.75で、不必要なエラーメッセージが表示される問題に対策。
