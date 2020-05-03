@@ -103,7 +103,7 @@
 
 			// 次の番組
 			if (isset($epg->items->eventinfo[1]->startTime)){
-				$next_starttime = $epg->items->eventinfo[0]->startDate.' '.$epg->items->eventinfo[1]->startTime;
+				$next_starttime = $epg->items->eventinfo[1]->startDate.' '.$epg->items->eventinfo[1]->startTime;
 			} else {
 				$next_starttime = date('Y/m/d').'00:00:00';
 			}
@@ -135,12 +135,14 @@
 
 			// 開始/終了時間の解析
 			$starttimestamp = strtotime($starttime); //タイムスタンプに変換
-			$next_starttimestamp = strtotime($next_starttime); //タイムスタンプに変換
 			$endtimestamp = $starttimestamp + $duration; // 秒数を足す
-			$next_endtimestamp = $next_starttimestamp + $duration; // 秒数を足す
 			$starttime = date("H:i", $starttimestamp);
-			$next_starttime = date("H:i", $next_starttimestamp);
 			$endtime = date("H:i", $endtimestamp);
+
+			// 次の番組の開始/終了時間の解析
+			$next_starttimestamp = strtotime($next_starttime); //タイムスタンプに変換
+			$next_endtimestamp = $next_starttimestamp + $next_duration; // 秒数を足す
+			$next_starttime = date("H:i", $next_starttimestamp);
 			$next_endtime = date("H:i", $next_endtimestamp);
 
 			return array(
