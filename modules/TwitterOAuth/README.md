@@ -4,11 +4,6 @@
 
 ------------
 
-割とよく使うので若干設定等改造したものを上げておきます  
-機能的には本家と変わりません
-
-------------
-
 <p itemprop="description">The most popular PHP library for Twitter's OAuth REST API.</p>
 
 See documentation at https://twitteroauth.com.
