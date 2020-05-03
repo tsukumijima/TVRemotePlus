@@ -2311,26 +2311,11 @@ td {
 }
 
 .bluebutton:hover {
-    background-color: #1d82f2;
+    background-color: #016fe4;
 }
 
-.bluebutton[disabled] {
-    background-color: var(--color-tweet-disabled);
-    cursor: auto;
-}
-
-.bluebutton.disabled {
-    background-color: var(--color-tweet-disabled);
-    cursor: auto;
-}
-
-.bluebutton[disabled]:hover {
-    background-color: var(--color-tweet-disabled);
-    cursor: auto;
-}
-
-.bluebutton.disabled:hover {
-    background-color: var(--color-tweet-disabled);
+.bluebutton[disabled], .bluebutton[disabled]:hover, .bluebutton.disabled, .bluebutton.disabled:hover {
+    background-color: #55a7ff;
     cursor: auto;
 }
 
@@ -2354,12 +2339,7 @@ td {
     background-color: #ca0040;
 }
 
-.redbutton[disabled] {
-    background-color: #ff709e;
-    cursor: auto;
-}
-
-.redbutton[disabled]:hover {
+.redbutton[disabled], .redbutton[disabled]:hover, .redbutton.disabled, .redbutton.disabled:hover {
     background-color: #ff709e;
     cursor: auto;
 }

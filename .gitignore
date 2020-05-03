@@ -24,7 +24,7 @@
 /data/*.log
 /logs/*
 /modules/Cast/cast.json
-/modules/cast/scan.json
+/modules/Cast/scan.json
 /htdocs/server.crt
 /htdocs/phpinfo.php
 /htdocs/files/info/*
