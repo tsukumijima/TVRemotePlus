@@ -148,6 +148,7 @@
 		if($result and !isset($result->errors) and !isset($info->errors)){
 			echo $tweet_type.'：投稿に成功しました。';
 		} else if (isset($result->errors)){
+			// エラーメッセージ
 			switch ($result->errors[0]->code) {
 				case 32:
 					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
@@ -167,6 +168,9 @@
 				case 99:
 					echo '<span class="tweet-failed">OAuth 資格情報を確認できません (再ログインしてください)：投稿に失敗しました…</span>';
 					break;
+				case 131:
+					echo '<span class="tweet-failed">サーバーエラー (500) が発生しています：投稿に失敗しました…</span>';
+					break;
 				case 135:
 					echo '<span class="tweet-failed">認証に失敗しました：投稿に失敗しました…</span>';
 					break;
@@ -183,7 +187,7 @@
 					echo '<span class="tweet-failed">このアクションを完了できません：投稿に失敗しました…</span>';
 					break;
 				case 231:
-					echo '<span class="tweet-failed">ログインを確認してください(再ログインしてください)：投稿に失敗しました…</span>';
+					echo '<span class="tweet-failed">ログインを確認してください (再ログインしてください)：投稿に失敗しました…</span>';
 					break;
 				case 261:
 					echo '<span class="tweet-failed">Twitter API アプリが凍結されています：投稿に失敗しました…</span>';

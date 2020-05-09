@@ -11,6 +11,7 @@ date_default_timezone_set('Asia/Tokyo');
 
 // べースディレクトリ(フォルダ)
 $base_dir = str_replace('/modules', '', str_replace('\\', '/', dirname(__FILE__)).'/');
+$base_dir_reverse = str_replace('\modules', '', dirname(__FILE__).'\\');
 
 // バージョン
 $version = file_get_contents($base_dir.'data/version.txt');

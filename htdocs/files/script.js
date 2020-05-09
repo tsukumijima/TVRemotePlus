@@ -551,14 +551,14 @@
         contentType: false
       })
       .done(function(data) {
-        $("#tweet-status").html(data);
+        $('#tweet-status').html(data);
         $('#tweet-account-icon').attr('src', '/files/account_default.jpg');
         $('#tweet-account-name').text('ログインしていません');
         $('#tweet-account-name').removeAttr('href');
         $('#tweet-account-id').text('Not Login');
       })
       .fail(function(data){
-        $("#tweet-status").html('<span class="tweet-failed">ログアウト中にエラーが発生しました…</span>');
+        $('#tweet-status').html('<span class="tweet-failed">ログアウト中にエラーが発生しました…</span>');
       });
     });
 
@@ -615,12 +615,10 @@
 
       // Ctrl + Enterキーが押された時にツイートを送信する
       // limit内なら
-      if ((limit < 140 || file != null) && limit >= 0){
+      if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
         // Ctrl(or Command) + Enterキーなら送信
-        if (event.ctrlKey || event.metaKey){
-          if (event.which == 13){
-            tweet_send(event);
-          }
+        if ((event.ctrlKey || event.metaKey) && event.which == 13){
+          tweet_send(event);
         }
       }
 
@@ -628,7 +626,9 @@
 
     // ツイートボタンが押された時にツイートを送信する
     $('#tweet-submit').click(function(event){
-      tweet_send(event);
+      if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
+        tweet_send(event);
+      }
     });
 
 
@@ -959,36 +959,46 @@
     function tweet_count(event){
 
       // 現在のカウント数
-      count = Array.from($('#tweet').val()).length + Array.from($('#tweet-hashtag').val()).length;
+      count_tweet = Array.from($('#tweet').val()).length;
+      count_hashtag = Array.from($('#tweet-hashtag').val()).length;
+      count = count_hashtag + count_tweet;
       limit = 140 - count;
 
       if (limit <= 140) {
+        
+        // 初期化
         $('#tweet-num').text(limit);
         $('#tweet-num').removeClass('over');
         $('#tweet-num').removeClass('warn');
+
         // 送信中 or キャプチャ中でないなら
-        if ($("#tweet-status").text() != 'ツイートを送信中…' && $("#tweet-status").text() != 'コメント付きでキャプチャ中…' && $("#tweet-status").text() != 'キャプチャ中…'){
-          $('#tweet-submit').prop('disabled', false).removeClass('disabled');
+        if ($('#tweet-status').text() != 'ツイートを送信中…' && $('#tweet-status').text() != 'コメント付きでキャプチャ中…' && $('#tweet-status').text() != 'キャプチャ中…'){
+          $('#tweet-submit').prop('disabled', false).removeClass('disabled'); // 一旦ボタンを有効化
         }
-        if (limit == 140) {
-          $('#tweet-num').text(limit);
-          if (file == null){ // キャプチャされてないなら
+
+        // ハッシュタグ以外のツイート文が空
+        if (count_tweet === 0) {
+          if (file === null){ // キャプチャがない（ハッシュタグ以外送信するものがない）場合はボタンを無効に
             $('#tweet-submit').prop('disabled', true).addClass('disabled');
           }
         }
+        
+        // 残り20字以下
         if (limit <= 20) {
-          $('#tweet-num').text(limit);
           $('#tweet-num').addClass('warn');
         }
+        
+        // 残り0文字
         if (limit == 0) {
-          $('#tweet-num').text(limit);
           $('#tweet-num').addClass('over');
         }
+        
+        // 文字数オーバー
         if (limit < 0) {
-          $('#tweet-num').text(limit);
           $('#tweet-num').addClass('over');
-          $('#tweet-submit').prop('disabled', true).addClass('disabled');
+          $('#tweet-submit').prop('disabled', true).addClass('disabled'); // エラーになるので送信できないよう無効化
         }
+        
       }
     }
 
@@ -997,7 +1007,7 @@
 
       event.preventDefault(); // 通常のイベントをキャンセル
       $('#tweet-submit').prop('disabled', true).addClass('disabled');
-      $("#tweet-status").html('ツイートを送信中…');
+      $('#tweet-status').html('ツイートを送信中…');
 
       // フォームデータ
       var formData = new FormData($('#tweet-form').get(0));
@@ -1024,11 +1034,11 @@
         limit = 140;
         $('#tweet').val(null);
         $('#tweet-file').val(null);
-        $("#tweet-status").html(data);
+        $('#tweet-status').html(data);
         $('#tweet-num').text(140);
       })
       .fail(function(data){
-        $("#tweet-status").html('<span class="tweet-failed">送信中にエラーが発生しました…</span>');
+        $('#tweet-status').html('<span class="tweet-failed">送信中にエラーが発生しました…</span>');
       });
     }
 
@@ -1045,9 +1055,9 @@
       $('#content-box').show();
       $('#footer').show();
       if (Cookies.get('twitter')){
-        $("#tweet-status").html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
+        $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
       } else {
-        $("#tweet-status").html('<a id="tweet-login" href="/tweet/auth"><i class="fas fa-sign-in-alt"></i>ログイン</a>');
+        $('#tweet-status').html('<a id="tweet-login" href="/tweet/auth"><i class="fas fa-sign-in-alt"></i>ログイン</a>');
       }
     }
     

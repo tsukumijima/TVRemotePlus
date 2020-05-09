@@ -21,7 +21,7 @@
 	require_once ('../../modules/TwitterOAuth/autoload.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
-	// コンシューマーキーが空ならエラー吐く
+	// コンシューマーキーが空の場合
 	if (empty($CONSUMER_KEY) or empty($CONSUMER_SECRET)){
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">';
 		echo '<b>エラー：TwitterAPI の Consumer Key 、または Consumer Secret が設定されていないため、アプリ連携ができません。</b><br>';
@@ -64,7 +64,7 @@
 			
 		} else {
 			echo '<b>エラー：認証中に不明なエラーが発生したため、アプリ連携ができません。</b><br>';
-			echo $e.'<br>';
+			echo '<b>'.$e.'</b><br>';
 			echo '<a href="/settings/">環境設定</a> から設定が正しいかどうか確認し、もう一度アプリ連携し直してください。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
 		}
