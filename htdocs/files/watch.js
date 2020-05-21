@@ -314,16 +314,16 @@
         $('option[name=quality_default]').after('<option name="Original" value="Original">Original (元画質)</option>');
         $('option[name=encoder_default]').after('<option name="Progressive" value="Progressive">Progressive (プログレッシブダウンロード)</option>');
         // デフォルトオプションの値と表示を変更
-        $('option[name=quality_default').val('Original');
-        $('option[name=quality_default').text('デフォルト (Original)');
+        $('option[name=quality_default]').val('Original');
+        $('option[name=quality_default]').text('デフォルト (Original)');
       } else {
         changeToNormalEncoder();
         // プログレッシブオプションを削除
         $('option[name=Original]').remove();
         $('option[name=Progressive]').remove();
         // デフォルトオプションの値と表示を戻す
-        $('option[name=quality_default').val($('option[name=quality_default').data('value'));
-        $('option[name=quality_default').text($('option[name=quality_default').data('text'));
+        $('option[name=quality_default]').val($('option[name=quality_default]').data('value'));
+        $('option[name=quality_default]').text($('option[name=quality_default]').data('text'));
       }
 
       // ワンクリックでストリーム開始する場合
@@ -336,12 +336,12 @@
 
     // プログレッシブとそれ以外の切り替え周り
     $('select[name=quality]').change(function(event){
-      console.log('changed')
+      // console.log('changed')
       if ($(this).val() == 'Original'){
-        console.log('Original')
+        // console.log('Original')
         changeToProgressiveEncoder();
       } else {
-        console.log('Original以外')
+        // console.log('Original以外')
         changeToNormalEncoder();
       }
     });
@@ -355,10 +355,10 @@
       $('option[name=NVEncC]').prop('disabled', true);
       $('option[name=VCEEncC]').prop('disabled', true);
       // デフォルトオプションの値と表示を変更
-      $('option[name=encoder_default').val('Progressive');
-      $('option[name=encoder_default').text('デフォルト (Progressive)');
+      $('option[name=encoder_default]').val('Progressive');
+      $('option[name=encoder_default]').text('デフォルト (Progressive)');
       // デフォルトオプションを既定で選択する
-      $('option[name=encoder_default').prop('selected', true);
+      $('option[name=encoder_default]').prop('selected', true);
     }
 
     function changeToNormalEncoder(){
@@ -369,10 +369,10 @@
       $('option[name=NVEncC]').prop('disabled', false);
       $('option[name=VCEEncC]').prop('disabled', false);
       // デフォルトオプションの値と表示を戻す
-      $('option[name=encoder_default').val($('option[name=encoder_default').data('value'));
-      $('option[name=encoder_default').text($('option[name=encoder_default').data('text'));
+      $('option[name=encoder_default]').val($('option[name=encoder_default]').data('value'));
+      $('option[name=encoder_default]').text($('option[name=encoder_default]').data('text'));
       // デフォルトオプションを既定で選択する
-      $('option[name=encoder_default').prop('selected', true);
+      $('option[name=encoder_default]').prop('selected', true);
     }
 
 

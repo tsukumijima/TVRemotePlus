@@ -112,6 +112,7 @@ pre {
     margin: 0;
     padding: 20px 50px;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 pre:empty {
@@ -790,6 +791,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     transform: translateX(-105%);
     transition: transform 0.3s cubic-bezier(.4,0,.4,1);
     will-change: transform;
+    -webkit-overflow-scrolling: touch;
 }
 
 #nav-content::-webkit-scrollbar {
@@ -1965,12 +1967,14 @@ td {
     margin: auto;
     padding: 20px 22px;
     box-sizing: border-box;
-    transition: opacity 0.3s, visibility 0.3s ease-in-out;
+    transition: transform 0.33s, opacity 0.3s, visibility 0.3s ease-in-out;
+    transform: translateY(-50px);
     visibility: hidden;
     opacity: 0;
     width: 95%;
     max-width: 500px;
     height: 395px;
+    max-height: 95vh;
     background-color: var(--color-white);
     border-radius: 5px;
     font-size: 16px;
@@ -1978,6 +1982,7 @@ td {
 }
 
 #broadcast-stream-box.open {
+    transform: translateY(0px);
     transition-delay: 0s;
     visibility: visible;
     opacity: 1;
@@ -2009,6 +2014,26 @@ td {
     margin-right: 0px;
 }
 
+@media (max-width: 1024px) {
+    /* iOS Safari のみ */ 
+    _::-webkit-full-page-media, _:future, :root #broadcast-stream-box {
+        max-height: 83vh;
+    }
+}
+
+@media screen and (max-width: 500px){
+    #broadcast-stream-box {
+        padding: 20px 18px;
+        height: 531px;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .android.chrome #broadcast-stream-box {
+        height: 513px;
+    }
+}
+
 /* Chromecastボックス */
 
 #chromecast-box {
@@ -2021,13 +2046,15 @@ td {
     right: 0;
     bottom: 0;
     z-index: 400;
-    transition: opacity 0.3s, visibility 0.3s ease-in-out;
+    transition: transform 0.33s, opacity 0.3s, visibility 0.3s ease-in-out;
+    transform: translateY(-50px);
     visibility: hidden;
     opacity: 0;
     will-change: opacity;
 }
 
 #chromecast-box.open {
+    transform: translateY(0px);
     transition-delay: 0s;
     visibility: visible;
     opacity: 1;
@@ -2108,13 +2135,15 @@ td {
     right: 0;
     bottom: 0;
     z-index: 400;
-    transition: opacity 0.3s, visibility 0.3s ease-in-out;
+    transition: transform 0.33s, opacity 0.3s, visibility 0.3s ease-in-out;
+    transform: translateY(-50px);
     visibility: hidden;
     opacity: 0;
     will-change: opacity;
 }
 
 #hotkey-box.open {
+    transform: translateY(0px);
     transition-delay: 0s;
     visibility: visible;
     opacity: 1;
@@ -2261,14 +2290,6 @@ td {
 }
 
 @media screen and (max-width: 500px){
-    #broadcast-stream-box {
-        padding: 20px 18px;
-        height: 531px;
-    }
-    
-    .android.chrome #broadcast-stream-box {
-        height: 513px;
-    }
 
     .form {
         align-items: normal;

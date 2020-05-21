@@ -271,7 +271,6 @@ section {
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
-    -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 }
 
@@ -301,7 +300,6 @@ section {
     font-size: 13.5px;
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-box-orient: vertical;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-height: 155%;
@@ -356,7 +354,8 @@ section {
     margin: auto;
     padding: 20px 22px;
     box-sizing: border-box;
-    transition: opacity 0.3s, visibility 0.3s ease-in-out;
+    transition: transform 0.33s, opacity 0.3s, visibility 0.3s ease-in-out;
+    transform: translateY(-50px);
     visibility: hidden;
     opacity: 0;
     width: 95%;
@@ -368,6 +367,7 @@ section {
 }
 
 #search-stream-box.open {
+    transform: translateY(0px);
     transition-delay: 0s;
     visibility: visible;
     opacity: 1;
@@ -393,10 +393,19 @@ section {
     width: 30%;
 }
 
+@media (max-width: 1024px) {
+    /* iOS Safari のみ */ 
+    _::-webkit-full-page-media, _:future, :root #search-stream-box {
+        max-height: 83vh;
+    }
+}
+
 @media screen and (max-width: 500px){
     #search-stream-box {
         padding: 20px 18px;
         height: 454px;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
     }
     .ios.safari #search-stream-box {
         height: 466px;
