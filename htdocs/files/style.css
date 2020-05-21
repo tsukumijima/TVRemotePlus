@@ -53,6 +53,7 @@ html {
 body {
     transform: none !important;
     font-family: 'Open Sans','Segoe UI','Arial',sans-serif;
+    -webkit-font-smoothing: antialiased;
     background-color: var(--color-background);
     color: var(--color-text);
     margin: 0px;
@@ -778,7 +779,6 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 /* サイドメニュー */
 
 #nav-content {
-    overflow: auto;
     position: fixed;
     top: 0;
     left: 0;
@@ -791,6 +791,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     transform: translateX(-105%);
     transition: transform 0.3s cubic-bezier(.4,0,.4,1);
     will-change: transform;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -2021,11 +2022,11 @@ td {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 767px){
     #broadcast-stream-box {
         padding: 20px 18px;
         height: 531px;
-        overflow-y: scroll;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
     

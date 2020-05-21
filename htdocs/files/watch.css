@@ -400,11 +400,11 @@ section {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 767px){
     #search-stream-box {
         padding: 20px 18px;
         height: 454px;
-        overflow-y: scroll;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
     .ios.safari #search-stream-box {

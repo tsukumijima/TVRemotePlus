@@ -1,7 +1,6 @@
 
   // 参考: https://qiita.com/yukiTTT/items/773356c2483b96c9d4e0
   function handleTouchMove(event) {
-    console.log(event)
     var path = event.path || (event.composedPath && event.composedPath());
 
     // タップした要素（から遡った親要素）がメニューだったらスクロールを有効にする
