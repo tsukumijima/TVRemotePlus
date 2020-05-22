@@ -70,7 +70,8 @@
         // html
         var html = '';
 
-        var length = $('.search-file-box').length + (settings['list_view_number'] || 30);
+        var length = $('.search-file-box').length + Number(settings['list_view_number'] || 30);
+        console.log(length)
         // 全体の配列数より表示する動画数の方が大きくなったら
         if (fileinfo.length < length){
           length = fileinfo.length;
