@@ -11,8 +11,6 @@ YouTube やニコニコ動画などの動画配信サービスの UI を意識�
 ![Screenshot](docs/screenshot1.png)
 <span style="font-size: 80%; float: right;">＊画像はイメージです</span>
 
-- [<img alt="Logo" src="docs/logo.png" width="350">](#img-altlogo-srcdocslogopng-width350)
-  - [ダウンロードはこちら](#ダウンロードはこちら)
   - [概要](#概要)
     - [開発動機](#開発動機)
   - [機能](#機能)
