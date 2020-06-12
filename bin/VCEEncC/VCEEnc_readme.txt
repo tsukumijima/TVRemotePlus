@@ -11,12 +11,12 @@ AMDのVCE(VideoCodecEngine)を使用してエンコードを行うAviutlの出力プラグインです。
 VCEによるハードウェア高速エンコードを目指します。
 
 【基本動作環境】
-Windows 7, 8.1, 10 (x86/x64)
-Aviutl 0.99g4 以降
+Windows 10 (x86/x64)
+Aviutl 1.00 以降
 VCEが載ったハードウェア
   AMD製 GPU Radeon HD 7xxx以降
   AMD製 APU Trinity世代(第2世代)以降
-AMD Radeon Software Adrenalin Edition 19.7.1 以降
+AMD Radeon Software Adrenalin Edition 20.2.1 以降
 
 
 【VCEEnc 使用にあたっての注意事項】
@@ -26,20 +26,12 @@ VCEEncを使用したことによる、いかなる損害・トラブルについても責任を負いません。
 【VCEEnc 再配布(二次配布)について】
 このファイル(VCEEnc_readme.txt)と一緒に配布してください。念のため。
 まあできればアーカイブまるごとで。
-
-【VCEの現時点での仕様】
-・H.264 baseline / main / high profile
-・H.264 I/P フレーム (Bフレーム無し)
-・プログレッシブのみ (インターレスサポート無し)
-・CQP/CBR/VBRモード
-・SAR比指定不可
-・限定的なフレームレートサポート
      
 【VCEEnc 使用方法 (簡易インストーラ使用)】
 付属の簡易インストーラを使用する方法です。
 手動で行う場合は、後述のVCEEnc 使用方法 (手動)を御覧ください。
 
-1. ダウンロードしたVCEEnc_4.xx.zipを一度解凍します。
+1. ダウンロードしたVCEEnc_5.xx.zipを一度解凍します。
 
 2. auo_setup.exeをダブルクリックし、実行します。
    基本的に自動で必要なもののダウンロード・インストールが行われます。
@@ -89,6 +81,10 @@ Aviutlを起動し、「その他」>「出力プラグイン情報」にVCEEncがあるか確かめます。
  http://www.bunkus.org/videotools/mkvtoolnix/
  
 <音声エンコーダ>
+ [ffmpeg     (AAC, AC3, mp3エンコーダとして使用)]
+ https://ffmpeg.zeranoe.com/builds/
+ http://blog.k-tai-douga.com/
+
  [neroaacenc (AACエンコーダ)]
  http://www.nero.com/jpn/downloads-nerodigital-nero-aac-codec.php
 
@@ -106,9 +102,6 @@ Aviutlを起動し、「その他」>「出力プラグイン情報」にVCEEncがあるか確かめます。
  
  [lame       (mp3エンコーダ)]
  http://www.rarewares.org/mp3-lame-bundle.php
- 
- [ffmpeg     (AC3エンコーダとして使用)]
- http://blog.k-tai-douga.com/
  
  [oggenc2    (ogg Vorbis, mkv専用)]
  http://www.rarewares.org/ogg-oggenc.php 
@@ -135,12 +128,12 @@ iniファイルの音声やmuxerのコマンドラインを調整してみてください。
 
 
 【ビルドについて】
-ビルドにはVC++2015が必要です。
+ビルドにはVC++2019が必要です。
 
 コーディングが汚いとか言わないで。
 
 【コンパイル環境】
-VC++ 2015 Community
+VC++ 2019 Community
 
 
 【検証環境 2012.11～】
@@ -199,6 +192,77 @@ Ryzen3 3200G + Asrock AB350 Pro4
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【どうでもいいメモ】
+2020.05.14 (6.02)
+[VCEEncC]
+・vpp-afsのNaviでのOpenCLのコンパイルエラーを修正、6.01での修正が不十分だった。
+
+[VCEEnc.auo]
+・HEVC時の設定画面の挙動を改善。
+
+2020.05.12 (6.01)
+[VCEEncC]
+・pre-encodeによるレート制御を使用するオプションを追加。( --pe )
+・vpp-afsのNaviでのOpenCLのコンパイルエラーを修正する。
+・遅延を最小化するモードを追加。 ( --lowlatency )
+
+[VCEEnc.auo]
+・VCEEnc.auoからsarが指定できないのを修正。
+・外部エンコーダ使用時に、音声エンコードを「同時」に行うと異常終了するのを修正。
+
+2020.04.19 (6.00)
+[VCEEncC]
+・音声デコーダやエンコーダへのオプション指定が誤っていた場合に、
+  エラーで異常終了するのではなく、警告を出して継続するよう変更。
+・--chapterがavsw/avhw利用時にしか効かなかったのを修正。
+
+[VCEEnc.auo]
+・VCEEnc.auoで内部エンコーダを使用するモードを追加。
+  こちらの動作をデフォルトにし、外部エンコーダを使うほうはオプションに。
+
+2020.03.07 (5.04)
+[VCEEncC]
+・avsw/avhw読み込み時の入力オプションを指定するオプションを追加。(--input-option)
+・trueHDなどの一部音声がうまくmuxできないのを改善。
+・VCEEnc.auoの修正に対応する変更を実施。
+
+[VCEEnc.auo]
+・VCEEnc.auoから出力するときに、Aviutlのウィンドウを最小化したり元に戻すなどするとフレームが化ける問題を修正。
+
+2020.02.29 (5.03)
+[VCEEncC]
+・caption2assが正常に動作しないケースがあったのを修正。
+・5.02で--cqpが正常に動作しない問題を修正。
+
+[VCEEnc.auo]
+・簡易インストーラの安定動作を目指した改修。
+  必要な実行ファイルをダウンロードしてインストールする形式から、
+  あらかじめ同梱した実行ファイルを展開してインストールする方式に変更する。
+・デフォルトの音声エンコーダをffmpegによるAACに変更。
+・VCEEnc.auoの設定画面のタブによる遷移順を調整。
+
+2020.02.11 (5.02)
+[VCEEncC]
+・動作環境の変更。Win10のみ対応。
+・AMF 1.4.14 -> 1.4.16に更新。
+  AMD Radeon Software Adrenalin Edition 20.2.1 以降が必要に。
+・AMF 1.4.16で追加されたpre-anaysisに関するオプションを追加。(VCEEncCのみ)
+  (--pa, --pa-sc, --pa-ss, --pa-activity-type, --pa-caq-strength, --pa-initqpsc, --pa-fskip-maxqp )
+・ssim/psnrを計算するオプションを追加。(--ssim/--psnr)
+・HDR関連のmeta情報を入力ファイルからコピーできるように。
+  (--master-display copy, --max-cll copy)
+・colormatrix等の情報を入力ファイルからコピーする機能を追加。
+  --colormtarix copy
+  --colorprim copy
+  --transfer copy
+  --chromaloc copy
+  --colorrange copy
+・HEVCエンコ時に、high tierの存在しないlevelが設定された場合、main tierに修正するように。
+・mux時の動作の安定性を向上し、シーク時に不安定になる症状を改善。
+・Windowsのパフォーマンスカウンタを使用したプロセスのGPU使用率情報を使用するように。
+・Readme等で、NVEncのままの表記だった個所を修正。
+・ログに常に出力ファイル名を表示するように。
+・VUI情報、mastering dsiplay, maxcllの情報をログに表示するように。
+
 2019.12.24 (5.01)
 [VCEEncC]
 ・OpenCLで実装された自動フィールドシフトを追加。(--vpp-afs)

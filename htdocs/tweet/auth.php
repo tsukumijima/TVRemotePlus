@@ -72,8 +72,8 @@
 	}
 
 	// 認証後にアクセストークンを取得するために、セッション関数にトークンを保存することでコールバック後にアクセス出来るようにする
-	$_SESSION['oauth_token'] = $request_token["oauth_token"];
-	$_SESSION['oauth_token_secret'] = $request_token["oauth_token_secret"];
+	$_SESSION['oauth_token'] = $request_token['oauth_token'];
+	$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 
 	// 認証URLの取得
 	$url = $connection->url('oauth/authenticate', array('oauth_token' => $request_token['oauth_token']));

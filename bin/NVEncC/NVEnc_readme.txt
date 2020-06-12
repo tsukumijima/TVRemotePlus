@@ -161,11 +161,47 @@ NVIDIA グラフィックドライバ 419.67
 NVIDIA グラフィックドライバ 436.02
 NVIDIA グラフィックドライバ 442.19
 NVIDIA グラフィックドライバ 445.75
+NVIDIA グラフィックドライバ 446.14
 
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.06.11 (5.04)
+[NVEncC]
+・一部のHEVCファイルで、正常にデコードできないことがあるのに対し、可能であればswデコーダでデコードできるようにした。
+・--dhdr10-infoとlookaheadの相性が悪く、nvEncEncodePicture内でクラッシュしてしまうため、--dhdr10-info使用時にはlookaheadを無効にするようにした。
+・入力のエラーを捕捉してもエラーコードが0を返してしまう場合があったのを修正。
+・avs読み込みで、より詳細なAvisynthのバージョンを取得するように。
+・GPU自動選択の際、ssim/psnr計算に必要なhwデコーダのチェックもするように。
+
+[NVEnc.auo]
+・NVEnc.auoの設定画面でも、--output-resに負の値を指定できるように。
+
+2020.05.31 (5.03)
+[NVEncC]
+・遅延を伴う一部の--audio-filterで音声の最後がエンコードされなくなってしまう問題を修正。
+・lowlatencyが使用できないのを修正。
+・--video-tagを指定すると異常終了してしまうのを修正。 
+
+2020.05.23 (5.02)
+[NVEncC]
+・出力するmetadata制御を行うオプション群を追加。
+  --metadata
+  --video-metadata
+  --audio-metadata
+  --sub-metadata
+・streamのdispositionを指定するオプションを追加。 (--audio-disposition, --sub-disposition)
+・--audio-source/--sub-sourceでうまくファイル名を取得できないことがあるのを修正。
+・--helpに記載のなかった下記オプションを追記。
+  --video-tag
+  --keyfile
+  --vpp-smooth
+・--vpp-delogoでデバッグ用のメッセージが標準出力にでるようになってしまっていたのを修正。
+・読み込み時に発生したエラーを補足するように。
+・オプションリストを表示するオプションを追加。 (--option-list)
+・動画の最初のtimestampをデバッグログに表示するように。
+
 2020.05.07 (5.01)
 [NVEncC]
 ・Linuxに対応。

@@ -1,5 +1,5 @@
 @echo off
-%~dp0\NVEncC64.exe --check-hw
+%~dp0\NVEncC-tvrp.exe --check-hw
 if errorlevel 0 (
     echo NVENC‚Í—˜—p‰Â”\‚Å‚·B
 ) else (

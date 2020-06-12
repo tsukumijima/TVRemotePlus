@@ -1,2 +1,2 @@
 @echo off
-%~dp0\QSVEncC64.exe --check-features-html
+%~dp0\QSVEncC-tvrp.exe --check-features-html

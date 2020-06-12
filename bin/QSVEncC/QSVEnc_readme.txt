@@ -18,10 +18,9 @@ http://rigaya34589.blog135.fc2.com/blog-entry-337.html
 
 
 【基本動作環境】
-Windows 7,8,8.1,10 (x86/x64) (QSVEnc.auo / QSVEncC.exe x86版)
-Windows 7,8,8.1,10 (x64) (QSVEncC.exe x64版)
-Aviutl 0.99g4 以降 (QSVEnc.auo)
-SSE4.2の搭載されたCPU
+Windows 10 (x86/x64) (QSVEnc.auo / QSVEncC.exe x86版)
+Windows 10 (x64) (QSVEncC.exe x64版)
+Aviutl 1.00 以降 (QSVEnc.auo)
 
 【ハードウェアエンコード動作環境】
 上記「基本動作環境」に加え、
@@ -149,6 +148,10 @@ Aviutlを起動し、「その他」>「出力プラグイン情報」にQSVEncがあるか確かめます。
  http://www.bunkus.org/videotools/mkvtoolnix/
  
 <音声エンコーダ>
+ [ffmpeg     (AAC, AC3, mp3エンコーダとして使用)]
+ https://ffmpeg.zeranoe.com/builds/
+ http://blog.k-tai-douga.com/
+
  [neroaacenc (AACエンコーダ)]
  http://www.nero.com/jpn/downloads-nerodigital-nero-aac-codec.php
  
@@ -166,9 +169,6 @@ Aviutlを起動し、「その他」>「出力プラグイン情報」にQSVEncがあるか確かめます。
  
  [lame       (mp3エンコーダ)]
  http://www.rarewares.org/mp3-lame-bundle.php
- 
- [ffmpeg     (AC3エンコーダとして使用)]
- http://blog.k-tai-douga.com/
  
  [oggenc2    (ogg Vorbis, mkv専用)]
  http://www.rarewares.org/ogg-oggenc.php 
@@ -195,7 +195,7 @@ iniファイルの音声やmuxerのコマンドラインを調整してみてください。
 
 
 【ビルドについて】
-ビルドにはVC++ 2015が必要です。
+ビルドにはVC++ 2019が必要です。
 
 "atlbase.h"や"atls.lib"がないと言われる場合、
 Windows Drivers Kit 7.1.0
@@ -240,7 +240,7 @@ includeファイルのディレクトリにOpenCL SDK へのパスを
 コーディングが汚いとか言わないで。
 
 【コンパイル環境】
-VC++ 2015 Community
+VC++ 2019 Community
 
 
 【検証環境 ～2011.09.30】
@@ -358,6 +358,7 @@ Intel Graphics Driver 25.20.100.7000 (API v1.27)
 Intel Graphics Driver 25.20.100.7327 (API v1.30)
 
 【Intel Media SDKとAPIの対応関係】
+API v1.29 … Intel Media SDK 2018 R1
 API v1.27 … Intel Media SDK 2018 R2
 API v1.26 … Intel Media SDK 2018 R1
 API v1.23 … Intel Media SDK 2017 R1
@@ -378,6 +379,119 @@ API v1.1  … Intel Media SDK v2.0
 
 
 【どうでもいいメモ】
+2020.05.31 (4.03)
+[QSVEncC]
+・遅延を伴う一部の--audio-filterで音声の最後がエンコードされなくなってしまう問題を修正。
+・lowlatencyが使用できないのを修正。
+・--video-tagを指定すると異常終了してしまうのを修正。 
+・出力するmetadata制御を行うオプション群を追加。
+  --metadata
+  --video-metadata
+  --audio-metadata
+  --sub-metadata
+・streamのdispositionを指定するオプションを追加。 (--audio-disposition, --sub-disposition)
+・--audio-source/--sub-sourceでうまくファイル名を取得できないことがあるのを修正。
+・--helpに記載のなかった下記オプションを追記。
+  --video-tag
+  --keyfile
+  --vpp-smooth
+・オプションリストを表示するオプションを追加。 (--option-list)
+
+2020.05.06 (4.02)
+[QSVEncC]
+・yuv444→yv12/p010変換のマルチスレッド時のメモリアクセスエラーを修正。
+・遅延を最小化するモードを追加。 (--lowlatency)
+  エンコードのスループット自体は下がってしまうので、あまり使い道はないかも?
+
+[QSVEnc.auo]
+・外部エンコーダ使用時に、音声エンコードを「同時」に行うと異常終了するのを修正。
+
+2020.04.15 (4.01)
+[QSVEncC]
+・3.33からIvyBridgeの環境でvppを使用できない問題を回避。
+
+[QSVEnc.auo]
+・デフォルト音声エンコーダの設定が反映されないのを修正。
+
+2020.04.05 (4.00)
+[QSVEncC]
+・音声デコーダやエンコーダへのオプション指定が誤っていた場合に、
+  エラーで異常終了するのではなく、警告を出して継続するよう変更。
+・3.33からSandyBridge/IvyBridgeの環境でvppを使用できない問題を回避。
+・--chapterがavsw/avhw利用時にしか効かなかったのを修正。
+
+[QSVEnc.auo]
+・QSVEnc.auoで内部エンコーダを使用するモードを追加。
+  こちらの動作をデフォルトにし、外部エンコーダを使うほうはオプションに。
+・QSVのない環境で設定画面を開こうとすると異常終了してしまうのを修正。
+
+2020.03.07 (3.33)
+[QSVEncC]
+・avsw/avhw読み込み時の入力オプションを指定するオプションを追加。(--input-option)
+・Media SDKのcolorフィルタを使用するテストコードを追加。(--vpp-colorspace)
+・trueHDなどの一部音声がうまくmuxできないのを改善。
+・IceLake世代が正常に判定されないのを修正。
+・QSVEnc.auoの修正に対応する変更を実施。
+
+[QSVEnc.auo]
+・QSVEnc.auoから出力するときに、Aviutlのウィンドウを最小化したり元に戻すなどするとフレームが化ける問題を修正。
+
+2020.02.29 (3.32)
+[QSVEncC]
+・caption2assが正常に動作しないケースがあったのを修正。
+・helpの見直し。
+・3.31で--cqpが正常に動作しない問題を修正。
+
+[QSVEnc.auo]
+・簡易インストーラの安定動作を目指した改修。
+  必要な実行ファイルをダウンロードしてインストールする形式から、
+  あらかじめ同梱した実行ファイルを展開してインストールする方式に変更する。
+・デフォルトの音声エンコーダをffmpegによるAACに変更。
+・QSVEnc.auoの設定画面のタブによる遷移順を調整。
+
+2020.02.20 (3.31)
+[QSVEncC]
+・コマンドラインの指定ミスの際のエラーメッセージを改善。
+・mux処理を見直し、シークしづらくなるなどの症状を改善。
+
+[QSVEnc.auo]
+・ビットレート上限の解放。
+
+2020.02.02 (3.30)
+[QSVEncC]
+・vpp-subは最近安定して動作しないため、無効化。
+・colormatrix等の情報を入力ファイルからコピーする機能を追加。
+  --colormtarix auto
+  --colorprim auto
+  --transfer auto
+  --chromaloc auto
+  --colorrange auto
+・VUI情報、mastering display, maxcllの情報をログに表示するように。
+・終了時にエラー終了してしまうことがあるのを修正。
+・ログに常に出力ファイル名を表示するように。
+・VUI情報、mastering dsiplay, maxcllの情報をログに表示するように。
+
+[QSVEnc.auo]
+・QSVEncCとの連携のための実装を変更。
+  たまに緑のフレームが入ったりする(?)という問題に対処できているとよいが…。
+
+2020.01.18 (3.29)
+[共通]
+・動作環境を変更。
+・Media SDKを2019 R1に更新。
+・プロセスのGPU使用率情報を使用するように。
+
+[QSVEncC]
+・HDR関連のmeta情報を入力ファイルからコピーできるように。
+  (--master-display copy, --max-cll copy)
+・ffmpeg関連のdllを更新。
+  AV1のソフトウェアデコードを可能に。
+  libogg-1.3.3 -> 1.3.4
+  twolame-0.3.13 -> 0.4.0
+  wavpack-5.1.0 -> 5.2.0
+  libxml2-2.9.9 -> 2.9.10
+  dav1d-0.5.2 !new!
+
 2019.12.24 (3.28)
 [QSVEncC]
 ・音声処理でのメモリリークを解消。
