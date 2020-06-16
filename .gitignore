@@ -2,7 +2,6 @@
 #---------------------------
 /config.php
 /bin/Apache/conf/httpd.conf
-/bin/Apache/conf/openssl.ext
 /bin/Apache/conf/server.crt
 /bin/Apache/conf/server.csr
 /bin/Apache/conf/server.key
@@ -11,17 +10,17 @@
 /bin/QSVEncC/qsv_check.html
 /bin/TSTask/BonDriver/*
 /bin/TSTask/BonDriver_TSTask.dll
-/bin/TSTask/TSTask.exe
-/bin/TSTask/TSTaskCentre.exe
+/bin/TSTask/TSTask-tvrp.exe
+/bin/TSTask/TSTaskCentre-tvrp.exe
 /bin/TSTask/WinSCard.dll
 /bin/TSTask/WinSCard.ini
 /bin/TSTask/*.log
 /data/twitter_session/*
 /data/session/*
+/data/upload/*
 /data/comment.json
 /data/niconico.cookie
 /data/settings.json
-/data/*.log
 /logs/*
 /modules/Cast/cast.json
 /modules/Cast/scan.json
@@ -33,7 +32,6 @@
 /htdocs/files/fileinfo.json.lock
 /htdocs/files/history.json
 /htdocs/stream/*
-/htdocs/tweet/upload/*
 !.gitkeep
 
 # Temporary Files

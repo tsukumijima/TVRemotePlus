@@ -1069,30 +1069,30 @@
       return ('0000000000' + num).slice(-length);
     }
 
-  	// 時計用
-	  function clock(){
+    // 時計用
+    function clock(){
 
-		  // 曜日を表す各文字列の配列
-		  var weeks = new Array("Sun","Mon","Thu","Wed","Thr","Fri","Sat");
-		  // 現在日時を表すインスタンスを取得
-		  var now = new Date();
-		  var y = now.getFullYear(); // 年
-		  var mo = now.getMonth() + 1; // 月 0~11で取得されるので実際の月は+1したものとなる
-		  var d = now.getDate(); // 日
-		  var w = weeks[now.getDay()]; // 曜日 0~6で日曜始まりで取得されるのでweeks配列のインデックスとして指定する
+      // 曜日を表す各文字列の配列
+      var weeks = new Array("Sun","Mon","Thu","Wed","Thr","Fri","Sat");
+      // 現在日時を表すインスタンスを取得
+      var now = new Date();
+      var y = now.getFullYear(); // 年
+      var mo = now.getMonth() + 1; // 月 0~11で取得されるので実際の月は+1したものとなる
+      var d = now.getDate(); // 日
+      var w = weeks[now.getDay()]; // 曜日 0~6で日曜始まりで取得されるのでweeks配列のインデックスとして指定する
 
-		  var h = now.getHours(); // 時
-		  var mi = now.getMinutes(); // 分
-		  var s = now.getSeconds(); // 秒
+      var h = now.getHours(); // 時
+      var mi = now.getMinutes(); // 分
+      var s = now.getSeconds(); // 秒
 
-		  // 日付時刻文字列のなかで常に2ケタにしておきたい部分はここで処理
-		  if (mo < 10) mo = "0" + mo;
-		  if (d < 10) d = "0" + d;
-		  if (h < 10) h = "0" + h;
-		  if (mi < 10) mi = "0" + mi;
+      // 日付時刻文字列のなかで常に2ケタにしておきたい部分はここで処理
+      if (mo < 10) mo = "0" + mo;
+      if (d < 10) d = "0" + d;
+      if (h < 10) h = "0" + h;
+      if (mi < 10) mi = "0" + mi;
       if (s < 10) s = "0" + s;
-      
-		  $('#clock').text(y + '/' + mo + '/' + d + ' ' + h + ':' + mi + ':' + s);
+
+      $('#clock').text(y + '/' + mo + '/' + d + ' ' + h + ':' + mi + ':' + s);
     }
     
     // タイムスタンプ取得
