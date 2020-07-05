@@ -585,7 +585,8 @@
       }
 
       // ?キー
-      if (document.activeElement.id != 'tweet' && event.key == '?'){
+      // dplayer-comment-input
+      if (document.activeElement.id != 'tweet' && document.activeElement.className != 'dplayer-comment-input' && event.key == '?'){
         event.preventDefault();
         $('#hotkey-box').toggleClass('open');
         $('#nav-close').toggleClass('open');
