@@ -97,7 +97,7 @@
 		// XMLを解析してAPIに格納
 		if (isset($jkthread_xml->chat[0])){ //コメントが存在するなら
 		
-			//こ↑こ↓配列の数だけ繰り返す
+			//ここを配列の数だけ繰り返す
 			for ($i = 0; $i < count($jkthread_xml->chat); $i++){
 				// chatを格納
 				// スレッドID
@@ -146,7 +146,7 @@
 		return $position;
 	}
 
-	// 色を解析して16進数カラーコードにする関数
+	// 色を16進数カラーコードにする関数
 	function getColor($option){
 
 		if (strpos($option, 'red') !== false){
@@ -590,8 +590,7 @@
 				$waybackkey_URL = 'http://jk.nicovideo.jp/api/v2/getwaybackkey?thread='.$getflv_param['thread_id'];
 				$waybackkey = str_replace('waybackkey=', '', nicologin($waybackkey_URL, false)); //ログインクッキーを渡す
 
-
-				// ニコニコの謎仕様で過去ログは取得を終える時間から巻き戻して1000件分しか取得できないため
+				// ニコニコの謎仕様で過去ログは取得を終える時間から巻き戻して1000件分しか取得できないため、
 				// whileで繰り返して$whenが放送開始時刻の前になるまで取得する
 
 				// 取得終了時間　ここから巻き戻して1000件ずつ取得
@@ -723,7 +722,7 @@
 		$json = array(
 			'api' => 'jikkyo',
 			'type' => 'error',
-			'code' => 334,
+			'code' => 300,
 			'version' => 3
 		);
 

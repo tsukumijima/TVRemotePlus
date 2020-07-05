@@ -340,6 +340,12 @@
 			
 			// dirnameは削除しておく(セキュリティ上の問題)
 			unset($TSfile['data'][$key]['pathinfo']['dirname']);
+
+			// 無駄な空白や改行を削除
+			if (isset($TSfile['data'][$key]['title'])) $TSfile['data'][$key]['title'] = trim($TSfile['data'][$key]['title']);
+			if (isset($TSfile['data'][$key]['title_raw'])) $TSfile['data'][$key]['title_raw'] = trim($TSfile['data'][$key]['title_raw']);
+			if (isset($TSfile['data'][$key]['info'])) $TSfile['data'][$key]['info'] = trim($TSfile['data'][$key]['info']);
+
 		}
 
 		// ファイルに保存
