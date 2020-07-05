@@ -300,7 +300,7 @@
       $('#stream-fileinfo').val($elem.find('.search-file-description').html());
       $('#stream-fileext').val($elem.find('.search-file-ext').text().toLowerCase());
       $('#stream-filechannel').val($elem.find('.search-file-channel').text());
-      $('#stream-filetime').val($elem.find('.search-file-time').text());
+      $('#stream-filetime').val($elem.find('.search-file-date').text() + ' ' + $elem.find('.search-file-time').text());
       $('#stream-start_timestamp').val($elem.find('.start_timestamp').text());
       $('#stream-end_timestamp').val($elem.find('.end_timestamp').text());
       $('#nav-close').toggleClass('open');
