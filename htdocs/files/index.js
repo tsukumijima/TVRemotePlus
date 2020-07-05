@@ -354,8 +354,13 @@
   // JavaScript からのキャストに対応しているかどうかのリスナー
   window.__onGCastApiAvailable = function(isAvailable) {
     if (isAvailable){
-      setTimeout(function() {
-        cast_init();
+      timer = setInterval(function() {
+        // console.log('typeof cast !== undefined: ' + (typeof cast !== 'undefined'))
+        if (typeof cast !== 'undefined') {
+          // console.log('cast_init()')
+          cast_init();
+          clearInterval(timer);
+        }
       }, 500);
       setInterval(function() {
         $('google-cast-launcher').css('display', 'block');
