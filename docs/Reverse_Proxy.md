@@ -67,6 +67,7 @@ Ubuntu であれば `a2enmod filter proxy proxy_http headers substitute` と実�
         Substitute "s|/api/epginfo|/tvrp/api/epginfo|q"
         Substitute "s|/api/jikkyo|/tvrp/api/jikkyo|q"
         Substitute "s|/api/listupdate|/tvrp/api/listupdate|q"
+        Substitute "s|/api/logo|/tvrp/api/logo|q"
         Substitute "s|/api/status|/tvrp/api/status|q"
         Substitute "s|\"/api/stream|\"/tvrp/api/stream|q"
         Substitute "s|'/api/stream|'/tvrp/api/stream|q"
@@ -108,6 +109,7 @@ https://example.com/ でアクセスする場合は、location /tvrp/ { の括�
             sub_filter "/api/epginfo" "/tvrp/api/epginfo";
             sub_filter "/api/jikkyo" "/tvrp/api/jikkyo";
             sub_filter "/api/listupdate" "/tvrp/api/listupdate";
+            sub_filter "/api/logo" "/tvrp/api/logo";
             sub_filter "/api/status" "/tvrp/api/status";
             sub_filter '"/api/stream' '"/tvrp/api/stream';
             sub_filter "'/api/stream" "'/tvrp/api/stream";

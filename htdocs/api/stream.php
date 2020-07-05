@@ -117,7 +117,7 @@
 	           ($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv')){
 
 		loadVideo($TSfile_dir.'/'.$ini[$stream]['filepath'], $ini[$stream]['fileext']);
-		exit();	 
+		exit();
 
 	} else {
 

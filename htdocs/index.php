@@ -296,15 +296,8 @@
           ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} //括弧終了
-	
-		// 自己署名証明書の許可用
-		// 参考：https://blog.hanhans.net/2018/06/16/simplexml-load-file/
-		$context = stream_context_create(array('ssl' => array(
-			'allow_self_signed'=> true,
-			'verify_peer' => false,
-		)));
 
-		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'/EnumEventInfo', false, $context)){ // EMWUI ?>
+		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'api/EnumEventInfo', false, $ssl_context)){ // EMWUI ?>
         <div class="error">
           EDCB Material WebUI の API がある URL が正しく設定されていないため、番組情報が表示できません。<br>
           設定ページの「EDCB Material WebUI (EMWUI) の API がある URL」が正しく設定されているかどうか、確認してください。<br>
@@ -342,7 +335,9 @@
                     data-channel="<?php echo $ch_T_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
-                  <i class="broadcast-img material-icons">tv</i>
+                  <div class="broadcast-img material-icons">tv
+                    <div class="broadcast-logo" style="background-image: url(<?php echo getLogoURL($i); ?>);"></div>
+                  </div>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
                       <div class="broadcast-channel"><?php echo $ch_T_channel; ?></div>
@@ -381,7 +376,9 @@
                     data-channel="<?php echo $ch_S_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
-                  <i class="broadcast-img material-icons">tv</i>
+                  <div class="broadcast-img material-icons">tv
+                    <div class="broadcast-logo" style="background-image: url(<?php echo getLogoURL($i); ?>);"></div>
+                  </div>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
                       <div class="broadcast-channel"><?php echo $ch_S_channel; ?></div>
@@ -420,7 +417,9 @@
                     data-channel="<?php echo $ch_CS_channel; ?>" data-name="<?php echo $value; ?>">
 
                 <div class="broadcast">
-                  <i class="broadcast-img material-icons">tv</i>
+                  <div class="broadcast-img material-icons">tv
+                    <div class="broadcast-logo" style="background-image: url(<?php echo getLogoURL($i); ?>);"></div>
+                  </div>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
                       <div class="broadcast-channel"><?php echo $ch_CS_channel; ?></div>

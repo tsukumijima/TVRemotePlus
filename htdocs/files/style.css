@@ -185,6 +185,12 @@ pre:empty {
     background-color: var(--color-border);
 }
 
+/** 字幕 **/
+
+video::cue {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 /** アイコンなど **/
 
 .material-icons {
@@ -1854,14 +1860,31 @@ td {
 }
 
 .broadcast-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
     width: 40px;
     height: 40px;
-    box-sizing: border-box;
-    border-radius: 50%;
+    border-radius: 18%;
     color: #FFFFFF;
     background-color: var(--color-green);
     font-size: 24px;
-    padding: 8px;
+    box-sizing: border-box;
+}
+
+.broadcast-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-shrink: 0;
+    border-radius: 18%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .broadcast-content {

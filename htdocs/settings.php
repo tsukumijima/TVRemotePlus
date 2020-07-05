@@ -244,6 +244,8 @@
 
 					// シングルクォーテーションを取る（セキュリティ対策）
 					$value = str_replace('\'', '', $value);
+					// ダブルクォーテーションを取る（セキュリティ対策）
+					$value = str_replace('"', '', $value);
 
 					// 数値化できるものは数値に変換しておく
 					if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
@@ -364,6 +366,18 @@
                 <input id="list_view" class="toggle-input" type="checkbox" value="true" /> 
 <?php	} // 括弧終了 ?>
                 <label for="list_view" class="toggle-label"></label>
+              </div>
+            </div>
+
+            <div class="setting-form">
+              <span>番組表に局ロゴを表示</span>
+              <div class="toggle-switch">
+<?php	if (isSettingsItem('logo_show', true, true)){ ?>
+                <input id="logo_show" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="logo_show" class="toggle-input" type="checkbox" value="true" /> 
+<?php	} // 括弧終了 ?>
+                <label for="logo_show" class="toggle-label"></label>
               </div>
             </div>
 
@@ -650,14 +664,15 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>EDCB Material WebUI (EMWUI) の API がある URL</span>
+                <span>EDCB Material WebUI (EMWUI) のある URL</span>
                 <p>
                   番組表取得などで利用します<br>
                   この機能を利用する場合、予め <a href="https://github.com/EMWUI/EDCB_Material_WebUI" target="_blank">EDCB Material WebUI</a> を導入しておいてください<br>
+                  以前は http://192.168.x.xx:5510/api/ のように指定していましたが、変更になりました<br>
                   TVRock 等を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
-              <input class="text-box" name="EDCB_http_url" type="url" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/api/" />
+              <input class="text-box" name="EDCB_http_url" type="url" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/" />
             </div>
 
             <div class="setting-form setting-input">

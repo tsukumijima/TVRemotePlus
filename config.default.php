@@ -74,10 +74,11 @@ $TSfile_dir = '';
 // 例：$TSinfo_dir = 'E:/TV-Record/録画情報/';
 $TSinfo_dir = '';
 
-// EDCB Material WebUI (EMWUI) の API がある URL を指定します (番組表取得で利用します・変更必須)
-// この機能を利用する場合、EDCB_Material_WebUI を導入しておいてください(APIを番組表取得で利用します)
-// http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/api/ のように指定します
-// 例：$EDCB_http_url = 'http://192.168.1.11:5510/api/';
+// EDCB Material WebUI (EMWUI) のある URL を指定します (番組表取得で利用します・変更必須)
+// この機能を利用する場合、EDCB_Material_WebUI を導入しておいてください (APIを番組表取得で利用します)
+// http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/ のように指定します
+// 以前は http://(EDCB(EMWUI)の動いてるPCのローカルIP):5510/api/ でしたが、変更になりました
+// 例：$EDCB_http_url = 'http://192.168.1.11:5510/';
 $EDCB_http_url = '';
 
 // リバースプロキシからアクセスする場合の URL を指定します

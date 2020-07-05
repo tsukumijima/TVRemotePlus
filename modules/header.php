@@ -84,6 +84,7 @@
       dark_theme: false,
       subchannel_show: false,
       list_view: false,
+      logo_show: true,
       comment_size: 35,
       comment_delay: 5,
       comment_file_delay: 0,

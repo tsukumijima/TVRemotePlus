@@ -202,24 +202,47 @@
 	// Cookie内の設定に指定の項目が指定された値であるかどうかを確認する関数
 	// あれば true・ないもしくは設定自体が存在しない場合は false を返す
 	// matchを省略した場合はその項目の値を返す
+	// defaultには設定のキーが存在しない場合のデフォルト値を設定できる
 	function isSettingsItem($item, $match = null, $default = false){
+
 		// Cookieが存在する
 		if (isset($_COOKIE['settings'])){
+
+			// 設定内容を読み込み
 			$settings = json_decode($_COOKIE['settings'], true);
+
 			if (isset($settings[$item])){
 				if ($settings[$item] === $match){
 					return true;
-				} else if ($match === null){ // === にしないとおかしくなることが
+				} else if ($match === null){ // === にしないとおかしくなることがある
 					return $settings[$item];
 				} else {
 					return false;
 				}
 			} else {
-				return false;
+				return $default; // default に指定した値を返す
 			}
+			
 		// Cookie が存在しない
 		} else {
 			return $default; // default に指定した値を返す
+		}
+	}
+
+	// 局ロゴの URL を取得する関数
+	function getLogoURL($channel) {
+
+		global $onid, $sid; // オブジェクト指向じゃないので global を使う羽目に…
+
+		// 設定がオンになっている場合のみ
+		if (isSettingsItem('logo_show', true, true)) {
+
+			// 局ロゴ API の URL を返す
+			return '/api/logo?onid='.$onid[strval($channel)].'&sid='.$sid[strval($channel)];
+
+		} else {
+
+			return ''; // 空
 		}
 	}
 
@@ -227,7 +250,7 @@
 	function getJKchannel($channel){
 		global $ch_sidfile;
 
-		// ch_sid.txtを改行ごとに区切って配列にする
+		// ch_sid.tsv を改行ごとに区切って配列にする
 		$ch_sid = explode("\n", removeBOM(file_get_contents($ch_sidfile)));
 
 		// 配列を回す
@@ -278,14 +301,14 @@
 		foreach ($file as $i => $row){
 
 			// 1行目はキーヘッダ行として取り込み
-			if($i===0) {
+			if ($i === 0) {
 				foreach($row as $j => $col) $colbook[$j] = $col;
 				continue;
 			}
 	
 			// 2行目以降はデータ行として取り込み
 			$line = array();
-			foreach($colbook as $j=>$col) $line[$colbook[$j]] = @$row[$j];
+			foreach($colbook as $j => $col) $line[$colbook[$j]] = @$row[$j];
 			$records[] = $line;
 		}
 		return $records;
@@ -304,10 +327,10 @@
 			$charset = 'UTF-16LE';
 		}
 
-		// 文字コードをUTF-8に (念の為)
+		// 念のため文字コードをUTF-8に
 		if ($charset != 'UTF-8') $program_data = mb_convert_encoding($program_data, 'UTF-8', $charset);
 
-		// 取りあえず改行で分割して配列に
+		// 改行で分割して配列にする
 		// ついでに全角英数字を半角に変換
 		$program_array = explode("\r\n", mb_convert_kana($program_data, 'asv', 'UTF-8'));
 

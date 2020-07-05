@@ -36,6 +36,17 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST']) or isset($_SERVER['HTTP_X_FORWARDED
 	$reverse_proxy = false;
 }
 
+// 自己署名証明書の許可用
+// 参考：https://blog.hanhans.net/2018/06/16/simplexml-load-file/
+$ssl_context = stream_context_create(
+	array('ssl' => array(
+		'allow_self_signed'=> true,
+		'verify_peer' => false,
+	),'http' => array(
+		'ignore_errors' => true,
+	))
+);
+
 
 // ***** ファイルパス *****
 
@@ -136,13 +147,16 @@ $vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 // config.php を読み込む
 require_once ($base_dir.'/config.php');
 
+// EDCB_http_url の書き換え (互換用)
+$EDCB_http_url = str_replace('api/', '', rtrim($EDCB_http_url, '/').'/'); // 常に末尾にスラッシュをつける
+
 // $reverse_proxy_url が空でないかを確かめるため
 // 敢えて設定を読み込んだ後に処理を行う
 
 // リバースプロキシからのアクセス時は site_url と OAUTH_CALLBACK を差し替える
 if ($reverse_proxy and !empty($reverse_proxy_url)){
 
-	// 末尾に常にスラッシュをつける
+	// 常に末尾にスラッシュをつける
 	$reverse_proxy_url = rtrim($reverse_proxy_url, '/').'/';
 
 	// URLを差し替え

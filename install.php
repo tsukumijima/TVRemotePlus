@@ -186,22 +186,23 @@
 		if ($bondriver != 2) $bondriver = 1;
 		echo "\n";
 
-		echo '    5. EDCB Material WebUI (EMWUI) の API がある URL を入力してください。'."\n";
+		echo '    5. EDCB Material WebUI (EMWUI) のある URL を入力してください。'."\n";
 		echo "\n";
-		echo '      通常は http://(EDCBのあるPCのIPアドレス):5510/api/ になっています。'."\n";
+		echo '      通常は http://(EDCBのあるPCのIPアドレス):5510/ になっています。'."\n";
+		echo '      以前は http://(EDCBのあるPCのIPアドレス):5510/api/ でしたが、変更になりました。'."\n";
 		echo '      EDCB Material WebUI のポートやフォルダ構成を変更していたり、'."\n";
 		echo '      EDCB が別の PC に入っている場合は、適宜設定を変更してください。'."\n";
 		echo "\n";
 		echo '      Enter キーで次に進む場合、同じ PC に EDCB が導入されていると仮定し、'."\n";
-		echo '      自動で http://'.$serverip.':5510/api/ に設定します。'."\n";
+		echo '      自動で http://'.$serverip.':5510/ に設定します。'."\n";
 		echo '      この設定は ≡ サイドメニュー → 設定 → 環境設定 からも変更できます。'."\n";
 		echo "\n";
-		echo '      EMWUI の API がある URL：';
+		echo '      EMWUI のある URL：';
 		// TVTestのBonDriver
 		$EDCB_http_url = trim(fgets(STDIN));
 		// 判定
 		if (empty($EDCB_http_url)){
-			$EDCB_http_url = 'http://'.$serverip.':5510/api/';
+			$EDCB_http_url = 'http://'.$serverip.':5510/';
 		}
 		echo "\n";
 

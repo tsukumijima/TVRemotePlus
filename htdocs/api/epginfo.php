@@ -18,15 +18,8 @@
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents($inifile), true);
 
-	// 自己署名証明書の許可用
-	// 参考：https://blog.hanhans.net/2018/06/16/simplexml-load-file/
-	$context = stream_context_create(array('ssl' => array(
-		'allow_self_signed'=> true,
-		'verify_peer' => false,
-	)));
-
 	// コンテキストを読み込む
-	libxml_set_streams_context($context);
+	libxml_set_streams_context($ssl_context);
 
 	// 番組情報を取得する関数
 	function getEpgInfo($ch, $jkchannels, $chnum, $sid, $onid, $tsid){
@@ -60,7 +53,7 @@
 		if (!empty($EDCB_http_url)){
 		
 			// 番組表API読み込み
-			$epg = simplexml_load_file($EDCB_http_url.'/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
+			$epg = simplexml_load_file($EDCB_http_url.'api/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
 
 			// チャンネル名
 			if (isset($epg->items->eventinfo[0]->service_name)){
