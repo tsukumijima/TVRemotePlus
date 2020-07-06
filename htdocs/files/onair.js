@@ -91,6 +91,20 @@
                   }
                   var time = hour + ':' + min + ':' + sec;
 
+                  // 手動スクロールでかつ完全にスクロールされている場合は自動スクロールに戻す
+                  // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
+                  var commentbox = document.getElementById('comment-draw-box');
+                  // console.log('Scroll: ' + Math.ceil(commentbox.scrollHeight - commentbox.scrollTop) + ' ScrollHeight: ' + commentbox.clientHeight)
+                  if (autoscroll === false && Math.ceil(commentbox.scrollHeight - commentbox.scrollTop) - commentbox.clientHeight <= 1) {
+
+                    autoscroll = true;
+
+                    // ボタンを非表示
+                    document.getElementById('comment-scroll').style.visibility = 'hidden';
+                    document.getElementById('comment-scroll').style.opacity = 0;
+
+                  }
+
                   // コメントをウインドウに出す
                   // 768px 以上のみ
                   if (windowWidth > 768){
@@ -113,6 +127,7 @@
                     // 古いコメントを削除
                     document.getElementsByClassName('comment-live')[0].parentNode.removeChild(document.getElementsByClassName('comment-live')[0]);
                   }
+
                 }
               }
 
