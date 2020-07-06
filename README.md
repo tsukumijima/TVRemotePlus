@@ -29,6 +29,7 @@ YouTube やニコニコ動画などの動画配信サービスの UI を意識�
   - [リバースプロキシで外出先からアクセスする（上級者向け）](#リバースプロキシで外出先からアクセスする上級者向け)
   - [注意事項・既知の問題](#注意事項既知の問題)
   - [利用ソフトウェア](#利用ソフトウェア)
+  - [利用ライブラリ](#利用ライブラリ)
   - [動作環境](#動作環境)
   - [動作確認](#動作確認)
   - [寄付について](#寄付について)
@@ -550,15 +551,35 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 全て配布アーカイブの中に組み込んでいますが、BonDriver 周りは各自で用意し、別途 (TVRemotePlusをインストールしたフォルダ)\bin\TSTask\BonDriver\ に入れてください。
 また、QSVEncC を利用する場合は Intel QSV に対応した GPU が、NVEncC を利用する場合は NVIDIA GPU が、VCEEncC を利用する場合は AMD の Radeon GPU が必要です。
 
-- Apache（ 2.4.41・Web サーバー）
-- PHP（ 7.4.4・実行環境）
-- TSTask（ 0.2.0(patch)・テレビ放送の受信、UDP 送信に利用）
-- rplsinfo（ 1.5.1・TSファイル内の番組情報取得に利用）
-- ffmpeg（ 4.1.4・UDP 受信 → エンコードに利用）
-- ffprobe（ 4.1.4・録画ファイルの情報取得に利用）
-- QSVEncC（ 4.04・UDP 受信 → ハードウェアエンコードに利用）
-- NVEncC（ 5.09・UDP 受信 → ハードウェアエンコードに利用）
-- VCEEncC（ 6.02・UDP 受信 → ハードウェアエンコードに利用）
+- Apache (2.4.41・Web サーバー)
+- PHP (7.4.4・実行環境)
+- TSTask (0.2.0(patch)・テレビ放送の受信、UDP 送信に利用)
+- rplsinfo (1.5.1・TSファイル内の番組情報取得に利用)
+- ffmpeg (4.1.4・UDP 受信 → エンコードに利用)
+- ffprobe (4.1.4・録画ファイルの情報取得に利用)
+- QSVEncC (4.04・UDP 受信 → ハードウェアエンコードに利用)
+- NVEncC (5.09・UDP 受信 → ハードウェアエンコードに利用)
+- VCEEncC (6.02・UDP 受信 → ハードウェアエンコードに利用)
+
+## 利用ライブラリ
+
+- **CSS ライブラリ**
+  - Font Awesome (アイコンフォント)
+  - Material Icons（アイコンフォント）
+  - Google Fonts（Web フォント）
+- **JavaScript ライブラリ**
+  - jQuery (フレームワーク)
+  - DPlayer (フォーク・JavaScript 製の動画プレイヤー)
+  - hls.js (b24.js対応フォーク・HLS 形式の動画再生に利用)
+  - CSS Browser Selector (ブラウザや OS ごとにクラスを付与してくれるライブラリ)
+  - js-cookie (Cookie の読み取り・書き込みに利用)
+  - PWACompat (PWA 対応を楽にしてくれるライブラリ)
+  - Swiper (スライダーライブラリ)
+  - Toastr (トースト通知ライブラリ)
+  - Velocity.js (アニメーションライブラリ)
+- **PHP ライブラリ**
+  - TwitterOAuth (Twitter 投稿に利用)
+  - CastV2inPHP (PHP からキャストできるライブラリ)
 
 ## 動作環境
   - サーバー：**Windows7 以上（のはず）・64bit**
