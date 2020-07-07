@@ -359,15 +359,16 @@ section {
     visibility: hidden;
     opacity: 0;
     width: 95%;
-    max-width: 500px;
     height: 345px;
+    max-width: 500px;
+    max-height: 95vh;
     background-color: var(--color-white);
     border-radius: 5px;
     will-change: opacity;
 }
 
 #search-stream-box.open {
-    transform: translateY(0px);
+    transform: translateY(0px) !important;
     transition-delay: 0s;
     visibility: visible;
     opacity: 1;
@@ -402,8 +403,16 @@ section {
 
 @media screen and (max-width: 767px){
     #search-stream-box {
-        padding: 20px 18px;
+        top: auto;
+        width: 100%;
         height: 454px;
+        padding: 20px 18px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        transform: translateY(500px);
+        opacity: 1;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
