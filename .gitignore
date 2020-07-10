@@ -24,13 +24,13 @@
 /logs/*
 /modules/Cast/cast.json
 /modules/Cast/scan.json
-/htdocs/server.crt
 /htdocs/phpinfo.php
 /htdocs/files/info/*
 /htdocs/files/thumb/*
 /htdocs/files/fileinfo.json
 /htdocs/files/fileinfo.json.lock
 /htdocs/files/history.json
+/htdocs/files/TVRemotePlus.crt
 /htdocs/stream/*
 !.gitkeep
 
