@@ -652,4 +652,4 @@ TVRemotePlus の字幕表示機能は EPGStation に使われていた b24.js �
 [Release_Notes.md](docs/Release_Notes.md)
 
 ## License
-[MIT Licence](LICENSE.txt)
+[MIT License](LICENSE.txt)

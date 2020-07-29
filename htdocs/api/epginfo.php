@@ -202,7 +202,7 @@
 
 		if ($ini[$key]['state'] == 'ONAir' or $ini[$key]['state'] == 'File'){
 			$standby = file_get_contents($standby_m3u8);
-			$stream_m3u8 = file_get_contents($segment_folder.'stream'.$key.'.m3u8');
+			$stream_m3u8 = @file_get_contents($segment_folder.'stream'.$key.'.m3u8');
 			if ($standby == $stream_m3u8){
 				$status = 'standby';
 			} else {

@@ -60,6 +60,13 @@ body {
     overflow-x: hidden;
 }
 
+/* 字幕 */
+
+video::cue {
+    font-family: 'Open Sans','Segoe UI','Arial',sans-serif;
+    font-size: 110%;
+}
+
 /* 本体のスクロールバー */
 
 .scrollbar {
@@ -183,12 +190,6 @@ pre:empty {
 .line {
     height: 2px;
     background-color: var(--color-border);
-}
-
-/** 字幕 **/
-
-video::cue {
-    background-color: rgba(0, 0, 0, 0.5);
 }
 
 /** アイコンなど **/

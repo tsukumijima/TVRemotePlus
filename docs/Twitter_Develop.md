@@ -100,7 +100,7 @@ Please confirm your email address to complete your application. 」
 ここで作ったアプリに TVRemotePlus からお使いの Twitter アカウントでアプリ連携することで、ツイートできるようになります。  
 アカウント作成は通っているので、App name・Callback URLs 以外は適当で大丈夫だと思います。
 
-### App name(必須・重複不可らしい)
+### App name（必須・重複不可らしい）
 
 ここの名前がツイートの via として表示されます。  
 いわゆる「独自 via 」と呼ばれるものです。後で変えることもできるので、好きな via にしましょう。
@@ -108,7 +108,7 @@ Please confirm your email address to complete your application. 」
 （例）TVRemotePlus@（自分の TwitterID ）  
 （例）Twitter for （自分の Twitter 名）  
 
-### Application description(必須)
+### Application description（必須）
 
 （例）TVRemotePlus@example からツイートを投稿するためのアプリケーションです。
 
@@ -133,6 +133,7 @@ HTTPS接続用にもう一つ、https://(稼働させているPCのLAN内IPア�
 （例）https://example.com/tvrp/tweet/callback.php
 
 ### Terms of service URL
+
 無記入で OK
 
 ### Privacy policy URL
