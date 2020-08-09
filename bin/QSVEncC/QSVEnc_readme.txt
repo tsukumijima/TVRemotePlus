@@ -356,9 +356,11 @@ Intel Graphics Driver 25.20.100.6326 (API v1.27)
 Intel Graphics Driver 25.20.100.6373 (API v1.27)
 Intel Graphics Driver 25.20.100.7000 (API v1.27)
 Intel Graphics Driver 25.20.100.7327 (API v1.30)
+Intel Graphics Driver 27.20.100.8190 (API v1.32)
 
 【Intel Media SDKとAPIの対応関係】
-API v1.29 … Intel Media SDK 2018 R1
+API v1.32 … Intel Media SDK 2020 R1
+API v1.29 … Intel Media SDK 2019 R1
 API v1.27 … Intel Media SDK 2018 R2
 API v1.26 … Intel Media SDK 2018 R1
 API v1.23 … Intel Media SDK 2017 R1
@@ -379,6 +381,22 @@ API v1.1  … Intel Media SDK v2.0
 
 
 【どうでもいいメモ】
+2020.08.06 (4.07)
+・ロードするAvisynth.dllを指定するオプションを追加。(--avsdll)
+
+2020.08.02 (4.06)
+[QSVEncC]
+・場合により、異常終了が発生することがあったのを修正。
+
+2020.07.29 (4.05)
+[QSVEncC]
+・Media SDKを2020 R1に更新。
+・ffmpeg関連のdllを更新。
+  これにより、ts/m2tsへのPGSのmuxを可能とする。
+・--audio-stream stereoが動作しないのを修正。
+・mkv出力時にdefault-durationが設定されるように。
+・--chromalocが使用できないのについて回避策を実装。
+
 2020.06.16 (4.04)
 [QSVEncC]
 ・一部のHEVCファイルで、正常にデコードできないことがあるのに対し、可能であればswデコーダでデコードできるようにした。
