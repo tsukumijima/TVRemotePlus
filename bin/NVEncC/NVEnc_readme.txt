@@ -25,6 +25,7 @@ NVEnc 3.08 NVIDIA グラフィックドライバ 378.66以降
 NVEnc 4.00 NVIDIA グラフィックドライバ 390.77以降
 NVEnc 4.31 NVIDIA グラフィックドライバ 418.81以降
 NVEnc 4.51 NVIDIA グラフィックドライバ 436.15以降
+NVEnc 5.10 NVIDIA グラフィックドライバ 418.81以降
 
 
 【NVIDIA CORPORATION CUDA SAMPLES EULA のライセンス規定の準拠表記】
@@ -157,16 +158,46 @@ NVIDIA グラフィックドライバ 417.22
 NVIDIA グラフィックドライバ 418.81
 NVIDIA グラフィックドライバ 419.35
 NVIDIA グラフィックドライバ 419.67
-NVIDIA グラフィックドライバ 419.67
+NVIDIA グラフィックドライバ 431.60
 NVIDIA グラフィックドライバ 436.02
+NVIDIA グラフィックドライバ 436.30
 NVIDIA グラフィックドライバ 442.19
 NVIDIA グラフィックドライバ 445.75
 NVIDIA グラフィックドライバ 446.14
+NVIDIA グラフィックドライバ 451.67
 
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.08.04 (5.14)
+・ロードするAvisynth.dllを指定するオプションを追加。(--avsdll)
+
+2020.07.29 (5.13)
+・ffmpeg関連のdllを更新。
+  これにより、ts/m2tsへのPGSのmuxを可能とする。
+
+2020.07.26 (5.12)
+・--audio-stream stereoが動作しないのを修正。
+・mkv出力時にdefault-durationが設定されるように。
+・bref-modeが使用可能かについて、each/only middleを区別して判定するように。
+
+2020.07.15 (5.11)
+・--multipassのオプションの誤字を修正。
+  2pass-quater -> 2pass-quarter
+・--presetで7段階のプリセットを指定可能に。(API v10.0以降のみ対応)
+
+2020.07.14 (5.10)
+[NVEncC]
+・NVENC SDK 10.0への対応を追加。SDK 10.0の機能を使用するには、ドライバ445.87以降が必要。
+・マルチパス解析モードを詳細に指定するオプションを追加。(--multipass)
+・NVENC SDK 9.0/9.1 との互換性を維持。
+  必要なドライババージョンを満たさない場合、旧APIバージョンでの互換動作を行う。
+  下記の互換動作とする。
+     | SDK API 9.1  | SDK API 10.0                 |
+     | --vbrhq      | --vbr --multipass 2pass-full |
+     | --cbrhq      | --cbr --multipass 2pass-full |
+
 2020.07.05 (5.09)
 [NVEncC]
 ・raw出力でSAR比を指定したときに発生するメモリリークを修正。
