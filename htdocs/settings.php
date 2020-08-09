@@ -45,12 +45,12 @@
 			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream'.$stream.'.m3u8') > 20)){
 
 			// 一旦現在のストリームを終了する
-      // state に関わらず実行
+			// state に関わらず実行
 			if (isset($_POST['allstop'])) {
-        stream_stop($stream, true);
-      } else {
-        stream_stop($stream);
-      }
+				stream_stop($stream, true);
+			} else {
+				stream_stop($stream);
+			}
 
 			// File
 			if ($ini[$stream]['state'] == 'File'){
