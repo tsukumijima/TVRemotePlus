@@ -117,6 +117,10 @@ $process_csv = $base_dir.'data/process.csv';
 $tstask_exe = 'TSTask-tvrp.exe';
 $tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
 
+// TSTaskCentreEx の名前とパス
+$tstaskcentreex_exe = 'TSTaskCentreEx.exe';
+$tstaskcentreex_path = $base_dir.'bin/TSTaskCentreEx/'.$tstaskcentreex_exe;
+
 // rplsinfo の名前とパス
 $rplsinfo_exe =  'rplsinfo-tvrp.exe';
 $rplsinfo_path =  $base_dir.'bin/rplsinfo/'.$rplsinfo_exe;

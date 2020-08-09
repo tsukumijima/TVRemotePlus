@@ -744,7 +744,7 @@
 	// ストリームを終了する関数
 	// flgがtrueの場合は全てのストリームを終了する
 	function stream_stop($stream, $flg=false){
-		global $inifile, $udp_port, $process_csv, $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $segment_folder, $TSTask_shutdown;
+		global $inifile, $udp_port, $process_csv, $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $tstaskcentreex_path, $segment_folder, $TSTask_shutdown;
 
 		// 全てのストリームを終了する
 		if ($flg){
@@ -765,7 +765,15 @@
 			if ($TSTask_shutdown == 'true'){ // 強制終了
 				win_exec('taskkill /F /IM '.$tstask_exe);
 			} else { // 通常終了
-				win_exec('taskkill /IM '.$tstask_exe);
+				// 起動している TSTask のプロセスを取得
+				exec($tstaskcentreex_path.' -m '.$tstask_exe.' -c list', $tstask_process_list);
+				// TSTask のプロセスごとに
+				foreach ($tstask_process_list as $key => $value) {
+					// PID を（強引に）取得
+					$tstask_pid = intval(str_replace('PID:', '', explode(' ', $value)[0]));
+					// TSTaskCentreEx で EndTask コマンドを送信
+					win_exec($tstaskcentreex_path.' -p '.$tstask_pid.' -c EndTask');
+				}
 			}
 
 			// フォルダ内のTSを削除
@@ -825,7 +833,8 @@
 					if ($TSTask_shutdown == 'true'){ // 強制終了
 						win_exec('taskkill /F /PID '.$value['ProcessId']);
 					} else { // 通常終了
-						win_exec('taskkill /PID '.$value['ProcessId']);
+						// TSTaskCentreEx で EndTask コマンドを送信
+						win_exec($tstaskcentreex_path.' -p '.$value['ProcessId'].' -c EndTask');
 					}
 					// echo 'TSTask Killed. Stream: '.$stream.' Cmd:'.$value['CommandLine']."\n\n";
 				}
