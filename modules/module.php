@@ -32,10 +32,11 @@
 	}
 
 	// Windowsコマンド用に文字列をエスケープする関数
-	function win_exec_escape($text){
+	// $exclude_ampersand を true に設定すると & をエスケープ対象から除外する
+	function win_exec_escape($text, $exclude_ampersand = false){
 
 		$text = str_replace('^', '^^', $text);
-		$text = str_replace('&', '^&', $text);
+		if ($exclude_ampersand === false) $text = str_replace('&', '^&', $text); // ^ を ^^ にエスケープしてから実行
 		$text = str_replace('<', '^<', $text);
 		$text = str_replace('>', '^>', $text);
 		$text = str_replace('|', '^|', $text);
@@ -152,6 +153,64 @@
 		} else {
 			return $stream_flg;
 		}
+	}
+
+	// ストリーム番号から現在実行中の TSTask の PID を取得する関数
+	// 見つからなかった場合は -1 を返す
+	function getTSTaskPID($stream) {
+
+		global $udp_port, $tstask_exe;
+
+		// 数値に変換しておく
+		$stream = intval($stream);
+
+		// ストリームの配信ポート
+		$stream_port = $udp_port + $stream;
+
+		// 超ゴリ押し PowerShell スクリプトをコマンドプロンプトから実行
+		$command = 'powershell -Command "'.
+		           // CSV がコンソール幅で改行されないようにコンソール幅を 9999 に設定
+				   '$h = get-host; $w = $h.ui.rawui; $n = $w.buffersize; $n.Width = 9999; $w.buffersize = $n; '.
+				   // Get-WmiObject で引数（コマンドライン）つきのプロセスリストを取得
+				   'Get-WmiObject win32_process | '.
+				   // cmd.exe から実行されているプロセスを除外
+				   '? { $_.CommandLine -notlike \'*cmd.exe*\' } | '.
+				   // コマンドラインに TSTask とポート番号が含まれているプロセスのみに絞り込み
+				   '? { $_.CommandLine -like \'*'.$tstask_exe.'*'.$stream_port.'*\' } | '.
+				   // プロセス ID とコマンドラインのみ取得
+				   'Select-Object ProcessId, CommandLine | '.
+				   // ConvertTo-CSV で tsv に変換
+		           'ConvertTo-Csv -NoTypeInformation  -Delimiter `t "';
+
+		exec($command, $result);
+
+		// CSV をパースして二次元配列に
+		$tstask_list = [];
+		foreach ($result as $index => $line) {
+
+			// ヘッダー
+			if ($index === 0) {
+				$tstask_list_header = str_getcsv(removeBOM($line), "\t"); // 悪しき BOM を除去
+				continue; // その後の処理をスキップ
+			}
+
+			// ヘッダー分のインデックスを詰める
+			$index = $index - 1; 
+
+			// データを連想配列に格納
+			foreach (str_getcsv($line, "\t") as $key => $value) {
+				$tstask_list[$index][$tstask_list_header[$key]] = $value;
+			}
+		}
+
+		if (isset($tstask_list[0]['ProcessId'])) {
+			// PID を取得できた
+			return intval($tstask_list[0]['ProcessId']);
+		} else {
+			// PID を取得できなかった
+			return -1;
+		}
+
 	}
 
 	// ストリーム状態を整形して返す関数

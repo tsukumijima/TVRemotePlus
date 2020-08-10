@@ -44,14 +44,6 @@
 		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or 
 			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream'.$stream.'.m3u8') > 20)){
 
-			// 一旦現在のストリームを終了する
-			// state に関わらず実行
-			if (isset($_POST['allstop'])) {
-				stream_stop($stream, true);
-			} else {
-				stream_stop($stream);
-			}
-
 			// File
 			if ($ini[$stream]['state'] == 'File'){
 
@@ -162,7 +154,11 @@
 			// Offline
 			} else if ($_POST['state'] == 'Offline'){
 
+				// このストリームを終了
 				if (!isset($_POST['allstop'])){
+					
+					// 現在のストリームを終了する
+					stream_stop($stream);
 
 					// Offline に設定する
 					$ini[$stream]['state'] = 'Offline';
@@ -182,7 +178,11 @@
 						@unlink($base_dir.'htdocs/stream/stream'.$stream.'.m3u8');
 					}
 
+				// 全てのストリームを終了
 				} else {
+
+					// 全てのストリームを終了する
+					stream_stop($stream, true);
 
 					// ストリーム番号ごとに実行
 					foreach ($ini as $key => $value) {
