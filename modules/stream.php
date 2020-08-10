@@ -214,15 +214,19 @@
 			if ($settings[strval($stream)]['BonDriver'] == $BonDriver) {
 
 				// TSTaskCentreEx のコマンド
-				$tstaskcentreex_cmd = '"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c SetChannel -o "ServiceID:'.$sid.'|TransportStreamID:'.$tsid.'" ';
+				$tstaskcentreex_cmd = // チャンネルをセット
+				                      '"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c SetChannel -o "ServiceID:'.$sid.'|TransportStreamID:'.$tsid.'" ';
 
 			// BonDriver が違うので BonDriver を読み込んでからチャンネルを切り替える
 			} else {
 
 				// TSTaskCentreEx のコマンド
-				$tstaskcentreex_cmd = '"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c LoadBonDriver -o "FilePath:\''.$BonDriver.'\'" && '.
-									'"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c OpenTuner && '.
-									'"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c SetChannel -o "ServiceID:'.$sid.'|TransportStreamID:'.$tsid.'" ';
+				$tstaskcentreex_cmd = // BonDriver をロード
+				                      '"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c LoadBonDriver -o "FilePath:\''.$BonDriver.'\'" && '.
+				                      // チューナーを開く
+				                      '"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c OpenTuner && '.
+				                      // チャンネルをセット
+				                      '"'.$tstaskcentreex_path.'" -p '.$tstask_pid.' -c SetChannel -o "ServiceID:'.$sid.'|TransportStreamID:'.$tsid.'" ';
 
 			}
 
