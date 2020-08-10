@@ -170,16 +170,16 @@
 		// 超ゴリ押し PowerShell スクリプトをコマンドプロンプトから実行
 		$command = 'powershell -Command "'.
 		           // CSV がコンソール幅で改行されないようにコンソール幅を 9999 に設定
-				   '$h = get-host; $w = $h.ui.rawui; $n = $w.buffersize; $n.Width = 9999; $w.buffersize = $n; '.
-				   // Get-WmiObject で引数（コマンドライン）つきのプロセスリストを取得
-				   'Get-WmiObject win32_process | '.
-				   // cmd.exe から実行されているプロセスを除外
-				   '? { $_.CommandLine -notlike \'*cmd.exe*\' } | '.
-				   // コマンドラインに TSTask とポート番号が含まれているプロセスのみに絞り込み
-				   '? { $_.CommandLine -like \'*'.$tstask_exe.'*'.$stream_port.'*\' } | '.
-				   // プロセス ID とコマンドラインのみ取得
-				   'Select-Object ProcessId, CommandLine | '.
-				   // ConvertTo-CSV で tsv に変換
+		           '$h = get-host; $w = $h.ui.rawui; $n = $w.buffersize; $n.Width = 9999; $w.buffersize = $n; '.
+		           // Get-WmiObject で引数（コマンドライン）つきのプロセスリストを取得
+		           'Get-WmiObject win32_process | '.
+		           // cmd.exe から実行されているプロセスを除外
+		           '? { $_.CommandLine -notlike \'*cmd.exe*\' } | '.
+		           // コマンドラインに TSTask とポート番号が含まれているプロセスのみに絞り込み
+		           '? { $_.CommandLine -like \'*'.$tstask_exe.'*'.$stream_port.'*\' } | '.
+		           // プロセス ID とコマンドラインのみ取得
+		           'Select-Object ProcessId, CommandLine | '.
+		           // ConvertTo-CSV で tsv に変換
 		           'ConvertTo-Csv -NoTypeInformation  -Delimiter `t "';
 
 		exec($command, $result);
