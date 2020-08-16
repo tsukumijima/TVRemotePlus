@@ -360,23 +360,22 @@
 
 		// ショートカット作成
 		// 既にショートカットがある場合は上書きしないようショートカット名を変える
-		if (file_exists(getenv('USERPROFILE').'\Desktop\TVRemotePlus - launch.lnk')){
-			$shortcut_file = '\Desktop\TVRemotePlus - launch (1).lnk';
+		if (file_exists(getenv('USERPROFILE').'\Desktop\TVRemotePlus- Launcher.lnk')){
+			$shortcut_file = '\Desktop\TVRemotePlus- Launcher (1).lnk';
 			$shortcut_count = 1;
 			while (file_exists(getenv('USERPROFILE').$shortcut_file)){
 				if (file_exists(getenv('USERPROFILE').$shortcut_file)){
 					$shortcut_count++;
-					$shortcut_file = '\Desktop\TVRemotePlus - launch ('.$shortcut_count.').lnk';
+					$shortcut_file = '\Desktop\TVRemotePlus- Launcher ('.$shortcut_count.').lnk';
 				}
 			}
 		} else {
-			$shortcut_file = '\Desktop\TVRemotePlus - launch.lnk';
+			$shortcut_file = '\Desktop\TVRemotePlus- Launcher.lnk';
 		}
 		$powershell = '$shell = New-Object -ComObject WScript.Shell; '.
 					  '$lnk = $shell.CreateShortcut(\"$Home'.$shortcut_file.'\"); '.
-					  '$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\httpd.exe\"; '.
-					  '$lnk.WorkingDirectory = \"'.str_replace('/', '\\', $serverroot).'\bin\Apache\bin\"; '.
-					  '$lnk.WindowStyle = 7; '.
+					  '$lnk.TargetPath = \"'.str_replace('/', '\\', $serverroot).'\TVRemotePlus.exe\"; '.
+					  '$lnk.WorkingDirectory = \"'.str_replace('/', '\\', $serverroot).'\"; '.
 					  '$lnk.Save()';
 		exec('powershell -Command "'.$powershell.'"', $opt2, $return2);
 		echo "\n";
