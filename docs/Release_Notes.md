@@ -9,7 +9,7 @@
       - **局ロゴ表示用の新規 API (/api/logo) を追加したため、リバースプロキシで運用されている方はリバースプロキシ側の設定変更が必要になります**
         - 他の API 同様に Apache の場合は Substitute 、nginx の場合は sub_filter で /api/logo の URL を置換するように設定します
           - 頻繁に変更になってしまい申し訳ないです…（把握しきれてない）
-        - 詳しくは [Reverse_Proxy.md](Reverse_Proxy.md) を参照してください
+        - 詳しくは [Reverse_Proxy.md](https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Reverse_Proxy.md) を参照してください
       - **環境設定の［EDCB_Material_WebUI の API がある URL］が［EDCB_Material_WebUI のある URL］に変わりました**
         - 今まで http://192.168.1.11:5510/api/ だったものが http://192.168.1.11:5510/ だけでよくなります
         - 互換性の観点から api/ が付いていた場合は除去するようにしていますが、できるだけ http://192.168.1.11:5510/ のように設定することを推奨します
@@ -48,7 +48,7 @@
         - Apache が起動できなかったり異常終了した場合はエラーダイヤログが表示されるので、ログの内容を確認してください
       - 今までの方法でも Apache を起動することはできますが、常に Apache がタスクバーに表示されます
       - 実行には .NET Framework 4.8 以降が必要です、もし PC にインストールされていない場合は適宜インストールしてから実行してください
-      - 詳しくは [README-Launcher.md](README-Launcher.md) を参照してください
+      - 詳しくは [README-Launcher.md](https://github.com/tsukumijima/TVRemotePlus/blob/master/README-Launcher.md) を参照してください
     - **TSTask の制御周りの変更**
       - **TSTaskCentreEx を追加した**
         - [TSTaskCentreEx](https://github.com/tsukumijima/TSTaskCentreEx) は、TSTask にメッセージコマンドを送信できるコマンドラインツールです
