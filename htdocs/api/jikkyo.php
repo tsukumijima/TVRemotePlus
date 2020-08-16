@@ -299,42 +299,49 @@
 					// jkthread をDPlayer用 danmaku 形式に変換する
 					for ($i = 0; $i < count($jkthread); $i++) { 
 
-						// 自分のコメントを表示しない
-						// commentとコメント内容が同じ & フラグが立っていない場合
-						if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
-							// 自分のコメントだったら
-							if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
-								$jkthread[$i]['content'] = ''; // 空にする
-								$comment_ini['comment_readed'] = true; //フラグをtrueに
+						if (isset($jkthread[$i]) and !empty($jkthread[$i])) {
+
+							// 自分のコメントを表示しない
+							// commentとコメント内容が同じ & フラグが立っていない場合
+							if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
+								// 自分のコメントだったら
+								if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
+									$jkthread[$i]['content'] = ''; // 空にする
+									$comment_ini['comment_readed'] = true; //フラグをtrueに
+								}
+							} else { // iniが空だったら再設定しておく
+								$comment_ini['comment'] = ' ';
+								$comment_ini['comment_readed'] = false;
 							}
-						} else { // iniが空だったら再設定しておく
-							$comment_ini['comment'] = ' ';
-							$comment_ini['comment_readed'] = false;
-						}
 
-						// iniファイル書き込み
-						file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+							// iniファイル書き込み
+							file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
 
-						// オプションを解析する
-						if (isset($jkthread[$i]['mail'])){ //空でないなら
-							$option = str_replace('184', '', $jkthread[$i]['mail']);
+							// オプションを解析する
+							if (isset($jkthread[$i]['mail'])){ //空でないなら
+								$option = str_replace('184', '', $jkthread[$i]['mail']);
+							} else {
+								$option = '';
+							}
+
+							// 位置を取得
+							$position = getPosition($option);
+							
+							// 色を取得
+							$color = getColor($option);
+
+							$danmaku[$i] = array(
+								'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
+								$position, // 場所(上・スクロール・下)をインポート
+								$color, // 色をインポート
+								$jkthread[$i]['user_id'], // ユーザーIDをインポート
+								$jkthread[$i]['content'], // コメントをインポート
+								$jkthread[$i]['no'], // コメ番をインポート
+							);
+
 						} else {
-							$option = '';
+							$danmaku[$i] = null; // コメントを取得できなかった
 						}
-
-						// 位置を取得
-						$position = getPosition($option);
-						
-						// 色を取得
-						$color = getColor($option);
-
-						$danmaku[$i] = array(
-							'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
-							$position, // 場所(上・スクロール・下)をインポート
-							$color, // 色をインポート
-							$jkthread[$i]['user_id'], //ユーザーIDをインポート
-							$jkthread[$i]['content'], //コメントをインポート
-						);
 					}
 
 				} else { //そうでなかったらdanmakuをnullにする
