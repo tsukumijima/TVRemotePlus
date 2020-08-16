@@ -262,7 +262,10 @@
 	if_copy ('/createcert.bat', true);
 	if_copy ('/LICENSE.txt', true);
 	if_copy ('/README.md', true);
+	if_copy ('/README-Launcher.md', true);
 	if_copy ('/stream.bat', true);
+	if_copy ('/TVRemotePlus.exe', true);
+	if_copy ('/TVRemotePlus.exe.config', true);
 	if_copy ('/bin', true);
 	if_copy ('/data', true);
 	if_copy ('/docs', true);
