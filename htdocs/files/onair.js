@@ -20,6 +20,7 @@
 
     // コメント取得
     setInterval((function status(){
+
       $.ajax({
         url: '/api/jikkyo/' + stream + '?res=' + res,
         dataType: 'json',
@@ -31,7 +32,7 @@
           res = data["last_res"];
           last_res = data["res"];
 
-          // console.log('―― GetComment postres:' + last_res + ' getres:' + res + ' draw:' + (res - last_res) + ' ――');
+          // console.log('―― GetComment last_res:' + last_res + ' res:' + res + ' draw:' + (res - last_res) + ' ――');
           // console.log(data['data']);
 
           if (data['ikioi'] !== null && data['ikioi'] !== undefined){
@@ -39,10 +40,10 @@
             document.getElementById('ikioi').textContent = '実況勢い: ' + data['ikioi'];
           }
 
-          // n秒後に実行(コメント遅延分)
-          wait(settings['comment_delay']).done(function(){
+          if (data['data'] != null && data['data'][0]){ // data['data'] があれば(nullでなければ)
 
-            if (data['data'] != null && data['data'][0]){ //data['data'] があれば(nullでなければ)
+            // n秒後に実行(コメント遅延分)
+            wait(settings['comment_delay']).done(function(){
 
               // コメントを無制限に表示 がオンの場合は全て流す
               // オフの場合は一度に最大5個のみ
@@ -148,8 +149,8 @@
 
               }
 
-            }
-          });
+            });
+          }
         }
       });
       return status;
