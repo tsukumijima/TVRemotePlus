@@ -41,8 +41,9 @@
       - 例えば前後5秒録画マージンを取っている場合は、［個人設定］→［コメントの遅延時間（ファイル再生・秒）］を 5 に設定すると、コメントがぴったりのタイミングで表示されるはずです
     - **TVRemotePlus-Launcher を追加し、Web サーバー (Apache) をバックグラウンドで起動できるようにした**
       - 今までは TVRemotePlus を起動している間 Apache がタスクバーに表示されたままになってしまっていましたが、タスクトレイに格納された TVRemotePlus-Launcher からバックグラウンドで Apache を起動するようにしたことで解消されます
-        - TVRemotePlus-Launcher のソースコードは [launcher](https://github.com/tsukumijima/TVRemotePlus/tree/launcher) ブランチにおいてあります
+        - TVRemotePlus-Launcher のソースコードは [TVRemotePlus-Launcher](https://github.com/tsukumijima/TVRemotePlus-Launcher) においてあります
           - C# と WPF は初めてなので作りが甘い部分があるかもですがご愛嬌…
+          - ブランチ扱いにしていましたが、わかりづらそうなので別のリポジトリに分けました
       - TVRemotePlus-Launcher（青緑のアイコン・TVRemotePlus.exe）を起動するとタスクトレイに表示され、Apache はバックグラウンドで起動されます
         - タスクトレイのアイコンを右クリック →［サーバー (Apache) の設定］から、サーバーの設定内容や Apache の起動ログを確認できます
         - Apache が起動できなかったり異常終了した場合はエラーダイヤログが表示されるので、ログの内容を確認してください
