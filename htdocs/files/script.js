@@ -21,8 +21,10 @@
     }
     $('#tweet-account-icon').attr('src', twitter['account_icon']);
     $('#tweet-account-name').text(twitter['account_name']);
-    $('#tweet-account-name').attr('href', 'https://twitter.com/' + twitter['account_id']);
-    $('#tweet-account-id').text('@' + twitter['account_id']);
+    if (twitter['account_id'] != '') { // スクリーンネームが空でなければ
+      $('#tweet-account-name').attr('href', 'https://twitter.com/' + twitter['account_id']);
+      $('#tweet-account-id').text('@' + twitter['account_id']);
+    }
 
     // ***** 視聴数カウント・ストリーム状態把握 *****
 
