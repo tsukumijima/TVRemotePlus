@@ -282,17 +282,17 @@
       <div id="information">
 <?php	if (empty($BonDriver_dll) and empty($ch)){ // エラーを吐く ?>
         <div class="error">
-          BonDriver とチャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
+          BonDriver とチャンネル設定ファイルが見つからないため、ライブ配信を開始できません。<br>
           ファイルが BonDriver フォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} else if (empty($BonDriver_dll)){ ?>
         <div class="error">
-          BonDriver が見つからないため、ストリームを開始できません。<br>
+          BonDriver が見つからないため、ライブ配信を開始できません。<br>
           ファイルが BonDriver フォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} else if (empty($ch)){ ?>
         <div class="error">
-          チャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
+          チャンネル設定ファイルが見つからないため、ライブ配信を開始できません。<br>
           ファイルが BonDriver フォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} //括弧終了

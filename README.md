@@ -240,6 +240,7 @@ README は常に更新するよう心がけていますが、まれに最新の�
      - BonDriverProxyEx のビルド済みアーカイブは [こちら](https://github.com/tsukumijima/TS-Soft-Built/raw/master/BonDriverProxyEx-1.1.6.6.zip) よりどうぞ
    - **B-CAS カードを PLEX 製チューナー付属の内蔵カードリーダーで利用している場合は、TVTest 等で使っている WinSCard.dll・WinSCard.ini を TSTask.exe と同じフォルダに入れてください**
      - ストリームの起動に失敗する or 再開 → 中断を繰り返す 場合はまずは WinSCard.dll・WinSCard.ini が配置されているかを確認してみてください
+     - SoftCas を利用している場合も同様の手順で可能だと思います（未検証）
 5. **デスクトップに追加されたショートカットをダブルクリックし、Web サーバーを起動する**
    - v2.2.0 以降では TVRemotePlus-Launcher がタスクトレイに表示された状態で立ち上がり、バックグラウンドで Web サーバー (Apache) を起動します
      - 起動（タスクトレイへの表示）に時間がかかる場合がありますが、しばらく待ちましょう
