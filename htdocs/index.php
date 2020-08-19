@@ -282,25 +282,25 @@
       <div id="information">
 <?php	if (empty($BonDriver_dll) and empty($ch)){ // エラーを吐く ?>
         <div class="error">
-          BonDriverとチャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
-          ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+          BonDriver とチャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
+          ファイルが BonDriver フォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} else if (empty($BonDriver_dll)){ ?>
         <div class="error">
-          BonDriverが見つからないため、ストリームを開始できません。<br>
-          ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+          BonDriver が見つからないため、ストリームを開始できません。<br>
+          ファイルが BonDriver フォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} else if (empty($ch)){ ?>
         <div class="error">
           チャンネル設定ファイルが見つからないため、ストリームを開始できません。<br>
-          ファイルがBonDriverフォルダに正しく配置されているか、確認してください。<br>
+          ファイルが BonDriver フォルダに正しく配置されているか、確認してください。<br>
         </div>
 <?php	} //括弧終了
 
 		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'api/EnumEventInfo', false, $ssl_context)){ // EMWUI ?>
         <div class="error">
-          EDCB Material WebUI の API がある URL が正しく設定されていないため、番組情報が表示できません。<br>
-          設定ページの「EDCB Material WebUI (EMWUI) の API がある URL」が正しく設定されているかどうか、確認してください。<br>
+          EEDCB Material WebUI のある URL が正しく設定されていないため、番組情報が表示できません。<br>
+          設定ページの「EDCB Material WebUI (EMWUI) のある URL」が正しく設定されているかどうか、確認してください。<br>
         </div>
 <?php	} //括弧終了 ?>
 
