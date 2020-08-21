@@ -1269,9 +1269,10 @@ td {
 
 #tweet-main {
     display: block;
+    position: relative;
     width: 85%;
     padding: 12px;
-    background-color: var(--color-hover-light);
+    background-color: var(--color-hover);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom: 2px var(--color-tweet) solid;
@@ -1324,43 +1325,45 @@ td {
 }
 
 #tweet-etc {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
     width: 4%;
     margin-left: 10px;
-    text-align: center;
-    display: block;
 }
 
 #tweet-etc div {
     display: inline-block;
+    text-align: center;
 }
 
-#tweet-etc div[data-balloon]:after {
+#tweet-etc div[aria-label]:before {
+    display: none;
+}
+
+#tweet-etc div[aria-label]:after {
+    padding: .3em .8em !important;
+    margin-bottom: 6px !important;
     background: rgba(29, 161, 242, 0.8) !important;
-    transition: all 0.15s ease-out 0.15s;
+    font-size: 11px !important;
+    transition: all 0.1s ease 0.1s;
 }
 
 @media screen and (max-width: 1024px){
-    #tweet-etc div[data-balloon]:after {
+    #tweet-etc div[aria-label]:before, #tweet-etc div[aria-label]:after {
         display: none;
     }
 }
 
-#tweet-picture, #tweet-picture img {
-    width: 28px;
-    height: 25px;
+.tweet-etc-item {
+    width: 25.5px;
     cursor: pointer;
 }
 
-#tweet-picture-comment, #tweet-picture-comment img {
-    width: 28px;
-    height: 25px;
-    cursor: pointer;
-}
-
-#tweet-reset, #tweet-reset img {
-    width: 28px;
-    height: 22px;
-    cursor: pointer;
+.tweet-etc-item img {
+    width: 100%;
+    height: 100%;
 }
 
 #tweet-picture:hover, #tweet-picture-comment:hover, #tweet-reset:hover {
@@ -1375,10 +1378,12 @@ td {
 }
 
 #tweet-num {
-    width: 100%;
+    display: block;
+    position: absolute;
+    right: 15px;
+    bottom: 11px;
     color: #707070;
     font-weight: bold;
-    display: block;
 }
 
 #tweet-num.warn {
