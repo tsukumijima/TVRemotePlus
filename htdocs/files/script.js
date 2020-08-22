@@ -849,7 +849,7 @@
           $(this_).find('.tweet-capture-cover').text('');
 
           // data-autoselect を削除
-          if (autoselect) {
+          if (typeof this_.dataset.autoselect !== 'undefined') {
             delete this_.dataset.autoselect;
           }
 
@@ -1295,7 +1295,11 @@
 
       // フォームデータ
       var formData = new FormData($('#tweet-form').get(0));
-      formData.append('picture', capture[0]);
+
+      // 選択した画像を追加
+      for (index in capture_selected) {
+        formData.append('picture' + (Number(index) + 1), capture_selected[index]);
+      }
 
       // 通常表示
       $('#content-box').show();

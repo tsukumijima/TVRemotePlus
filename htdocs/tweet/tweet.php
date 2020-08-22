@@ -80,25 +80,51 @@
 			}
 
 			// 画像とツイートが添付されている場合のみ
-			if (isset($_POST['tweet']) and !isset($_POST['picture'])){
+			if (isset($_POST['tweet']) and isset($_FILES['picture1'])){
 
 				// アップロードしたはずの画像が存在するなら
-				if (is_uploaded_file($_FILES['picture']['tmp_name'])){
+				if (is_uploaded_file($_FILES['picture1']['tmp_name'])){
 
+					// アップロード先のフォルダ
 					if (empty($tweet_upload)){
 						$tweet_upload = $base_dir.'data/upload/';
 					}
 
-					// アップロード処理
-					$picture = $tweet_upload.'/Capture_'.date('Ymd-His').'.jpg'; // アップロードするパス
-					
-					// アップロードディレクトリに保存
-					if (move_uploaded_file($_FILES['picture']['tmp_name'], $picture)){
-						// Twitterに画像をアップロード
-						$media = $connection->upload('media/upload', ['media' => $picture]);
-					} else {
-						echo '<span class="tweet-failed">画像の投稿に失敗しました：投稿に失敗しました…</span>';
-						exit(1);
+					// メディアID
+					$media_ids = [];
+
+					// 1枚ごとに実行
+					foreach ($_FILES as $index => $file) {
+
+						// picture5 (存在しない回)
+						if ($index === 'picture5') {
+							break; // ループを抜ける
+						}
+	
+						// アップロードするパス
+						$picture = $tweet_upload.'/Capture_'.date('Ymd-His').'_'.str_replace('picture', '', $index).'.jpg';
+						
+						// 画像をアップロード先のフォルダに移動
+						if (move_uploaded_file($file['tmp_name'], $picture)){
+
+							// Twitterに画像をアップロード
+							$media = $connection->upload('media/upload', ['media' => $picture]);
+
+							// メディアIDを取得
+							if (isset($media->media_id_string)) {
+
+								$media_ids[] = $media->media_id_string;
+
+							} else {
+								echo '<span class="tweet-failed">画像の投稿に失敗しました：投稿に失敗しました…</span>';
+								exit(1);
+							}
+
+						} else {
+							echo '<span class="tweet-failed">画像の投稿に失敗しました：投稿に失敗しました…</span>';
+							exit(1);
+						}
+
 					}
 					
 					$tweet_type = '画像付きツイート';
@@ -110,23 +136,23 @@
 					}
 
 					// ツイートの内容を設定
-					$tweet = array(
+					$tweet = [
 						'status' => $tweet_text,
-						'media_ids' => implode(',', [@$media->media_id_string])
-					);
+						'media_ids' => implode(',', $media_ids)
+					];
 
 				} else {
 					echo '<span class="tweet-failed">画像の投稿に失敗しました：投稿に失敗しました…</span>';
 					exit(1);
 				}
 
-			} else if (isset($_POST['tweet'])){ //画像はないけどツイートはある
+			} else if (isset($_POST['tweet']) and !empty($_POST['tweet'])){ // 画像はないけどツイートはある
 				$tweet_type = 'ツイート';
 
     			// ツイートの内容を設定
-				$tweet = array(
-					'status' => $tweet_text,
-				);
+				$tweet = [
+					'status' => $tweet_text
+				];
 
 			} else { // 何故か両方ない場合
 				echo '<span class="tweet-failed">本文が送信されませんでした：投稿に失敗しました…</span>';
