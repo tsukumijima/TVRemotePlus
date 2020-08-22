@@ -1394,7 +1394,7 @@ td {
 }
 
 #tweet-capture-box {
-    display: flex;
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -1404,31 +1404,49 @@ td {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     background-color: var(--color-hover);
-    transition: all  0.1s ease;
+    transition: all 0.1s ease;
+    box-sizing: border-box;
     overflow-x: auto;
     overflow-y: hidden;
+    scrollbar-width: thin;
     visibility: hidden;
     opacity: 0;
 }
-#tweet-capture-box::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-    background: var(--color-hover);
+#tweet-capture-box.show {
+    visibility: visible;
+    opacity: 1;
 }
-#tweet-capture-box::-webkit-scrollbar-corner {
-    background: var(--color-hover);
+#tweet-capture-box.display {
+    display: flex;
 }
-#tweet-capture-box::-webkit-scrollbar-thumb {
-    background: #657586;
+@media screen and (min-width: 1025px) {
+    #tweet-capture-box::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        background: var(--color-hover);
+    }
+    #tweet-capture-box::-webkit-scrollbar-corner {
+        background: var(--color-hover);
+    }
+    #tweet-capture-box::-webkit-scrollbar-thumb {
+        background: #657586;
+    }
 }
 
 .tweet-capture {
     position: relative;
+    width: 87px;
+    height: 87px;
     margin-right: 12px;
-    height: 100%;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+}
+.tweet-capture.disabled {
+    cursor: auto;
+}
+.tweet-capture:last-of-type {
+    padding-right: 12px;
 }
 
 .tweet-capture-cover {
@@ -1440,17 +1458,32 @@ td {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgb(39, 39, 39, 65%);
+    color: #f5f5f5;
+    background: rgb(39, 39, 39, 50%);
+    border: 2px solid var(--color-green);
     border-radius: 5px;
     font-size: 28px;
-    transition: all  0.1s ease;
     visibility: hidden;
     opacity: 0;
 }
-
+.dark .tweet-capture-cover {
+    background: rgb(39, 39, 39, 70%);
+}
 .tweet-capture.selected .tweet-capture-cover {
     visibility: visible;
     opacity: 1;
+}
+.tweet-capture.disabled .tweet-capture-cover {
+    border: none;
+    background: rgb(245, 245, 245, 50%);
+    visibility: visible;
+    opacity: 1;
+}
+.dark .tweet-capture.disabled .tweet-capture-cover {
+    background: rgb(245, 245, 245, 30%);
+}
+.tweet-capture:last-of-type .tweet-capture-cover {
+    margin-right: 12px;
 }
 
 .tweet-capture-img {
@@ -1458,12 +1491,8 @@ td {
     width: 87px;
     height: 87px;
     border-radius: 5px;
+    background: #272727;
     object-fit: cover;
-}
-
-#tweet-capture-box.open {
-    visibility: visible;
-    opacity: 1;
 }
 
 #tweet-submit {

@@ -459,7 +459,7 @@
     window.capture_selected = [];
 
     // キャプチャ画像の最大保持数
-    window.capture_maxcount = 6; // 6個
+    window.capture_maxcount = 10; // 10個
 
     // ツイートの文字数をカウント
     var count;
@@ -484,18 +484,13 @@
         if (item.type.indexOf('image') != -1) {
       
           // 画像だけ代入
-          $('#tweet-status').html('取得中…');
+          $('#tweet-status').text('取得中…');
           $('#tweet-submit').prop('disabled', true).addClass('disabled');
 
           // キャプチャ画像を追加
           addCaptureImage(item.getAsFile());
-
-          // limit内なら
-          if (limit >= 0){
-            $('#tweet-submit').prop('disabled', false).removeClass('disabled');
-          }
         
-          $('#tweet-status').html('クリップボードの画像を取り込みました。');
+          $('#tweet-status').text('クリップボードの画像を取り込みました。');
         }
       }
     });
@@ -564,12 +559,8 @@
 
     // フォームをハッシュタグ以外リセット
     $('#tweet-reset').click(function(event){
-      // キャプチャリストが表示されてたら非表示にする（リセットは行わない）
-      if ($('#tweet-capture-box').hasClass('open')) {
-        $('#tweet-capture-box').removeClass('open');
-      } else {
-        tweet_reset(event);
-      }
+      // ツイートをリセット
+      tweet_reset(event);
     });
 
     // Twitterからログアウト
@@ -645,7 +636,7 @@
       }
 
       // Ctrl + Enterキーが押された時にツイートを送信する
-      // limit内なら
+      // limit 内なら
       if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
         // Ctrl(or Command) + Enterキーなら送信
         if ((event.ctrlKey || event.metaKey) && event.which == 13){
@@ -667,7 +658,28 @@
 
     // キャプチャした画像の一覧を表示
     $('#tweet-picture-list').click(function(event){
-      $('#tweet-capture-box').toggleClass('open');
+
+      // キャプチャ画像リストを隠す
+      if ($('#tweet-capture-box').hasClass('show')) {
+
+        $('#tweet-capture-box').removeClass('show');
+
+        // 0.1 秒遅らせてから display: none; を適用
+        setTimeout(function(){
+          $('#tweet-capture-box').removeClass('display'); // 必ず後
+        }, 100);
+      
+      // キャプチャ画像リストを表示
+      } else {
+        
+        // 先に display: none; を解除
+        $('#tweet-capture-box').addClass('display'); // 必ず先
+
+        setTimeout(function(){
+          $('#tweet-capture-box').addClass('show');
+        }, 1); // 0.001 秒遅らせるのがポイント
+      
+      }
     });
 
     // キャプチャした画像をクリック
@@ -695,34 +707,39 @@
     // キャプチャした画像をリストに追加する関数
     function addCaptureImage(blob) {
 
-      // キャプチャ画像が capture_maxcount を越えていたら
+      // キャプチャ画像が capture_maxcount を超えていたら
+      // 超えた分のキャプチャ画像を削除する
       if (capture.length >= capture_maxcount) {
 
-        // 末尾のキャプチャを削除
+        // 配列から削除
         capture.pop();
+
+        // 削除する要素
+        let removeelemlist = document.getElementsByClassName('tweet-capture');
+        let removeelem = removeelemlist[removeelemlist.length -1];
         
         // blob URL を無効化
-        URL.revokeObjectURL($('.tweet-capture:last').data('url'));
+        URL.revokeObjectURL(removeelem.dataset.url);
 
         // 選択されていれば解除
-        deselectCaptureImage($('.tweet-capture:last')[0]); // jQuery オブジェクトではなく通常の element として渡す
+        deselectCaptureImage(removeelem); // jQuery オブジェクトではなく通常の element として渡す
 
         // 要素を削除
-        $('.tweet-capture:last').remove();
+        removeelem.remove();
       
       }
 
+      // blob URL を生成
+      let bloburl = URL.createObjectURL(blob);
+
       // キャプチャした画像を格納
       capture.unshift(blob); // ISO8601のタイムスタンプをキーにする
-
-      // blob URL を生成 
-      let bloburl = URL.createObjectURL(blob);
 
       // html を追加
       document.getElementById('tweet-capture-box').insertAdjacentHTML('afterbegin', `
         <div class="tweet-capture" data-index="0" data-url="` + bloburl + `">
           <img class="tweet-capture-img" src="` + bloburl + `" />
-          <div class="tweet-capture-cover">✔</div>
+          <div class="tweet-capture-cover"></div>
         </div>`
       );
 
@@ -733,12 +750,12 @@
         if (index === 0) {
 
           // 選択
-          // selectCaptureImage(elem, true);
+          selectCaptureImage(elem, true);
         
         } else {
           
           // 選択解除
-          // deselectCaptureImage(elem, true);
+          deselectCaptureImage(elem, true);
           
           // インデックスを書き換え
           elem.dataset.index++; 
@@ -765,8 +782,32 @@
         elem.dataset.autoselect = true;
       }
 
+      // 4 枚選択されていたら他のキャプチャを無効にする
+      if (capture_selected.length === 4) {
+
+        $('.tweet-capture').each(function(index, elem){
+
+          // order がなければ
+          if (typeof elem.dataset === 'undefined' || typeof elem.dataset.order === 'undefined') {
+            elem.classList.add('disabled'); // 無効化
+          }
+  
+        });
+      }
+
+      // ツイートが limit 内なら送信ボタンを有効化する
+      if (limit >= 0){
+        document.getElementById('tweet-submit').disabled = false;
+        document.getElementById('tweet-submit').classList.remove('disabled');
+      }
+
       // カバーを表示
-      $(elem).addClass('selected');
+      elem.classList.add('selected');
+
+      // メッセージを表示
+      if (!autoselect) {
+        document.getElementById('tweet-status').textContent = capture_selected.length + ' 枚の画像を選択しました。';
+      }
 
     }
 
@@ -795,22 +836,83 @@
               $(elem).find('.tweet-capture-cover').text(parseInt(elem.dataset.order) + 1);
     
             }
+            
+            // キャプチャを有効化
+            if (elem.classList.contains('disabled')){
+              elem.classList.remove('disabled');
+            }
     
           });
     
           // data-order を削除
           delete this_.dataset.order;
+          $(this_).find('.tweet-capture-cover').text('');
 
           // data-autoselect を削除
           if (autoselect) {
             delete this_.dataset.autoselect;
           }
+
+          // 本文が空でかつ選択されている画像が 0 なら送信ボタンを無効化する
+          if (document.getElementById('tweet').value.length === 0 && capture_selected.length === 0){
+            document.getElementById('tweet-submit').disabled = true;
+            document.getElementById('tweet-submit').classList.add('disabled');
+          }
     
           // カバーを非表示
-          $(this_).removeClass('selected');
+          this_.classList.remove('selected');
+
+          // メッセージを表示
+          if (!autoselect) {
+            if (capture_selected.length === 0) {
+              document.getElementById('tweet-status').innerHTML = '<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>';
+            } else {
+              document.getElementById('tweet-status').textContent = capture_selected.length + ' 枚の画像を選択しました。';
+            }
+          }
 
         }
       }
+    }
+
+    // キャプチャ画像をすべて選択解除する関数
+    function deselectAllCaptureImage() {
+
+      // 配列を空にする
+      capture_selected = [];
+
+      // 本文が空なら送信ボタンを無効化する
+      if (document.getElementById('tweet').value.length === 0) {
+        document.getElementById('tweet-submit').disabled = true;
+        document.getElementById('tweet-submit').classList.add('disabled');
+      }
+
+      // 要素ごとに実行
+      $('.tweet-capture').each(function(index, elem){
+
+        // order が定義されていれば
+        if (typeof elem.dataset !== 'undefined' && typeof elem.dataset.order !== 'undefined') {
+    
+          // data-order を削除
+          delete elem.dataset.order;
+
+          // data-autoselect を削除
+          if (typeof elem.dataset.autoselect !== 'undefined') {
+            delete elem.dataset.autoselect;
+          }
+    
+          // カバーを非表示
+          elem.classList.remove('selected');
+            
+        }
+            
+        // キャプチャを有効化
+        if (elem.classList.contains('disabled')){
+          elem.classList.remove('disabled');
+        }
+
+      });
+
     }
 
 
@@ -819,7 +921,7 @@
     // キャプチャした画像をblobにして格納する関数
     function captureVideo(event){
 
-      $('#tweet-status').html('キャプチャ中…');
+      $('#tweet-status').text('キャプチャ中…');
       $('#tweet-submit').prop('disabled', true).addClass('disabled');
       // 動画のキャンバス
       var canvas = document.createElement('canvas');
@@ -851,13 +953,8 @@
             // キャプチャした画像を格納
             addCaptureImage(blob);
             console.log('Render Blob: ' + URL.createObjectURL(blob));
-            
-            // limit内なら
-            if (limit > 0){
-              $('#tweet-submit').prop('disabled', false).removeClass('disabled');
-            }
 
-            $('#tweet-status').html('キャプチャしました。');
+            $('#tweet-status').text('キャプチャしました。');
           
           }, 'image/jpeg', 1);
         });
@@ -871,13 +968,8 @@
             // キャプチャした画像を格納
             addCaptureImage(blob);
             console.log('Render Blob: ' + URL.createObjectURL(blob));
-            
-            // limit内なら
-            if (limit > 0){
-              $('#tweet-submit').prop('disabled', false).removeClass('disabled');
-            }
           
-            $('#tweet-status').html('キャプチャしました。');
+            $('#tweet-status').text('キャプチャしました。');
           
           }, 'image/jpeg', 1);
         });
@@ -888,7 +980,7 @@
     // キャプチャした画像をコメント付きでblobにして格納する関数
     function captureVideoWithComment(event){
 
-      $('#tweet-status').html('コメント付きでキャプチャ中…');
+      $('#tweet-status').text('コメント付きでキャプチャ中…');
       $('#tweet-submit').prop('disabled', true).addClass('disabled');
 
       // 要素を取得
@@ -929,13 +1021,8 @@
           // キャプチャした画像を格納
           addCaptureImage(blob);
           console.log('Render Blob: ' + URL.createObjectURL(blob));
-          
-          // limit内なら
-          if (limit > 0){
-            $('#tweet-submit').prop('disabled', false).removeClass('disabled');
-          }
 
-          $('#tweet-status').html('コメント付きでキャプチャしました。');
+          $('#tweet-status').text('コメント付きでキャプチャしました。');
         
         }, 'image/jpeg', 1);
       });
@@ -1175,7 +1262,7 @@
 
         // ハッシュタグ以外のツイート文が空
         if (count_tweet === 0) {
-          if (file === null){ // キャプチャがない（ハッシュタグ以外送信するものがない）場合はボタンを無効に
+          if (capture_selected.length === 0){ // キャプチャがない（ハッシュタグ以外送信するものがない）場合はボタンを無効に
             $('#tweet-submit').prop('disabled', true).addClass('disabled');
           }
         }
@@ -1204,7 +1291,7 @@
 
       event.preventDefault(); // 通常のイベントをキャンセル
       $('#tweet-submit').prop('disabled', true).addClass('disabled');
-      $('#tweet-status').html('ツイートを送信中…');
+      $('#tweet-status').text('ツイートを送信中…');
 
       // フォームデータ
       var formData = new FormData($('#tweet-form').get(0));
@@ -1227,11 +1314,17 @@
         contentType: false
       })
       .done(function(data) {
-        capture = [];
+
+        // キャプチャ画像の選択をすべて解除
+        deselectAllCaptureImage();
+
+        // 文字数リミットをリセット
         limit = 140;
+        $('#tweet-num').text(140);
+        
         $('#tweet').val(null);
         $('#tweet-status').html(data);
-        $('#tweet-num').text(140);
+      
       })
       .fail(function(data){
         $('#tweet-status').html('<span class="tweet-failed">送信中にエラーが発生しました…</span>');
@@ -1240,15 +1333,21 @@
 
     // フォームをハッシュタグ以外リセットする関数
     function tweet_reset(event){
-      capture = [];
+
+      // キャプチャ画像の選択をすべて解除
+      deselectAllCaptureImage();
+
+      // 文字数リミットをリセット
       limit = 140;
       $('#tweet-num').text(limit);
       $('#tweet-num').removeClass('over');
       $('#tweet-num').removeClass('warn');
+
       $('#tweet-submit').prop('disabled', true).addClass('disabled');
       $('#tweet').val(null);
       $('#content-box').show();
       $('#footer').show();
+      
       if (Cookies.get('twitter')){
         $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
       } else {
