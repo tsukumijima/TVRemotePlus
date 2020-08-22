@@ -138,6 +138,7 @@
               <input id="tweet-hashtag" name="hashtag" type="text" placeholder="#ハッシュタグ">
               <textarea id="tweet" name="tweet" placeholder="ツイート (Ctrl + Enterで送信)"></textarea>
               <span id="tweet-num">140</span>
+              <div id="tweet-capture-box"></div>
             </div>
             <div id="tweet-etc">
               <div id="tweet-picture" class="tweet-etc-item" aria-label="キャプチャ (Alt+1)" data-balloon-pos="up">
@@ -145,6 +146,9 @@
               </div>
               <div id="tweet-picture-comment" class="tweet-etc-item" aria-label="コメント付きでキャプチャ (Alt+2)" data-balloon-pos="up">
                 <img src="/files/comment.svg">
+              </div>
+              <div id="tweet-picture-list" class="tweet-etc-item" aria-label="キャプチャ画像一覧" data-balloon-pos="up">
+                <img src="/files/list.svg">
               </div>
               <div id="tweet-reset" class="tweet-etc-item" aria-label="リセット (Alt+3)" data-balloon-pos="up">
                 <img src="/files/reset.svg">
