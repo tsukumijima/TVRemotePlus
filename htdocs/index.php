@@ -706,6 +706,12 @@
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">D</div>
               </div>
             </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ストリームを同期する（ライブ配信時のみ）</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">L</div>
+              </div>
+            </div>
           </div>
           <div class="hotkey-list-wrap">
             <div class="hotkey-head-box">
@@ -731,12 +737,6 @@
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">ストリームを同期する（ライブ配信時のみ）</div>
-              <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">L</div>
-              </div>
-            </div>
-            <div class="hotkey-list">
               <div class="hotkey-list-name">コメント入力フォームを表示してフォーカスする</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">C</div>
@@ -753,9 +753,18 @@
               <span class="hotkey-head">ツイート</span>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">ツイート入力フォームにフォーカスする / フォーカスを外す</div>
+              <div class="hotkey-list-name">
+                ツイート入力フォームにフォーカスする / フォーカスを外す<br>
+                プレイヤーにフォーカスする / フォーカスを外す（キャプチャ画像リスト表示時のみ）
+              </div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">Tab</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">キャプチャ画像リストを表示する</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">Q</div>
               </div>
             </div>
             <div class="hotkey-list">
