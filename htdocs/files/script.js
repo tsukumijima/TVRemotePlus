@@ -470,30 +470,6 @@
     $('#tweet-hashtag').on('keydown keyup keypress change',function(event){
       tweet_count(event);
     });
-
-    // クリップボードの画像を格納する
-    $('#tweet').on('paste', function(event){
-      
-      // event からクリップボードのアイテムを取り出す
-      var items = event.originalEvent.clipboardData.items; // ここがミソ
-      
-      for (var i = 0 ; i < items.length ; i++) {
-        
-        var item = items[i];
-
-        if (item.type.indexOf('image') != -1) {
-      
-          // 画像だけ代入
-          $('#tweet-status').text('取得中…');
-          $('#tweet-submit').prop('disabled', true).addClass('disabled');
-
-          // キャプチャ画像を追加
-          addCaptureImage(item.getAsFile());
-        
-          $('#tweet-status').text('クリップボードの画像を取り込みました。');
-        }
-      }
-    });
     
     // アカウント情報ボックスを表示する
     var clickEventType = ((window.ontouchstart!==null) ? 'mouseenter mouseleave' : 'touchstart');
@@ -581,6 +557,30 @@
       .fail(function(data){
         $('#tweet-status').html('<span class="tweet-failed">ログアウト中にエラーが発生しました…</span>');
       });
+    });
+
+    // クリップボードの画像を格納する
+    $('#tweet').on('paste', function(event){
+      
+      // event からクリップボードのアイテムを取り出す
+      var items = event.originalEvent.clipboardData.items; // ここがミソ
+      
+      for (var i = 0 ; i < items.length ; i++) {
+        
+        var item = items[i];
+
+        if (item.type.indexOf('image') != -1) {
+      
+          // 画像だけ代入
+          $('#tweet-status').text('取得中…');
+          $('#tweet-submit').prop('disabled', true).addClass('disabled');
+        
+          $('#tweet-status').text('クリップボードの画像を取り込みました。');
+
+          // キャプチャ画像を追加
+          addCaptureImage(item.getAsFile());
+        }
+      }
     });
 
     // tabキーが押されたとき：フォーカス
@@ -749,12 +749,16 @@
         // 配列の先頭の要素
         if (index === 0) {
 
-          // 選択
-          selectCaptureImage(elem, true);
+          // 自動選択
+          if (capture_selected.length < 4) { // 4枚未満なら（まだ追加されていないため「未満」）
+            selectCaptureImage(elem, true);
+          } else { // 5枚以上
+            elem.classList.add('disabled'); // 無効化
+          }
         
         } else {
           
-          // 選択解除
+          // 自動選択を解除
           deselectCaptureImage(elem, true);
           
           // インデックスを書き換え
@@ -806,7 +810,15 @@
 
       // メッセージを表示
       if (!autoselect) {
+      
         document.getElementById('tweet-status').textContent = capture_selected.length + ' 枚の画像を選択しました。';
+      
+      // (capture_selected.length + document.querySelectorAll('.tweet-capture[data-autoselect]').length) はおまじない
+      } else if ((Number(capture_selected.length) - (document.querySelectorAll('.tweet-capture[data-autoselect]').length - 1)) > 1) {
+      
+        document.getElementById('tweet-status').textContent = 
+          (Number(capture_selected.length) - (document.querySelectorAll('.tweet-capture[data-autoselect]').length - 1)) + ' 枚の画像を選択しました。';
+      
       }
 
     }
@@ -950,11 +962,11 @@
         nicoVideoToCanvas({video, html}).then(({canvas}) => {
           canvas.toBlob(function(blob){
 
-            // キャプチャした画像を格納
-            addCaptureImage(blob);
-            console.log('Render Blob: ' + URL.createObjectURL(blob));
-
             $('#tweet-status').text('キャプチャしました。');
+
+            // キャプチャした画像を格納
+            console.log('Render Blob: ' + URL.createObjectURL(blob));
+            addCaptureImage(blob);
           
           }, 'image/jpeg', 1);
         });
@@ -964,12 +976,12 @@
         // 普通にキャプチャする
         videoToCanvas(video).then(({canvas}) => {
           canvas.toBlob(function(blob){
-            
-            // キャプチャした画像を格納
-            addCaptureImage(blob);
-            console.log('Render Blob: ' + URL.createObjectURL(blob));
           
             $('#tweet-status').text('キャプチャしました。');
+            
+            // キャプチャした画像を格納
+            console.log('Render Blob: ' + URL.createObjectURL(blob));
+            addCaptureImage(blob);
           
           }, 'image/jpeg', 1);
         });
@@ -1017,12 +1029,12 @@
 
       nicoVideoToCanvas({video, html}).then(({canvas}) => {
         canvas.toBlob(function(blob){
-          
-          // キャプチャした画像を格納
-          addCaptureImage(blob);
-          console.log('Render Blob: ' + URL.createObjectURL(blob));
 
           $('#tweet-status').text('コメント付きでキャプチャしました。');
+          
+          // キャプチャした画像を格納
+          console.log('Render Blob: ' + URL.createObjectURL(blob));
+          addCaptureImage(blob);
         
         }, 'image/jpeg', 1);
       });

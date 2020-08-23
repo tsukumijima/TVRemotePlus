@@ -1214,7 +1214,7 @@ td {
     margin-right: 5px;
     font-weight: bold;
     display: block;
-    overflow:hidden;
+    overflow: hidden;
     font-size: 95%;
 }
 
@@ -1408,6 +1408,7 @@ td {
     box-sizing: border-box;
     overflow-x: auto;
     overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     visibility: hidden;
     opacity: 0;
@@ -1441,6 +1442,7 @@ td {
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 .tweet-capture.disabled {
     cursor: auto;
