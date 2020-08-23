@@ -467,10 +467,7 @@
     // ツイートの文字数をカウント
     var count;
     var limit = 140;
-    $('#tweet').on('keydown keyup keypress change',function(event){
-      tweet_count(event);
-    });
-    $('#tweet-hashtag').on('keydown keyup keypress change',function(event){
+    $('#tweet, #tweet-hashtag').on('keydown keyup keypress change',function(event){
       tweet_count(event);
     });
     
@@ -586,74 +583,144 @@
       }
     });
 
-    // tabキーが押されたとき：フォーカス
-    // ?キー：ショートカット一覧
-    // Alt + 1キーが押された時：キャプチャ
-    // Alt + 2キーが押された時：コメント付きキャプチャ
-    // Alt + 3キーが押された時：フォームリセット
-    // Ctrl + Enter：ツイート送信
+    // ツイートボタンが押された時にツイートを送信する
+    $('#tweet-submit').click(function(event){
+      if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
+        tweet_send(event);
+      }
+    });
+
+
+    // キーボードショートカット
+    //   Ctrl + Enter：ツイートを送信
+    //   Tab キー：フォーカス
+    //   ? キー：ショートカット一覧
+    //   Alt + Q キー: キャプチャ画像リストの表示 / 非表示の切り替え
+    //   Alt + 1 キー：キャプチャ
+    //   Alt + 2 キー：コメント付きでキャプチャ
+    //   Alt + 3 キー：フォームをリセット
+
+    // ページ全体
     $(document).keydown(function(event){
       
       // クロスブラウザ対応用
       var event = event || window.event;
 
-      // tabキー
-      if (event.which === 9){
-        // フォーカス
-        event.preventDefault();
-        if($(':focus').is('#tweet')) {
-          $('#tweet').blur();
-        } else {
-          $('#tweet').focus();
+      // Ctrl + Enter キー
+      // Twitter 機能が有効 & 送信ボタンが有効
+      if (settings['twitter_show'] && !$('#tweet-submit').prop('disabled')){
+
+        if ((event.ctrlKey || event.metaKey) && event.key == 'Enter'){
+          tweet_send(event); // ツイートを送信
         }
       }
 
-      // ?キー
+      // Tab キー
+      // Twitter 機能が有効
+      if (settings['twitter_show']) {
+        
+        if (event.key === 'Tab'){
+          
+          // デフォルトの処理を止める
+          event.preventDefault();
+
+          // キャプチャ画像リストが表示されていない
+          if (capture_list_focus === false) {
+
+            // ツイートフォームにフォーカス
+            if ($(':focus').is('#tweet')) {
+              $('#tweet').blur();
+            } else {
+              $('#tweet').focus();
+            }
+            
+          // キャプチャ画像リストが表示されている
+          } else {
+
+            // プレイヤーにフォーカス
+            if (dp.focus === false) {
+              dp.focus = true;
+              if (document.querySelectorAll('.tweet-capture.focus').length === 1) { // フォーカスがあれば
+                document.querySelector('.tweet-capture.focus').classList.remove('focus');
+              }
+            // キャプチャ画像リストにフォーカス
+            } else {
+              dp.focus = false;
+              if (document.querySelectorAll('.tweet-capture').length > 0) { // キャプチャ画像があれば
+                document.querySelector('.tweet-capture').classList.add('focus');
+              }
+            }
+          }
+
+        }
+      }
+
+      // ? キー
       if (document.activeElement.id != 'tweet' && document.activeElement.className != 'dplayer-comment-input' && event.key == '?'){
         event.preventDefault();
         $('#hotkey-box').toggleClass('open');
         $('#nav-close').toggleClass('open');
       }
 
-      // Alt(or option)キー
-      if (event.altKey){
-        event.preventDefault();
-        switch (event.which){
+      // Alt (or option) キー
+      // Twitter 機能が有効
+      if (settings['twitter_show']) {
 
-          case 49:
+        if (event.altKey){
+
+          // デフォルトの処理を止める
+          event.preventDefault();
+          
+          switch (event.key){
+  
+            // Alt + Q
+            case 'q':
+              // キャプチャ画像リストの表示 / 非表示の切り替え
+              tweet_capture_list(event);
+            break;
+  
             // Alt + 1
-            captureVideo(event);
-          break;
-
-          case 50:
+            case '1':
+              // キャプチャ
+              captureVideo(event);
+            break;
+  
             // Alt + 2
-            captureVideoWithComment(event);
-          break;
-
-          case 51:
+            case '2':
+              // コメント付きでキャプチャ
+              captureVideoWithComment(event);
+            break;
+  
             // Alt + 3
-            tweet_capture_list(event);
-          break;
-
-          case 52:
-            // Alt + 4
-            tweet_reset(event);
-          break;
-
+            case '3':
+              // フォームをリセット
+              tweet_reset(event);
+            break;
+  
+          }
         }
       }
 
-      // キャプチャ画像リストにフォーカスしていてかつキャプチャが存在するとき
-      if (capture_list_focus && capture.length > 0) {
+      // Twitter 機能が有効 & 
+      // キャプチャ画像リストにフォーカスしている &
+      // プレイヤーにフォーカスされていない
+      // キャプチャが存在する
+      if (settings['twitter_show'] && capture_list_focus && dp.focus === false && capture.length > 0) {
 
+        // ボックス
+        let box_elem = document.getElementById('tweet-capture-box');
+        
+        // 要素
         let focus_elems = document.querySelectorAll('.tweet-capture.focus');
         let focus_elem = focus_elems[0];
+
+        // フォーカスされている要素があるか
         let exists_focus_elem = (focus_elems.length === 1);
 
-        switch (event.which){
+        switch (event.key){
 
           // Space
-          case 32:
+          case ' ':
 
             event.preventDefault();
 
@@ -672,7 +739,7 @@
           break;
 
           // ←
-          case 37:
+          case 'ArrowLeft':
 
             event.preventDefault();
 
@@ -700,7 +767,7 @@
           break;
 
           // →
-          case 39:
+          case 'ArrowRight':
 
             event.preventDefault();
 
@@ -715,6 +782,18 @@
   
                 // 自分のフォーカスを解除
                 focus_elem.classList.remove('focus');
+        
+                // 親要素からの距離（X座標）
+                let focus_elem_left = (focus_elem.getBoundingClientRect().left - box_elem.getBoundingClientRect().left);
+
+                // キャプチャが画面に写っていなければスクロール
+                console.log('box_elem.offsetWidth: ' + box_elem.offsetWidth);
+                console.log('focus_elem_left: ' + focus_elem_left);
+                console.log('focus_elem_left + focus_elem.offsetWidth: ' + (focus_elem_left + focus_elem.offsetWidth));
+
+                if (box_elem.offsetWidth < (focus_elem_left + focus_elem.offsetWidth)) { // 自身の幅を含めて計算
+                  console.log('スクロール！') // TODO: 記述途中
+                }
 
               }
             
@@ -730,22 +809,6 @@
         }
       }
 
-      // Ctrl + Enter キーが押されたらツイートを送信する
-      // limit 内なら
-      if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
-        // Ctrl(or Command) + Enterキーなら送信
-        if ((event.ctrlKey || event.metaKey) && event.which == 13){
-          tweet_send(event);
-        }
-      }
-
-    });
-
-    // ツイートボタンが押された時にツイートを送信する
-    $('#tweet-submit').click(function(event){
-      if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
-        tweet_send(event);
-      }
     });
 
 
@@ -761,6 +824,11 @@
 
     // キャプチャした画像をクリック
     $(document).on('click', '.tweet-capture', function(event){
+
+      // フォーカスを解除
+      if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
+        document.querySelector('.tweet-capture.focus').classList.remove('focus');
+      }
 
       if (!$(this).hasClass('selected')) {
 
@@ -824,13 +892,8 @@
       // 追加したキャプチャを自動選択
       $('.tweet-capture').each(function(index, elem){
 
-        // 配列の先頭の要素
-        if (index === 0) {
-
-          // 自動選択
-          selectCaptureImage(elem, true);
-        
-        } else {
+        // 先頭の要素でなければ
+        if (index !== 0) {
           
           // 自動選択を解除
           deselectCaptureImage(elem, true);
@@ -840,6 +903,9 @@
         }
       
       });
+
+      // 自動選択
+      selectCaptureImage(document.getElementsByClassName('tweet-capture')[0], true);
 
     }
 
@@ -863,18 +929,24 @@
           elem.dataset.autoselect = true;
         }
 
-        // 4 枚選択されていたら他のキャプチャを無効にする
-        if (capture_selected.length === 4) {
+        $('.tweet-capture').each(function(index, elem){
 
-          $('.tweet-capture').each(function(index, elem){
+          // 手動選択だったら自動選択を解除
+          if (autoselect === false) {
+            deselectCaptureImage(elem, true);
+          }
+
+          // 4枚選択されていたら他のキャプチャを無効にする
+          if (capture_selected.length === 4) {
 
             // order がなければ
             if (typeof elem.dataset === 'undefined' || typeof elem.dataset.order === 'undefined') {
               elem.classList.add('disabled'); // 無効化
             }
-    
-          });
-        }
+
+          }
+  
+        });
 
         // ツイートが limit 内なら送信ボタンを有効化する
         if (limit >= 0){
@@ -886,16 +958,8 @@
         elem.classList.add('selected');
 
         // メッセージを表示
-        if (!autoselect) {
-        
+        if (!autoselect || capture_selected.length > 1) {
           document.getElementById('tweet-status').textContent = capture_selected.length + ' 枚の画像を選択しました。';
-        
-        // (capture_selected.length + document.querySelectorAll('.tweet-capture[data-autoselect]').length) はおまじない
-        } else if ((Number(capture_selected.length) - (document.querySelectorAll('.tweet-capture[data-autoselect]').length - 1)) > 1) {
-        
-          document.getElementById('tweet-status').textContent = 
-            (Number(capture_selected.length) - (document.querySelectorAll('.tweet-capture[data-autoselect]').length - 1)) + ' 枚の画像を選択しました。';
-        
         }
       
       // 5枚以上は無効化
@@ -988,6 +1052,7 @@
     
           // data-order を削除
           delete elem.dataset.order;
+          $(elem).find('.tweet-capture-cover').text('');
 
           // data-autoselect を削除
           if (typeof elem.dataset.autoselect !== 'undefined') {
@@ -1096,12 +1161,14 @@
 
         // フォーカスを外す
         if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
-          document.querySelectorAll('.tweet-capture.focus')[0].classList.remove('focus');
+          document.querySelector('.tweet-capture.focus').classList.remove('focus');
         }
 
         // 文字数リミットをリセット
         limit = 140;
         $('#tweet-num').text(140);
+        $('#tweet-num').removeClass('over');
+        $('#tweet-num').removeClass('warn');
         
         $('#tweet').val(null);
         $('#tweet-status').html(data);
@@ -1121,7 +1188,7 @@
         // フォーカスを外す
         capture_list_focus = false;
         if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
-          document.querySelectorAll('.tweet-capture.focus')[0].classList.remove('focus');
+          document.querySelector('.tweet-capture.focus').classList.remove('focus');
         }
 
         // プレイヤーのホットキー機能を有効にする
@@ -1136,6 +1203,9 @@
       
       // キャプチャ画像リストを表示
       } else {
+
+        // ツイート本文へのフォーカスを外す
+        $('#tweet').blur();
 
         // フォーカスを当てる
         capture_list_focus = true;
@@ -1161,7 +1231,7 @@
 
       // フォーカスを外す
       if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
-        document.querySelectorAll('.tweet-capture.focus')[0].classList.remove('focus');
+        document.querySelector('.tweet-capture.focus').classList.remove('focus');
       }
 
       // 文字数リミットをリセット

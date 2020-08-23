@@ -54,10 +54,12 @@
 
     $(window).on('load', function(){
       // スマホ・タブレットならplaceholder書き換え
-      if (windowWidth <= 1024){
-        document.getElementById('tweet').setAttribute('placeholder', 'ツイート');
-      } else {
-        document.getElementById('tweet').setAttribute('placeholder', 'ツイート (Ctrl + Enterで送信)');
+      if (settings['twitter_show']){
+        if (windowWidth <= 1024){
+          document.getElementById('tweet').setAttribute('placeholder', 'ツイート');
+        } else {
+          document.getElementById('tweet').setAttribute('placeholder', 'ツイート (Ctrl + Enterで送信)');
+        }
       }
     });
 
