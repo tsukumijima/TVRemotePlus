@@ -717,6 +717,17 @@
         // フォーカスされている要素があるか
         let exists_focus_elem = (focus_elems.length === 1);
 
+        // focus_elem があれば
+        if (exists_focus_elem) {
+
+          // キャプチャ画像の要素の margin (margin-right)
+          var focus_elem_margin = Number(getComputedStyle(focus_elem).marginRight.replace('px', ''));
+
+          // キャプチャ画像の要素 1 つ分の幅（ダミー用）
+          var focus_elem_dummy = focus_elem.getBoundingClientRect().width + focus_elem_margin;
+
+        }
+
         switch (event.key){
 
           // Space
@@ -754,6 +765,31 @@
   
                 // 自分のフォーカスを解除
                 focus_elem.classList.remove('focus');
+        
+                // tweet-capture-box の左端（絶対座標）
+                let box_elem_leftedge = box_elem.getBoundingClientRect().left;
+                console.log('box_elem_leftedge: ' + box_elem_leftedge);
+
+                // フォーカス中の画像の左（絶対座標）
+                // focus_elem_dummy 分の幅を引く
+                let focus_elem_leftedge = focus_elem.getBoundingClientRect().left - focus_elem_dummy;
+                console.log('focus_elem_leftedge: ' + focus_elem_leftedge);
+
+                // キャプチャ画像リストの表示領域に収まってない
+                if (focus_elem_leftedge < box_elem_leftedge) { // フォーカス中の画像の左端が tweet-capture-box の左端よりも左にある
+
+                  // スクロールする
+                  $(focus_elem).velocity('scroll', {
+                    axis: 'x',
+                    container: $(box_elem),
+                    duration: 400,
+                    // focus_elem_dummy 1 つ分の幅と focus_elem_margin (margin-right) 分を引く
+                    // focus_elem_dummy 2 つ分にするとスクロールする距離が2倍になる
+                    // なぜこれで丁度良い感じになるのかは謎
+                    offset: -(focus_elem_dummy * 1) - focus_elem_margin,
+                  });
+
+                }
 
               }
             
@@ -783,16 +819,29 @@
                 // 自分のフォーカスを解除
                 focus_elem.classList.remove('focus');
         
-                // 親要素からの距離（X座標）
-                let focus_elem_left = (focus_elem.getBoundingClientRect().left - box_elem.getBoundingClientRect().left);
+                // tweet-capture-box の右端（絶対座標）
+                let box_elem_rightedge = (box_elem.getBoundingClientRect().left + box_elem.getBoundingClientRect().width);
+                console.log('box_elem_rightedge: ' + box_elem_rightedge);
 
-                // キャプチャが画面に写っていなければスクロール
-                console.log('box_elem.offsetWidth: ' + box_elem.offsetWidth);
-                console.log('focus_elem_left: ' + focus_elem_left);
-                console.log('focus_elem_left + focus_elem.offsetWidth: ' + (focus_elem_left + focus_elem.offsetWidth));
+                // フォーカス中の画像の右端（絶対座標）
+                // focus_elem_dummy 分の幅を足す
+                let focus_elem_rightedge = (focus_elem.getBoundingClientRect().left + focus_elem.getBoundingClientRect().width + focus_elem_dummy);
+                console.log('focus_elem_rightedge: ' + focus_elem_rightedge);
 
-                if (box_elem.offsetWidth < (focus_elem_left + focus_elem.offsetWidth)) { // 自身の幅を含めて計算
-                  console.log('スクロール！') // TODO: 記述途中
+                // キャプチャ画像リストの表示領域に収まってない
+                if (box_elem_rightedge < focus_elem_rightedge) { // フォーカス中の画像の右端が tweet-capture-box の右端よりも右にある
+
+                  // スクロールする
+                  $(focus_elem).velocity('scroll', {
+                    axis: 'x',
+                    container: $(box_elem),
+                    duration: 400,
+                    // tweet-capture-box で引いた後に focus_elem_dummy 2 つ分の幅を足す
+                    // focus_elem_dummy 3 つ分にするとスクロールする距離が2倍になる
+                    // なぜこれで丁度良い感じになるのかは謎
+                    offset: -(box_elem.getBoundingClientRect().width) + (focus_elem_dummy * 2),
+                  });
+
                 }
 
               }
@@ -1218,7 +1267,7 @@
 
         setTimeout(function(){
           $('#tweet-capture-box').addClass('show');
-        }, 1); // 0.001 秒遅らせるのがポイント
+        }, 10); // 0.01 秒遅らせるのがポイント
       
       }
     }
