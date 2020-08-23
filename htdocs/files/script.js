@@ -1094,6 +1094,11 @@
         // キャプチャ画像の選択をすべて解除
         deselectAllCaptureImage();
 
+        // フォーカスを外す
+        if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
+          document.querySelectorAll('.tweet-capture.focus')[0].classList.remove('focus');
+        }
+
         // 文字数リミットをリセット
         limit = 140;
         $('#tweet-num').text(140);
@@ -1115,6 +1120,9 @@
 
         // フォーカスを外す
         capture_list_focus = false;
+        if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
+          document.querySelectorAll('.tweet-capture.focus')[0].classList.remove('focus');
+        }
 
         // プレイヤーのホットキー機能を有効にする
         dp.options.hotkey = true;
@@ -1150,6 +1158,11 @@
 
       // キャプチャ画像の選択をすべて解除
       deselectAllCaptureImage();
+
+      // フォーカスを外す
+      if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
+        document.querySelectorAll('.tweet-capture.focus')[0].classList.remove('focus');
+      }
 
       // 文字数リミットをリセット
       limit = 140;
