@@ -147,10 +147,10 @@
               <div id="tweet-picture-comment" class="tweet-etc-item" aria-label="コメント付きでキャプチャ (Alt+2)" data-balloon-pos="up">
                 <img src="/files/comment.svg">
               </div>
-              <div id="tweet-picture-list" class="tweet-etc-item" aria-label="キャプチャ画像リスト" data-balloon-pos="up">
+              <div id="tweet-capture-list" class="tweet-etc-item" aria-label="キャプチャ画像リスト (Alt+3)" data-balloon-pos="up">
                 <img src="/files/list.svg">
               </div>
-              <div id="tweet-reset" class="tweet-etc-item" aria-label="リセット (Alt+3)" data-balloon-pos="up">
+              <div id="tweet-reset" class="tweet-etc-item" aria-label="リセット (Alt+4)" data-balloon-pos="up">
                 <img src="/files/reset.svg">
               </div>
             </div>

@@ -1331,6 +1331,8 @@ td {
     justify-content: space-between;
     width: 4%;
     margin-left: 10px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #tweet-etc div[aria-label]:before {
@@ -1486,6 +1488,31 @@ td {
 }
 .tweet-capture:last-of-type .tweet-capture-cover {
     margin-right: 12px;
+}
+
+@media screen and (min-width: 1025px) {
+    .tweet-capture-focus {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid var(--color-blue);
+        border-radius: 5px;
+        font-size: 28px;
+        visibility: hidden;
+        opacity: 0;
+    }
+    .tweet-capture.focus .tweet-capture-focus {
+        visibility: visible;
+        opacity: 1;
+    }
+    .tweet-capture:last-of-type .tweet-capture-focus {
+        margin-right: 12px;
+    }
 }
 
 .tweet-capture-img {
