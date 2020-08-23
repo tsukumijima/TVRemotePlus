@@ -1464,7 +1464,7 @@ td {
     bottom: 0;
     color: #f5f5f5;
     background: rgb(39, 39, 39, 50%);
-    border: 3px solid #4ecda4;
+    border: 3.2px solid #4ecda4;
     border-radius: 5px;
     font-size: 28px;
     visibility: hidden;
@@ -1478,7 +1478,7 @@ td {
     opacity: 1;
 }
 .tweet-capture[data-autoselect]  .tweet-capture-cover {
-    border: 3px solid var(--color-green);
+    border: 3.2px solid var(--color-green);
 }
 .tweet-capture.disabled .tweet-capture-cover {
     border: none;
@@ -1503,7 +1503,7 @@ td {
         left: 0;
         right: 0;
         bottom: 0;
-        border: 3px solid var(--color-tweet);
+        border: 3.2px solid var(--color-tweet);
         border-radius: 5px;
         font-size: 28px;
         visibility: hidden;
