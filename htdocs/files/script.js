@@ -1033,6 +1033,9 @@
         // カバーを表示
         elem.classList.add('selected');
 
+        // 枚数を表示
+        document.getElementById('tweet-capture-num').textContent = capture_selected.length + '/4';
+
         // メッセージを表示
         if (!autoselect || capture_selected.length > 1) {
           document.getElementById('tweet-status').textContent = capture_selected.length + ' 枚の画像を選択しました。';
@@ -1095,6 +1098,9 @@
           // カバーを非表示
           this_.classList.remove('selected');
 
+          // 枚数を表示
+          document.getElementById('tweet-capture-num').textContent = capture_selected.length + '/4';
+
           // メッセージを表示
           if (!autoselect) {
             if (capture_selected.length === 0) {
@@ -1146,6 +1152,9 @@
         }
 
       });
+
+      // 枚数を表示
+      document.getElementById('tweet-capture-num').textContent = '0/4';
 
     }
 
