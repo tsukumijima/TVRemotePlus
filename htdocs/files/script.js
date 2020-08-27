@@ -641,12 +641,24 @@
             if (dp.focus === false) {
               dp.focus = true;
               if (document.querySelectorAll('.tweet-capture.focus').length === 1) { // フォーカスがあれば
+
+                // フォーカスをはずす
                 document.querySelector('.tweet-capture.focus').classList.remove('focus');
               }
             // キャプチャ画像リストにフォーカス
             } else {
               dp.focus = false;
               if (document.querySelectorAll('.tweet-capture').length > 0) { // キャプチャ画像があれば
+            
+                // コメント入力欄のフォーカスを外す
+                dp.comment.hide();
+
+                // 他のフォーカスがあれば削除
+                $('.tweet-capture').each(function(index, elem){
+                  elem.classList.remove('focus');
+                });
+
+                // フォーカスする
                 document.querySelector('.tweet-capture').classList.add('focus');
               }
             }
@@ -738,6 +750,9 @@
 
             event.preventDefault();
 
+            // コメント入力欄のフォーカスを外す
+            dp.comment.hide();
+
             // focus_elem があれば
             if (exists_focus_elem) {
               
@@ -756,6 +771,9 @@
           case 'ArrowLeft':
 
             event.preventDefault();
+            
+            // コメント入力欄のフォーカスを外す
+            dp.comment.hide();
 
             // focus_elem があれば
             if (exists_focus_elem) {
@@ -810,6 +828,11 @@
             
             } else {
 
+              // 他のフォーカスがあれば削除
+              $('.tweet-capture').each(function(index, elem){
+                elem.classList.remove('focus');
+              });
+
               // 最初の要素にフォーカス
               document.getElementsByClassName('tweet-capture')[0].classList.add('focus');
 
@@ -821,6 +844,9 @@
           case 'ArrowRight':
 
             event.preventDefault();
+            
+            // コメント入力欄のフォーカスを外す
+            dp.comment.hide();
 
             // focus_elem があれば
             if (exists_focus_elem) {
@@ -874,6 +900,11 @@
               }
             
             } else {
+
+              // 他のフォーカスがあれば削除
+              $('.tweet-capture').each(function(index, elem){
+                elem.classList.remove('focus');
+              });
 
               // 最初の要素にフォーカス
               document.getElementsByClassName('tweet-capture')[0].classList.add('focus');
