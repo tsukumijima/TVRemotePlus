@@ -1159,7 +1159,7 @@
 
 <?php		} //括弧終了 ?>
             <div id="button-box">
-              <button class="redbutton" type="button" onclick="location.href='/<?php echo $stream; ?>/'"><i class="fas fa-home"></i>ホームに戻る</button>
+              <button class="redbutton" type="button" onclick="location.href='<?php echo $site_url.$stream; ?>/'"><i class="fas fa-home"></i>ホームに戻る</button>
             </div>
           </div>
 
