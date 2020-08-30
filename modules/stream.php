@@ -668,7 +668,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' '.$dual_mono_mode_ffmpeg.' main -i "'.$filepath.'"'.
+					' '.$dual_mono_mode_ffmpeg.' -i "'.$filepath.'"'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
