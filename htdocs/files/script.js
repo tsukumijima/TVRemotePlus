@@ -683,28 +683,30 @@
           // デフォルトの処理を止める
           event.preventDefault();
           
-          switch (event.key){
+          // Mac だと Option キーを押しながら入力すると œ など謎の文字が入力されてしまうので、
+          // 敢えて event.keyCode で実装
+          switch (event.keyCode){
   
             // Alt + Q
-            case 'q':
+            case 81:
               // キャプチャ画像リストの表示 / 非表示の切り替え
               tweet_capture_list(event);
             break;
   
             // Alt + 1
-            case '1':
+            case 49:
               // キャプチャ
               captureVideo(event);
             break;
   
             // Alt + 2
-            case '2':
+            case 50:
               // コメント付きでキャプチャ
               captureVideoWithComment(event);
             break;
   
             // Alt + 3
-            case '3':
+            case 51:
               // フォームをリセット
               tweet_reset(event);
             break;
