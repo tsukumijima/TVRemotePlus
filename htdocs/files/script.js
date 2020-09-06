@@ -583,6 +583,27 @@
       }
     });
 
+    // 現在変換中か
+    window.isComposing = false;
+    $('#tweet').on('compositionstart', function() {
+      window.isComposing = true;
+    });
+    $('#tweet').on('compositionend', function() {
+      window.isComposing = false;
+    });
+    $('#tweet-hashtag').on('compositionstart', function() {
+      window.isComposing = true;
+    });
+    $('#tweet-hashtag').on('compositionend', function() {
+      window.isComposing = false;
+    });
+    $('.dplayer-comment-input').on('compositionstart', function() {
+      window.isComposing = true;
+    });
+    $('.dplayer-comment-input').on('compositionend', function() {
+      window.isComposing = false;
+    });
+
     // ツイートボタンが押された時にツイートを送信する
     $('#tweet-submit').click(function(event){
       if (!$('#tweet-submit').prop('disabled')){ // ボタンが無効でなければ
@@ -616,8 +637,8 @@
       }
 
       // Tab キー
-      // Twitter 機能が有効
-      if (settings['twitter_show']) {
+      // Twitter 機能が有効 & 変換中でない
+      if (settings['twitter_show'] && window.isComposing === false) {
         
         if (event.key === 'Tab'){
           
@@ -717,9 +738,10 @@
 
       // Twitter 機能が有効 & 
       // キャプチャ画像リストにフォーカスしている &
-      // プレイヤーにフォーカスされていない
-      // キャプチャが存在する
-      if (settings['twitter_show'] && capture_list_focus && dp.focus === false && capture.length > 0) {
+      // プレイヤーにフォーカスされていない &
+      // キャプチャが存在する &
+      // 変換中ではない
+      if (settings['twitter_show'] && capture_list_focus && dp.focus === false && capture.length > 0 && window.isComposing === false) {
 
         // ボックス
         let box_elem = document.getElementById('tweet-capture-box');
