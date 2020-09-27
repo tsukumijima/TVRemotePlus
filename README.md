@@ -559,7 +559,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 全て配布アーカイブの中に組み込んでいますが、BonDriver 周りは各自で用意し、別途 (TVRemotePlusをインストールしたフォルダ)\bin\TSTask\BonDriver\ に入れてください。
 また、QSVEncC を利用する場合は Intel QSV に対応した GPU が、NVEncC を利用する場合は NVIDIA GPU が、VCEEncC を利用する場合は AMD の Radeon GPU が必要です。
 
-- Apache (2.4.41・Web サーバー)
+- Apache (2.4.46・Web サーバー)
 - PHP (7.4.4・実行環境)
 - TSTask (0.2.0(patch)・テレビ放送の受信、UDP 送信に利用)
 - TSTaskCentreEx (1.2.0・TSTask へのコマンド送信に利用)
