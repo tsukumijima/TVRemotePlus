@@ -2,6 +2,16 @@
 	
 	// ***** 各種モジュール関数 *****
 
+	// 参考: http://www.cattlemute.com/2019/09/14/1830/
+	function is_empty($var = null) {
+		// 論理型の false を取り扱う場合は、更に「&& false !== $var」を追加する
+		if (empty( $var) && 0 !== $var && '0' !== $var ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	// Windows用コマンド実行関数
 	// proc_open を用いることで非同期でも実行できるようにする
 	function win_exec($cmd, $log = null, $errorlog = null){
@@ -141,7 +151,7 @@
 		$stream = end($slash);
 
 		// URLに正しいストリーム番号が入っていなかった場合はストリーム1とする
-		if (empty($stream) or !is_numeric($stream)){
+		if (is_empty($stream) or !is_numeric($stream)){
 			$stream = 1;
 			$stream_flg = false;
 		} else {
@@ -258,10 +268,10 @@
 		}
 	}
 
-	// Cookie内の設定に指定の項目が指定された値であるかどうかを確認する関数
+	// Cookie 内の設定に指定の項目が指定された値であるかどうかを確認する関数
 	// あれば true・ないもしくは設定自体が存在しない場合は false を返す
-	// matchを省略した場合はその項目の値を返す
-	// defaultには設定のキーが存在しない場合のデフォルト値を設定できる
+	// match を省略した場合はその項目の値を返す
+	// default には設定のキーが存在しない場合のデフォルト値を設定できる
 	function isSettingsItem($item, $match = null, $default = false){
 
 		// Cookieが存在する

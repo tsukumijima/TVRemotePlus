@@ -310,7 +310,7 @@
             <div class="setting-form">
               <span>Twitter 投稿</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('twitter_show', true, true)){ ?>
+<?php	if (isSettingsItem('twitter_show', true, true) !== false){ ?>
                 <input id="twitter_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="twitter_show" class="toggle-input" type="checkbox" value="true" />
@@ -322,7 +322,7 @@
             <div class="setting-form">
               <span>コメント一覧</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('comment_show', true, true)){ ?>
+<?php	if (isSettingsItem('comment_show', true, true) !== false){ ?>
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" />
@@ -334,7 +334,7 @@
             <div class="setting-form">
               <span>ダークモード</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('dark_theme', true)){ ?>
+<?php	if (isSettingsItem('dark_theme', true) !== false){ ?>
                 <input id="dark_theme" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="dark_theme" class="toggle-input" type="checkbox" value="true" /> 
@@ -346,7 +346,7 @@
             <div class="setting-form">
               <span>サブチャンネル</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('subchannel_show', true)){ ?>
+<?php	if (isSettingsItem('subchannel_show', true) !== false){ ?>
                 <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" /> 
@@ -358,7 +358,7 @@
             <div class="setting-form">
               <span>録画番組のリスト表示</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('list_view', true)){ ?>
+<?php	if (isSettingsItem('list_view', true) !== false){ ?>
                 <input id="list_view" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="list_view" class="toggle-input" type="checkbox" value="true" /> 
@@ -370,7 +370,7 @@
             <div class="setting-form">
               <span>番組表に局ロゴを表示</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('logo_show', true, true)){ ?>
+<?php	if (isSettingsItem('logo_show', true, true) !== false){ ?>
                 <input id="logo_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="logo_show" class="toggle-input" type="checkbox" value="true" /> 
@@ -385,15 +385,15 @@
               <span>コメントのフォントサイズ</span>
               <div class="select-wrap">
                 <select id="comment_size" required>
-<?php	if (isSettingsItem('comment_size', '42')){ ?>
+<?php	if (isSettingsItem('comment_size', '42') !== false){ ?>
                   <option value="42" selected>大きめ</option>
                   <option value="35">ふつう</option>
                   <option value="28">小さめ</option>
-<?php	} else if (isSettingsItem('comment_size', '35')){ ?>
+<?php	} else if (isSettingsItem('comment_size', '35') !== false){ ?>
                   <option value="42">大きめ</option>
                   <option value="35" selected>ふつう</option>
                   <option value="28">小さめ</option>
-<?php	} else if (isSettingsItem('comment_size', '28')){ ?>
+<?php	} else if (isSettingsItem('comment_size', '28') !== false){ ?>
                   <option value="42">大きめ</option>
                   <option value="35">ふつう</option>
                   <option value="28" selected>小さめ</option>
@@ -408,7 +408,7 @@
 
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（ライブ配信・秒）</span>
-<?php	if (isSettingsItem('comment_delay')){ ?>
+<?php	if (isSettingsItem('comment_delay') !== false){ ?>
               <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="<?php echo isSettingsItem('comment_delay'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="5" required />
@@ -417,7 +417,7 @@
 
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（ファイル再生・秒）</span>
-<?php	if (isSettingsItem('comment_file_delay')){ ?>
+<?php	if (isSettingsItem('comment_file_delay') !== false){ ?>
               <input class="text-box" id="comment_file_delay" type="number" min="0" max="60" placeholder="0" value="<?php echo isSettingsItem('comment_file_delay'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="comment_file_delay" type="number" min="0" max="60" placeholder="0" value="0" required />
@@ -426,7 +426,7 @@
 
             <div class="setting-form setting-select">
               <span>一度に表示する番組の件数（個）</span>
-<?php	if (isSettingsItem('list_view_number')){ ?>
+<?php	if (isSettingsItem('list_view_number') !== false){ ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?php echo isSettingsItem('list_view_number'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="30" required />
@@ -436,7 +436,7 @@
             <div class="setting-form">
               <span>デフォルト設定を使い1クリックでストリームを開始する</span>
               <div class="toggle-switch">
-<?php	if (isSettingsItem('onclick_stream', true)){ ?>
+<?php	if (isSettingsItem('onclick_stream', true) !== false){ ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" />
