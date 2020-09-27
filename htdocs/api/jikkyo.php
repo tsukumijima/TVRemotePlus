@@ -278,23 +278,47 @@
 				$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
 								'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
 
-				// XMLでAPIを叩く
+				// API から XML データを取得
 				$jkthread_xml = simplexml_load_file($jkthread_url);
 
-				// APIを解析
+				// XML を解析
 				list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
 
-				// jkthreadから取得したres
+				// jkthread から取得した現在のコメ番
 				if (isset($jkthread_info['last_res'])){
 					$res = intval($jkthread_info['last_res']);
 				} else {
 					$res = 0;
 				}
 
-				// まずresのパラメータが存在していて
-				// かつresが空でなくて
-				// かつ受け取ったresがAPIのresと同じだったら(新しいコメがなかったら)
-				if (isset($_GET['res']) and !$_GET['res'] == '' and $res != $last_res){
+				// $_GET['res'] が存在する
+				if (isset($_GET['res']) and !$_GET['res'] == ''){
+
+					// 先ほど取得した現在のコメ番 ($last_res) とリクエスト時に指定されたコメ番 ($res) が同じ（更新がない）なら
+					// コメ番が更新されるまで 0.25 秒おきに情報を取得してループ
+					while (true) {
+
+						// 更新されていたらループを抜ける
+						if ($last_res != $res) break;
+
+						// 0.25 秒待つ
+						usleep(250000);
+	
+						// API から XML データを取得
+						$jkthread_xml = simplexml_load_file($jkthread_url);
+	
+						// XML を解析
+						list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
+	
+						// jkthread から取得した現在のコメ番
+						if (isset($jkthread_info['last_res'])){
+							$res = intval($jkthread_info['last_res']);
+						} else {
+							$res = 0;
+						}
+					}
+
+					// これより先の処理はコメ番が更新されている前提
 
 					// jkthread をDPlayer用 danmaku 形式に変換する
 					for ($i = 0; $i < count($jkthread); $i++) { 
@@ -344,7 +368,7 @@
 						}
 					}
 
-				} else { //そうでなかったらdanmakuをnullにする
+				} else { // コメントを取得できなかった
 					$danmaku[0] = null;
 				}
 
