@@ -84,15 +84,15 @@
 
 		// とりあえずthreadは全部格納する
 		// 0で成功、それ以外は失敗
-		if(isset($jkthread_xml->thread['resultcode'])) $jkthread_info['resultcode'] = intval($jkthread_xml->thread['resultcode']);
+		if (isset($jkthread_xml->thread['resultcode'])) $jkthread_info['resultcode'] = intval($jkthread_xml->thread['resultcode']);
 		// スレッドID
-		if(isset($jkthread_xml->thread['thread'])) $jkthread_info['thread'] = intval($jkthread_xml->thread['thread']);
+		if (isset($jkthread_xml->thread['thread'])) $jkthread_info['thread'] = intval($jkthread_xml->thread['thread']);
 		// スレッド開始からのコメント数
-		if(isset($jkthread_xml->thread['last_res'])) $jkthread_info['last_res'] = intval($jkthread_xml->thread['last_res']);
+		if (isset($jkthread_xml->thread['last_res'])) $jkthread_info['last_res'] = intval($jkthread_xml->thread['last_res']);
 		// コメント投稿するため？のチケット
-		if(isset($jkthread_xml->thread['ticket'])) $jkthread_info['ticket'] = strval($jkthread_xml->thread['ticket']);
+		if (isset($jkthread_xml->thread['ticket'])) $jkthread_info['ticket'] = strval($jkthread_xml->thread['ticket']);
 		// 取得した現在のサーバー時間(UNIX時間)
-		if(isset($jkthread_xml->thread['server_time'])) $jkthread_info['server_time'] = intval($jkthread_xml->thread['server_time']);
+		if (isset($jkthread_xml->thread['server_time'])) $jkthread_info['server_time'] = intval($jkthread_xml->thread['server_time']);
 
 		// XMLを解析してAPIに格納
 		if (isset($jkthread_xml->chat[0])){ //コメントが存在するなら
@@ -210,7 +210,7 @@
 
 	// コメントの取得
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' and $ini[$stream]['state'] == 'ONAir' and
-	    intval($ini[$stream]['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認 (jk0もはじく)
+	    intval($ini[$stream]['channel']) !== 0 and !isset($_GET['id'])){ // パラメータ確認 (jk0 もはじく)
 
 		// 実況IDを取得
 		if (isset($ch[$ini[$stream]['channel']])){
@@ -252,151 +252,177 @@
 			// チャンネルが存在する場合のみ
 			if (isset($channel) and $channel !== -1 and $channel !== -2){
 
-				if (!isset($_GET['res'])){ //resパラメータがないなら
+				// リクエストパラメータに min_comeban がある場合のみ
+				if (isset($_GET['min_comeban']) and !empty($_GET['min_comeban'])){
 
-					// コメントサーバのresを取得するURL
-					$jkthread_res_URL = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].'/api/thread?version=20061206&thread='.$getflv_param['thread_id'];
+					// リクエストパラメータの min_comeban をそのまま設定
+					$min_comeban = intval($_GET['min_comeban']);
+					
+					// コメントサーバーから実況を取得する URL
+					$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
+									'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$min_comeban;
 
-					$jkthread_xml = simplexml_load_file($jkthread_res_URL);
+					// API から XML データを取得
+					$jkthread_xml = simplexml_load_file($jkthread_url);
 
-					// APIを解析
+					// XML を解析
+					list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
+
+					// jkthread から取得した現在のコメ番
+					if (isset($jkthread_info['last_res'])){
+						$next_comeban = intval($jkthread_info['last_res']) + 1; // 次のコメ番に設定するので +1
+					} else {
+						$next_comeban = 1;
+					}
+
+					// $_GET['min_comeban'] が存在する
+					if (isset($_GET['min_comeban']) and !$_GET['min_comeban'] == ''){
+
+						// 先ほど取得した現在のコメ番 ($min_comeban) とリクエスト時に指定されたコメ番 ($next_comeban) が同じ（更新がない）なら
+						// コメ番が更新されるまで 0.25 秒おきに情報を取得してループ
+						$loop_count = 0; // ループ回数をカウント
+						while (true) {
+
+							// 更新されていたらループを抜ける
+							if ($min_comeban != $next_comeban) break;
+
+							// 240 回（1分）以上ループされていたらループを抜ける
+							// 何分もフリーズ状態なのはさすがによくなさそう
+							if ($loop_count >= 240) break;
+
+							// 0.25 秒待つ
+							usleep(250000);
+		
+							// もう一度 API から XML データを取得
+							$jkthread_xml = simplexml_load_file($jkthread_url);
+		
+							// XML を解析
+							list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
+		
+							// jkthread から取得した現在のコメ番
+							if (isset($jkthread_info['last_res'])){
+								$next_comeban = intval($jkthread_info['last_res']) + 1; // 次のコメ番に設定するので +1
+							} else {
+								$next_comeban = 1;
+							}
+
+							$loop_count += 1; // カウントを足す
+						}
+
+						// コメ番が更新されている
+						if ($min_comeban != $next_comeban) {
+
+							// jkthread をDPlayer用 danmaku 形式に変換する
+							for ($i = 0; $i < count($jkthread); $i++) { 
+
+								if (isset($jkthread[$i]) and !empty($jkthread[$i])) {
+
+									// 自分のコメントを表示しない
+									// commentとコメント内容が同じ & フラグが立っていない場合
+									if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
+										// 自分のコメントだったら
+										if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
+											$jkthread[$i]['content'] = ''; // 空にする
+											$comment_ini['comment_readed'] = true; //フラグをtrueに
+										}
+									} else { // iniが空だったら再設定しておく
+										$comment_ini['comment'] = ' ';
+										$comment_ini['comment_readed'] = false;
+									}
+
+									// iniファイル書き込み
+									file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
+									// オプションを解析する
+									if (isset($jkthread[$i]['mail'])){ //空でないなら
+										$option = str_replace('184', '', $jkthread[$i]['mail']);
+									} else {
+										$option = '';
+									}
+
+									// 位置を取得
+									$position = getPosition($option);
+									
+									// 色を取得
+									$color = getColor($option);
+
+									$danmaku[$i] = array(
+										'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
+										$position, // 場所(上・スクロール・下)をインポート
+										$color, // 色をインポート
+										$jkthread[$i]['user_id'], // ユーザーIDをインポート
+										$jkthread[$i]['content'], // コメントをインポート
+										$jkthread[$i]['no'], // コメ番をインポート
+									);
+
+								} else {
+									$danmaku[$i] = null; // コメントを取得できなかった
+								}
+							}
+
+						} else { // 1分待機したけどコメントを取得できなかった
+							$danmaku[0] = null;
+						}
+
+					} else { // コメントを取得できなかった
+						$danmaku[0] = null;
+					}
+				
+					// 出力JSON
+					$json = array(
+						'api' => 'jikkyo',
+						'type' => 'receive',
+						'ikioi' => $ikioi,
+						'channel' => 'jk'.$channel,
+						'min_comeban' => $min_comeban,
+						'next_comeban' => $next_comeban,
+						//'jkthread' => $jkthread,
+						//'jkthread_url'=> $jkthread_url,
+						'code' => 0,
+						'version' => 3,
+						'data' => $danmaku,
+					);
+
+				} else {
+
+					// API から XML データを取得
+					$jkthread_xml = simplexml_load_file('http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
+					                                    '/api/thread?version=20061206&thread='.$getflv_param['thread_id']);
+
+					// XML を解析
 					list($jkthread_res, $jkthread_res_info) = getJKthread($jkthread_xml);
 
-					if (isset($jkthread_res_info['last_res'])){ //last_resがあれば代入
-						$last_res = $jkthread_res_info['last_res'];
-					} else { //なかったら0にしとく
-						$last_res = 0;
+					// コメ番を取得
+					if (isset($jkthread_res_info['last_res'])){
+						$next_comeban = intval($jkthread_res_info['last_res']) + 1; // 次のコメ番に設定するので +1
+					} else {
+						$next_comeban = 1; // コメ番を取得できなかったらとりあえず 1 に設定
 					}
-
-				} else { //resパラメータがあるなら
-					$last_res = intval($_GET['res']); //そのまま代入
-				}
-
-				$last_res_request = $last_res + 1; //リクエストする時にlast_resがそのままだとコメが重複するので+1する
 				
-				// コメントサーバから実況を取得するURL
-				$jkthread_url = 'http://'.$getflv_param['ms'].':'.$getflv_param['http_port'].
-								'/api/thread?version=20061206&thread='.$getflv_param['thread_id'].'&res_from='.$last_res_request;
-
-				// API から XML データを取得
-				$jkthread_xml = simplexml_load_file($jkthread_url);
-
-				// XML を解析
-				list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
-
-				// jkthread から取得した現在のコメ番
-				if (isset($jkthread_info['last_res'])){
-					$res = intval($jkthread_info['last_res']);
-				} else {
-					$res = 0;
+					// 出力JSON
+					$json = array(
+						'api' => 'jikkyo',
+						'type' => 'connect',
+						'ikioi' => $ikioi,
+						'channel' => 'jk'.$channel,
+						'min_comeban' => null,
+						'next_comeban' => $next_comeban,
+						'code' => 0,
+						'version' => 3,
+						'data' => null,
+					);
 				}
-
-				// $_GET['res'] が存在する
-				if (isset($_GET['res']) and !$_GET['res'] == ''){
-
-					// 先ほど取得した現在のコメ番 ($last_res) とリクエスト時に指定されたコメ番 ($res) が同じ（更新がない）なら
-					// コメ番が更新されるまで 0.25 秒おきに情報を取得してループ
-					while (true) {
-
-						// 更新されていたらループを抜ける
-						if ($last_res != $res) break;
-
-						// 0.25 秒待つ
-						usleep(250000);
-	
-						// API から XML データを取得
-						$jkthread_xml = simplexml_load_file($jkthread_url);
-	
-						// XML を解析
-						list($jkthread, $jkthread_info) = getJKthread($jkthread_xml);
-	
-						// jkthread から取得した現在のコメ番
-						if (isset($jkthread_info['last_res'])){
-							$res = intval($jkthread_info['last_res']);
-						} else {
-							$res = 0;
-						}
-					}
-
-					// これより先の処理はコメ番が更新されている前提
-
-					// jkthread をDPlayer用 danmaku 形式に変換する
-					for ($i = 0; $i < count($jkthread); $i++) { 
-
-						if (isset($jkthread[$i]) and !empty($jkthread[$i])) {
-
-							// 自分のコメントを表示しない
-							// commentとコメント内容が同じ & フラグが立っていない場合
-							if (isset($comment_ini['comment'])){ // 空になってる場合があるので分岐
-								// 自分のコメントだったら
-								if (($jkthread[$i]['content'] == $comment_ini['comment']) and ($comment_ini['comment_readed'] == false)){
-									$jkthread[$i]['content'] = ''; // 空にする
-									$comment_ini['comment_readed'] = true; //フラグをtrueに
-								}
-							} else { // iniが空だったら再設定しておく
-								$comment_ini['comment'] = ' ';
-								$comment_ini['comment_readed'] = false;
-							}
-
-							// iniファイル書き込み
-							file_put_contents($commentfile, json_encode($comment_ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-
-							// オプションを解析する
-							if (isset($jkthread[$i]['mail'])){ //空でないなら
-								$option = str_replace('184', '', $jkthread[$i]['mail']);
-							} else {
-								$option = '';
-							}
-
-							// 位置を取得
-							$position = getPosition($option);
-							
-							// 色を取得
-							$color = getColor($option);
-
-							$danmaku[$i] = array(
-								'0.'.strval($jkthread[$i]['vpos']), // 秒数(ミリ秒足す)
-								$position, // 場所(上・スクロール・下)をインポート
-								$color, // 色をインポート
-								$jkthread[$i]['user_id'], // ユーザーIDをインポート
-								$jkthread[$i]['content'], // コメントをインポート
-								$jkthread[$i]['no'], // コメ番をインポート
-							);
-
-						} else {
-							$danmaku[$i] = null; // コメントを取得できなかった
-						}
-					}
-
-				} else { // コメントを取得できなかった
-					$danmaku[0] = null;
-				}
-
-				// 出力JSON
-				$json = array(
-					'api' => 'jikkyo',
-					'type' => 'load',
-					'ikioi' => $ikioi,
-					'channel' => 'jk'.$channel,
-					'res' => $last_res,
-					'last_res' => $res,
-					//'jkthread' => $jkthread,
-					//'jkthread_url'=> $jkthread_url,
-					'code' => 0,
-					'version' => 3,
-					'data' => $danmaku,
-				);
 
 			} else {
 
 				// 出力JSON
 				$json = array(
 					'api' => 'jikkyo',
-					'type' => 'load',
+					'type' => 'receive',
 					'ikioi' => $ikioi,
 					'channel' => 'jk'.$channel,
-					'res' => 0,
-					'last_res' => 0,
+					'min_comeban' => 0,
+					'next_comeban' => 0,
 					'code' => 0,
 					'version' => 3,
 					'data' => null,
@@ -420,7 +446,7 @@
 				} else if (strpos($http_response_header[0], '503')){
 					$error = 'メンテナンス中です';
 				} else if (empty($channel)){
-					$error = '-';
+					$error = '-'; // ニコニコ実況に存在しないチャンネル
 				} else {
 					$error = 'ニコニコ実況に問題が発生しています';
 				}
@@ -431,7 +457,7 @@
 			// 出力JSON
 			$json = array(
 				'api' => 'jikkyo',
-				'type' => 'load',
+				'type' => 'receive',
 				'ikioi' => $error,
 				'channel' => 'jk'.$channel,
 				'error' => $error,
@@ -762,7 +788,7 @@
 		// 出力JSON
 		$json = array(
 			'api' => 'jikkyo',
-			'type' => 'connect',
+			'type' => 'dummy',
 			'code' => 0,
 			'version' => 3
 		);
