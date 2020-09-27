@@ -33,112 +33,115 @@
         url: '/api/status/' + stream,
         dataType: 'json',
         cache: false,
-        success: function(data) {
+      }).done(function(data) {
 
-          // 視聴数を表示
-          document.getElementById('watching').textContent = data['watching'] + '人が視聴中';
+        // 視聴数を表示
+        document.getElementById('watching').textContent = data['watching'] + '人が視聴中';
 
-          var status = document.getElementById('status').textContent;
+        var status = document.getElementById('status').textContent;
 
-          if (data['status'] == 'failed' && status != 'failed'){
-            toastr.error('ストリームの開始に失敗しました…');
-            $.ajax({
-              url: '/settings/',
-              type: 'post',
-              data: {
-                'state': 'Offline',
-                'stream': stream
-              },
-              cache: false,
-              success: function(data) {
-                toastr.info('ストリームを終了します。');
-              }
-            });
+        if (data['status'] == 'failed' && status != 'failed'){
+          toastr.error('ストリームの開始に失敗しました…');
+          $.ajax({
+            url: '/settings/',
+            type: 'post',
+            data: {
+              'state': 'Offline',
+              'stream': stream
+            },
+            cache: false,
+          }).done(function(data) {
+            toastr.info('ストリームを終了します。');
+          });
+        }
+
+        if (data['status'] == 'restart' && status != 'restart'){
+          toastr.warning('ストリームが途中で中断しました…');
+          $.ajax({
+            url: '/settings/',
+            type: 'post',
+            data: {
+              'state': 'ONAir',
+              'stream': stream,
+              'restart': 'true'
+            },
+            cache: false,
+          }).done(function(data) {
+            var paused = dp.video.paused;
+            if (data['streamtype'] == 'progressive'){
+              dp.video.src = '/api/stream?_=' + time();
+              dp.initVideo(dp.video, 'normal');
+            } else {
+              dp.video.src = '/stream/stream' + stream + '.m3u8';
+              dp.initVideo(dp.video, 'hls');
+            }
+            if (!paused){
+              dp.video.play();
+            } else {
+              dp.video.pause();
+            }
+            toastr.info('ストリームを再起動しています…');
+          });
+        }
+        
+        // 状態を隠しHTMLに書き出して変化してたらリロードする
+        if ((data['status'] != status) && status != ''){
+
+          if (document.getElementById('state').value === undefined){
+            document.getElementById('state').value = data['state'];
           }
 
-          if (data['status'] == 'restart' && status != 'restart'){
-            toastr.warning('ストリームが途中で中断しました…');
-            $.ajax({
-              url: '/settings/',
-              type: 'post',
-              data: {
-                'state': 'ONAir',
-                'stream': stream,
-                'restart': 'true'
-              },
-              cache: false,
-              success: function(data) {
-                var paused = dp.video.paused;
-                if (data['streamtype'] == 'progressive'){
-                  dp.video.src = '/api/stream?_=' + time();
-                  dp.initVideo(dp.video, 'normal');
-                } else {
-                  dp.video.src = '/stream/stream' + stream + '.m3u8';
-                  dp.initVideo(dp.video, 'hls');
-                }
-                if (!paused){
-                  dp.video.play();
-                } else {
-                  dp.video.pause();
-                }
-                toastr.info('ストリームを再起動しています…');
-              }
-            });
-          }
-          
-          // 状態を隠しHTMLに書き出して変化してたらリロードする
-          if ((data['status'] != status) && status != ''){
+          // stateが同じの場合のみ読み込みし直し
+          if ((document.getElementById('state').value == data['state']) &&
+            (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
 
-            if (document.getElementById('state').value === undefined){
-              document.getElementById('state').value = data['state'];
+            if (data['status'] == 'failed' || data['status'] != 'restart'){
+
+              // ストリームを読み込みし直す
+              var paused = dp.video.paused;
+              if (data['streamtype'] == 'progressive'){
+                dp.video.src = '/api/stream?_=' + time();
+                dp.initVideo(dp.video, 'normal');
+              } else {
+                dp.video.src = '/stream/stream' + stream + '.m3u8';
+                dp.initVideo(dp.video, 'hls');
+              }
+              if (!paused){
+                dp.video.play();
+              } else {
+                dp.video.pause();
+              }
+
+              // コメ番をリセット
+              // リセットしないと前の局のコメ番より今の局のコメ番が小さい場合にコメントが流れない
+              commentnumber = 0;
+              res = '';
+              // console.log('【コメ番をリセットしました】')
+
             }
 
-            // stateが同じの場合のみ読み込みし直し
-            if ((document.getElementById('state').value == data['state']) &&
-              (data['state'] == 'ONAir' || (data['state'] == 'File' && data['status'] == 'onair'))){
-
-              if (data['status'] == 'failed' || data['status'] != 'restart'){
-
-                // ストリームを読み込みし直す
-                var paused = dp.video.paused;
-                if (data['streamtype'] == 'progressive'){
-                  dp.video.src = '/api/stream?_=' + time();
-                  dp.initVideo(dp.video, 'normal');
-                } else {
-                  dp.video.src = '/stream/stream' + stream + '.m3u8';
-                  dp.initVideo(dp.video, 'hls');
-                }
-                if (!paused){
-                  dp.video.play();
-                } else {
-                  dp.video.pause();
-                }
-
-                // コメ番をリセット
-                // リセットしないと前の局のコメ番より今の局のコメ番が小さい場合にコメントが流れない
-                commentnumber = 0;
-                res = '';
-                // console.log('【コメ番をリセットしました】')
-
-              }
-
-            // それ以外は諸々問題があるので一旦リロード
-            } else {
-              if (data['status'] == 'failed'){
-                setTimeout(function(){
-                  $('#cover').addClass('open');
-                  location.reload(true);
-                }, 3000);
-              } else {
+          // それ以外は諸々問題があるので一旦リロード
+          } else {
+            if (data['status'] == 'failed'){
+              setTimeout(function(){
                 $('#cover').addClass('open');
                 location.reload(true);
-              }
+              }, 3000);
+            } else {
+              $('#cover').addClass('open');
+              location.reload(true);
             }
           }
-
-          document.getElementById('status').textContent = data['status'];
-          // console.log('status: ' + data['status']);
         }
+
+        document.getElementById('status').textContent = data['status'];
+        // console.log('status: ' + data['status']);
+
+      }).fail(function(data, status, error) {
+
+        // エラーメッセージ
+        message = 'failed to get status. status: ' + status + '\nerror: ' + error.message;
+        console.error(message);
 
       });
       return status;
@@ -152,191 +155,196 @@
         url: '/api/epginfo/' + stream,
         dataType: 'json',
         cache: false,
-        success: function(data) {
+      }).done(function(data) {
 
-          // 結果をHTMLにぶち込む
+        // 結果をHTMLにぶち込む
 
-          // 高さフラグ
-          if (document.getElementsByClassName('broadcast-title-ch1')[0]){
-            if (document.getElementsByClassName('broadcast-title-ch1')[0].textContent == ''){
-              var flg = true;
-            } else {
-              var flg = false;
-            }
+        // 高さフラグ
+        if (document.getElementsByClassName('broadcast-title-ch1')[0]){
+          if (document.getElementsByClassName('broadcast-title-ch1')[0].textContent == ''){
+            var flg = true;
           } else {
             var flg = false;
           }
-          
-          if (data['stream'][stream]['state'] == 'ONAir'){
+        } else {
+          var flg = false;
+        }
+        
+        if (data['stream'][stream]['state'] == 'ONAir'){
 
-            // 変化がある場合のみ書き換え
-            if (document.getElementById('epg-starttime').innerHTML != data['stream'][stream]['starttime'] ||
-                document.getElementById('epg-title').innerHTML != data['stream'][stream]['program_name'] ||
-                document.getElementById('epg-channel').innerHTML != data['stream'][stream]['channel']){
+          // 変化がある場合のみ書き換え
+          if (document.getElementById('epg-starttime').innerHTML != data['stream'][stream]['starttime'] ||
+              document.getElementById('epg-title').innerHTML != data['stream'][stream]['program_name'] ||
+              document.getElementById('epg-channel').innerHTML != data['stream'][stream]['channel']){
 
-              // 現在の番組
-              document.getElementById('epg-starttime').textContent = data['stream'][stream]['starttime'];
-              document.getElementById('epg-to').textContent = data['stream'][stream]['to'];
-              document.getElementById('epg-endtime').textContent = data['stream'][stream]['endtime'];
-              
-              if (data['stream'][stream]['ch'] < 55){
-                document.getElementById('epg-channel').textContent =
-                    'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
-              } else {
-                document.getElementById('epg-channel').textContent =
-                    'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
-              }
-              document.getElementById('epg-title').innerHTML = data['stream'][stream]['program_name'];
-              document.getElementById('epg-info').innerHTML = data['stream'][stream]['program_info'];
-          
-              // 次の番組
-              document.getElementById('epg-next-starttime').textContent = data['stream'][stream]['next_starttime'];
-              document.getElementById('epg-next-to').textContent = data['stream'][stream]['to'];
-              document.getElementById('epg-next-endtime').textContent = data['stream'][stream]['next_endtime'];
-              document.getElementById('epg-next-title').innerHTML = data['stream'][stream]['next_program_name'];
-
-              // ON Air
-              document.getElementById('state').textContent = '● ON Air';
-              document.getElementById('state').style.color = '#007cff';
-            }
-
-          } else if (data['stream'][stream]['state'] == 'Offline') {
-
-            // Offline
-            document.getElementById('state').textContent = '● Offline';
-            document.getElementById('state').style.color = 'gray';
-          }
-
-          // stateを記録しておく
-          document.getElementById('state').value = data['stream'][stream]['state'];
-
-          // progressbarの割合を計算して代入
-          var percent = ((Math.floor(Date.now() / 1000) - data['stream'][stream]['timestamp']) / data['stream'][stream]['duration']) * 100;
-          document.getElementById('progress').style.width = percent + '%';
-
-          // チャンネルごとに実行
-          for (key in data['onair']){
-
-            // 変化がある場合のみ書き換え
-            // 特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
-            if (document.querySelector('#ch' + key + ' .broadcast-start').innerHTML != data['onair'][key]['starttime'] ||
-                document.querySelector('#ch' + key + ' .broadcast-title').innerHTML != data['onair'][key]['program_name']){
-
-              // 書き換え用html
-              var html = `<div class="broadcast-channel-box">
-                            <div class="broadcast-channel">` + document.getElementById('ch' + key).dataset.channel + `</div>
-                              <div class="broadcast-name-box">
-                                <div class="broadcast-name">` + document.getElementById('ch' + key).dataset.name + `</div>
-                                <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi">` + data['onair'][key]['ikioi'] + `</span></div>
-                              </div>
-                            </div>
-                            <div class="broadcast-title">
-                              <span class="broadcast-start">` + data['onair'][key]['starttime'] + `</span>
-                              <span class="broadcast-to">` + data['onair'][key]['to'] + `</span>
-                              <span class="broadcast-end">` + data['onair'][key]['endtime'] + `</span>
-                              <span class="broadcast-title-id">` + data['onair'][key]['program_name'] + `</span>
-                            </div>
-                            <div class="broadcast-next">
-                              <span>` + data['onair'][key]['next_starttime'] + `</span>
-                              <span>` + data['onair'][key]['to'] + `</span>
-                              <span>` + data['onair'][key]['next_endtime'] + `</span>
-                              <span>` + data['onair'][key]['next_program_name'] + `</span>
-                            </div>
-                          </div>`;
-
-              // 番組情報を書き換え
-              document.querySelector('#ch' + key + ' .broadcast-content').innerHTML = html;
-            }
-
-            // プログレスバー
-            var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
-            document.querySelector('#ch' + key + ' .progress').style.width = percent + '%';
-
-          }
-
-          // ストリーム番号ごとに実行
-          for (key in data['stream']){
-
-            var elem = document.getElementsByClassName('stream-view-' + key)[0];
+            // 現在の番組
+            document.getElementById('epg-starttime').textContent = data['stream'][stream]['starttime'];
+            document.getElementById('epg-to').textContent = data['stream'][stream]['to'];
+            document.getElementById('epg-endtime').textContent = data['stream'][stream]['endtime'];
             
-            switch (data['stream'][key]['state']){
-              
-              case 'ONAir':
-                var state = '● ON Air'
-                var color = 'blue';
-                var time = data['stream'][key]['starttime'] + ' ～ ' + data['stream'][key]['endtime'];
-                break;
-
-              case 'File':
-                var state = '● File'
-                var color = 'green';
-                var time = data['stream'][key]['time'];
-                break;
-
-              default:
-                var state = '● Offline'
-                var color = '';
-                var time = '';
-                break;
+            if (data['stream'][stream]['ch'] < 55){
+              document.getElementById('epg-channel').textContent =
+                  'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
+            } else {
+              document.getElementById('epg-channel').textContent =
+                  'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
             }
+            document.getElementById('epg-title').innerHTML = data['stream'][stream]['program_name'];
+            document.getElementById('epg-info').innerHTML = data['stream'][stream]['program_info'];
+        
+            // 次の番組
+            document.getElementById('epg-next-starttime').textContent = data['stream'][stream]['next_starttime'];
+            document.getElementById('epg-next-to').textContent = data['stream'][stream]['to'];
+            document.getElementById('epg-next-endtime').textContent = data['stream'][stream]['next_endtime'];
+            document.getElementById('epg-next-title').innerHTML = data['stream'][stream]['next_program_name'];
 
-            // 要素が存在しない・変化がある場合のみ書き換え
-            if ((data['stream'][key]['state'] != 'Offline' || key == '1') &&
-                (elem === undefined || elem.getElementsByClassName('stream-title')[0].innerHTML != data['stream'][key]['program_name'])){
-
-              // 書き換え用html
-              var streamview = `<div class="stream-box">
-                                  <div class="stream-number-title">Stream</div><div class="stream-number">` + key + `</div>
-                                  <div class="stream-stop ` + (data['stream'][key]['state'] == 'Offline' ? 'disabled' : '') + `">
-                                    <i class="stream-stop-icon far fa-stop-circle"></i>
-                                  </div>
-                                  <div class="stream-state ` + color + `">` + state + `</div>
-                                  <div class="stream-info">
-                                    <div class="stream-title">` + data['stream'][key]['program_name'].replace(/<br>/g,' ') + `</div>
-                                    <div class="stream-channel">` + data['stream'][key]['channel'] + `</div>
-                                    <div class="stream-description">` + data['stream'][key]['program_info'].replace(/<br>/g,' ') + `</div>
-                                  </div>
-                                </div>`;
-
-              // 番組情報を書き換え
-              if (elem === undefined){
-
-                // 親要素を追加
-                streamview = `<div class="stream-view stream-view-` + key + `" type="button" data-num="` + key + `" data-url="/` + key + `/" style="display: none; opacity: 0;">` + streamview + `</div>`;
-
-                // 新規で要素を作る
-                document.getElementById('stream-view-box').insertAdjacentHTML('beforeend', streamview);
-
-                // スライドダウン
-                $('.stream-view-' + key).slideDown(400).animate(
-                  { opacity: 1 },
-                  { queue: false, duration: 400, easing: 'swing' }
-                );
-
-              } else {
-
-                // 既存のものを書き換え
-                elem.innerHTML = streamview;
-              }
-
-            // オフラインかつ要素が存在する場合
-            } else if (elem !== undefined && data['stream'][key]['state'] == 'Offline' && key != '1'){
-
-              // 要素を削除する
-              $('.stream-view-' + key).slideUp(400).animate(
-                { opacity: 0 },
-                { queue: false, duration: 400, easing: 'swing' }
-              ).queue(function() {
-                $('.stream-view-' + key).remove();
-              });
-
-            }
+            // ON Air
+            document.getElementById('state').textContent = '● ON Air';
+            document.getElementById('state').style.color = '#007cff';
           }
 
-          // 高さ調整(初回のみ)
-          if (flg) $('.swiper-wrapper').eq(1).css('height', $('.broadcast-nav.swiper-slide').height() + 'px');
+        } else if (data['stream'][stream]['state'] == 'Offline') {
+
+          // Offline
+          document.getElementById('state').textContent = '● Offline';
+          document.getElementById('state').style.color = 'gray';
+        }
+
+        // stateを記録しておく
+        document.getElementById('state').value = data['stream'][stream]['state'];
+
+        // progressbarの割合を計算して代入
+        var percent = ((Math.floor(Date.now() / 1000) - data['stream'][stream]['timestamp']) / data['stream'][stream]['duration']) * 100;
+        document.getElementById('progress').style.width = percent + '%';
+
+        // チャンネルごとに実行
+        for (key in data['onair']){
+
+          // 変化がある場合のみ書き換え
+          // 特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
+          if (document.querySelector('#ch' + key + ' .broadcast-start').innerHTML != data['onair'][key]['starttime'] ||
+              document.querySelector('#ch' + key + ' .broadcast-title').innerHTML != data['onair'][key]['program_name']){
+
+            // 書き換え用html
+            var html = `<div class="broadcast-channel-box">
+                          <div class="broadcast-channel">` + document.getElementById('ch' + key).dataset.channel + `</div>
+                            <div class="broadcast-name-box">
+                              <div class="broadcast-name">` + document.getElementById('ch' + key).dataset.name + `</div>
+                              <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi">` + data['onair'][key]['ikioi'] + `</span></div>
+                            </div>
+                          </div>
+                          <div class="broadcast-title">
+                            <span class="broadcast-start">` + data['onair'][key]['starttime'] + `</span>
+                            <span class="broadcast-to">` + data['onair'][key]['to'] + `</span>
+                            <span class="broadcast-end">` + data['onair'][key]['endtime'] + `</span>
+                            <span class="broadcast-title-id">` + data['onair'][key]['program_name'] + `</span>
+                          </div>
+                          <div class="broadcast-next">
+                            <span>` + data['onair'][key]['next_starttime'] + `</span>
+                            <span>` + data['onair'][key]['to'] + `</span>
+                            <span>` + data['onair'][key]['next_endtime'] + `</span>
+                            <span>` + data['onair'][key]['next_program_name'] + `</span>
+                          </div>
+                        </div>`;
+
+            // 番組情報を書き換え
+            document.querySelector('#ch' + key + ' .broadcast-content').innerHTML = html;
+          }
+
+          // プログレスバー
+          var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
+          document.querySelector('#ch' + key + ' .progress').style.width = percent + '%';
 
         }
+
+        // ストリーム番号ごとに実行
+        for (key in data['stream']){
+
+          var elem = document.getElementsByClassName('stream-view-' + key)[0];
+          
+          switch (data['stream'][key]['state']){
+            
+            case 'ONAir':
+              var state = '● ON Air'
+              var color = 'blue';
+              var time = data['stream'][key]['starttime'] + ' ～ ' + data['stream'][key]['endtime'];
+              break;
+
+            case 'File':
+              var state = '● File'
+              var color = 'green';
+              var time = data['stream'][key]['time'];
+              break;
+
+            default:
+              var state = '● Offline'
+              var color = '';
+              var time = '';
+              break;
+          }
+
+          // 要素が存在しない・変化がある場合のみ書き換え
+          if ((data['stream'][key]['state'] != 'Offline' || key == '1') &&
+              (elem === undefined || elem.getElementsByClassName('stream-title')[0].innerHTML != data['stream'][key]['program_name'])){
+
+            // 書き換え用html
+            var streamview = `<div class="stream-box">
+                                <div class="stream-number-title">Stream</div><div class="stream-number">` + key + `</div>
+                                <div class="stream-stop ` + (data['stream'][key]['state'] == 'Offline' ? 'disabled' : '') + `">
+                                  <i class="stream-stop-icon far fa-stop-circle"></i>
+                                </div>
+                                <div class="stream-state ` + color + `">` + state + `</div>
+                                <div class="stream-info">
+                                  <div class="stream-title">` + data['stream'][key]['program_name'].replace(/<br>/g,' ') + `</div>
+                                  <div class="stream-channel">` + data['stream'][key]['channel'] + `</div>
+                                  <div class="stream-description">` + data['stream'][key]['program_info'].replace(/<br>/g,' ') + `</div>
+                                </div>
+                              </div>`;
+
+            // 番組情報を書き換え
+            if (elem === undefined){
+
+              // 親要素を追加
+              streamview = `<div class="stream-view stream-view-` + key + `" type="button" data-num="` + key + `" data-url="/` + key + `/" style="display: none; opacity: 0;">` + streamview + `</div>`;
+
+              // 新規で要素を作る
+              document.getElementById('stream-view-box').insertAdjacentHTML('beforeend', streamview);
+
+              // スライドダウン
+              $('.stream-view-' + key).slideDown(400).animate(
+                { opacity: 1 },
+                { queue: false, duration: 400, easing: 'swing' }
+              );
+
+            } else {
+
+              // 既存のものを書き換え
+              elem.innerHTML = streamview;
+            }
+
+          // オフラインかつ要素が存在する場合
+          } else if (elem !== undefined && data['stream'][key]['state'] == 'Offline' && key != '1'){
+
+            // 要素を削除する
+            $('.stream-view-' + key).slideUp(400).animate(
+              { opacity: 0 },
+              { queue: false, duration: 400, easing: 'swing' }
+            ).queue(function() {
+              $('.stream-view-' + key).remove();
+            });
+
+          }
+        }
+
+        // 高さ調整(初回のみ)
+        if (flg) $('.swiper-wrapper').eq(1).css('height', $('.broadcast-nav.swiper-slide').height() + 'px');
+
+      }).fail(function(data, status, error) {
+
+        // エラーメッセージ
+        message = 'failed to get tvguide. status: ' + status + '\nerror: ' + error.message;
+        console.error(message);
+
       });
       return status;
     }()), 10000);
@@ -405,35 +413,34 @@
           type: 'post',
           data: {state: 'Offline', stream: streamnum},
           cache: false,
-          success: function(data) {
+        }).done(function(data) {
             
-            toastr.success('ストリーム ' + streamnum + ' を終了しました。');
+          toastr.success('ストリーム ' + streamnum + ' を終了しました。');
 
-            // Offlineにする
-            $(streamview).find('.stream-stop').addClass('disabled');
-            $(streamview).find('.stream-state').removeClass('blue');
-            $(streamview).find('.stream-state').removeClass('green');
-            $(streamview).find('.stream-state').html('● Offline');
-            $(streamview).find('.stream-title').html('配信休止中…');
-            $(streamview).find('.stream-channel').empty();
-            $(streamview).find('.stream-description').empty();
+          // Offlineにする
+          $(streamview).find('.stream-stop').addClass('disabled');
+          $(streamview).find('.stream-state').removeClass('blue');
+          $(streamview).find('.stream-state').removeClass('green');
+          $(streamview).find('.stream-state').html('● Offline');
+          $(streamview).find('.stream-title').html('配信休止中…');
+          $(streamview).find('.stream-channel').empty();
+          $(streamview).find('.stream-description').empty();
 
-            // ストリーム開始のセレクトボックスの表示も書き換える
-            $('select[name=stream] option[value=' + streamnum + ']').text('Stream ' + streamnum + ' - Offline');
+          // ストリーム開始のセレクトボックスの表示も書き換える
+          $('select[name=stream] option[value=' + streamnum + ']').text('Stream ' + streamnum + ' - Offline');
 
-            // 自分のストリームでない&ストリーム1でないなら要素を削除する
-            if (stream != streamnum && streamnum != '1'){
-              $(streamview).slideUp(400).animate(
-                { opacity: 0 },
-                { queue: false, duration: 400, easing: 'swing' }
-              ).queue(function() {
-                $(streamview).remove();
-              });
-            }
-
-          }, error: function(){
-            toastr.error('ストリーム ' + streamnum + ' の終了に失敗しました…');
+          // 自分のストリームでない&ストリーム1でないなら要素を削除する
+          if (stream != streamnum && streamnum != '1'){
+            $(streamview).slideUp(400).animate(
+              { opacity: 0 },
+              { queue: false, duration: 400, easing: 'swing' }
+            ).queue(function() {
+              $(streamview).remove();
+            });
           }
+
+        }).fail(function() {
+          toastr.error('ストリーム ' + streamnum + ' の終了に失敗しました…');
         });
 
       } else if ($(event.target).parent().hasClass('disabled')){
@@ -545,16 +552,14 @@
         url: "/tweet/logout",
         type: "post",
         processData: false,
-        contentType: false
-      })
-      .done(function(data) {
+        contentType: false,
+      }).done(function(data) {
         $('#tweet-status').html(data);
         $('#tweet-account-icon').attr('src', '/files/account_default.jpg');
         $('#tweet-account-name').text('ログインしていません');
         $('#tweet-account-name').removeAttr('href');
         $('#tweet-account-id').text('Not Login');
-      })
-      .fail(function(data){
+      }).fail(function(data) {
         $('#tweet-status').html('<span class="tweet-failed">ログアウト中にエラーが発生しました…</span>');
       });
     });
@@ -1292,9 +1297,8 @@
         type: 'post',
         data: formData,
         processData: false,
-        contentType: false
-      })
-      .done(function(data) {
+        contentType: false,
+      }).done(function(data) {
 
         // キャプチャ画像の選択をすべて解除
         deselectAllCaptureImage();
@@ -1313,8 +1317,7 @@
         $('#tweet').val(null);
         $('#tweet-status').html(data);
       
-      })
-      .fail(function(data){
+      }).fail(function(data) {
         $('#tweet-status').html('<span class="tweet-failed">送信中にエラーが発生しました…</span>');
       });
     }

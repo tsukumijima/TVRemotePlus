@@ -64,13 +64,12 @@
         type: 'post',
         data: $('#setting-env').serialize(),
         cache: false,
-        success: function(data) {
-          toastr.success('環境設定を保存しました。');
-          setTimeout(function(){
-            $('.redbutton').attr('disabled', false);
-            $('#save').removeClass('disabled');
-          }, 200);
-        }
+      }).done(function(data) {
+        toastr.success('環境設定を保存しました。');
+        setTimeout(function(){
+          $('.redbutton').attr('disabled', false);
+          $('#save').removeClass('disabled');
+        }, 200);
       });
 
     });

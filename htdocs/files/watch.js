@@ -6,150 +6,149 @@
       url: '/files/' + json + '.json',
       dataType: 'json',
       cache: false,
-      success: function(data) {
+    }).done(function(data) {
 
-        // 透明にする
-        $('#search-list').css('opacity', 0);
-        // 中身を空にしてリセットする
-        if ($('#search-info').html().indexOf('更新中') === -1){
-          $('#search-info').empty();
-        }
-        if (flg != 'more'){
-          $('#search-list').empty();
-        }
-        // 一旦もっと見るを消す
-        $('#search-more-box').remove();
+      // 透明にする
+      $('#search-list').css('opacity', 0);
 
-        // 録画ファイル情報リスト
-        var fileinfo = data['data'];
+      // 中身を空にしてリセットする
+      if ($('#search-info').html().indexOf('更新中') === -1) $('#search-info').empty();
+      
+      if (flg != 'more') $('#search-list').empty();
 
-        // キーワード検索
-        var text = $('#search-find-form').val();
-        if (text !== undefined && text !== ''){ // 検索キーワードがあるなら
-          var fileinfo = $.grep(fileinfo,
-            function(a, b) {
-              // 正規表現
-              regexp = new RegExp('.*' + text + '.*', 'ig');
-              // 配列にフィルターをかける
-              return a.title.match(regexp);
-            }
-          );
-          $('#search-info').html(fileinfo.length + '件ヒットしました。').hide().delay(200).velocity('fadeIn', 500);
-        }
+      // 一旦もっと見るを消す
+      $('#search-more-box').remove();
 
-        // console.log(fileinfo);
-  
-        switch (sortnum){
-          case 1:
-            fileinfo.sort(function(a, b) {
-              return (a.start_timestamp > b.start_timestamp) ? -1 : 1;
-            });
-            break;
-          case 2:
-            fileinfo.sort(function(a, b) {
-              return (a.start_timestamp < b.start_timestamp) ? -1 : 1;
-            });
-            break;
-          case 3:
-            fileinfo.sort(function(a, b) {
-              return (a.title < b.title) ? -1 : 1;
-            });
-            break;
-          case 4:
-            fileinfo.sort(function(a, b) {
-              return (a.title > b.title) ? -1 : 1;
-            });
-            break;
-          case 5:
-            fileinfo.sort(function(a, b) {
-              return (a.play > b.play) ? -1 : 1;
-            });
-            break;
-        }
-        
-        // html
-        var html = '';
+      // 録画ファイル情報リスト
+      var fileinfo = data['data'];
 
-        var length = $('.search-file-box').length + Number(settings['list_view_number'] || 30);
-        // console.log(length)
-        // 全体の配列数より表示する動画数の方が大きくなったら
-        if (fileinfo.length < length){
-          length = fileinfo.length;
-        }
-
-        // ファイルが1件以上あれば
-        if (fileinfo.length > 0){
-        
-          for (var i = $('.search-file-box').length; i < length; i++){
-
-            download = `<a class="search-file-download" href="/api/stream?file=` + encodeURIComponent(fileinfo[i]['file']) + `" target="blank" download="` + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + `">
-                          <i class="fas fa-download"></i>
-                        </a>`;
-
-            encode = `<div class="search-file-encode">
-                        <i class="fas fa-film"></i>
-                      </div>`;
-
-            html += `<div class="search-file-box">
-                      <div class="search-file-thumb">
-                        <img class="search-file-thumb-img" src="/files/thumb/` + fileinfo[i]['thumb'] + `">
-                        <div class="search-file-ext ` + fileinfo[i]['pathinfo']['extension'] + `">` + fileinfo[i]['pathinfo']['extension'].toUpperCase() + `</div>
-                          ` + (fileinfo[i]['pathinfo']['extension'].toLowerCase() == 'ts' ? encode : download) + `
-                        </div>
-                        <div class="search-file-content">
-                          <div class="search-file-path">` + fileinfo[i]['file'] + `</div>
-                          <div class="start_timestamp">` + fileinfo[i]['start_timestamp'] + `</div>
-                          <div class="end_timestamp">` + fileinfo[i]['end_timestamp'] + `</div>
-                          <div class="search-file-title">` + fileinfo[i]['title'] + `</div>
-                          <div class="search-file-info">
-                            <span class="search-file-channel">` + fileinfo[i]['channel'] + `</span>
-                            <span class="search-file-date">` + fileinfo[i]['date'] + `</span>
-                            <span class="search-file-time">` + fileinfo[i]['start'] + ` ～ ` + fileinfo[i]['end'] + ` (` + fileinfo[i]['duration'] + `分)</span>
-                         </div>
-                          <div class="search-file-description">
-                            ` + fileinfo[i]['info'] + `
-                          </div>
-                        </div>
-                      </div>`;
+      // キーワード検索
+      var text = $('#search-find-form').val();
+      if (text !== undefined && text !== ''){ // 検索キーワードがあるなら
+        var fileinfo = $.grep(fileinfo,
+          function(a, b) {
+            // 正規表現
+            regexp = new RegExp('.*' + text + '.*', 'ig');
+            // 配列にフィルターをかける
+            return a.title.match(regexp);
           }
-
-          // まだ表示しきれてないのがあるなら
-          if (fileinfo.length > length){
-            // もっと見る
-            html +=  `<div id="search-more-box">
-                        <i class="fas fa-angle-down"></i>
-                        <span>もっと見る</span>
-                      </div>`;
-          }
-
-          // 1つずつだと遅すぎるため一気に出す
-          $('#search-list').append(html).hide().delay(200).velocity('fadeIn', 500);
-          
-          // 検索キーワードがあるなら上までスクロール
-          if (flg == 'search'){
-            $('html, body').velocity('scroll', { duration: 700, offset: -54 });
-          }
-
-        // 1件も見つからなかった場合
-        } else {
-          $('#search-info').html('<span class="error-text">キーワードに一致する録画番組が見つかりませんでした…</span>').hide().delay(200).velocity('fadeIn', 500);
-        }
-
-      },
-      error: function(fileinfo) {
-        // 中身を空にしてリセットする
-        if (flg != 'more'){
-          $('#search-list').empty();
-        }
-        // もっと見るを消す
-        $('#search-more-box').remove();
-        // エラー吐く
-        if (sortnum == 5){
-          $('#search-info').html('再生履歴がありません。録画番組を再生するとここに履歴が表示されます。').hide().delay(200).velocity('fadeIn', 500);
-        } else {
-          $('#search-info').html('録画リストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
-        }
+        );
+        $('#search-info').html(fileinfo.length + '件ヒットしました。').hide().delay(200).velocity('fadeIn', 500);
       }
+
+      // console.log(fileinfo);
+
+      switch (sortnum){
+        case 1:
+          fileinfo.sort(function(a, b) {
+            return (a.start_timestamp > b.start_timestamp) ? -1 : 1;
+          });
+          break;
+        case 2:
+          fileinfo.sort(function(a, b) {
+            return (a.start_timestamp < b.start_timestamp) ? -1 : 1;
+          });
+          break;
+        case 3:
+          fileinfo.sort(function(a, b) {
+            return (a.title < b.title) ? -1 : 1;
+          });
+          break;
+        case 4:
+          fileinfo.sort(function(a, b) {
+            return (a.title > b.title) ? -1 : 1;
+          });
+          break;
+        case 5:
+          fileinfo.sort(function(a, b) {
+            return (a.play > b.play) ? -1 : 1;
+          });
+          break;
+      }
+      
+      // html
+      var html = '';
+
+      var length = $('.search-file-box').length + Number(settings['list_view_number'] || 30);
+      // console.log(length)
+      // 全体の配列数より表示する動画数の方が大きくなったら
+      if (fileinfo.length < length){
+        length = fileinfo.length;
+      }
+
+      // ファイルが1件以上あれば
+      if (fileinfo.length > 0){
+      
+        for (var i = $('.search-file-box').length; i < length; i++){
+
+          download = `<a class="search-file-download" href="/api/stream?file=` + encodeURIComponent(fileinfo[i]['file']) + `" target="blank" download="` + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + `">
+                        <i class="fas fa-download"></i>
+                      </a>`;
+
+          encode = `<div class="search-file-encode">
+                      <i class="fas fa-film"></i>
+                    </div>`;
+
+          html += `<div class="search-file-box">
+                    <div class="search-file-thumb">
+                      <img class="search-file-thumb-img" src="/files/thumb/` + fileinfo[i]['thumb'] + `">
+                      <div class="search-file-ext ` + fileinfo[i]['pathinfo']['extension'] + `">` + fileinfo[i]['pathinfo']['extension'].toUpperCase() + `</div>
+                        ` + (fileinfo[i]['pathinfo']['extension'].toLowerCase() == 'ts' ? encode : download) + `
+                      </div>
+                      <div class="search-file-content">
+                        <div class="search-file-path">` + fileinfo[i]['file'] + `</div>
+                        <div class="start_timestamp">` + fileinfo[i]['start_timestamp'] + `</div>
+                        <div class="end_timestamp">` + fileinfo[i]['end_timestamp'] + `</div>
+                        <div class="search-file-title">` + fileinfo[i]['title'] + `</div>
+                        <div class="search-file-info">
+                          <span class="search-file-channel">` + fileinfo[i]['channel'] + `</span>
+                          <span class="search-file-date">` + fileinfo[i]['date'] + `</span>
+                          <span class="search-file-time">` + fileinfo[i]['start'] + ` ～ ` + fileinfo[i]['end'] + ` (` + fileinfo[i]['duration'] + `分)</span>
+                        </div>
+                        <div class="search-file-description">
+                          ` + fileinfo[i]['info'] + `
+                        </div>
+                      </div>
+                    </div>`;
+        }
+
+        // まだ表示しきれてないのがあるなら
+        if (fileinfo.length > length){
+          // もっと見る
+          html +=  `<div id="search-more-box">
+                      <i class="fas fa-angle-down"></i>
+                      <span>もっと見る</span>
+                    </div>`;
+        }
+
+        // 1つずつだと遅すぎるため一気に出す
+        $('#search-list').append(html).hide().delay(200).velocity('fadeIn', 500);
+        
+        // 検索キーワードがあるなら上までスクロール
+        if (flg == 'search'){
+          $('html, body').velocity('scroll', { duration: 700, offset: -54 });
+        }
+
+      // 1件も見つからなかった場合
+      } else {
+        $('#search-info').html('<span class="error-text">キーワードに一致する録画番組が見つかりませんでした…</span>').hide().delay(200).velocity('fadeIn', 500);
+      }
+
+    }).fail(function(fileinfo) {
+
+      // 中身を空にしてリセットする
+      if (flg != 'more') $('#search-list').empty();
+
+      // もっと見るを消す
+      $('#search-more-box').remove();
+
+      // エラー吐く
+      if (sortnum == 5){
+        $('#search-info').html('再生履歴がありません。録画番組を再生するとここに履歴が表示されます。').hide().delay(200).velocity('fadeIn', 500);
+      } else {
+        $('#search-info').html('録画リストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
+      }
+        
     });
   }
 
@@ -173,19 +172,19 @@
         url: '/api/listupdate?manual',
         dataType: 'json',
         cache: false,
-        success: function(data) {
-
-          if (data['status'] == 'success'){
-            $('#rec-new').addClass('search-find-selected');
-            $('#rec-old').removeClass('search-find-selected');
-            $('#name-up').removeClass('search-find-selected');
-            $('#name-down').removeClass('search-find-selected');
-            $('#play-history').removeClass('search-find-selected');
-            $('#search-info').empty();
-            sortFileinfo('fileinfo', 1);
-            toastr.success('リストを更新しました。');
-          }
+      }).done(function(data) {
+        if (data['status'] == 'success') {
+          $('#rec-new').addClass('search-find-selected');
+          $('#rec-old').removeClass('search-find-selected');
+          $('#name-up').removeClass('search-find-selected');
+          $('#name-down').removeClass('search-find-selected');
+          $('#play-history').removeClass('search-find-selected');
+          $('#search-info').empty();
+          sortFileinfo('fileinfo', 1);
+          toastr.success('リストを更新しました。');
         }
+      }).fail(function(data) {
+        toastr.error('リストの更新に失敗しました…');
       });
     });
 
@@ -195,10 +194,11 @@
         url: '/api/listupdate?list_reset',
         dataType: 'json',
         cache: false,
-        success: function(data) {
-          sortFileinfo('fileinfo', 1);
-          toastr.success('リストをリセットしました。');
-        }
+      }).done(function(data) {
+        sortFileinfo('fileinfo', 1);
+        toastr.success('リストをリセットしました。');
+      }).fail(function(data) {
+        toastr.error('リストのリセットに失敗しました…');
       });
     });
 
@@ -208,10 +208,11 @@
         url: '/api/listupdate?history_reset',
         dataType: 'json',
         cache: false,
-        success: function(data) {
-          sortFileinfo('fileinfo', 1);
-          toastr.success('再生履歴をリセットしました。');
-        }
+      }).done(function(data) {
+        sortFileinfo('fileinfo', 1);
+        toastr.success('再生履歴をリセットしました。');
+      }).fail(function(data) {
+        toastr.error('再生履歴のリセットに失敗しました…');
       });
     });
 

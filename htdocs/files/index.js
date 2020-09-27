@@ -204,8 +204,7 @@
         data: {state: 'Offline', stream: stream},
         cache: false,
         async: false,
-        success: function(data) {
-        }
+      }).done(function(data) {
       });
 
       // 最近ではunload時にAjaxが実行できなくなっているらしいので
@@ -233,17 +232,16 @@
       url: '/api/chromecast/' + stream,
       dataType: 'json',
       cache: false,
-      success: function(data) {
-        if (data['status'] == 'play'){
-          $('#cast-toggle > .menu-link-href').text('キャストを終了');
-          setTimeout(function(){
-            var state = document.getElementById('state').value;
-            if (state == 'File'){
-              dp.pause();
-            }
-            cast_server_control(state);
-          }, 1500);
-        }
+    }).done(function(data) {
+      if (data['status'] == 'play'){
+        $('#cast-toggle > .menu-link-href').text('キャストを終了');
+        setTimeout(function(){
+          var state = document.getElementById('state').value;
+          if (state == 'File'){
+            dp.pause();
+          }
+          cast_server_control(state);
+        }, 1500);
       }
     });
 
@@ -260,37 +258,36 @@
           url: '/api/chromecast/' + stream,
           dataType: 'json',
           cache: false,
-          success: function(data) {
+        }).done(function(data) {
 
-            var html = '';
-            
-            // デバイスごとに
-            Object.keys(data['scandata']).forEach(function(key){
+          var html = '';
+          
+          // デバイスごとに
+          Object.keys(data['scandata']).forEach(function(key){
 
-              // htmlを生成
-              html += `<div class="chromecast-device" data-ip="` + data['scandata'][key]['ip'] + `" data-port="` + data['scandata'][key]['port'] + `">
-                          <i class="fas fa-tv"></i>
-                          <div class="chromecast-name-box">
-                          <span class="chromecast-name">` + data['scandata'][key]['friendlyname'] + `</span>
-                          <span class="chromecast-type">` + data['scandata'][key]['type'] + `</span>
-                        </div>
-                       </div>`;
-            });
+            // htmlを生成
+            html += `<div class="chromecast-device" data-ip="` + data['scandata'][key]['ip'] + `" data-port="` + data['scandata'][key]['port'] + `">
+                        <i class="fas fa-tv"></i>
+                        <div class="chromecast-name-box">
+                        <span class="chromecast-name">` + data['scandata'][key]['friendlyname'] + `</span>
+                        <span class="chromecast-type">` + data['scandata'][key]['type'] + `</span>
+                      </div>
+                      </div>`;
+          });
 
-            // 空ならメッセージを入れる
-            if (html == ''){
+          // 空ならメッセージを入れる
+          if (html == ''){
 
-              // htmlを生成
-              html += `<div class="error">
-                          キャストするデバイスがありません。<br>
-                          右上の︙メニューから、デバイスをスキャンしてください。<br>
-                       </div>`;
-            }
-
-            // 一気に代入
-            document.getElementById('chromecast-device-box').innerHTML = html;
-
+            // htmlを生成
+            html += `<div class="error">
+                        キャストするデバイスがありません。<br>
+                        右上の︙メニューから、デバイスをスキャンしてください。<br>
+                      </div>`;
           }
+
+          // 一気に代入
+          document.getElementById('chromecast-device-box').innerHTML = html;
+
         });
 
       // キャスト終了
@@ -300,20 +297,19 @@
           url: '/api/chromecast/' + stream + '?cmd=stop',
           dataType: 'json',
           cache: false,
-          success: function(data) {
+        }).done(function(data) {
 
-            $('#cast-toggle > .menu-link-href').text('キャストを開始');
-            toastr.success('キャストを終了しました。');
-            // 端末のミュートを解除
-            dp.video.muted = false;
-            // 音量を戻す
-            dp.video.volume = 1;
+          $('#cast-toggle > .menu-link-href').text('キャストを開始');
+          toastr.success('キャストを終了しました。');
+          // 端末のミュートを解除
+          dp.video.muted = false;
+          // 音量を戻す
+          dp.video.volume = 1;
 
-            // 動画表示を戻す
-            dp.video.style.opacity = 1;
-            $('.dplayer-casting').css('opacity', 0);
+          // 動画表示を戻す
+          dp.video.style.opacity = 1;
+          $('.dplayer-casting').css('opacity', 0);
 
-          }
         });
       }
 
@@ -332,17 +328,16 @@
         url: '/api/chromecast/' + stream + '?cmd=scan',
         dataType: 'json',
         cache: false,
-        success: function(data) {
-          if (data['scan'] == true){
-            toastr.success('スキャンに成功しました。');
+      }).done(function(data) {
+        if (data['scan'] == true){
+          toastr.success('スキャンに成功しました。');
+        } else {
+          toastr.error('スキャンに失敗しました…');
+          toastr.error('ChromeCast が同じ Wi-Fi ネットワーク上にないか、Bonjour がインストールされていない可能性があります。');
+          if (data['bonjour'] == false){
+            toastr.error('TVRemotePlus (Apache) を管理者権限で起動させてから、もう一度試してみてください。');
           } else {
-            toastr.error('スキャンに失敗しました…');
-            toastr.error('ChromeCast が同じ Wi-Fi ネットワーク上にないか、Bonjour がインストールされていない可能性があります。');
-            if (data['bonjour'] == false){
-              toastr.error('TVRemotePlus (Apache) を管理者権限で起動させてから、もう一度試してみてください。');
-            } else {
-              toastr.error('もう一度試してみてください。');
-            }
+            toastr.error('もう一度試してみてください。');
           }
         }
       });
@@ -617,20 +612,19 @@
       url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(elem).attr('data-ip') + '&port=' + $(elem).attr('data-port'),
       dataType: 'json',
       cache: false,
-      success: function(data) {
+    }).done(function(data) {
 
-        if (data['status'] == 'play'){
+      if (data['status'] == 'play'){
 
-          $('#cast-toggle > .menu-link-href').text('キャストを終了');
+        $('#cast-toggle > .menu-link-href').text('キャストを終了');
 
-          // 制御は別の関数に投げる
-          cast_server_control(state);
+        // 制御は別の関数に投げる
+        cast_server_control(state);
 
-        } else {
-          toastr.error('キャストの開始に失敗しました…');
-        }
-
+      } else {
+        toastr.error('キャストの開始に失敗しました…');
       }
+
     });
   }
 
@@ -654,10 +648,9 @@
         url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
         dataType: 'json',
         cache: false,
-        success: function(data) {
-          dp.video.muted = true;
-          dp.pause();
-        }
+      }).done(function(data) {
+        dp.video.muted = true;
+        dp.pause();
       });
 
     } else {
@@ -673,8 +666,7 @@
           url: '/api/chromecast/' + stream + '?cmd=restart',
           dataType: 'json',
           cache: false,
-          success: function(data) {
-          }
+        }).done(function(data) {
         });
       
       }
@@ -692,8 +684,7 @@
             url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
             dataType: 'json',
             cache: false,
-            success: function(data) {
-            }
+          }).done(function(data) {
           });
 
         } else {
@@ -702,9 +693,8 @@
             url: '/api/chromecast/' + stream + '?cmd=pause',
             dataType: 'json',
             cache: false,
-            success: function(data) {
-              dp.pause();
-            }
+          }).done(function(data) {
+            dp.pause();
           });
 
         }
@@ -723,9 +713,8 @@
             url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
             dataType: 'json',
             cache: false,
-            success: function(data) {
-              dp.pause();
-            }
+          }).done(function(data) {
+            dp.pause();
           });
 
         }
@@ -741,8 +730,7 @@
           url: '/api/chromecast/' + stream + '?cmd=volume&arg=' + dp.video.volume,
           dataType: 'json',
           cache: false,
-          success: function(data) {
-          }
+        }).done(function(data) {
         });
         
         dp.video.muted = true; // 端末はミュートにする
