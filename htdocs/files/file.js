@@ -9,47 +9,35 @@
       // コメント一覧の時間欄のwidthを調整
       $('#comment-time').css('width', '62px');
 
-      $.ajax({
-        url: '/api/jikkyo/' + stream + '?id=TVRemotePlus',
-        dataType: 'json',
-        cache: false,
-      }).done(function(data) {
+      // コメントを読み込みが完了したときに発火
+      dp.on('danmaku_load_end', function() {
+        
+        let html = '';
 
-        if (data['data'] != null && data['data'][0]){ //data['data'] があれば(nullでなければ)
+        for (danmaku of dp.danmaku.dan) {
 
-          var html = '';
+          // 分と秒を計算
+          let videotime = (danmaku['time']).toString();
+          let ss = Math.floor(videotime % 60);
+          let mm = Math.floor(videotime / 60);
+          if (ss < 10) ss = '0' + ss;
+          if (mm < 10) mm = '0' + mm;
+          let time = mm + ':' + ss;
 
-          for (i = 0; i <= data['data'].length-1; i++){
-
-            // 分と秒を計算
-            var videotime = (data['data'][i][0]).toString();
-            ss = Math.floor(videotime % 60);
-            mm = Math.floor(videotime / 60);
-            if (ss < 10) ss = '0' + ss;
-            if (mm < 10) mm = '0' + mm;
-            var time = mm + ':' + ss;
-
-            html +=  `<tbody class="comment-file" data-time="` + Math.floor(videotime) + `">
-                        <tr>
-                          <td class="time" align="center" value="` + videotime + `">` + time + `</td>
-                          <td class="comment">` + data['data'][i][4].toString() + `</td>
-                        </tr>
-                      </tbody>`;
-          }
-
-          // コメントを一気にコメント一覧に挿入
-          // 1つずつだと遅すぎるため一気に、さらにスピード重視であえてJavaScriptで実装
-          document.getElementById('comment-draw-box').innerHTML = html;
-
+          html +=  `<tbody class="comment-file" data-time="` + Math.floor(videotime) + `">
+                      <tr>
+                        <td class="time" align="center" value="` + videotime + `">` + time + `</td>
+                        <td class="comment">` + danmaku['text'] + `</td>
+                      </tr>
+                    </tbody>`;
         }
-      
-      }).done(function(data, status, error) {
-
-        // エラーメッセージ
-        message = 'failed to get comment. status: ' + status + '\nerror: ' + error.message;
-        console.error(message);
+        
+        // コメントを一気にコメント一覧に挿入
+        // 1つずつだと遅すぎるため一気に、さらにスピード重視であえてJavaScriptで実装
+        document.getElementById('comment-draw-box').innerHTML = html;
 
       });
+
 
       // 時間クリック時にその再生位置に飛ぶやつ
       $(document).on('click', '.comment-file', function(){
