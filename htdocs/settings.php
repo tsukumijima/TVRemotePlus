@@ -379,7 +379,7 @@
               </div>
             </div>
 
-            <h4><i class="fas fa-sliders-h"></i>機能</h4>
+            <h4><i class="fas fa-comment-alt"></i>コメント</h4>
 
             <div class="setting-form setting-select">
               <span>コメントのフォントサイズ</span>
@@ -425,7 +425,27 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>一度に表示する番組の件数（個）</span>
+              <span>コメントリストのパフォーマンス</span>
+              <div class="select-wrap">
+                <select id="comment_list_performance" required>
+<?php	if (isSettingsItem('comment_list_performance', 'normal') !== false){ ?>
+                  <option value="normal" selected>標準</option>
+                  <option value="light">軽量</option>
+<?php	} else if (isSettingsItem('comment_list_performance', 'light') !== false){ ?>
+                  <option value="normal">標準</option>
+                  <option value="light" selected>軽量</option>
+<?php	} else { ?>
+                  <option value="normal" selected>標準</option>
+                  <option value="light">軽量</option>
+<?php	} // 括弧終了 ?>
+                </select>
+              </div>
+            </div>
+
+            <h4><i class="fas fa-sliders-h"></i>機能</h4>
+
+            <div class="setting-form setting-select">
+              <span>一度に表示する録画番組リストの番組数</span>
 <?php	if (isSettingsItem('list_view_number') !== false){ ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?php echo isSettingsItem('list_view_number'); ?>" required />
 <?php	} else { ?>
@@ -434,7 +454,7 @@
             </div>
 
             <div class="setting-form">
-              <span>デフォルト設定を使い1クリックでストリームを開始する</span>
+              <span>デフォルト設定を使い 1 クリックでストリームを開始する</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('onclick_stream', true) !== false){ ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" checked />

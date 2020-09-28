@@ -940,7 +940,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 /* コメント一覧 */
 
-#comment-box-wrap {
+#comment-box {
     display: grid;
     position: relative;
     grid-template-columns: 100%; /* 横幅 */
@@ -977,7 +977,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     border-right: 1px solid #4d4d4d;
 }
 
-#comment-box {
+#comment-draw-wrap {
     display: block;
     grid-column: 1 / 2;
     grid-row: 3 / 4;
@@ -1049,6 +1049,20 @@ td {
 
 .comment-file {
     cursor: pointer;
+}
+
+.comment-lightmode .comment-file {
+    height: 28px;
+}
+
+.comment-lightmode .comment-file:first-of-type,
+.comment-lightmode .comment-file:last-of-type {
+    height: 34.5px;
+}
+
+.comment-lightmode .comment-file .comment {
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .time {

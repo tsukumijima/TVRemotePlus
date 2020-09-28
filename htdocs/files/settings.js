@@ -33,6 +33,7 @@
       settings['comment_size'] = $('#comment_size').val();
       settings['comment_delay'] = $('#comment_delay').val();
       settings['comment_file_delay'] = $('#comment_file_delay').val();
+      settings['comment_list_performance'] = $('#comment_list_performance').val();
       settings['list_view_number'] = $('#list_view_number').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');
 
