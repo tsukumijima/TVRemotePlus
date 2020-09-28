@@ -705,7 +705,7 @@ section {
 }
 
 .menu-link:hover {
-    background-color: var(--color-hover);
+    background-color: var(--color-hover-light);
 }
 
 .menu-link i {
