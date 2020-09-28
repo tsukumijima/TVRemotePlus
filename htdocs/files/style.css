@@ -464,6 +464,8 @@ section {
 #sidebar {
     position: relative;
     width: 24%;
+    min-height: 100%;
+    max-height: 100%;
 }
 
 @media screen and (max-width : 768px){
@@ -939,42 +941,32 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 /* コメント一覧 */
 
 #comment-box-wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    display: grid;
+    position: relative;
+    grid-template-columns: 100%; /* 横幅 */
+    grid-template-rows: 40px 40px 1fr; /* 縦幅 */
+    min-height: 100%;
+    max-height: 100%;
 }
 
 #comment-box-header {
-    font-size: 90%;
+    display: block;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    font-size: 14.5px;
     background-color: var(--color-white);
     padding: 10px 20px 8px 20px;
-    height: 20px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-#comment-box {
-    position: absolute;
-    top: 38px;
-    left: 0;
-    right: 0;
-    bottom: 0;
 }
 
 #comment-draw-box-header {
     display: block;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
     background-color: #F5F5F5;
-    height: 40px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
+}
+
+#comment-draw-box-header tbody, #comment-draw-box-header tr {
+    height: 100%;
 }
 
 .dark #comment-draw-box-header {
@@ -985,13 +977,23 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     border-right: 1px solid #4d4d4d;
 }
 
-#comment-draw-box {
+#comment-box {
     display: block;
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
     position: absolute;
-    top: 40px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
+    min-width: 100%;
+    max-width: 100%;
+}
+
+#comment-draw-box {
+    display: block;
+    position: static;
+    height: 100%;
     border-collapse: collapse;
     border-left: 1px solid var(--color-border);
     border-bottom: 8px solid var(--color-border);
@@ -1000,6 +1002,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     scrollbar-width: thin;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    outline: none;
 }
 
 #comment-draw-box::-webkit-scrollbar {
@@ -1014,13 +1017,13 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     background: #657586;
 }
 
-#comment-draw-box tbody:first-of-type .time,
-#comment-draw-box tbody:first-of-type .comment {
+#comment-draw-box tr:first-of-type .time,
+#comment-draw-box tr:first-of-type .comment {
     padding-top: 10px;
 }
 
-#comment-draw-box tbody:last-of-type .time,
-#comment-draw-box tbody:last-of-type .comment {
+#comment-draw-box tr:last-of-type .time,
+#comment-draw-box tr:last-of-type .comment {
     padding-bottom: 10px;
 }
 
@@ -1033,7 +1036,9 @@ tr {
 }
 
 th {
-    padding: 8px 12px !important;
+    padding-top: 9px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
 }
 
 td {

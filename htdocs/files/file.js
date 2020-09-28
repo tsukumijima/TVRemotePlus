@@ -4,7 +4,7 @@
 
     // コメントを取得してコメント一覧画面にコメントを流し込む
     // スマホ以外のみ発動（スマホだと動作が遅くなるため）
-    if (document.body.clientWidth > 768 && document.getElementById('comment-draw-box').innerHTML == ''){
+    if (document.body.clientWidth > 768 && document.querySelector('#comment-draw-box > tbody').innerHTML == ''){
 
       // コメント一覧の時間欄のwidthを調整
       $('#comment-time').css('width', '62px');
@@ -12,7 +12,7 @@
       // コメントを読み込みが完了したときに発火
       dp.on('danmaku_load_end', function() {
         
-        let html = '';
+        let html = [];
 
         for (danmaku of dp.danmaku.dan) {
 
@@ -24,17 +24,22 @@
           if (mm < 10) mm = '0' + mm;
           let time = mm + ':' + ss;
 
-          html +=  `<tbody class="comment-file" data-time="` + Math.floor(videotime) + `">
-                      <tr>
-                        <td class="time" align="center" value="` + videotime + `">` + time + `</td>
-                        <td class="comment">` + danmaku['text'] + `</td>
-                      </tr>
-                    </tbody>`;
+          html.push(`<tr class="comment-file" data-time="` + Math.floor(videotime) + `">
+                      <td class="time" align="center" value="` + videotime + `">` + time + `</td>
+                      <td class="comment">` + danmaku['text'] + `</td>
+                    </tr>`);
         }
         
         // コメントを一気にコメント一覧に挿入
         // 1つずつだと遅すぎるため一気に、さらにスピード重視であえてJavaScriptで実装
-        document.getElementById('comment-draw-box').innerHTML = html;
+        document.querySelector('#comment-draw-box > tbody').innerHTML = html.join('');
+
+        // Clusterize.js で高速スクロール
+        // let clusterize = new Clusterize({
+        //   rows: html,
+        //   scrollElem: document.querySelector('#comment-draw-box'),
+        //   contentElem: document.querySelector('#comment-draw-box > tbody'),
+        // });
 
       });
 

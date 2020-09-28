@@ -126,13 +126,11 @@
                   // コメントをウインドウに出す
                   // 768px 以上のみ
                   if (windowWidth > 768){
-                    document.getElementById('comment-draw-box').insertAdjacentHTML('beforeend',
-                        `<tbody class="comment-live">
-                          <tr>
-                            <td class="time" align="center">` + time + `</td>
-                            <td class="comment">` + danmaku['text'] + `</td>
-                          </tr>
-                        </tbody>`);
+                    document.querySelector('#comment-draw-box > tbody').insertAdjacentHTML('beforeend',
+                        `<tr class="comment-live">
+                           <td class="time" align="center">` + time + `</td>
+                           <td class="comment">` + danmaku['text'] + `</td>
+                         </tr>`);
                   }
 
                   // コメント描画 (再生時のみ)

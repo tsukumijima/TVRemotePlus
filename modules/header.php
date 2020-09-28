@@ -62,6 +62,7 @@
   <script type="text/javascript" src="/files/common.js"></script>
 <?php
 	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
+		echo '  <script type="text/javascript" src="/files/clusterize.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/index.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
