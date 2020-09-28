@@ -183,13 +183,20 @@
       autoscroll = true;
 
       // 要素を取得
-      var $comment = $('.comment-file[data-time=' + Math.floor(dp.video.currentTime) + ']').eq(count);
-      var $commentbox = $('#comment-draw-box');
+      let $commentbox = $('#comment-draw-box');
+      let $comment = $('.comment-file[data-time=' + Math.floor(dp.video.currentTime) + ']').eq(count);
+
+      // コメント要素が取得できなかったら取得できるまで秒数を足して再取得を試す
+      let currentTime_count = 0;
+      while ($comment.length === 0) {
+        currentTime_count += 1; // カウントを足す
+        $comment = $('.comment-file[data-time=' + Math.floor(dp.video.currentTime + currentTime_count) + ']').eq(count); // 再取得
+      }
 
       // スクロール
       $comment.velocity('scroll', {
         container: $commentbox,
-        duration: 300,
+        duration: 400,
         offset: -$commentbox.height() + $comment.height(),
       });
 
