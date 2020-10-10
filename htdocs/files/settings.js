@@ -23,7 +23,6 @@
       $('.bluebutton').attr('disabled', true);
 
       // 設定を保存
-      var settings = {};
       settings['twitter_show'] = $('#twitter_show').prop('checked');
       settings['comment_show'] = $('#comment_show').prop('checked');
       settings['dark_theme'] = $('#dark_theme').prop('checked');

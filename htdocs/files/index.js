@@ -189,6 +189,16 @@
       event.stopPropagation();
     });
 
+    // 設定読み込み
+    if (typeof settings['ljicrop_magnify'] !== 'undefined') {
+      $('input[name="ljicrop_magnify"]').val(settings['ljicrop_magnify']);
+      $('input[name="ljicrop_coordinateX"]').val(settings['ljicrop_coordinateX']);
+      $('input[name="ljicrop_coordinateY"]').val(settings['ljicrop_coordinateY']);
+      $('input[name="ljicrop_type"]').val([settings['ljicrop_type']]);
+      ljicrop();
+    }
+
+    // イベントハンドラーを設定
     $('input[name="ljicrop_magnify"]').on('input', ljicrop);
     $('input[name="ljicrop_coordinateX"]').on('input', ljicrop);
     $('input[name="ljicrop_coordinateY"]').on('input', ljicrop);
@@ -204,6 +214,13 @@
       const ljicrop_coordinateY = parseInt($('input[name=ljicrop_coordinateY]').val());
       // 拡大起点
       const ljicrop_type = $('input[name=ljicrop_type]:checked').val();
+
+      // 設定を保存
+      settings['ljicrop_magnify'] = ljicrop_magnify;
+      settings['ljicrop_coordinateX'] = ljicrop_coordinateX;
+      settings['ljicrop_coordinateY'] = ljicrop_coordinateY;
+      settings['ljicrop_type'] = ljicrop_type;
+      Cookies.set('settings', JSON.stringify(settings), { expires: 365 });
 
       // 表示
       $('#ljicrop-magnify-percentage').text(ljicrop_magnify + '%');

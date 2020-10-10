@@ -91,7 +91,11 @@
       comment_file_delay: 0,
       comment_list_performance: 'normal',
       list_view_number: 30,
-      onclick_stream: false
+      onclick_stream: false,
+      ljicrop_magnify: 100,
+      ljicrop_coordinateX: 0,
+      ljicrop_coordinateY: 0,
+      ljicrop_type: 'upperright',
     };
     if (Cookies.get('settings') === undefined){
       var json = JSON.stringify(settings);
@@ -159,7 +163,7 @@
         <span class="menu-link-href">サブチャンネルを表示</span>
       </div>
 <?php	} // 括弧終了 ?>
-      <div id="ljicrop" class="menu-link" aria-label="Ｌ字画面のクロップを行う設定を表示します" data-balloon-pos="up">
+      <div id="ljicrop" class="menu-link" aria-label="Ｌ字画面のクロップの設定を表示します" data-balloon-pos="up">
         <i class="fas fa-tv"></i>
         <span class="menu-link-href">Ｌ字画面のクロップ</span>
       </div>
