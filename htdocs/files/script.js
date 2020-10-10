@@ -392,6 +392,7 @@
       $('#broadcast-stream-box').removeClass('open');
       $('#chromecast-box').removeClass('open');
       $('#hotkey-box').removeClass('open');
+      $('#ljicrop-box').removeClass('open');
       $('html').removeClass('open');
     });
 

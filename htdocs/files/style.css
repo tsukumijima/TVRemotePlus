@@ -721,17 +721,16 @@ section {
 
 google-cast-launcher {
     position: absolute !important;
-    top: 104px;
-    left: 0px;
-    right: 0px;
     bottom: 56px;
+    width: 100%;
+    height: 48px;
     opacity: 0;
     z-index: 10;
     cursor: pointer;
 }
 
 google-cast-launcher:hover + #cast-toggle{
-    background-color: var(--color-hover);
+    background-color: var(--color-hover-light);
 }
 
 google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #cast-toggle:after{
@@ -2383,6 +2382,101 @@ td {
         -webkit-overflow-scrolling: touch;
     }
 }
+
+/* L字画面クロップ設定ボックス */
+
+#ljicrop-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 400;
+    transition: transform 0.33s, opacity 0.3s, visibility 0.3s ease-in-out;
+    transform: translateY(-50px);
+    visibility: hidden;
+    opacity: 0;
+    will-change: opacity;
+}
+
+#ljicrop-box.open {
+    transform: translateY(0px);
+    transition-delay: 0s;
+    visibility: visible;
+    opacity: 1;
+}
+
+#ljicrop-wrap {
+    display: block;
+    width: 95%;
+    max-width: 490px;
+    padding: 18px 22px;
+    border-radius: 5px;
+    font-size: 15px;
+    background-color: var(--color-white);
+    box-sizing: border-box;
+}
+
+.ljicrop-head-box {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 95%;
+    margin-top: 3px;
+    margin-bottom: 14px;
+}
+.ljicrop-head-box.title {
+    margin-bottom: 18px;
+}
+
+.ljicrop-head-box i {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 21px;
+}
+
+.ljicrop-head {
+    display: inline-block;
+    margin-left: 7px;
+}
+
+#ljicrop-magnify-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#ljicrop-magnify-box > input[type="range"] {
+    width: 100%;
+}
+
+#ljicrop-point-box {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.ljicrop-point {
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+    line-height: 1;
+}
+.ljicrop-point:last-of-type {
+    margin-right: 0;
+}
+
+.ljicrop-point > input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    vertical-align: middle;
+}
+
 
 /* Hotkeyボックス */
 

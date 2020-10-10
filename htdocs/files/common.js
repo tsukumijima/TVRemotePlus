@@ -60,6 +60,7 @@
       $('#search-stream-box').removeClass('open');
       $('#chromecast-box').removeClass('open');
       $('#hotkey-box').removeClass('open');
+      $('#ljicrop-box').removeClass('open');
       //スクロール復帰
       document.removeEventListener('touchmove', handleTouchMove, { passive: false });
     });

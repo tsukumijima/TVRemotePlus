@@ -173,6 +173,71 @@
       }, 300);
     });
 
+    // ***** L字画面クロップ設定 *****
+
+    $('#ljicrop').click(function(){
+      $('#nav-close').toggleClass('open');
+      $('#ljicrop-box').toggleClass('open');
+    });
+
+    $('#ljicrop-box').click(function(event){
+      $('#nav-close').removeClass('open');
+      $('#ljicrop-box').removeClass('open');
+    });
+
+    $('#ljicrop-wrap').click(function(event){
+      event.stopPropagation();
+    });
+
+    $('input[name="ljicrop_magnify"]').on('input', ljicrop);
+    $('input[name="ljicrop_type"]').on('input', ljicrop);
+
+    function ljicrop() {
+
+      // 拡大率
+      const ljicrop_magnify = parseInt($('input[name=ljicrop_magnify]').val());
+      // 拡大起点
+      const ljicrop_type = $('input[name=ljicrop_type]:checked').val();
+
+      // 表示
+      $('#ljicrop-magnify-percentage').text(ljicrop_magnify + '%');
+
+      // video 要素を拡大
+      dp.video.style.position = 'relative';
+      dp.video.style.width = ljicrop_magnify + '%';
+      dp.video.style.height = ljicrop_magnify + '%';
+
+      // 拡大起点別
+      switch (ljicrop_type) {
+
+        // 右上
+        case 'upperright':
+            dp.video.style.left = '-' + (ljicrop_magnify - 100) + '%';
+            dp.video.style.bottom = '';
+          break;
+
+        // 右下
+        case 'lowerright':
+            dp.video.style.left = '-' + (ljicrop_magnify - 100) + '%';
+            dp.video.style.bottom = (ljicrop_magnify - 100) + '%';
+          break;
+
+        // 左上
+        case 'upperleft':
+            dp.video.style.left = '';
+            dp.video.style.bottom = '';
+          break;
+
+        // 左下
+        case 'lowerleft':
+            dp.video.style.left = '';
+            dp.video.style.bottom = (ljicrop_magnify - 100) + '%';
+          break;
+
+      }
+    }
+
+
     // ***** キーボードショートカット一覧 *****
 
     $('#hotkey').click(function(){
@@ -605,6 +670,7 @@
     $('#nav-close').removeClass('open');
     $('#chromecast-box').removeClass('open');
     $('#hotkey-box').removeClass('open');
+    $('#ljicrop-box').removeClass('open');
     $('html').removeClass('open');
 
     // Chromecast を起動
