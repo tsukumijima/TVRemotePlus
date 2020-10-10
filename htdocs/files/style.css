@@ -2426,7 +2426,7 @@ td {
     font-weight: bold;
     font-size: 95%;
     margin-top: 3px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 .ljicrop-head-box.title {
     margin-bottom: 18px;
@@ -2444,26 +2444,20 @@ td {
     margin-left: 7px;
 }
 
-#ljicrop-magnify-box {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-#ljicrop-magnify-box > input[type="range"] {
-    width: 100%;
-}
-
 #ljicrop-point-box {
     display: flex;
     align-items: center;
     width: 100%;
+    margin-bottom: 22px;
+    padding: 0 18px;
+    box-sizing: border-box;
 }
 
 .ljicrop-point {
     display: flex;
     align-items: center;
     margin-right: auto;
+    font-size: 14px;
     line-height: 1;
 }
 .ljicrop-point:last-of-type {
@@ -2473,8 +2467,28 @@ td {
 .ljicrop-point > input[type="radio"] {
     width: 15px;
     height: 15px;
+    margin-top: 1px;
+    margin-left: 0px;
     margin-right: 7px;
     vertical-align: middle;
+}
+
+.ljicrop-range-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.ljicrop-range-box > input[type="range"] {
+    width: 100%;
+}
+
+.ljicrop-range-start {
+    margin-right: 20px;
+}
+
+.ljicrop-range-end {
+    margin-left: 20px;
 }
 
 
@@ -2614,10 +2628,6 @@ td {
 @media screen and (max-width: 1024px){
     #hotkey {
         display: none;
-    }
-
-    google-cast-launcher {
-        top: 56px;
     }
 }
 

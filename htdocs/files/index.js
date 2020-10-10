@@ -190,17 +190,25 @@
     });
 
     $('input[name="ljicrop_magnify"]').on('input', ljicrop);
+    $('input[name="ljicrop_coordinateX"]').on('input', ljicrop);
+    $('input[name="ljicrop_coordinateY"]').on('input', ljicrop);
     $('input[name="ljicrop_type"]').on('input', ljicrop);
 
     function ljicrop() {
 
       // 拡大率
       const ljicrop_magnify = parseInt($('input[name=ljicrop_magnify]').val());
+      // X座標
+      const ljicrop_coordinateX = parseInt($('input[name=ljicrop_coordinateX]').val());
+      // Y座標
+      const ljicrop_coordinateY = parseInt($('input[name=ljicrop_coordinateY]').val());
       // 拡大起点
       const ljicrop_type = $('input[name=ljicrop_type]:checked').val();
 
       // 表示
       $('#ljicrop-magnify-percentage').text(ljicrop_magnify + '%');
+      $('#ljicrop-coordinatex-percentage').text(ljicrop_coordinateX + '%');
+      $('#ljicrop-coordinatey-percentage').text(ljicrop_coordinateY + '%');
 
       // video 要素を拡大
       dp.video.style.position = 'relative';
@@ -212,26 +220,66 @@
 
         // 右上
         case 'upperright':
-            dp.video.style.left = '-' + (ljicrop_magnify - 100) + '%';
-            dp.video.style.bottom = '';
+
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
+              dp.video.style.left = -(ljicrop_magnify - ljicrop_coordinateX - 100) + '%';
+            } else {
+              dp.video.style.left = -(ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+            }
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
+              dp.video.style.bottom = ljicrop_coordinateY + '%';
+            } else {
+              dp.video.style.bottom = (ljicrop_magnify - 100) + '%';
+            }
+
           break;
 
         // 右下
         case 'lowerright':
-            dp.video.style.left = '-' + (ljicrop_magnify - 100) + '%';
-            dp.video.style.bottom = (ljicrop_magnify - 100) + '%';
+
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
+              dp.video.style.left = -(ljicrop_magnify - ljicrop_coordinateX - 100) + '%';
+            } else {
+              dp.video.style.left = -(ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+            }
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
+              dp.video.style.bottom = (ljicrop_magnify - ljicrop_coordinateY - 100) + '%';
+            } else {
+              dp.video.style.bottom = (ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+            }
+
           break;
 
         // 左上
         case 'upperleft':
-            dp.video.style.left = '';
-            dp.video.style.bottom = '';
+
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
+              dp.video.style.left = -ljicrop_coordinateX + '%';
+            } else {
+              dp.video.style.left = -(ljicrop_magnify - 100) + '%';
+            }
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
+              dp.video.style.bottom = ljicrop_coordinateY + '%';
+            } else {
+              dp.video.style.bottom = (ljicrop_magnify - 100) + '%';
+            }
+
           break;
 
         // 左下
         case 'lowerleft':
-            dp.video.style.left = '';
-            dp.video.style.bottom = (ljicrop_magnify - 100) + '%';
+
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
+              dp.video.style.left = -ljicrop_coordinateX + '%';
+            } else {
+              dp.video.style.left = -(ljicrop_magnify - 100) + '%';
+            }
+            if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
+              dp.video.style.bottom = (ljicrop_magnify - ljicrop_coordinateY - 100) + '%';
+            } else {
+              dp.video.style.bottom = (ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+            }
+
           break;
 
       }

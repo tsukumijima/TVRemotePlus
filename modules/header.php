@@ -159,9 +159,9 @@
         <span class="menu-link-href">サブチャンネルを表示</span>
       </div>
 <?php	} // 括弧終了 ?>
-      <div id="ljicrop" class="menu-link" aria-label="L字画面クロップ設定を表示します" data-balloon-pos="up">
+      <div id="ljicrop" class="menu-link" aria-label="Ｌ字画面のクロップを行う設定を表示します" data-balloon-pos="up">
         <i class="fas fa-tv"></i>
-        <span class="menu-link-href">L字画面クロップ設定</span>
+        <span class="menu-link-href">Ｌ字画面のクロップ</span>
       </div>
       <div id="hotkey" class="menu-link" aria-label="キーボードショートカットの一覧を表示します" data-balloon-pos="up">
         <i class="fas fa-keyboard"></i>

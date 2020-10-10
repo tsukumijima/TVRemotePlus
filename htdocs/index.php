@@ -629,16 +629,34 @@
       <div id="ljicrop-wrap">
         <div class="ljicrop-head-box title">
           <i class="fas fa-tv"></i>
-          <span class="ljicrop-head">L字画面クロップ設定</span>
+          <span class="ljicrop-head">Ｌ字画面のクロップ</span>
         </div>
         <div class="ljicrop-head-box">
           <i class="fas fa-search-plus" style="font-size: 13.5px;"></i>
-          <span class="ljicrop-head">拡大率: <span id="ljicrop-magnify-percentage">100%<span></span>
+          <span class="ljicrop-head">拡大率 : <span id="ljicrop-magnify-percentage">100%<span></span>
         </div>
-        <div id="ljicrop-magnify-box">
-          <span style="margin-right: 20px;">100%</span>
+        <div class="ljicrop-range-box">
+          <span class="ljicrop-range-start">100%</span>
           <input id="ljicrop-magnify" name="ljicrop_magnify" type="range" min="100" max="200" value="100">
-          <span style="margin-left: 20px;">200%</span>
+          <span class="ljicrop-range-end">200%</span>
+        </div>
+        <div class="ljicrop-head-box">
+          <i class="fas fa-arrows-alt-h" style="font-size: 13.5px;"></i>
+          <span class="ljicrop-head">X 座標 : <span id="ljicrop-coordinatex-percentage">0%<span></span>
+        </div>
+        <div class="ljicrop-range-box">
+          <span class="ljicrop-range-start" style="padding-left: 18px;">0%</span>
+          <input id="ljicrop-coordinatex" name="ljicrop_coordinateX" type="range" min="0" max="100" value="0">
+          <span class="ljicrop-range-end">100%</span>
+        </div>
+        <div class="ljicrop-head-box">
+          <i class="fas fa-arrows-alt-v" style="font-size: 13.5px;"></i>
+          <span class="ljicrop-head">Y 座標 : <span id="ljicrop-coordinatey-percentage">0%<span></span>
+        </div>
+        <div class="ljicrop-range-box">
+          <span class="ljicrop-range-start" style="padding-left: 18px;">0%</span>
+          <input id="ljicrop-coordinatey" name="ljicrop_coordinateY" type="range" min="0" max="100" value="0">
+          <span class="ljicrop-range-end">100%</span>
         </div>
         <div class="ljicrop-head-box">
           <i class="fas fa-crosshairs" style="font-size: 13.5px;"></i>
