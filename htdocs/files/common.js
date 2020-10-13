@@ -108,13 +108,16 @@
       $('#tweet-account-box').css('visibility', 'hidden');
 
       // スクロール位置を取得
-      var topPos = $(this).scrollTop();
+      const position_current = $(this).scrollTop() + 54;  // 54 はヘッダー分
+      const position_target = $('#description').offset().top;
 
       // 表示・非表示
-      if (topPos > 400) {
+      // ターゲット座標以上
+      if (position_current > position_target) {
         $('#scroll').css('opacity', '1');
         $('#scroll').css('visibility', 'visible');
-      } else {
+      // ターゲット座標以内
+      } else if (position_current < position_target) {
         $('#scroll').css('opacity', '0');
         $('#scroll').css('visibility', 'hidden');
       }

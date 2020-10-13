@@ -140,6 +140,66 @@
 
   $(function(){
     
+    // ***** スクロールで動画をフロート表示 *****
+
+    // 501px より大きい（スマホを除外）
+    if (document.documentElement.clientWidth > 500) {
+
+      // スクロール時のイベント
+      $(window).scroll(function(){
+
+        const position_current = $(this).scrollTop() + 54;  // 54px はヘッダー分
+        const position_target = $('#stream-view-box').offset().top;
+        
+        // ターゲット座標以上
+        if (position_current > position_target) {
+
+          if (!dp.video.classList.contains('dplayer-float')) {
+
+            // 一旦 transition を削除
+            dp.video.style.transition = 'none';
+          
+            // 透明度を 0 に設定
+            dp.video.style.opacity = 0;
+
+            // transition を再付与
+            dp.video.style.transition = 'opacity 0.2s ease-in-out';
+  
+            setTimeout(function(){
+
+              // 動画をフロート化
+              dp.video.classList.add('dplayer-float');
+            
+              // 透明度を 1 に設定
+              dp.video.style.opacity = 1;
+
+            }, 200);
+
+          }
+        
+        // ターゲット座標以内
+        } else if (position_current < position_target) {
+
+          if (dp.video.classList.contains('dplayer-float')) {
+          
+            // 透明度を 0 に設定
+            dp.video.style.opacity = 0;
+  
+            setTimeout(function(){
+
+              // 動画のフロート化を解除
+              dp.video.classList.remove('dplayer-float');
+
+              // 透明度を 1 に設定
+              dp.video.style.opacity = 1;
+
+            }, 200);
+
+          }
+        }
+      });
+    }
+    
     // ***** リロードボタン *****
 
     $('#reload').click(function(){
