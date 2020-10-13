@@ -2424,7 +2424,7 @@ td {
     display: flex;
     align-items: center;
     font-weight: bold;
-    font-size: 95%;
+    font-size: 15px;
     margin-top: 3px;
     margin-bottom: 12px;
 }
@@ -2489,6 +2489,28 @@ td {
 
 .ljicrop-range-end {
     margin-left: 20px;
+}
+
+@media screen and (max-width: 767px){
+    #ljicrop-box {
+        top: auto;
+        transform: translateY(600px);
+        opacity: 1;
+    }
+
+    #ljicrop-wrap {
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #ljicrop-point-box {
+        padding: 0 3px;
+    }
 }
 
 
