@@ -913,16 +913,25 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 .dplayer-float {
     position: fixed !important;
-    width: 300px !important;
-    height: calc(300px / 16 * 9) !important;
+    width: 280px !important;
+    height: calc(280px / 16 * 9) !important;
     top: 76px !important;
     left: auto !important;
     right: 25px !important;
     bottom: auto !important;
-    z-index: 500 !important;
-    box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+    z-index: 400 !important;
+    border-radius: 6px;
+    box-shadow: 0 1px 10px 0 rgba(32, 33, 36, 0.5);
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
+}
+
+@media (max-width: 1024px){
+
+    .dplayer-float {
+        width: 230px !important;
+        height: calc(230px / 16 * 9) !important;
+    }
 }
 
 @media (max-width: 500px){
