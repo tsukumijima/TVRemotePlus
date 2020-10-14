@@ -911,7 +911,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     pointer-events: none;
 }
 
-.dplayer-float {
+.dplayer-floating {
     position: fixed !important;
     width: 280px !important;
     height: calc(280px / 16 * 9) !important;
@@ -928,7 +928,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 
 @media (max-width: 1024px){
 
-    .dplayer-float {
+    .dplayer-floating {
         width: 230px !important;
         height: calc(230px / 16 * 9) !important;
     }

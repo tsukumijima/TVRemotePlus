@@ -35,6 +35,7 @@
       settings['comment_list_performance'] = $('#comment_list_performance').val();
       settings['list_view_number'] = $('#list_view_number').val();
       settings['onclick_stream'] = $('#onclick_stream').prop('checked');
+      settings['player_floating'] = $('#player_floating').prop('checked');
 
       // ダークモード切り替え
       if (settings['dark_theme']){

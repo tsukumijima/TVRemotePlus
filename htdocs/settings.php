@@ -465,6 +465,18 @@
               </div>
             </div>
 
+            <div class="setting-form">
+              <span>番組表へスクロールした時にプレイヤーをフローティング表示する</span>
+              <div class="toggle-switch">
+<?php	if (isSettingsItem('player_floating', true) !== false){ ?>
+                <input id="player_floating" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="player_floating" class="toggle-input" type="checkbox" value="true" />
+<?php	} // 括弧終了 ?>
+                <label for="player_floating" class="toggle-label"></label>
+              </div>
+            </div>
+
           </form>
 <?php	if (!($reverse_proxy and $setting_hide == 'true')){ ?>
 

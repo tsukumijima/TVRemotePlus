@@ -12,7 +12,7 @@
     } else {
       return true;
     }
-  };
+  }
 
   // フルスクリーンかどうか
   // フルスクリーンならtrue、そうでないならfalseを返す
@@ -142,14 +142,14 @@
     
     // ***** スクロールで動画をフロート表示 *****
 
-    // 501px より大きい（スマホを除外）
-    if (document.documentElement.clientWidth > 500) {
+    // 個人設定で有効 & 501px より大きい（スマホを除外）
+    if (settings['player_floating'] && document.documentElement.clientWidth > 500) {
 
       // スクロール時のイベント
       $(window).scroll(function(){
 
         const position_current = $(this).scrollTop() + 54;  // 54px はヘッダー分
-        const position_target = $('#stream-view-box').offset().top;  // 計算めんどいのであえて jQuery
+        const position_target = $('#epg-box').offset().top;  // 計算めんどいのであえて jQuery
 
         // State を取得
         const state = document.getElementById('state').value;
@@ -160,7 +160,7 @@
           // ターゲット座標以上
           if (position_current > position_target) {
 
-            if (!dp.video.classList.contains('dplayer-float')) {
+            if (!dp.video.classList.contains('dplayer-floating')) {
 
               // 一旦 transition を削除
               dp.video.style.transition = 'none';
@@ -174,7 +174,7 @@
               setTimeout(function(){
 
                 // 動画をフロート化
-                dp.video.classList.add('dplayer-float');
+                dp.video.classList.add('dplayer-floating');
 
                 // 透明度を 1 に設定
                 dp.video.style.opacity = 1;
@@ -186,7 +186,7 @@
           // ターゲット座標以内
           } else if (position_current < position_target) {
 
-            if (dp.video.classList.contains('dplayer-float')) {
+            if (dp.video.classList.contains('dplayer-floating')) {
 
               // 透明度を 0 に設定
               dp.video.style.opacity = 0;
@@ -194,7 +194,7 @@
               setTimeout(function(){
 
                 // 動画のフロート化を解除
-                dp.video.classList.remove('dplayer-float');
+                dp.video.classList.remove('dplayer-floating');
 
                 // 透明度を 1 に設定
                 dp.video.style.opacity = 1;
