@@ -109,7 +109,7 @@
 
       // スクロール位置を取得
       const position_current = $(this).scrollTop() + 54;  // 54 はヘッダー分
-      const position_target = 450;
+      const position_target = $('#epg-box').offset().top;  // 計算めんどいのであえて jQuery
 
       // 表示・非表示
       // ターゲット座標以上
