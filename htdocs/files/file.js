@@ -1,6 +1,6 @@
 
   // ロード時 & リサイズ時に発火
-  $(window).on('load resize', function(event){
+  $(window).on('DOMContentLoaded resize', function(event){
 
     // コメントを取得してコメント一覧画面にコメントを流し込む
     // スマホ以外のみ発動（スマホだと動作が遅くなるため）
