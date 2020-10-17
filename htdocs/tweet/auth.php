@@ -2,6 +2,7 @@
 
 	// モジュール読み込み
 	require_once ('../../modules/require.php');
+	require_once ('../../modules/module.php');
 
 	// セッション保存ディレクトリ
 	session_save_path($base_dir.'data/twitter_session');
@@ -41,13 +42,16 @@
 		exit(1);
 	}
 
+	// リファラからストリーム番号を取得
+	$stream = getStreamNumber($_SERVER['HTTP_REFERER']);
+
 	// config.phpで入力した値を用いてTwitterに接続
 	$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET);
 
 	// エラー捕捉
 	try {
 		// 認証URLを取得するためのリクエストトークンの生成
-		$request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $OAUTH_CALLBACK));
+		$request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $OAUTH_CALLBACK.'?stream='.$stream));
 
 	} catch(Exception $e) {
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">';

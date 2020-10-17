@@ -48,7 +48,12 @@
 		setcookie('twitter', $cookie, time() + 7776000, '/');
 
 		// トップページにリダイレクト
-		header('Location: '.$site_url);
+		if (isset($_GET['stream']) and !empty($_GET['stream'])) {  // ストリーム番号があるか
+			header('Location: '.$site_url.$_GET['stream'].'/');
+		} else {
+			header('Location: '.$site_url);
+		}
+
 		exit;
 
 	} else {
