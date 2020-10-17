@@ -107,9 +107,14 @@
       $('#tweet-account-box').css('opacity', 0);
       $('#tweet-account-box').css('visibility', 'hidden');
 
+
       // スクロール位置を取得
-      const position_current = $(this).scrollTop() + 54;  // 54 はヘッダー分
-      const position_target = $('#epg-box').offset().top;  // 計算めんどいのであえて jQuery
+      let position_current = $(this).scrollTop() + 54;  // 54 はヘッダー分
+      let position_target = 450;
+
+      if ($('#epg-box').offset() !== undefined) {
+        position_target = $('#epg-box').offset().top;  // 計算めんどいのであえて jQuery
+      } 
 
       // 表示・非表示
       // ターゲット座標以上
