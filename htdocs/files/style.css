@@ -921,7 +921,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     bottom: auto !important;
     z-index: 400 !important;
     border-radius: 6px;
-    box-shadow: 0 1px 10px 0 rgba(32, 33, 36, 0.5);
+    box-shadow: 0 1px 8px 0 rgba(32, 33, 36, 0.35);
     opacity: 1;
     transition: opacity 0.2s ease-in-out;
 }

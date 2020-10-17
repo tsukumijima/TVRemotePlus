@@ -189,11 +189,11 @@ select {
 }
 
 #setting-user .select-wrap {
-    width: 150px;
+    max-width: 150px;
 }
 
 #setting-user .text-box {
-    width: 150px;
+    max-width: 150px;
 }
 
 .download, .download:link, .download:visited {
