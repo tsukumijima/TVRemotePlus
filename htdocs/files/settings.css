@@ -288,6 +288,9 @@ select {
     #setting-user .toggle-switch {
         margin-left: 20px;
     }
+    #setting-env .toggle-switch {
+        margin-left: auto;
+    }
     input[type="text"], input[type="number"], input[type="url"], input[type="email"], input[type="password"] {
         width: 100%;
         margin-left: 0px;
@@ -322,9 +325,11 @@ select {
 @media screen and (max-width: 500px){
     #setting-user .select-wrap {
         width: 100%;
+        max-width: 100%;
     }
     #setting-user .text-box {
         width: 100%;
+        max-width: 100%;
     }
     .setting-select {
         flex-direction: column;
