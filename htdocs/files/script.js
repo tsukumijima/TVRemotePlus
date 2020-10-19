@@ -589,6 +589,12 @@
       }
     });
 
+    // Shift キー
+    window.isShiftKey = false;
+    $(document).on('keydown keyup', function(event) {
+      window.isShiftKey = event.shiftKey;
+    });
+
     // 現在変換中か
     window.isComposing = false;
     $('#tweet').on('compositionstart', function() {
@@ -1409,8 +1415,8 @@
       var video = document.getElementsByClassName('dplayer-video-current')[0];
       var subtitles = video.textTracks[1].activeCues;
 
-      // 字幕オンなら
-      if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length){
+      // 字幕オン & Shift キーが押されていないなら
+      if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length && (!event.shiftKey || !window.isShiftKey)){
 
         var subtitle_html = '<div class="video-subtitle-box">\n';
         for(var i = (subtitles.length - 1); i >= 0; i--){
@@ -1477,8 +1483,8 @@
         html = html.replace(/transform: translateX\(.*?\)\;/, 'left: ' + position + 'px;');
       }
 
-      // 字幕オンなら
-      if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length){
+      // 字幕オン & Shift キーが押されていないなら
+      if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length && !event.shiftKey){
 
         var subtitle_html = '<div class="video-subtitle-box">\n';
         for(var i = (subtitles.length - 1); i >= 0; i--){
