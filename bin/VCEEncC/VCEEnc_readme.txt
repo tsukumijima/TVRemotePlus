@@ -188,10 +188,64 @@ Win10 x64
 Ryzen3 3200G + Asrock AB350 Pro4
 16GB RAM
 
+【検証環境 2020.06】
+Win10 x64
+Ryzen3 3200G + Asrock AB350 Pro4
+Radeon RX 460
+16GB RAM
+
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【どうでもいいメモ】
+2020.09.23 (6.05)
+[VCEEncC]
+・ログメッセージでlowlatencyが無効の場合もいつもlowlatencyと表示されていたのを修正。
+・hrdをデフォルトではオフに。--enforce-hrdで有効化できる。
+
+2020.09.17 (6.04)
+[VCEEncC]
+・2つめのインタレ解除フィルタ (--vpp-nnedi)を追加。
+・映像にパディングを付加するフィルタ(--vpp-pad)を追加。
+・映像の回転・反転を行うフィルタを追加。(--vpp-rotate/vpp-transform)
+・preanalysisの情報が不必要に表示されていたのを修正。
+・proresがデコードできないのを修正。
+・raw読み込み時に色空間を指定するオプションを追加。(--input-csp)
+・HEVC 10bitのhwデコードのサポートを追加。
+・HEVCエンコード時のプリセットが正しく設定されないのを修正。
+
+2020.07.06 (6.03)
+[VCEEncC]
+・ノイズ除去フィルタ(--vpp-knn)を追加。
+・ノイズ除去フィルタ(--vpp-pmd)を追加。
+・エッジ調整フィルタ(--vpp-edgelevel)を追加。
+・エッジ強調フィルタ(--vpp-unsharp)を追加。
+・バンディング低減フィルタ(--vpp-deband)を追加。
+・色調整フィルタ(--vpp-tweak)を追加。
+・複数のAMD GPU環境でも選択したGPUを適切に使用できるように改良。
+・出力ファイルのmetadata制御を行うオプション群を追加。
+  --metadata
+  --video-metadata
+  --audio-metadata
+  --sub-metadata
+・attachmentをコピーするオプションを追加。 ( --attachment-copy )
+・streamのdispositionを指定するオプションを追加。 ( --audio-disposition, --sub-disposition )
+・--audio-sourceでもdelayを指定できるように。
+・6.01からvpy読み込みがシングルスレッド動作になっていたのをマルチスレッド動作に戻した。
+・オプションリストを表示するオプションを追加。 ( --option-list )
+・avs読み込みで、可能であれば詳細なバージョン情報を取得するように。
+・一部のHEVCファイルで、正常にデコードできないことがあるのに対し、可能であればswデコーダでデコードできるようにした。
+・遅延を伴う一部の--audio-filterで音声の最後がエンコードされなくなってしまう問題を修正。
+・--audio-source/--sub-sourceでうまくファイル名を取得できないことがあるのを修正。
+・avsw/avhw読み込み時にlowlatencyが使用できないのを修正。
+・--video-tagを指定すると異常終了してしまうのを修正。
+・raw出力でSAR比を指定したときに発生するメモリリークを修正。
+
+[VCEEnc.auo]
+・VCEEnc.auoの設定画面でも、--output-resに負の値を指定できるように。
+・簡易インストーラ更新。
+  VC runtimeのダウンロード先のリンク切れを修正。
+
 2020.05.14 (6.02)
 [VCEEncC]
 ・vpp-afsのNaviでのOpenCLのコンパイルエラーを修正、6.01での修正が不十分だった。
