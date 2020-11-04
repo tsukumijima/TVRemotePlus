@@ -357,6 +357,7 @@ Intel Graphics Driver 25.20.100.6373 (API v1.27)
 Intel Graphics Driver 25.20.100.7000 (API v1.27)
 Intel Graphics Driver 25.20.100.7327 (API v1.30)
 Intel Graphics Driver 27.20.100.8190 (API v1.32)
+Intel Graphics Driver 27.20.100.8681 (API v1.33)
 
 【Intel Media SDKとAPIの対応関係】
 API v1.32 … Intel Media SDK 2020 R1
@@ -381,6 +382,16 @@ API v1.1  … Intel Media SDK v2.0
 
 
 【どうでもいいメモ】
+2020.09.30 (4.08)
+・Apple proresがデコードできないのを修正。
+・raw読み込み時に色空間を指定するオプションを追加。( --input-csp )
+  yuv420/422/444の8-16bitの読み込みに対応。
+・--check-libの結果の成否によってプログラムの戻り値を変更するように。
+・HEVCエンコード時に--output-depth 10指定時に自動的にmain10を使用するように。
+  いままでは--profile main10と併せて使用しないと10bit深度でエンコードされなかった。
+・Linuxビルドを更新、Broadwell以降のIntel iGPUでのQSVエンコードが容易に。
+・Linuxでのビルド方法について追記。
+
 2020.08.06 (4.07)
 ・ロードするAvisynth.dllを指定するオプションを追加。(--avsdll)
 
