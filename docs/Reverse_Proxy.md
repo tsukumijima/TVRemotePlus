@@ -1,42 +1,44 @@
+
 # リバースプロキシで TVRemotePlus に外出先からアクセスする（上級者向け）
 
-外部ネットワークに公開する PC や （ VPN 経由で予め同じネットワークに繋げた）VPS 等に予めドメインを割り当て（ここでは example.com とします）、  
-そこから https://example.com/ や https://example.com/tvrp/ などの URL で TVRemotePlus にアクセスできるようにすることもできます。  
+外部ネットワークに公開する PC や （ VPN 経由で予め同じネットワークに繋げた）VPS 等に予めドメインを割り当て（ここでは example.com とします）、そこから https://example.com/ や https://example.com/tvrp/ などの URL で TVRemotePlus にアクセスできるようにすることもできます。  
 
 ここでは、リバースプロキシを使い外出先からアクセスする方法を解説します。  
-初心者の方にはお勧めしません（後述）。VPN を使ってアクセス出来るようにするのが何かと手っ取り早いと思いますが、ここでは割愛します。  
+初心者の方にはお勧めしません。VPN 経由でアクセスできるよう設定するのが何かと手っ取り早いと思いますが、この記事では割愛します。  
 
 ## 注意
 
- - **既に Apache や nginx などの Web サーバーについて比較的知識がある人向けです**
-   - よくわからない方（ Apache や nginx が何か分からない人・設定ファイルを弄ったことがない人・リバースプロキシの意味が全くわからない人）はやらない方が身のためです 
-   - また、**設定を誤ると外部からの攻撃に極めて脆弱になる可能性があります**・細心の注意を払って作業してください
-     - **作業は全て自己責任にてお願いします**（仮にハッキングされてしまっても責任はとれません）
- - リバースプロキシとは、TVRemotePlus のサーバー PC に直接アクセスするのではなく、リバースプロキシになる PC やサーバーが代わりに TVRemotePlus にアクセスし、そのデータをそっくりそのまま返してくる（アクセスにワンクッションおく）事を指します（詳しくは [Wikipedia](https://ja.wikipedia.org/wiki/%E3%83%AA%E3%83%90%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7) や [リバースプロキシ (reverse proxy) とは](https://wa3.i-3-i.info/word1755.html) を参照してください）
- - **予め Let's Encrypt を使い、HTTPS で接続出来るようにしておいてください**
-   - HTTP 接続の場合、通信内容が盗聴される可能性があります・セキュリティ向上の為、HTTPS にすることを強く推奨します
- - V6プラスを契約している環境では、ポート解放が出来ない場合があります
-   - VPS を契約した上で VPN サーバーを VPS に建て、TVRemotePlus のサーバ PC と VPN で接続し、VPS をリバースプロキシにすることも不可能ではありません（難易度高）
- - リバースプロキシを利用せず直接 TVRemotePlus のサーバー PC を外部に公開することもできるとは思いますが、外部からの攻撃に常に晒される事になるため非推奨です
- - **Apache と nginx は同じ Web サーバー用ソフトウェアです、どちらか好きな方を選んでリバースプロキシにする PC にインストール・設定してください**
-   - 両方設定する必要はありません（むしろポートがバッティングしてどっちかが落ちます）
-   - Apache を使う場合は［Apache の設定］の方を、nginx を使う場合は［nginx の設定］の方を参照してください
+ - **既に Apache や nginx などの Web サーバーについて比較的知識がある人向けの内容です。**
+   - よくわからない方（ Apache や nginx が何か分からない方・設定ファイルをいじったことがない方・リバースプロキシの意味が全くわからない方）はやらない方が身のためです…
+   - また、**設定を少しでも誤ると外部からの攻撃に極めて脆弱になる可能性があります。** 細心の注意を払って作業してください。
+     - **作業は全て自己責任にてお願いします**（仮にハッキングされてしまっても責任はとれません）。
+     - Apache や nginx 自体のセットアップ方法は割愛します。自力でセットアップできる方のみ行ってください。
+ - リバースプロキシとは、TVRemotePlus のサーバー PC に直接アクセスするのではなく、リバースプロキシになる PC やサーバーが代わりに TVRemotePlus にアクセスし、そのデータをそっくりそのまま返してくる（アクセスにワンクッションおく）事を指します（詳しくは [Wikipedia](https://ja.wikipedia.org/wiki/%E3%83%AA%E3%83%90%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7) や [リバースプロキシ (reverse proxy) とは](https://wa3.i-3-i.info/word1755.html) を参照してください）。
+ - **予め Let's Encrypt を使い、HTTPS で接続できるようにしておいてください。**
+   - HTTP 接続の場合、通信内容が盗聴される可能性があります。セキュリティ向上の為、HTTPS にすることを強く推奨します。
+ - v6プラスなどの IPoE/IPv4 over IPv6 を契約している環境では、ポート解放ができない場合があります。
+   - VPS を契約した上で VPN サーバーを VPS に建て、TVRemotePlus のサーバー PC と VPN で接続し、VPS をサーバー PC のリバースプロキシにするなどの方法でv6プラス環境でも利用すること自体は可能ですが、かなり難易度が高くなります。
+ - リバースプロキシを利用せず直接 TVRemotePlus のサーバー PC を外部に公開することも不可能ではありませんが、外部からの攻撃に常に晒される事になるため推奨しません。
+ - Apache と nginx は同じ Web サーバー用ソフトウェアです。どちらか好きな方を選んでリバースプロキシにする PC にインストール・設定してください。
+   - 両方設定する必要はありません（むしろポートがバッティングしてどっちかが落ちます）。
+   - Apache を使う場合は［Apache の設定］の方を、nginx を使う場合は［nginx の設定］の方を参照してください。
 
 ## TVRemotePlus 側の設定
 
  1. 設定ページから、［リバースプロキシからアクセスする場合の URL］の箇所を各自のリバースプロキシの URL に変更します
     - リバースプロキシからのアクセスかどうかは HTTP ヘッダに X-FORWARDED-HOST があるかどうかで判定しています
-    - このため、X-FORWARDED-HOST ヘッダが送信されないリバースプロキシの場合はリバースプロキシからのアクセスかどうかを判定できません
+    - そのため、X-FORWARDED-HOST ヘッダが送信されないリバースプロキシの場合はリバースプロキシからのアクセスかどうかを判定できません
     - Apache または nginx の設定で X-FORWARDED-HOST ヘッダを送信するよう設定してください（ Apache の場合は標準でそうなっていたはず）
- 2. Twitter 投稿機能を使う場合は、[こちら](Twitter_Develop.md) を参考に TwitterAPI のアプリ設定内の Callback URLs にリバースプロキシの URL を追加してください
- 3. セキュリティ向上のため、［リバースプロキシからのアクセス時に環境設定を非表示にする］の設定をオンにしておくことを推奨します
-    - TVRemotePlus 側、或いはリバースプロキシ側で Basic 認証を掛けておくことを強く推奨しますが、仮に Basic 認証なしで利用する場合は必ずこの設定をオンにしてください（最悪外部から PC に侵入されてしまう可能性があります）
+ 2. Twitter 投稿機能を使う場合は、[こちら](Twitter_Develop.md) を参考に Twitter API のアプリ設定から Callback URLs にリバースプロキシの URL を追加してください
+ 3. セキュリティ向上のため、**TVRemotePlus 側、或いはリバースプロキシ側で Basic 認証を掛けておくことを強く推奨します**
+    - 仮に Basic 認証なしで利用する場合は、必ず［リバースプロキシからのアクセス時に環境設定を非表示にする］の設定をオンにしてください
+      - TVRemotePlus の環境設定保存機能は外部からのアクセスに晒される事を考慮しておらず、最悪外部から PC に侵入されてしまう可能性があります
 
 ## Apache の設定
-ここでは https://example.com/tvrp/ でアクセス出来るようにします（お好みで tvrp の部分を書き換えてください）。  
+ここでは https://example.com/tvrp/ でアクセスできるようにします。お好みで tvrp の部分を変更してください。  
 TVRemotePlus のポートはデフォルトの 8000・8100 としています（変更している場合は適宜書き換えてください）。  
-https://example.com/ でアクセスする場合は、<Location /tvrp/></Location> と RequestHeader unset Accept-Encoding から下の書き換え関連の項目を適宜コメントアウトしてください。  
-予め、前述のように Let's Encrypt でアクセス出来る事が前提です。
+https://example.com/ でアクセスする場合は、`<Location /tvrp/>` `</Location>` と `RequestHeader unset Accept-Encoding` から下の書き換え関連の項目を適宜コメントアウトしてください。  
+予め、前述のように Let's Encrypt でアクセスできている事が前提です。  
 
 この他、mod_filter mod_proxy mod_proxy_http mod_headers mod_substitute（いずれも Apache の拡張機能）を利用します。  
 Ubuntu であれば `a2enmod filter proxy proxy_http headers substitute` と実行、  
@@ -61,9 +63,9 @@ Ubuntu であれば `a2enmod filter proxy proxy_http headers substitute` と実�
         ProxyPassReverse http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/
         ProxyPassReverseCookieDomain (TVRemotePlusをインストールしたPCのローカルIPアドレス):8000 example.com
         ProxyPassReverseCookiePath / /tvrp/
-        RequestHeader unset Accept-Encoding
-        SetEnvIf Host .* filter-errordocs
         AddOutputFilterByType SUBSTITUTE text/plain text/html application/json application/javascript text/javascript text/css
+        SetEnvIf Host .* filter-errordocs
+        RequestHeader unset Accept-Encoding
         Substitute "s|http://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8000/|https://example.com/tvrp/|q"
         Substitute "s|https://(TVRemotePlusをインストールしたPCのローカルIPアドレス):8100/|https://example.com/tvrp/|q"
         Substitute "s|/api/chromecast|/tvrp/api/chromecast|q"
@@ -90,10 +92,10 @@ Ubuntu であれば `a2enmod filter proxy proxy_http headers substitute` と実�
     </IfModule>
 
 ## nginx の設定
-ここでは https://example.com/tvrp/ でアクセス出来るようにします（お好みで tvrp の部分を書き換えてください）。  
+ここでは https://example.com/tvrp/ でアクセスできるようにします。お好みで tvrp の部分を変更してください。  
 TVRemotePlus のポートはデフォルトの 8000・8100 としています（変更している場合は適宜書き換えてください）。  
-https://example.com/ でアクセスする場合は、location /tvrp/ { の括弧と sub_filter がついている書き換え関連の項目を適宜コメントアウトしてください。  
-予め、前述のように Let's Encrypt でアクセス出来る事が前提です。  
+https://example.com/ でアクセスする場合は、`location /tvrp/ {` とその閉じ括弧、`sub_filter` ディレクティブの書き換え関連の項目を適宜コメントアウトしてください。  
+予め、前述のように Let's Encrypt でアクセスできている事が前提です。  
 
     server {
         listen  443 ssl;
