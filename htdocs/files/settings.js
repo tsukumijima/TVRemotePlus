@@ -84,7 +84,7 @@
       if ($('#setting-env').length === 1){
         // 表示・非表示
         if (topPos > $('#setting-env').offset().top &&
-            topPos + $(window).height() < $('#setting-other').offset().top) {
+           ($('#setting-other').length === 0 || topPos + $(window).height() < $('#setting-other').offset().top)) {
           $('#save').css('opacity', '1');
           $('#save').css('visibility', 'visible');
         } else {
