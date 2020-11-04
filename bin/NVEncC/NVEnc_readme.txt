@@ -165,11 +165,44 @@ NVIDIA グラフィックドライバ 442.19
 NVIDIA グラフィックドライバ 445.75
 NVIDIA グラフィックドライバ 446.14
 NVIDIA グラフィックドライバ 451.67
+NVIDIA グラフィックドライバ 456.71
+NVIDIA グラフィックドライバ 457.09
 
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2020.11.01 (5.19)
+・HLG用のAlternative Transfer Characteristicsを指定するオプションを追加。( --atc-sei )
+・--sub-copy指定時に常にすべての字幕がコピーされるようになっていた問題を修正。
+・HEVCエンコードで常にrepeat-headersが有効になっていたのを修正。
+・avsw/avhw読み込み以外でもvpp-subburnに対応。
+・timestampの順序が反転した場合への対応。
+・エラーメッセージの改善。
+・AmpereのCUDAコア数の判定を追加。
+
+2020.10.18 (5.18)
+・NVENC SDK 11のサポートを追加。
+  AV1, HEVC 12bitのhw decodeが可能…かもしれない。(RTX30xxを未所持のため、未テスト)
+
+2020.10.15 (5.17)
+・456.38以降のドライバの問題により、--vpp-knnが動作しなくなっていたので、この問題を回避できるようコードを改変。
+
+2020.10.12 (5.16)
+・--vpp-subburnと--sub-copyを同時に指定可能に。
+・--vpp-tweakにU,V成分を反転させるオプションを追加。
+・--check-hw, --check-featureが常に戻り値0を返していたのを修正。
+
+2020.09.12 (5.15)
+・raw読み込み時に色空間を指定するオプションを追加。( --input-csp )
+  raw読み込みのyuv420/422/444の8-16bitの読み込みに対応。
+・p210→yv12変換を追加。
+・--maxcll/--masterdisplayが指定されている場合は、IDRフレームごとにヘッダ(SPS/PPS/VPS)を出力するとともに、
+  そのうしろに--maxcll/--masterdisplayを付加するようにした。
+・--maxcll/--masterdisplayをそれぞれ異なるnalユニットに出力するように。
+・proresがデコードできないのを修正。
+・vpp-nnedi、vpp-padのコード見直し(簡略化)。
+
 2020.08.04 (5.14)
 ・ロードするAvisynth.dllを指定するオプションを追加。(--avsdll)
 
