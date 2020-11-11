@@ -98,7 +98,7 @@
                 <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
-<?php		if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
+<?php		if (isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
 <?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
               <option value="<?php echo $i; ?>">Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
 <?php			} //括弧終了 ?>
@@ -125,7 +125,7 @@
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
                 <option value="4" selected>Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
 <?php		} //括弧終了 ?>
-<?php		if (isStreamActive($ini, 1) and isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
+<?php		if (isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
                 <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
                 <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
                 <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
