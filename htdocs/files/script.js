@@ -1290,6 +1290,24 @@
         formData.append('picture' + (Number(index) + 1), capture_selected[index]);
       }
 
+      // 値をリセット
+      // キャプチャ画像の選択をすべて解除
+      deselectAllCaptureImage();
+
+      // フォーカスを外す
+      if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
+        document.querySelector('.tweet-capture.focus').classList.remove('focus');
+      }
+
+      // 文字数リミットをリセット
+      limit = 140;
+      $('#tweet-num').text(140);
+      $('#tweet-num').removeClass('over');
+      $('#tweet-num').removeClass('warn');
+
+      // 本文をクリア
+      $('#tweet').val(null);
+
       // 通常表示
       $('#content-box').show();
       $('#footer').show();
@@ -1306,24 +1324,7 @@
         processData: false,
         contentType: false,
       }).done(function(data) {
-
-        // キャプチャ画像の選択をすべて解除
-        deselectAllCaptureImage();
-
-        // フォーカスを外す
-        if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
-          document.querySelector('.tweet-capture.focus').classList.remove('focus');
-        }
-
-        // 文字数リミットをリセット
-        limit = 140;
-        $('#tweet-num').text(140);
-        $('#tweet-num').removeClass('over');
-        $('#tweet-num').removeClass('warn');
-        
-        $('#tweet').val(null);
         $('#tweet-status').html(data);
-      
       }).fail(function(data) {
         $('#tweet-status').html('<span class="tweet-failed">送信中にエラーが発生しました…</span>');
       });
@@ -1515,10 +1516,10 @@
       });
     }
 
-    // Zenzawatchのコードより一部改変した上で使わせて頂いています
+    // Zenzawatch のコードより一部改変した上で使わせて頂いています
     // 参考
     // https://developer.mozilla.org/ja/docs/Web/HTML/Canvas/Drawing_DOM_objects_into_a_canvas
-    // ChromeだとtoBlobした際に汚染されるのでDataURIに変換する
+    // Chrome だと toBlob した際に汚染されるので DataURI に変換する
     // https://qiita.com/kjunichi/items/f5993d34838e1623daf5
     
     const htmlToSvg = function(html, width = 640, height = 360) {
