@@ -58,6 +58,7 @@
   <script type="text/javascript" src="/files/toastr.min.js"></script>
   <script type="text/javascript" src="/files/js.cookie.min.js"></script>
   <script type="text/javascript" src="/files/velocity.min.js"></script>
+  <script type="text/javascript" src="/files/moment.min.js"></script>
   <script type="text/javascript" src="/files/css_browser_selector.js"></script>
   <script type="text/javascript" src="/files/common.js"></script>
 <?php
