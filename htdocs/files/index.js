@@ -439,7 +439,7 @@
           if (state == 'File'){
             dp.pause();
           }
-          cast_server_control(state);
+          controlServerCast(state);
         }, 1500);
       }
     });
@@ -492,7 +492,7 @@
             
             // キャスト開始
             elem.addEventListener('click', function() {
-              cast_server_init(elem);
+              initServerCast(elem);
             });
 
           });
@@ -556,8 +556,8 @@
       timer = setInterval(function() {
         // console.log('typeof cast !== undefined: ' + (typeof cast !== 'undefined'))
         if (typeof cast !== 'undefined') {
-          // console.log('cast_init()')
-          cast_init();
+          // console.log('initBrowserCast()')
+          initBrowserCast();
           clearInterval(timer);
         }
       }, 500);
@@ -568,7 +568,7 @@
   };
 
   // JavaScript から Chromecast を初期化・起動する関数
-  function cast_init(){
+  function initBrowserCast(){
 
     // キャストオプション
     cast.framework.CastContext.getInstance().setOptions({
@@ -616,7 +616,7 @@
           $('.dplayer-casting').css('opacity', 0.8);
 
           // 制御は別の関数に投げる
-          cast_control();
+          controlBrowserCast();
 
         } else {
 
@@ -637,7 +637,7 @@
   }
 
   // JavaScript から Chromecast を制御する関数
-  function cast_control(){
+  function controlBrowserCast(){
     
     // セッション周り
     var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
@@ -771,7 +771,7 @@
   }
 
   // サーバー経由で Chromecast を初期化・起動する関数
-  function cast_server_init(elem){
+  function initServerCast(elem){
 
     var state = document.getElementById('state').value;
 
@@ -822,7 +822,7 @@
         $('#cast-toggle > .menu-link-href').text('キャストを終了');
 
         // 制御は別の関数に投げる
-        cast_server_control(state);
+        controlServerCast(state);
 
       } else {
         toastr.error('キャストの開始に失敗しました…');
@@ -832,7 +832,7 @@
   }
 
   // サーバー経由で Chromecast を制御する関数
-  function cast_server_control(state){
+  function controlServerCast(state){
 
     setTimeout(function(){
       toastr.success('キャストを開始しました。');
