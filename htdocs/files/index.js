@@ -486,7 +486,16 @@
 
           // 一気に代入
           document.getElementById('chromecast-device-box').innerHTML = html;
+          
+          // クリックイベントを付与
+          document.querySelectorAll('.chromecast-device').forEach(function(elem) {
+            
+            // キャスト開始
+            elem.addEventListener('click', function() {
+              cast_server_init(elem);
+            });
 
+          });
         });
 
       // キャスト終了
@@ -514,12 +523,6 @@
 
     });
 
-    // キャスト開始
-    $('body').on('click','.chromecast-device',function(){
-  
-      cast_server_init(this);
-      
-    });
 
     $('#cast-scan').click(function(){
       toastr.info('スキャンしています…');
