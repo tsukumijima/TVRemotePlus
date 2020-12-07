@@ -21,8 +21,13 @@ RewriteRule ^(.*)/$ $1.php
 
 # m3u8をキャッシュから除外
 <Files ~ "\.(m3u8)$">
-Header add Pragma "no-cache"
-Header set Cache-Control no-cache
+  Header add Pragma "no-cache"
+  Header set Cache-Control no-cache
+</Files>
+
+# m3u8 と ts に CORS ヘッダーを付与（Chromecast対策）
+<Files ~ "\.(m3u8|ts)$">
+  Header set Access-Control-Allow-Origin "*"
 </Files>
 
 # faviconをBasic認証から除外
