@@ -16,6 +16,10 @@
 
         for (danmaku of dp.danmaku.dan) {
 
+          if (danmaku['text'] === '') {  // コメントが空
+            continue;
+          }
+
           // 分と秒を計算
           let videotime = (danmaku['time']).toString();
           let ss = Math.floor(videotime % 60);
