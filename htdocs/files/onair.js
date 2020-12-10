@@ -228,7 +228,7 @@
             url: '/api/jikkyov2',
             dataType: 'json',
             cache: false,
-        }))['watchsession_url'];
+        }))['websocket_url'];
 
         // 視聴セッション構築用の WebSocket
         const watchsession = new WebSocket(watchsession_url);
@@ -273,7 +273,7 @@
                 // WebSocket を開いたとき
                 websocket.addEventListener('open', function(event) {
 
-                    // コメント送信リクエスト
+                    // コメントの送信をリクエスト
                     websocket.send(JSON.stringify([
                         { 'ping': {'content': 'rs:0'} },
                         { 'ping': {'content': 'ps:0'} },
