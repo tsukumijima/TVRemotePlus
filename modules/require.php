@@ -149,7 +149,7 @@ $vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 // ***** 設定読み込み *****
 
 // config.php を読み込む
-require_once ($base_dir.'/config.php');
+require ($base_dir.'/config.php');
 
 // EDCB_http_url の書き換え (互換用)
 $EDCB_http_url = str_replace('api/', '', rtrim($EDCB_http_url, '/').'/'); // 常に末尾にスラッシュをつける
