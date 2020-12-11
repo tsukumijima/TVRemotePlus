@@ -64,7 +64,11 @@ class JikkyoController {
     
                             // ニコ生のセッション情報を取得
                             $nicolive_session = $instance->getNicoliveSession($nicolive_id);
-    
+
+                            // WebSocket の URL が空
+                            if (empty($nicolive_session['websocket_url'])) {
+                                $message = '視聴セッションを取得できませんでした。';
+                            }
                         } else {
                             $message = '現在放送中のニコニコ実況がありません。';
                         }
@@ -83,7 +87,7 @@ class JikkyoController {
 
 
         // ニコ生のセッション情報を取得できているか
-        if (isset($nicolive_session)) {
+        if (isset($nicolive_session) && !empty($nicolive_session['websocket_url'])) {
 
             // 出力
             $output = [
