@@ -222,21 +222,31 @@
 
     async function newNicoJK() {
 
-        // 視聴セッション構築用の WebSocket の URL
+        // 視聴セッションを取得        
         // await で Ajax が完了するまで待つ
-        const watchsession_url = (await $.ajax({
-            url: '/api/jikkyov2',
+        const watchsession_info = (await $.ajax({
+            url: '/api/jikkyov2/' + stream,
             dataType: 'json',
             cache: false,
-        }))['websocket_url'];
+        }));
+
+        // 視聴セッションを取得できなかった
+        if (watchsession_info['result'] === 'error') {
+          console.error('Error: ' + watchsession_info['message']);
+          return;
+        }
+
+        // 視聴セッション構築用の WebSocket の URL
+        const watchsession_userid = watchsession_info['session']['user_id'];
+        const watchsession_websocketurl = watchsession_info['session']['websocket_url'];
 
         // 視聴セッション構築用の WebSocket
-        const watchsession = new WebSocket(watchsession_url);
+        const watchsession = new WebSocket(watchsession_websocketurl);
 
-        // WebSocket を開いたとき
+        // 視聴セッション構築用 WebSocket を開いたとき
         watchsession.addEventListener('open', function(event) {
 
-            // 視聴セッションリクエスト
+            // 視聴セッションをリクエスト
             watchsession.send(JSON.stringify({
                 'type': 'startWatching',
                 'data': {
@@ -255,20 +265,22 @@
             }));
         });
       
-        // WebSocket でメッセージを受信したとき
+        // 視聴セッション構築用 WebSocket でメッセージを受信したとき
         watchsession.addEventListener('message', function(event){
             
             const message = JSON.parse(event.data);
             // console.log(message);
 
             if (message.type === 'room') {
-        
+
                 const websocket_url = message.data.messageServer.uri;
                 const websocket_threadid = message.data.threadId;
                 const websocket_postkey = message.data.yourPostKey;
+
+                console.log('PostKey:' + websocket_postkey);
         
                 // コメントサーバーの WebSocket
-                websocket = new WebSocket(websocket_url, 'msg.nicovideo.jp#json');
+                const websocket = new WebSocket(websocket_url, 'msg.nicovideo.jp#json');
         
                 // WebSocket を開いたとき
                 websocket.addEventListener('open', function(event) {
@@ -284,6 +296,7 @@
                                 'thread': websocket_threadid,
                                 'threadkey': websocket_postkey,
                                 'version': '20061206',
+                                'user_id': watchsession_userid,
                                 'res_from': 0,
                                 'with_global': 1,
                                 'scores': 1,
@@ -362,16 +375,19 @@
 
                     // コメント数が 500 を超えたら
                     if (document.getElementsByClassName('comment-live').length >= 500){
-                      // 古いコメントを削除
-                      document.getElementsByClassName('comment-live')[0].remove();
+                        // 古いコメントを削除
+                        document.getElementsByClassName('comment-live')[0].remove();
                     }
 
                 });
+
+                // 視聴セッション用の WebSocket はもういらないので閉じる
+                watchsession.close();
             }
         });
 
     };
-   //  newNicoJK();  // しばらく封印
+    newNicoJK();  // しばらく封印
 
     /**
      * ニコニコの色指定を 16 進数カラーコードに置換する
