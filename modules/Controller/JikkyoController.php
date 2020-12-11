@@ -3,6 +3,7 @@
 require_once ('classloader.php');
 
 class JikkyoController {
+    
 
     /**
      * コンストラクタ

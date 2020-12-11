@@ -8,8 +8,8 @@ class Jikkyo {
 	// ログイン情報を保存する Cookie ファイル
 	private $cookie_file;
 
-	// ch_sid.tsv ファイル
-	private $ch_sid_file;
+	// channel_table.json ファイル
+	private $channel_table_file;
 
 	// ゲストかどうか
 	private bool $is_guest;
@@ -34,7 +34,7 @@ class Jikkyo {
 		require ('require.php');
 
 		$this->cookie_file = $cookiefile;
-		$this->ch_sid_file = $ch_sidfile;
+		$this->channel_table_file = $channel_table_file;
 		
 		// メールアドレス・パスワードが空ならゲスト利用と判定
 		$this->is_guest = (empty($nicologin_mail) or empty($nicologin_password));
@@ -75,7 +75,7 @@ class Jikkyo {
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
 		curl_setopt($curl, CURLOPT_COOKIEJAR, $this->cookie_file); // Cookie をファイルに保存する（重要）
 
 		// 空実行する
@@ -95,30 +95,25 @@ class Jikkyo {
 	 */
 	public function getNicoJikkyoID(string $channel_name): int {
 
-		// ch_sid.tsv を改行ごとに区切って配列にする
-		$ch_sid = explode("\n", removeBOM(file_get_contents($this->ch_sid_file)));
+		// channel_table.json を読み込み
+		$channel_table = json_decode(file_get_contents($this->channel_table_file), true);
 
 		// 配列を回す
-		foreach ($ch_sid as $key => $value) {
-
-			// Tab で区切る
-			$ch_sid[$key] = explode('	', $value);
+		foreach ($channel_table as $channel_record) {
 
 			// 抽出したチャンネル名
-			$jkch = mb_convert_kana($ch_sid[$key][4], 'asv');
+			$channel_field = $channel_record['Channel'];
 
 			// 正規表現パターン
 			// preg_quote() は正規表現用の文字をエスケープする用
 			mb_regex_encoding('UTF-8');
-			$match = "{".$jkch."[0-9]}u";
-			$match2 = "{".preg_quote(mb_substr($jkch, 0, 5))."[0-9]".preg_quote(mb_substr($jkch, 5, 3))."}u"; // NHK総合用パターン
-			$match3 = "{".preg_quote(mb_substr($jkch, 0, 6))."[0-9]".preg_quote(mb_substr($jkch, 6, 3))."}u"; // NHKEテレ用パターン
+			$match = '{'.str_replace('NHK総合', 'NHK総合[0-9]?', str_replace('NHKEテレ', 'NHKEテレ[0-9]?', $channel_field)).'[0-9]?}u';
 
 			// チャンネル名がいずれかのパターンに一致したら
-			if ($channel_name === $jkch or preg_match($match, $channel_name) or preg_match($match2, $channel_name) or preg_match($match3, $channel_name)) {
+			if ($channel_name === $channel_field or preg_match($match, $channel_name)) {
 
 				// 実況 ID を返す
-				return intval($ch_sid[$key][0]);
+				return intval($channel_record['JikkyoID']);
 			}
 		}
 
@@ -151,7 +146,8 @@ class Jikkyo {
 		];
 
 		if (isset($table['jk'.$nicojikkyo_id])) {
-			return $table['jk'.$nicojikkyo_id];
+			// return $table['jk'.$nicojikkyo_id];
+			return 1072;  // 開始までは暫定的にチャンネル ID をウェザーニューズに設定
 		} else {
 			return null;
 		}
@@ -175,7 +171,7 @@ class Jikkyo {
 		curl_setopt($curl, CURLOPT_URL, $api_baseurl.$nicochannel_id);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
 		$response = json_decode(curl_exec($curl), true);  // リクエストを実行
 		curl_close($curl);
 
@@ -224,7 +220,7 @@ class Jikkyo {
 			curl_setopt($curl, CURLOPT_URL, $nicolive_baseurl.'lv'.$nicolive_id);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
-			curl_setopt($curl,CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
 			if (file_exists($cookie_file)) curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file); // Cookie を送信する（ファイルがあれば）
 			$nicolive_html = curl_exec($curl);  // リクエストを実行
 			curl_close($curl);
