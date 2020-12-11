@@ -66,16 +66,16 @@ class JikkyoController {
                             $nicolive_session = $instance->getNicoliveSession($nicolive_id);
     
                         } else {
-                            $message = '現在放送中の番組がありません。';
+                            $message = '現在放送中のニコニコ実況がありません。';
                         }
                     } else {
-                        $message = 'このチャンネルの実況チャンネルは廃止されました。';
+                        $message = 'このチャンネルのニコニコ実況は廃止されました。';
                     }
                 } else {
-                    $message = '実況チャンネルが存在しません。';
+                    $message = 'このチャンネルのニコニコ実況はありません。';
                 }
             } else {
-                $message = "Stream {$stream} は ON Air ではありません。";
+                $message = "Stream {$stream} は ON Air 以外です。";
             }
         } else {
             $message = "Stream {$stream} は存在しません。";
