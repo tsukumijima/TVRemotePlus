@@ -66,7 +66,7 @@ class JikkyoController {
                             $nicolive_session = $instance->getNicoliveSession($nicolive_id);
 
                             // WebSocket の URL が空
-                            if (empty($nicolive_session['websocket_url'])) {
+                            if (empty($nicolive_session['watchsession_url'])) {
                                 $message = '視聴セッションを取得できませんでした。';
                             }
                         } else {
@@ -87,7 +87,7 @@ class JikkyoController {
 
 
         // ニコ生のセッション情報を取得できているか
-        if (isset($nicolive_session) && !empty($nicolive_session['websocket_url'])) {
+        if (isset($nicolive_session) && !empty($nicolive_session['watchsession_url'])) {
 
             // 出力
             $output = [

@@ -258,7 +258,7 @@ function newNicoJKAPIBackend() {
         }
 
         // 視聴セッション WebSocket を開く
-        watchsession = new WebSocket(watchsession_info.session.websocket_url);
+        watchsession = new WebSocket(watchsession_info.session.watchsession_url);
 
         // 視聴セッション WebSocket を開いたとき
         watchsession.addEventListener('open', (event) => {
@@ -330,11 +330,10 @@ function newNicoJKAPIBackend() {
                             'user_id': watchsession_info.session.user_id,
                             'user_type': watchsession_info.session.user_type,
                             'is_login': watchsession_info.session.is_login,
-                            'websocket_url': watchsession_info.session.websocket_url,
+                            'watchsession_url': watchsession_info.session.watchsession_url,
                             // コメントサーバーへの接続情報
-                            'ticket': '',  // この時点では空
                             'thread_id': message.data.threadId,
-                            'postkey': message.data.yourPostKey,
+                            'postkey': (message.data.yourPostKey ? message.data.yourPostKey : null),
                             'commentsession_url': message.data.messageServer.uri,
                         });
 
@@ -394,9 +393,6 @@ function newNicoJKAPIBackend() {
 
                     // リクエスト成功
                     if (thread.resultcode === 0) {
-
-                        // チケット情報を取得
-                        commentsession_info.ticket = thread.ticket;
 
                         // 接続成功のコールバックを DPlayer に通知
                         console.log(commentsession_info);
@@ -559,8 +555,25 @@ function newNicoJKAPIBackend() {
                 // コメント送信直後に error が送られてきた → コメント送信に失敗している
                 case 'error':
 
+                    // エラーメッセージ
+                    let error;
+                    switch (message.data.code) {
+                        
+                        case 'INVALID_MESSAGE':
+                            error = 'コメント内容が不正です。';
+                            break;
+
+                        case 'COMMENT_POST_NOT_ALLOWED':
+                            error = 'コメントするにはニコニコにログインしてください。';
+                            break;
+
+                        default:
+                            error = `コメントの送信に失敗しました… (${message.data.code})`;
+                            break;
+                    }
+
                     // コメント失敗のコールバックを DPlayer に通知
-                    options.error(`コメントの送信に失敗しました… (${message.data.code})`);
+                    options.error(error);
                     
                     // イベントを解除
                     watchsession.onmessage = null;
