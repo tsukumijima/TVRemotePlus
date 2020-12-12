@@ -321,7 +321,6 @@ function newNicoJKAPIBackend() {
         return [true, commentsession_info];
     }
 
-
     /**
      * コメントを受信・描画する
      * @param {object} options DPlayer から渡されるコールバック等が入ったオブジェクト
@@ -401,7 +400,7 @@ function newNicoJKAPIBackend() {
                 // 自分のコメントも表示しない
                 if (comment.yourpost && comment.yourpost === 1) {
                     console.log('自分のコメント：' + comment.content);
-                    return;
+                    // return;
                 }
 
                 // 色・位置
@@ -473,7 +472,6 @@ function newNicoJKAPIBackend() {
         }
     }
 
-
     /**
      * コメントを送信する
      * @param {object} options DPlayer から渡されるコールバック等が入ったオブジェクト
@@ -484,8 +482,67 @@ function newNicoJKAPIBackend() {
         const vpos = Math.floor(new Date().getTime() / 10) - (commentsession_info.begintime * 100);
         console.log(vpos);
 
-    } 
+    }
 
+    /**
+     * ニコニコの色指定を 16 進数カラーコードに置換する
+     * @param {string} color ニコニコの色指定
+     * @return {string} 16 進数カラーコード
+     */
+    function getCommentColor(color) {
+        const table = {
+            'red': '#E54256',
+            'pink': '#FF8080',
+            'orange': '#FFC000',
+            'yellow': '#FFE133',
+            'green': '#64DD17',
+            'cyan': '#39CCFF',
+            'blue': '#0000FF',
+            'purple': '#D500F9',
+            'black': '#000000',
+            'white': '#FFFFFF',
+            'white2': '#CCCC99',
+            'niconicowhite': '#CCCC99',
+            'red2': '#CC0033',
+            'truered': '#CC0033',
+            'pink2': '#FF33CC',
+            'orange2': '#FF6600',
+            'passionorange': '#FF6600',
+            'yellow2': '#999900',
+            'madyellow': '#999900',
+            'green2': '#00CC66',
+            'elementalgreen': '#00CC66',
+            'cyan2': '#00CCCC',
+            'blue2': '#3399FF',
+            'marineblue': '#3399FF',
+            'purple2': '#6633CC',
+            'nobleviolet': '#6633CC',
+            'black2': '#666666',
+        }
+        if (table[color] !== undefined) {
+            return table[color];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * ニコニコの位置指定を DPlayer の位置指定に置換する
+     * @param {string} position ニコニコの位置指定
+     * @return {string} DPlayer の位置指定
+     */
+    function getCommentPosition(position) {
+        switch (position) {
+            case 'ue':
+                return 'top';
+            case 'naka':
+                return 'right';
+            case 'shita':
+                return 'bottom';
+            default:
+                return null;
+        }
+    }
 
     return {
 
@@ -525,92 +582,6 @@ function newNicoJKAPIBackend() {
             // }));
 
             options.success([{}]);  // 空のコメントを入れておく
-        }
-    }
-
-
-    /**
-     * ニコニコの色指定を 16 進数カラーコードに置換する
-     * @param {string} $color ニコニコの色指定
-     * @return {string} 16 進数カラーコード
-     */
-    function getCommentColor($color) {
-        switch ($color) {
-            case 'red':
-                return '#E54256';
-            case 'pink':
-                return '#FF8080';
-            case 'orange':
-                return '#FFC000';
-            case 'yellow':
-                return '#FFE133';
-            case 'green':
-                return '#64DD17';
-            case 'cyan':
-                return '#39CCFF';
-            case 'blue':
-                return '#0000FF';
-            case 'purple':
-                return '#D500F9';
-            case 'black':
-                return '#000000';
-            case 'white':
-                return '#FFFFFF';
-            case 'white2':
-                return '#CCCC99';
-            case 'niconicowhite':
-                return '#CCCC99';
-            case 'red2':
-                return '#CC0033';
-            case 'truered':
-                return '#CC0033';
-            case 'pink2':
-                return '#FF33CC';
-            case 'orange2':
-                return '#FF6600';
-            case 'passionorange':
-                return '#FF6600';
-            case 'yellow2':
-                return '#999900';
-            case 'madyellow':
-                return '#999900';
-            case 'green2':
-                return '#00CC66';
-            case 'elementalgreen':
-                return '#00CC66';
-            case 'cyan2':
-                return '#00CCCC';
-            case 'blue2':
-                return '#3399FF';
-            case 'marineblue':
-                return '#3399FF';
-            case 'purple2':
-                return '#6633CC';
-            case 'nobleviolet':
-                return '#6633CC';
-            case 'black2':
-                return '#666666';
-            default:
-                return null;
-        }
-    }
-
-
-    /**
-     * ニコニコの位置指定を DPlayer の位置指定に置換する
-     * @param {string} $position ニコニコの位置指定
-     * @return {string} DPlayer の位置指定
-     */
-    function getCommentPosition(position) {
-        switch (position) {
-            case 'ue':
-                return 'top';
-            case 'naka':
-                return 'right';
-            case 'shita':
-                return 'bottom';
-            default:
-                return null;
         }
     }
 }
