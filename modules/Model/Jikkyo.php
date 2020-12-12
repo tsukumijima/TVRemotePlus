@@ -254,6 +254,12 @@ class Jikkyo {
 		// タイトル
 		$title = $nicolive_json['program']['title'];
 
+		// 開始時間
+		$begintime = $nicolive_json['program']['beginTime'];
+
+		// 終了時間
+		$endtime = $nicolive_json['program']['endTime'];
+
 		// ユーザー ID
 		$user_id = (isset($nicolive_json['user']['id']) ? $nicolive_json['user']['id'] : '');
 
@@ -270,6 +276,8 @@ class Jikkyo {
 		// 連想配列を返す
 		return [
 			'title' => $title,
+			'begintime' => $begintime,
+			'endtime' => $endtime,
 			'live_id' => 'lv'.$nicolive_id,
 			'user_id' => $user_id,
 			'user_type' => $user_type,
