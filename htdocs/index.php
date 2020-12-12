@@ -73,6 +73,9 @@
     volume: 1.0,
     autoplay: true,
     screenshot: true,
+<?php	if ($ini[$stream]['state'] === 'ONAir'){ ?>
+    // apiBackend: newNicoJKAPIBackend(),
+<?php	} //括弧終了 ?>
 <?php	if ($ini[$stream]['state'] !== 'File'){ ?>
     live: true,
 <?php	} //括弧終了 ?>
