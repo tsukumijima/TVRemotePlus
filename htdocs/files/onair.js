@@ -291,29 +291,54 @@ function newNicoJKAPIBackend() {
                 // 受信したメッセージ
                 const message = JSON.parse(event.data);
 
-                if (message.type === 'room') {
+                switch (message.type) {
 
-                    // 視聴セッション用の WebSocket はもういらないので閉じる
-                    watchsession.close();
+                    // ping-pong
+                    case 'ping':
 
-                    // コメントサーバーへの接続情報の入ったオブジェクトを返す
-                    // デバッグ用で実際には使わないものもある
-                    resolve({
-                        // 視聴セッション情報
-                        'title': watchsession_info.session.title,
-                        'begintime': watchsession_info.session.begintime,
-                        'endtime': watchsession_info.session.endtime,
-                        'live_id': watchsession_info.session.live_id,
-                        'user_id': watchsession_info.session.user_id,
-                        'user_type': watchsession_info.session.user_type,
-                        'is_login': watchsession_info.session.is_login,
-                        'websocket_url': watchsession_info.session.websocket_url,
-                        // コメントサーバーへの接続情報
-                        'ticket': '',  // この時点では空
-                        'thread_id': message.data.threadId,
-                        'postkey': message.data.yourPostKey,
-                        'commentsession_url': message.data.messageServer.uri,
-                    });
+                        // pong を返してセッションを維持する
+                        // 送り返さなかった場合勝手にセッションが閉じられる
+                        watchsession.send(JSON.stringify({
+                            'type': 'pong',
+                        }));
+
+                    break;
+
+                    // 座席情報
+                    case 'seat':
+
+                        // keepIntervalSec の秒数ごとに keepSeat を送信して座席を維持する
+                        setInterval(() => {
+                            watchsession.send(JSON.stringify({
+                                'type': 'keepSeat',
+                            }));
+                        }, message.data.keepIntervalSec * 1000);
+
+                    break;
+
+                    // 部屋情報（実際には統合されていて、全てアリーナ扱いになっている）
+                    case 'room':
+
+                        // コメントサーバーへの接続情報の入ったオブジェクトを返す
+                        // デバッグ用で実際には使わないものもある
+                        resolve({
+                            // 視聴セッション情報
+                            'title': watchsession_info.session.title,
+                            'begintime': watchsession_info.session.begintime,
+                            'endtime': watchsession_info.session.endtime,
+                            'live_id': watchsession_info.session.live_id,
+                            'user_id': watchsession_info.session.user_id,
+                            'user_type': watchsession_info.session.user_type,
+                            'is_login': watchsession_info.session.is_login,
+                            'websocket_url': watchsession_info.session.websocket_url,
+                            // コメントサーバーへの接続情報
+                            'ticket': '',  // この時点では空
+                            'thread_id': message.data.threadId,
+                            'postkey': message.data.yourPostKey,
+                            'commentsession_url': message.data.messageServer.uri,
+                        });
+
+                    break;
                 }
             });
         });
@@ -399,8 +424,7 @@ function newNicoJKAPIBackend() {
 
                 // 自分のコメントも表示しない
                 if (comment.yourpost && comment.yourpost === 1) {
-                    console.log('自分のコメント：' + comment.content);
-                    // return;
+                    return;
                 }
 
                 // 色・位置
@@ -478,10 +502,72 @@ function newNicoJKAPIBackend() {
      */
     function sendComment(options) {
 
+        // 色
+        const color_table = {
+            '16777215': 'white',
+            '15024726': 'red',
+            '16769331': 'yellow',
+            '6610199': 'green',
+            '3788031': 'cyan',
+            '13959417': 'purple',
+        };
+
+        // 位置
+        const position_table = {
+            '0': 'naka',
+            '1': 'ue',
+            '2': 'shita',
+        };
+
         // vpos を計算 (10ミリ秒単位)
         const vpos = Math.floor(new Date().getTime() / 10) - (commentsession_info.begintime * 100);
-        console.log(vpos);
 
+        // コメントを送信
+        watchsession.send(JSON.stringify({
+            'type': 'postComment',
+            'data': {
+                'text': options.data.text,
+                'color': color_table[options.data.color.toString()],
+                'position': position_table[options.data.type.toString()],
+                'vpos': vpos,
+                'isAnonymous': true,
+            }
+        }));
+
+        // コメント送信のレスポンス
+        // onmessage なのはピンポイントでイベントを無効化できるため
+        watchsession.onmessage = (event) => {
+
+            // 受信したメッセージ
+            const message = JSON.parse(event.data);
+            
+            switch (message.type) {
+
+                // postCommentResult
+                // これが送られてくる → コメント送信に成功している
+                case 'postCommentResult':
+
+                    // コメント成功のコールバックを DPlayer に通知
+                    options.success();
+                    
+                    // イベントを解除
+                    watchsession.onmessage = null;
+
+                break;
+
+                // error
+                // コメント送信直後に error が送られてきた → コメント送信に失敗している
+                case 'error':
+
+                    // コメント失敗のコールバックを DPlayer に通知
+                    options.error(`コメントの送信に失敗しました… (${message.data.code})`);
+                    
+                    // イベントを解除
+                    watchsession.onmessage = null;
+                    
+                break;
+            }
+        }
     }
 
     /**
@@ -490,7 +576,7 @@ function newNicoJKAPIBackend() {
      * @return {string} 16 進数カラーコード
      */
     function getCommentColor(color) {
-        const table = {
+        const color_table = {
             'red': '#E54256',
             'pink': '#FF8080',
             'orange': '#FFC000',
@@ -518,9 +604,9 @@ function newNicoJKAPIBackend() {
             'purple2': '#6633CC',
             'nobleviolet': '#6633CC',
             'black2': '#666666',
-        }
-        if (table[color] !== undefined) {
-            return table[color];
+        };
+        if (color_table[color] !== undefined) {
+            return color_table[color];
         } else {
             return null;
         }
@@ -544,9 +630,17 @@ function newNicoJKAPIBackend() {
         }
     }
 
+    // ページを閉じる/移動する前に WebSocket を閉じる
+    // しなくても勝手に閉じられる気はするけど一応
+    window.addEventListener('beforeunload', function () {
+        watchsession.close();
+        commentsession.close();
+    });
+
     return {
 
-        // 受信
+        // コメント受信時
+        // 正確には最初のプレイヤー読み込み時のみ発火
         read: (options) => {
 
             // コメントサーバーへの接続情報を取得してから
@@ -561,27 +655,11 @@ function newNicoJKAPIBackend() {
             });
         },
 
-        // 送信
+        // コメント送信時
         send: (options) => {
 
-            // vpos を計算 (10ミリ秒単位)
-            const vpos = Math.floor(new Date().getTime() / 10) - (commentsession_info.begintime * 100);
-            console.log(vpos)
-
-            // // コメントを送信
-            // commentsession.send(JSON.stringify({
-            //     'chat': {
-            //         'thread': commentsession_info.thread_id,
-            //         'vpos': vpos,
-            //         'mail': '184',
-            //         'ticket': commentsession_info.ticket,
-            //         'user_id': commentsession_info.user_id,
-            //         'content': options.data.text,
-            //         'postkey': commentsession_info.postkey,
-            //     }
-            // }));
-
-            options.success([{}]);  // 空のコメントを入れておく
+            // コメントを送信する
+            sendComment(options);
         }
     }
 }
