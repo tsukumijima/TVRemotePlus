@@ -67,6 +67,7 @@
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/index.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/jikkyo.js"></script>'."\n";
 	}
 	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
 		echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
