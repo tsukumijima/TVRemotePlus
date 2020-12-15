@@ -146,8 +146,7 @@ class Jikkyo {
         ];
 
         if (isset($table['jk'.$nicojikkyo_id])) {
-            // return $table['jk'.$nicojikkyo_id];
-            return 1072;  // 開始までは暫定的にチャンネル ID をウェザーニューズに設定
+            return $table['jk'.$nicojikkyo_id];
         } else {
             return null;
         }

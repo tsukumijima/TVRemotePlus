@@ -78,7 +78,7 @@
     loop: true,
     lang: 'ja-jp',
     theme: '#007cff',
-    // 読み込むm3u8を指定する
+    // 読み込む m3u8 を指定する
     video: {
 <?php	if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'): ?>
       url: '/api/stream/<?php echo $stream; ?>?_=<?php echo time(); ?>',
@@ -88,11 +88,10 @@
       type: 'hls'
 <?php	endif; ?>
     },
-    // 読み込むdanmaku(コメント)
+    // コメント設定
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
-      api: '/api/jikkyo/<?php echo $stream; ?>',
       bottom: '10%',
       height: settings['comment_size'],
       unlimited: false
