@@ -101,15 +101,23 @@
               var paused = dp.video.paused;
               if (data['streamtype'] == 'progressive'){
                 dp.video.src = '/api/stream?_=' + time();
+                dp.video.load();
                 dp.initVideo(dp.video, 'normal');
               } else {
                 dp.video.src = '/stream/stream' + stream + '.m3u8';
+                dp.video.load();
                 dp.initVideo(dp.video, 'hls');
               }
-              if (!paused){
-                dp.video.play();
-              } else {
-                dp.video.pause();
+
+              try {
+                // 読み込みし直す前の再生状態を復元
+                if (!paused){
+                  dp.video.play();
+                } else {
+                  dp.video.pause();
+                }
+              } catch (error) {
+                console.error(error);
               }
 
               // コメ番をリセット
