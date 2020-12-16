@@ -609,8 +609,18 @@ function newNicoJKAPIBackendONAir() {
         // コメント送信時
         send: (options) => {
 
-            // コメントを送信する
-            sendComment(options);
+            // 視聴セッションを取得できていれば
+            if (commentsession_connectable) {
+
+                // コメントを送信する
+                sendComment(options);
+
+            // 視聴セッションを取得できなかった
+            } else {
+
+                // コメント失敗のコールバックを DPlayer に通知
+                options.error(commentsession_info);
+            }
         }
     }
 }
