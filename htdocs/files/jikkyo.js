@@ -123,9 +123,13 @@ function newNicoJKAPIBackendONAir() {
 
                         // keepIntervalSec の秒数ごとに keepSeat を送信して座席を維持する
                         setInterval(() => {
-                            watchsession.send(JSON.stringify({
-                                'type': 'keepSeat',
-                            }));
+                            // セッションがまだ開いていれば
+                            if (watchsession.readyState === 1) {
+                                // 座席を維持
+                                watchsession.send(JSON.stringify({
+                                    'type': 'keepSeat',
+                                }));
+                            }
                         }, message.data.keepIntervalSec * 1000);
 
                     break;
@@ -421,6 +425,24 @@ function newNicoJKAPIBackendONAir() {
 
             });
 
+            // ストリームの更新イベントを受け取ったとき
+            function restart() {
+
+                // WebSocket を閉じる
+                watchsession.close();
+                commentsession.close();
+
+                // プレイヤー側のコメント機能をリロード
+                dp.danmaku.dan = [];
+                dp.danmaku.clear();
+                dp.danmaku.load();
+                
+                // イベント自身を削除
+                document.getElementById('status').removeEventListener('update', restart);
+            }
+            // イベント追加
+            document.getElementById('status').addEventListener('update', restart);
+
         // 接続不能
         } else {
 
@@ -583,9 +605,9 @@ function newNicoJKAPIBackendONAir() {
 
     // ページを閉じる/移動する前に WebSocket を閉じる
     // しなくても勝手に閉じられる気はするけど一応
-    window.addEventListener('beforeunload', function () {
-        watchsession.close();
-        commentsession.close();
+    window.addEventListener('beforeunload', () => {
+        if (watchsession) watchsession.close();
+        if (commentsession) commentsession.close();
     });
 
     return {

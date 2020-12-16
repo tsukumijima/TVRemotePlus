@@ -119,13 +119,13 @@
               } catch (error) {
                 console.error(error);
               }
+              
+              // status が standby のみ
+              if (data['status'] === 'standby') {
 
-              // コメ番をリセット
-              // リセットしないと前の局のコメ番より今の局のコメ番が小さい場合にコメントが流れない
-              commentnumber = 0;
-              res = '';
-              // console.log('【コメ番をリセットしました】')
-
+                // status の update イベントを発行
+                document.getElementById('status').dispatchEvent(new CustomEvent('update'));
+              }
             }
 
           // それ以外は諸々問題があるので一旦リロード
