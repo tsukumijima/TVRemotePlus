@@ -92,6 +92,7 @@
     danmaku: {
       id: 'TVRemotePlus',
       user: 'TVRemotePlus',
+      api: '',
       bottom: '10%',
       height: settings['comment_size'],
       unlimited: false
