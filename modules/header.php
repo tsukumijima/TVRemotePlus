@@ -74,7 +74,6 @@
 	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false){ // settings.phpのみ
 		echo '  <script type="text/javascript" src="/files/settings.js"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'ONAir'){
-		echo '  <script type="text/javascript" src="/files/onair.js"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'File'){
 		echo '  <script type="text/javascript" src="/files/file.js"></script>'."\n";
 	}

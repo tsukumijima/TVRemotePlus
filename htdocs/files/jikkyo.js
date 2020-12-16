@@ -168,6 +168,59 @@ function newNicoJKAPIBackendONAir() {
         // 接続可能ならコメントサーバーに接続
         if (commentsession_connectable) {
 
+            // 自動スクロールモードか
+            let is_autoscroll_mode = true;
+
+            // 自動スクロール中か
+            let is_autoscroll_now = false;
+
+            // setTimeout の ID
+            let is_autoscroll_now_timer;
+
+            // コメントをスクロールする
+            function scroll() {
+                        
+                // コメントボックス
+                const comment_draw_box = document.querySelector('#comment-draw-box');
+
+                // スクロールする余地が存在する
+                if (!(Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight))) {
+
+                    // 既に自動スクロール中
+                    if (is_autoscroll_now === true) {
+                        // タイマーをクリア
+                        clearTimeout(is_autoscroll_now_timer);
+                        // イベントを削除
+                        comment_draw_box.onscroll = null;
+                    }
+
+                    // ボタンを非表示
+                    document.getElementById('comment-scroll').style.visibility = 'hidden';
+                    document.getElementById('comment-scroll').style.opacity = 0;
+
+                    // スクロール中フラグをオン
+                    is_autoscroll_now = true;
+
+                    // スクロール
+                    comment_draw_box.scroll({
+                        top: comment_draw_box.scrollHeight,
+                        left: 0,
+                        behavior: 'smooth',
+                    });
+
+                    // スクロールを停止して 150ms 後に終了とする
+                    comment_draw_box.onscroll = (event) => {
+                        clearTimeout(is_autoscroll_now_timer);
+                        is_autoscroll_now_timer = setTimeout(() => {
+                            // スクロール中フラグをオフ
+                            is_autoscroll_now = false;
+                            // イベントを削除
+                            comment_draw_box.onscroll = null;
+                        }, 150);
+                    };
+                }
+            }
+
             // コメントサーバーの WebSocket
             commentsession = new WebSocket(commentsession_info.commentsession_url, 'msg.nicovideo.jp#json');
 
@@ -264,8 +317,10 @@ function newNicoJKAPIBackendONAir() {
                 // HLS 配信に伴う遅延（指定された秒数）分待ってから描画
                 await new Promise(r => setTimeout(r, settings.comment_delay * 1000));
 
-                // コメント一覧に表示する（ 768px 以上のみ）
+                // 768px 以上のみ
                 if (document.body.clientWidth > 768){
+
+                    // コメント一覧に表示する
                     document.querySelector('#comment-draw-box > tbody').insertAdjacentHTML('beforeend',`
                         <tr class="comment-live">
                             <td class="time" align="center">` + time + `</td>
@@ -275,13 +330,8 @@ function newNicoJKAPIBackendONAir() {
 
                     // スクロールする（自動スクロールが有効な場合のみ）
                     // ゆくゆく全部 behavior: 'smooth' に書き換えたい（ JS 使うと重いので）
-                    if (autoscroll) {
-                        const comment_draw_box = document.querySelector('#comment-draw-box');
-                        comment_draw_box.scroll({
-                            top: comment_draw_box.scrollHeight,
-                            left: 0,
-                            behavior: 'smooth',
-                        });
+                    if (is_autoscroll_mode) {
+                        scroll();
                     }
                 }
 
@@ -296,6 +346,80 @@ function newNicoJKAPIBackendONAir() {
                     // 古いコメントを削除
                     document.getElementsByClassName('comment-live')[0].remove();
                 }
+            });
+
+            // コメント一覧が手動スクロールされたときのイベント
+            let timeout;
+            document.getElementById('comment-draw-box').addEventListener('scroll', (event) => {
+
+                // setTimeout() がセットされていたら無視
+                if (timeout) return;
+                timeout = setTimeout(() => {
+                    timeout = 0;
+
+                    // コメントボックス
+                    const comment_draw_box = document.getElementById('comment-draw-box');
+
+                    // 自動スクロール中でない
+                    if (is_autoscroll_now === false) {
+        
+                        // 手動スクロールでかつ下まで完全にスクロールされている場合は自動スクロールに戻す
+                        // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
+                        if (is_autoscroll_mode === false && Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight)) {
+
+                            // 自動スクロール中
+                            is_autoscroll_mode = true;
+
+                            // ボタンを非表示
+                            document.getElementById('comment-scroll').style.visibility = 'hidden';
+                            document.getElementById('comment-scroll').style.opacity = 0;
+
+                        } else {
+                        
+                            // 手動スクロール中
+                            is_autoscroll_mode = false;
+
+                            // ボタンを表示
+                            document.getElementById('comment-scroll').style.visibility = 'visible';
+                            document.getElementById('comment-scroll').style.opacity = 1;
+                        }
+                    }
+
+                }, 100);  // 100ms ごと
+            });
+
+            // コメントスクロールボタンがクリックされた時のイベント
+            document.getElementById('comment-scroll').addEventListener('click', (event) => {
+        
+                // ボタンを非表示
+                document.getElementById('comment-scroll').style.visibility = 'hidden';
+                document.getElementById('comment-scroll').style.opacity = 0;
+            
+                // 自動スクロールに戻す
+                is_autoscroll_mode = true;
+
+                // スクロール
+                scroll();
+            });
+
+            // ウインドウがリサイズされたとき
+            window.addEventListener('resize', (event) => {
+                        
+                // スクロール
+                setTimeout(() => {
+        
+                    // ボタンを非表示
+                    document.getElementById('comment-scroll').style.visibility = 'hidden';
+                    document.getElementById('comment-scroll').style.opacity = 0;
+                
+                    // 自動スクロールに戻す
+                    is_autoscroll_mode = true;
+    
+                    // スクロール
+                    scroll();
+                    
+                }, 300);
+
             });
 
         // 接続不能
