@@ -58,7 +58,7 @@ function newNicoJKAPIBackendONAir() {
         
         try {
             watchsession_info = await $.ajax({
-                url: '/api/jikkyov2/' + stream,
+                url: '/api/jikkyo/' + stream,
                 dataType: 'json',
                 cache: false,
             });
@@ -154,6 +154,26 @@ function newNicoJKAPIBackendONAir() {
                             'postkey': (message.data.yourPostKey ? message.data.yourPostKey : null),
                             'commentsession_url': message.data.messageServer.uri,
                         });
+
+                    break;
+
+                    // 視聴セッションが閉じられた（4時のリセットなど）
+                    case 'disconnect':
+
+                        console.log(`disconnected. reason: ${message.data.reason}`);
+            
+                        // コメントセッションがまだ開かれていれば閉じる
+                        if (commentsession) commentsession.close();
+
+                        // 5 秒ほどまってから再接続
+                        setTimeout(() => {
+            
+                            // プレイヤー側のコメント機能をリロード
+                            dp.danmaku.dan = [];
+                            dp.danmaku.clear();
+                            dp.danmaku.load();
+
+                        }, 5000);
 
                     break;
                 }
@@ -662,7 +682,7 @@ function newNicoJKAPIBackendFile() {
             let comment;
             try {
                 comment = await $.ajax({
-                    url: '/api/jikkyov2/' + stream,
+                    url: '/api/jikkyo/' + stream,
                     dataType: 'json',
                     cache: false,
                 });
