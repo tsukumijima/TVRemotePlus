@@ -425,24 +425,6 @@ function newNicoJKAPIBackendONAir() {
 
             });
 
-            // ストリームの更新イベントを受け取ったとき
-            function restart() {
-
-                // WebSocket を閉じる
-                watchsession.close();
-                commentsession.close();
-
-                // プレイヤー側のコメント機能をリロード
-                dp.danmaku.dan = [];
-                dp.danmaku.clear();
-                dp.danmaku.load();
-                
-                // イベント自身を削除
-                document.getElementById('status').removeEventListener('update', restart);
-            }
-            // イベント追加
-            document.getElementById('status').addEventListener('update', restart);
-
         // 接続不能
         } else {
 
@@ -450,6 +432,24 @@ function newNicoJKAPIBackendONAir() {
             console.error('Error: ' + commentsession_info);
             options.error(commentsession_info);  // エラーメッセージを送信
         }
+
+        // ストリームの更新イベントを受け取ったとき
+        function restart() {
+
+            // WebSocket が開かれていれば閉じる
+            if (watchsession) watchsession.close();
+            if (commentsession) commentsession.close();
+
+            // プレイヤー側のコメント機能をリロード
+            dp.danmaku.dan = [];
+            dp.danmaku.clear();
+            dp.danmaku.load();
+            
+            // イベント自身を削除
+            document.getElementById('status').removeEventListener('update', restart);
+        }
+        // イベント追加
+        document.getElementById('status').addEventListener('update', restart);
     }
 
     /**
