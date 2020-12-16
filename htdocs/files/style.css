@@ -1023,6 +1023,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     font-size: 90%;
     scrollbar-width: thin;
     overflow-y: scroll;
+    overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
     outline: none;
 }

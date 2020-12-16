@@ -202,13 +202,13 @@ function newNicoJKAPIBackendONAir() {
                     is_autoscroll_now = true;
 
                     // スクロール
-                    comment_draw_box.scroll({
+                    comment_draw_box.scrollTo({
                         top: comment_draw_box.scrollHeight,
                         left: 0,
                         behavior: 'smooth',
                     });
 
-                    // スクロールを停止して 150ms 後に終了とする
+                    // スクロールを停止して 200ms 後に終了とする
                     comment_draw_box.onscroll = (event) => {
                         clearTimeout(is_autoscroll_now_timer);
                         is_autoscroll_now_timer = setTimeout(() => {
@@ -216,7 +216,7 @@ function newNicoJKAPIBackendONAir() {
                             is_autoscroll_now = false;
                             // イベントを削除
                             comment_draw_box.onscroll = null;
-                        }, 150);
+                        }, 200);
                     };
                 }
             }
@@ -329,7 +329,6 @@ function newNicoJKAPIBackendONAir() {
                     );
 
                     // スクロールする（自動スクロールが有効な場合のみ）
-                    // ゆくゆく全部 behavior: 'smooth' に書き換えたい（ JS 使うと重いので）
                     if (is_autoscroll_mode) {
                         scroll();
                     }
