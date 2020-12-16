@@ -98,7 +98,7 @@ class JikkyoController {
 
                     // 過去ログを（ DPlayer 互換フォーマットで）取得
                     // JavaScript 側で変換することもできるけどコメントが大量だと重くなりそうで
-                    $kakolog = $instance->getNicoJikkyoKakolog($nicojikkyo_id, $start_timestamp, $end_timestamp);
+                    list($kakolog, $kakolog_url) = $instance->getNicoJikkyoKakolog($nicojikkyo_id, $start_timestamp, $end_timestamp);
 
                     // 過去ログが配列でない（＝エラーメッセージが入っている）
                     if (!is_array($kakolog)) {
@@ -137,7 +137,8 @@ class JikkyoController {
             $output = [
                 'api' => 'jikkyo',
                 'result' => 'success',
-                'comment' => $kakolog,
+                'kakolog_url' => $kakolog_url,
+                'kakolog' => $kakolog,
             ];
 
         // 何らかの要因でセッションを取得できなかった

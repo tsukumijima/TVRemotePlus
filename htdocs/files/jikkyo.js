@@ -647,7 +647,7 @@ function newNicoJKAPIBackendFile() {
             }
 
             // 取得したコメントを DPlayer 側に送信
-            options.success(comment.comment);
+            options.success(comment.kakolog);
         },
 
         // コメント送信時

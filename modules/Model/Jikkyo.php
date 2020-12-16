@@ -374,9 +374,9 @@ class Jikkyo {
         // json をデコード
         $kakologs = json_decode($kakolog_json, true);
 
-        // エラーが入ってたら処理中断、エラーメッセージを返す
+        // エラーが入ってたら処理中断、エラーメッセージと過去ログ API の URL を返す
         if (isset($kakologs['error'])) {
-            return $kakologs['error'];
+            return [$kakologs['error'], $kakologapi_url];
         }
 
         // 変換後のコメント
@@ -427,7 +427,7 @@ class Jikkyo {
             ];
         }
 
-        // 変換した過去ログを返す
-        return $danmaku;
+        // 変換した過去ログと過去ログ API の URL を返す
+        return [$danmaku, $kakologapi_url];
     }
 }
