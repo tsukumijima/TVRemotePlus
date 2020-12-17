@@ -385,10 +385,27 @@ function newNicoJKAPIBackendONAir() {
 
                     // 自動スクロール中でない
                     if (is_autoscroll_now === false) {
+
+                        // 手動スクロールでかつ下まで完全にスクロールされている
+                        // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
+                        function isManualBottomScroll() {
+                            if (is_autoscroll_mode === false) {
+                                const height = Math.ceil(comment_draw_box.scrollHeight); // ボックス全体の高さ
+                                const scroll = Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
+                                const diff = Math.abs(height - scroll); // 絶対値を取得
+                                // 差が 3 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
+                                if (diff <= 3) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } else {
+                                return false;
+                            }
+                        }
         
                         // 手動スクロールでかつ下まで完全にスクロールされている場合は自動スクロールに戻す
-                        // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
-                        if (is_autoscroll_mode === false && Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight)) {
+                        if (isManualBottomScroll()) {
 
                             // 自動スクロール中
                             is_autoscroll_mode = true;
