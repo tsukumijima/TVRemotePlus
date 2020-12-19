@@ -60,22 +60,22 @@
   <script type="text/javascript" src="/files/velocity.min.js"></script>
   <script type="text/javascript" src="/files/moment.min.js"></script>
   <script type="text/javascript" src="/files/css_browser_selector.js"></script>
-  <script type="text/javascript" src="/files/common.js"></script>
+  <script type="text/javascript" src="/files/common.js?<?php echo $version; ?>"></script>
 <?php
 	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
 		echo '  <script type="text/javascript" src="/files/clusterize.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
-		echo '  <script type="text/javascript" src="/files/index.js"></script>'."\n";
-		echo '  <script type="text/javascript" src="/files/script.js"></script>'."\n";
-		echo '  <script type="text/javascript" src="/files/jikkyo.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/index.js?'.$version.'"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/script.js?'.$version.'"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/jikkyo.js?'.$version.'"></script>'."\n";
 	}
 	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
-		echo '  <script type="text/javascript" src="/files/watch.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/watch.js?'.$version.'"></script>'."\n";
 	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false){ // settings.phpのみ
-		echo '  <script type="text/javascript" src="/files/settings.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/settings.js?'.$version.'"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'ONAir'){
 	} else if ($ini[$stream]['state'] == 'File'){
-		echo '  <script type="text/javascript" src="/files/file.js"></script>'."\n";
+		echo '  <script type="text/javascript" src="/files/file.js?'.$version.'"></script>'."\n";
 	}
 ?>
 
