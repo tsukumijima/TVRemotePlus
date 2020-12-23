@@ -55,21 +55,13 @@ class JikkyoController {
                     // ニコニコチャンネル ID が存在する（=実況 ID がニコニコチャンネル上に存在する）
                     if ($nicochannel_id !== null) {
     
-                        // ニコニコチャンネル ID から、現在放送中のニコ生の放送 ID を取得する
-                        $nicolive_id = $instance->getNicoLiveID($nicochannel_id);
+                        // ニコ生のセッション情報を取得
+                        $nicolive_session = $instance->getNicoliveSession($nicochannel_id);
     
-                        // 放送 ID が null でない（=現在放送中）
-                        if ($nicolive_id !== null) {
-    
-                            // ニコ生のセッション情報を取得
-                            $nicolive_session = $instance->getNicoliveSession($nicolive_id);
-
-                            // WebSocket の URL が空
-                            if (empty($nicolive_session['watchsession_url'])) {
-                                $message = '視聴セッションを取得できませんでした。';
-                            }
-                        } else {
+                        if ($nicolive_session === null) {  // 現在放送中でない（タイムシフト or 予約中）
                             $message = '現在放送中のニコニコ実況がありません。';
+                        } else if (empty($nicolive_session['watchsession_url'])) {  // WebSocket の URL が空
+                            $message = '視聴セッションを取得できませんでした。';
                         }
                     } else {
                         $message = 'このチャンネルのニコニコ実況は廃止されました。';

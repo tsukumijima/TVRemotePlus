@@ -168,6 +168,7 @@ class Jikkyo {
     /**
      * ニコニコチャンネルの ID から、現在放送中のニコ生の放送 ID を取得する
      * 現在放送中の番組が存在しない場合は null を返す
+     * 実装方法の変更により現在未使用
      *
      * @param string $nicochannel_id ニコニコチャンネルID
      * @return ?string ニコ生の放送ID or null
@@ -209,10 +210,10 @@ class Jikkyo {
     /**
      * ニコ生の視聴セッション情報を取得する
      *
-     * @param string $nicolive_id ニコ生の放送ID (ex: lv329283198)
-     * @return array 視聴セッション情報が含まれる連想配列
+     * @param string $nicolive_id ニコ生の放送ID (ex: lv329283198・ch2646436)
+     * @return ?array 視聴セッション情報が含まれる連想配列 or null
      */
-    public function getNicoliveSession(string $nicolive_id): array {
+    public function getNicoliveSession(string $nicolive_id): ?array {
 
         /**
          * 二回使うので関数内関数にした
@@ -247,6 +248,11 @@ class Jikkyo {
         $nicolive_json = getSession($nicolive_id, $this->cookie_file);
 
 
+        // 現在放送中 (ON_AIR) でないなら null を返す
+        if ($nicolive_json['program']['status'] !== 'ON_AIR') {
+            return null;
+        }
+
         // ログイン利用で実際にログインされている、またはゲスト利用
         if ($nicolive_json['user']['isLoggedIn'] === true or $this->is_guest) {
 
@@ -270,6 +276,9 @@ class Jikkyo {
 
         // 終了時間
         $endtime = $nicolive_json['program']['endTime'];
+
+        // 放送 ID を上書き
+        $nicolive_id = $nicolive_json['program']['nicoliveProgramId'];
 
         // ユーザー ID
         $user_id = (isset($nicolive_json['user']['id']) ? $nicolive_json['user']['id'] : null);
