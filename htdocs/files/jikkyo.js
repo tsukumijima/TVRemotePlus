@@ -229,7 +229,7 @@ function newNicoJKAPIBackendONAir() {
                     comment_draw_box.scrollTo({
                         top: comment_draw_box.scrollHeight,
                         left: 0,
-                        behavior: 'smooth',
+                        // behavior: 'smooth',
                     });
 
                     // スクロールを停止して 200ms 後に終了とする
