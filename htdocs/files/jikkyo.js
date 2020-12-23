@@ -202,7 +202,7 @@ function newNicoJKAPIBackendONAir() {
             let is_autoscroll_now_timer;
 
             // コメントをスクロールする
-            function scroll() {
+            function scroll(animation = false) {
                         
                 // コメントボックス
                 const comment_draw_box = document.querySelector('#comment-draw-box');
@@ -229,7 +229,7 @@ function newNicoJKAPIBackendONAir() {
                     comment_draw_box.scrollTo({
                         top: comment_draw_box.scrollHeight,
                         left: 0,
-                        // behavior: 'smooth',
+                        behavior: (animation ? 'smooth': 'auto'),  // アニメーション
                     });
 
                     // スクロールを停止して 200ms 後に終了とする
@@ -439,7 +439,7 @@ function newNicoJKAPIBackendONAir() {
                 is_autoscroll_mode = true;
 
                 // スクロール
-                scroll();
+                scroll(true);
             });
 
             // ウインドウがリサイズされたとき
@@ -456,7 +456,7 @@ function newNicoJKAPIBackendONAir() {
                     is_autoscroll_mode = true;
     
                     // スクロール
-                    scroll();
+                    scroll(true);
                     
                 }, 300);
 
