@@ -46,9 +46,8 @@ class JikkyoController {
                     $nicojikkyo_id = -2;
                 }
     
-                // 実況 ID が 1 以上であれば続行
-                // 実況 ID が 1 以下は実況チャンネルが存在しない
-                if ($nicojikkyo_id > 0) {
+                // 実況 ID が存在する
+                if ($nicojikkyo_id !== null) {
     
                     // 実況 ID からニコニコチャンネル ID を取得する
                     $nicochannel_id = $instance->getNicoChannelID($nicojikkyo_id);
