@@ -58,14 +58,18 @@ class JikkyoController {
                         // ニコ生のセッション情報を取得
                         $nicolive_session = $instance->getNicoliveSession($nicochannel_id);
     
-                        if ($nicolive_session === null) {  // 現在放送中でない（タイムシフト or 予約中）
+                        // 現在放送中でない（タイムシフト or 予約中）
+                        if ($nicolive_session === null) {
                             $message = '現在放送中のニコニコ実況がありません。';
-                        } else if (empty($nicolive_session['watchsession_url'])) {  // WebSocket の URL が空
+                        // WebSocket の URL が空
+                        } else if (empty($nicolive_session['watchsession_url'])) {
                             $message = '視聴セッションを取得できませんでした。';
                         }
+                        
                     } else {
                         $message = 'このチャンネルのニコニコ実況は廃止されました。';
                     }
+
                 } else {
                     $message = 'このチャンネルのニコニコ実況はありません。';
                 }
