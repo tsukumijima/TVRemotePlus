@@ -295,7 +295,11 @@ function newNicoJKAPIBackendONAir() {
                         // 接続失敗のコールバックを DPlayer に通知
                         const message = 'コメントサーバーに接続できませんでした。';
                         console.error('Error: ' + message);
-                        options.error(message);  // エラーメッセージを送信
+                        if (dp.danmaku.showing) {
+                            options.error(message);  // エラーメッセージを送信
+                        } else {
+                            options.success([{}]);  // 成功したことにして通知を抑制
+                        }
                     }
                 }
 
@@ -467,7 +471,11 @@ function newNicoJKAPIBackendONAir() {
 
             // 接続失敗のコールバックを DPlayer に通知
             console.error('Error: ' + commentsession_info);
-            options.error(commentsession_info);  // エラーメッセージを送信
+            if (dp.danmaku.showing) {
+                options.error(commentsession_info);  // エラーメッセージを送信
+            } else {
+                options.success([{}]);  // 成功したことにして通知を抑制
+            }
         }
 
         // ストリームの更新イベントを受け取ったとき
@@ -704,13 +712,21 @@ function newNicoJKAPIBackendFile() {
                     cache: false,
                 });
             } catch (error) {
-                options.error(`過去ログの取得に失敗しました。(${error.statusText})`);
+                if (dp.danmaku.showing) {
+                    options.error(`過去ログの取得に失敗しました。(${error.statusText})`);
+                } else {
+                    options.success([{}]);  // 成功したことにして通知を抑制
+                }
                 return;
             }
 
             // コメントを取得できなかった
             if (comment.result === 'error') {
-                options.error(comment.message);  // 取得失敗
+                if (dp.danmaku.showing) {
+                    options.error(comment.message);  // 取得失敗
+                } else {
+                    options.success([{}]);  // 成功したことにして通知を抑制
+                }
                 return;
             }
 
