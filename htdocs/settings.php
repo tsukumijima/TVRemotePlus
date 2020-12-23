@@ -320,7 +320,7 @@
             </div>
 
             <div class="setting-form">
-              <span>コメント一覧</span>
+              <span>コメントリスト</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('comment_show', true, true) !== false){ ?>
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" checked />

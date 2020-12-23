@@ -2,11 +2,11 @@
   // ロード時 & リサイズ時に発火
   $(window).on('DOMContentLoaded resize', function(event){
 
-    // コメントを取得してコメント一覧画面にコメントを流し込む
+    // コメントを取得してコメントリスト画面にコメントを流し込む
     // スマホ以外のみ発動（スマホだと動作が遅くなるため）
     if (document.body.clientWidth > 768 && document.querySelector('#comment-draw-box > tbody').innerHTML == ''){
 
-      // コメント一覧の時間欄のwidthを調整
+      // コメントリストの時間欄のwidthを調整
       $('#comment-time').css('width', '62px');
 
       // コメントを読み込みが完了したときに発火
@@ -52,7 +52,7 @@
           // 軽量モード中のクラスを削除
           document.querySelector('#comment-box').classList.remove('comment-lightmode')
         
-          // コメントを一気にコメント一覧に挿入
+          // コメントを一気にコメントリストに挿入
           // 1つずつだと遅すぎるため一気に、さらにスピード重視であえてJavaScriptで実装
           document.querySelector('#comment-draw-box > tbody').innerHTML = html.join('');
 

@@ -344,7 +344,7 @@ function newNicoJKAPIBackendONAir() {
                 // 768px 以上のみ
                 if (document.body.clientWidth > 768){
 
-                    // コメント一覧に表示する
+                    // コメントリストに表示する
                     document.querySelector('#comment-draw-box > tbody').insertAdjacentHTML('beforeend',`
                         <tr class="comment-live">
                             <td class="time" align="center">` + time + `</td>
@@ -371,7 +371,7 @@ function newNicoJKAPIBackendONAir() {
                 }
             });
 
-            // コメント一覧が手動スクロールされたときのイベント
+            // コメントリストが手動スクロールされたときのイベント
             let timeout;
             document.getElementById('comment-draw-box').addEventListener('scroll', (event) => {
 
