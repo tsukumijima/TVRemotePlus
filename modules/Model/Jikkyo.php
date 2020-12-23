@@ -311,12 +311,12 @@ class Jikkyo {
      * ニコニコ実況の過去ログを取得する
      * 過去ログが取得できたら DPlayer 互換フォーマットの過去ログを、取得できなければエラーメッセージを返す
      *
-     * @param integer $nicojikkyo_id ニコニコ実況の ID
+     * @param string $nicojikkyo_id ニコニコ実況の ID
      * @param integer $start_timestamp 取得を開始する時刻のタイムスタンプ
      * @param integer $end_timestamp 取得を終了する時刻のタイムスタンプ
      * @return array|string 過去ログ（DPlayer 互換）or エラーメッセージ
      */
-    public function getNicoJikkyoKakolog(int $nicojikkyo_id, int $start_timestamp, int $end_timestamp) {
+    public function getNicoJikkyoKakolog(string $nicojikkyo_id, int $start_timestamp, int $end_timestamp) {
 
         /**
          * ニコニコの色指定を 16 進数カラーコードに置換する
@@ -380,7 +380,7 @@ class Jikkyo {
 
 
         // 過去ログ API の URL
-        $kakologapi_sprintf= 'https://jikkyo.tsukumijima.net/api/kakolog/jk%d?starttime=%d&endtime=%d&format=json';
+        $kakologapi_sprintf= 'https://jikkyo.tsukumijima.net/api/kakolog/%s?starttime=%d&endtime=%d&format=json';
         $kakologapi_url = sprintf($kakologapi_sprintf, $nicojikkyo_id, $start_timestamp, $end_timestamp);
 
         // API から過去ログを取得

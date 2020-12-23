@@ -49,10 +49,10 @@ class JikkyoController {
                 // 実況 ID が存在する
                 if ($nicojikkyo_id !== null) {
     
-                    // 実況 ID からニコニコチャンネル ID を取得する
+                    // 実況 ID からニコニコチャンネル/コミュニティ ID を取得する
                     $nicochannel_id = $instance->getNicoChannelID($nicojikkyo_id);
     
-                    // ニコニコチャンネル ID が存在する（=実況 ID がニコニコチャンネル上に存在する）
+                    // ニコニコチャンネル/コミュニティ ID が存在する（＝実況 ID がニコニコチャンネル上に存在する）
                     if ($nicochannel_id !== null) {
     
                         // ニコ生のセッション情報を取得
@@ -83,9 +83,8 @@ class JikkyoController {
                 // 実況 ID を取得
                 $nicojikkyo_id = $instance->getNicoJikkyoID($settings[$stream]['filechannel']);
 
-                // 実況 ID が 1 以上であれば続行
-                // 実況 ID が 1 以下は実況チャンネルが存在しない
-                if ($nicojikkyo_id > 0) {
+                // 実況 ID が存在する
+                if ($nicojikkyo_id !== null) {
 
                     // 過去ログを（ DPlayer 互換フォーマットで）取得
                     // JavaScript 側で変換することもできるけどコメントが大量だと重くなりそうで
@@ -122,7 +121,7 @@ class JikkyoController {
 
         // ファイル再生
         // 過去ログが取得できていれば
-        } else if ($settings[$stream]['state'] == 'File' && is_array($kakolog)) {
+        } else if ($settings[$stream]['state'] == 'File' && isset($kakolog) && is_array($kakolog)) {
 
             // 出力
             $output = [
