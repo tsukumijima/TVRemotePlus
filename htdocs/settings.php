@@ -409,18 +409,18 @@
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（ライブ配信・秒）</span>
 <?php	if (isSettingsItem('comment_delay') !== false){ ?>
-              <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="<?php echo isSettingsItem('comment_delay'); ?>" required />
+              <input class="text-box" id="comment_delay" type="number" min="0" max="120" placeholder="5" value="<?php echo isSettingsItem('comment_delay'); ?>" required />
 <?php	} else { ?>
-              <input class="text-box" id="comment_delay" type="number" min="0" max="60" placeholder="5" value="5" required />
+              <input class="text-box" id="comment_delay" type="number" min="0" max="120" placeholder="5" value="5" required />
 <?php	} // 括弧終了 ?>
             </div>
 
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（ファイル再生・秒）</span>
 <?php	if (isSettingsItem('comment_file_delay') !== false){ ?>
-              <input class="text-box" id="comment_file_delay" type="number" min="0" max="60" placeholder="0" value="<?php echo isSettingsItem('comment_file_delay'); ?>" required />
+              <input class="text-box" id="comment_file_delay" type="number" min="0" max="120" placeholder="0" value="<?php echo isSettingsItem('comment_file_delay'); ?>" required />
 <?php	} else { ?>
-              <input class="text-box" id="comment_file_delay" type="number" min="0" max="60" placeholder="0" value="0" required />
+              <input class="text-box" id="comment_file_delay" type="number" min="0" max="120" placeholder="0" value="0" required />
 <?php	} // 括弧終了 ?>
             </div>
 
