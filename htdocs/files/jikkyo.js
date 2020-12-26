@@ -535,12 +535,14 @@ function newNicoJKAPIBackendONAir() {
                 // ボタンを非表示
                 document.getElementById('comment-scroll').style.visibility = 'hidden';
                 document.getElementById('comment-scroll').style.opacity = 0;
-            
-                // 自動スクロールに戻す
-                is_autoscroll_mode = true;
 
                 // スクロール
                 scroll(true);
+            
+                // 200ms 後に自動スクロールに戻す
+                setTimeout(() => {
+                    is_autoscroll_mode = true;
+                }, 200);
             });
         }
 
