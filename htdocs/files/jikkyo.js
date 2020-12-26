@@ -157,16 +157,107 @@ function newNicoJKAPIBackendONAir() {
 
                     break;
 
+                    // エラー情報
+                    case 'error':
+
+                        let error;
+
+                        // エラー情報
+                        switch (message.data.code) {
+
+                            case 'CONNECT_ERROR':
+                                error = 'コメントサーバーに接続できません。';
+                            break;
+                            case 'CONTENT_NOT_READY':
+                                error = 'ニコニコ実況が配信できない状態です。';
+                            break;
+                            case 'NO_THREAD_AVAILABLE':
+                                error = 'コメントスレッドを取得できません。';
+                            break;
+                            case 'NO_ROOM_AVAILABLE':
+                                error = 'コメント部屋を取得できません。';
+                            break;
+                            case 'NO_PERMISSION':
+                                error = 'API にアクセスする権限がありません。';
+                            break;
+                            case 'NOT_ON_AIR':
+                                error = 'ニコニコ実況が放送中ではありません。';
+                            break;
+                            case 'BROADCAST_NOT_FOUND':
+                                error = 'ニコニコ実況の配信情報を取得できません。';
+                            break;
+                            case 'INTERNAL_SERVERERROR':
+                                error = 'ニコニコ実況でサーバーエラーが発生しています。';
+                            break;
+                            default:
+                                error = `ニコニコ実況でエラーが発生しています。(${message.data.code})`;
+                            break;
+                        }
+
+                        // エラー情報を表示
+                        console.log(`error occurred. code: ${message.data.code}`);
+                        if (dp.danmaku.showing) {
+                            dp.notice(error);
+                        }
+
+                    break;
+
                     // 視聴セッションが閉じられた（4時のリセットなど）
                     case 'disconnect':
 
+                        let error;
+
+                        // 接続切断の理由
+                        switch (message.data.reason) {
+
+                            case 'TAKEOVER':
+                                error = 'ニコニコ実況の番組から追い出されました。';
+                            break;
+                            case 'NO_PERMISSION':
+                                error = 'ニコニコ実況の番組の座席を取得できませんでした。';
+                            break;
+                            case 'END_PROGRAM':
+                                error = 'ニコニコ実況がリセットされたか、コミュニティの番組が終了しました。';
+                            break;
+                            case 'PING_TIMEOUT':
+                                error = 'コメントサーバーとの接続生存確認に失敗しました。';
+                            break;
+                            case 'TOO_MANY_CONNECTIONS':
+                                error = 'ニコニコ実況の同一ユーザからの接続数上限を越えています。';
+                            break;
+                            case 'TOO_MANY_WATCHINGS':
+                                error = 'ニコニコ実況の同一ユーザからの視聴番組数上限を越えています。';
+                            break;
+                            case 'CROWDED':
+                                error = 'ニコニコ実況の番組が満席です。';
+                            break;
+                            case 'MAINTENANCE_IN':
+                                error = 'ニコニコ実況はメンテナンス中です。';
+                            break;
+                            case 'SERVICE_TEMPORARILY_UNAVAILABLE':
+                                error = 'ニコニコ実況で一時的にサーバーエラーが発生しています。';
+                            break;
+                            default:
+                                error = `ニコニコ実況との接続が切断されました。(${message.data.reason})`;
+                            break;
+                        }
+
+                        // 接続切断の理由を表示
                         console.log(`disconnected. reason: ${message.data.reason}`);
+                        if (dp.danmaku.showing) {
+                            dp.notice(error);
+                        }
             
                         // コメントセッションがまだ開かれていれば閉じる
                         if (commentsession) commentsession.close();
 
-                        // 5 秒ほどまってから再接続
+                        // 5 秒ほど待ってから再接続
                         setTimeout(() => {
+
+                            //　再接続表示
+                            if (dp.danmaku.showing) {
+                                dp.notice('ニコニコ実況に再接続しています…');
+                            }
             
                             // プレイヤー側のコメント機能をリロード
                             dp.danmaku.dan = [];
@@ -232,7 +323,7 @@ function newNicoJKAPIBackendONAir() {
                         behavior: (animation ? 'smooth': 'auto'),  // アニメーション
                     });
 
-                    // スクロールを停止して 200ms 後に終了とする
+                    // スクロールを停止して 50ms 後に終了とする
                     comment_draw_box.onscroll = (event) => {
                         clearTimeout(is_autoscroll_now_timer);
                         is_autoscroll_now_timer = setTimeout(() => {
@@ -240,7 +331,7 @@ function newNicoJKAPIBackendONAir() {
                             is_autoscroll_now = false;
                             // イベントを削除
                             comment_draw_box.onscroll = null;
-                        }, 200);
+                        }, 50);
                     };
                 }
             }
@@ -575,16 +666,17 @@ function newNicoJKAPIBackendONAir() {
                     switch (message.data.code) {
                         
                         case 'INVALID_MESSAGE':
-                            error = 'コメント内容が不正です。';
-                            break;
-
+                            error = 'コメント内容が無効です。';
+                        break;
                         case 'COMMENT_POST_NOT_ALLOWED':
                             error = 'コメントするにはニコニコにログインしてください。';
-                            break;
-
+                        break;
+                        case 'COMMENT_LOCKED':
+                            error = 'コメントがロックされています。';
+                        break;
                         default:
                             error = `コメントの送信に失敗しました。(${message.data.code})`;
-                            break;
+                        break;
                     }
 
                     // コメント失敗のコールバックを DPlayer に通知
