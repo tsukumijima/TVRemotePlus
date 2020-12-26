@@ -320,7 +320,7 @@ function newNicoJKAPIBackendONAir() {
                     behavior: (animation ? 'smooth': 'auto'),  // アニメーション
                 });
 
-                // スクロールを停止して 50ms 後に終了とする
+                // スクロールを停止して 100ms 後に終了とする
                 comment_draw_box.onscroll = (event) => {
                     clearTimeout(is_autoscroll_now_timer);
                     is_autoscroll_now_timer = setTimeout(() => {
@@ -328,7 +328,7 @@ function newNicoJKAPIBackendONAir() {
                         is_autoscroll_now = false;
                         // イベントを削除
                         comment_draw_box.onscroll = null;
-                    }, 50);
+                    }, 100);
                 };
             }
         }
