@@ -205,47 +205,47 @@ function newNicoJKAPIBackendONAir() {
                     // 視聴セッションが閉じられた（4時のリセットなど）
                     case 'disconnect':
 
-                        let error;
+                        let disconnect;
 
                         // 接続切断の理由
                         switch (message.data.reason) {
 
                             case 'TAKEOVER':
-                                error = 'ニコニコ実況の番組から追い出されました。';
+                                disconnect = 'ニコニコ実況の番組から追い出されました。';
                             break;
                             case 'NO_PERMISSION':
-                                error = 'ニコニコ実況の番組の座席を取得できませんでした。';
+                                disconnect = 'ニコニコ実況の番組の座席を取得できませんでした。';
                             break;
                             case 'END_PROGRAM':
-                                error = 'ニコニコ実況がリセットされたか、コミュニティの番組が終了しました。';
+                                disconnect = 'ニコニコ実況がリセットされたか、コミュニティの番組が終了しました。';
                             break;
                             case 'PING_TIMEOUT':
-                                error = 'コメントサーバーとの接続生存確認に失敗しました。';
+                                disconnect = 'コメントサーバーとの接続生存確認に失敗しました。';
                             break;
                             case 'TOO_MANY_CONNECTIONS':
-                                error = 'ニコニコ実況の同一ユーザからの接続数上限を越えています。';
+                                disconnect = 'ニコニコ実況の同一ユーザからの接続数上限を越えています。';
                             break;
                             case 'TOO_MANY_WATCHINGS':
-                                error = 'ニコニコ実況の同一ユーザからの視聴番組数上限を越えています。';
+                                disconnect = 'ニコニコ実況の同一ユーザからの視聴番組数上限を越えています。';
                             break;
                             case 'CROWDED':
-                                error = 'ニコニコ実況の番組が満席です。';
+                                disconnect = 'ニコニコ実況の番組が満席です。';
                             break;
                             case 'MAINTENANCE_IN':
-                                error = 'ニコニコ実況はメンテナンス中です。';
+                                disconnect = 'ニコニコ実況はメンテナンス中です。';
                             break;
                             case 'SERVICE_TEMPORARILY_UNAVAILABLE':
-                                error = 'ニコニコ実況で一時的にサーバーエラーが発生しています。';
+                                disconnect = 'ニコニコ実況で一時的にサーバーエラーが発生しています。';
                             break;
                             default:
-                                error = `ニコニコ実況との接続が切断されました。(${message.data.reason})`;
+                                disconnect = `ニコニコ実況との接続が切断されました。(${message.data.reason})`;
                             break;
                         }
 
                         // 接続切断の理由を表示
                         console.log(`disconnected. reason: ${message.data.reason}`);
                         if (dp.danmaku.showing) {
-                            dp.notice(error);
+                            dp.notice(disconnect);
                         }
             
                         // コメントセッションがまだ開かれていれば閉じる
@@ -280,304 +280,289 @@ function newNicoJKAPIBackendONAir() {
      */
     function receiveComment(options) {
 
-        // 接続可能ならコメントサーバーに接続
-        if (commentsession_connectable) {
+        // 自動スクロールモードか
+        let is_autoscroll_mode = true;
 
-            // 自動スクロールモードか
-            let is_autoscroll_mode = true;
+        // 自動スクロール中か
+        let is_autoscroll_now = false;
 
-            // 自動スクロール中か
-            let is_autoscroll_now = false;
+        // setTimeout の ID
+        let is_autoscroll_now_timer;
 
-            // setTimeout の ID
-            let is_autoscroll_now_timer;
+        // コメントをスクロールする
+        function scroll(animation = false) {
+                    
+            // コメントボックス
+            const comment_draw_box = document.querySelector('#comment-draw-box');
 
-            // コメントをスクロールする
-            function scroll(animation = false) {
-                        
-                // コメントボックス
-                const comment_draw_box = document.querySelector('#comment-draw-box');
+            // スクロールする余地が存在する
+            if (!(Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight))) {
 
-                // スクロールする余地が存在する
-                if (!(Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight))) {
+                // 既に自動スクロール中
+                if (is_autoscroll_now === true) {
+                    // タイマーをクリア
+                    clearTimeout(is_autoscroll_now_timer);
+                    // イベントを削除
+                    comment_draw_box.onscroll = null;
+                }
 
-                    // 既に自動スクロール中
-                    if (is_autoscroll_now === true) {
-                        // タイマーをクリア
-                        clearTimeout(is_autoscroll_now_timer);
+                // ボタンを非表示
+                document.getElementById('comment-scroll').style.visibility = 'hidden';
+                document.getElementById('comment-scroll').style.opacity = 0;
+
+                // スクロール中フラグをオン
+                is_autoscroll_now = true;
+
+                // スクロール
+                comment_draw_box.scrollTo({
+                    top: comment_draw_box.scrollHeight,
+                    left: 0,
+                    behavior: (animation ? 'smooth': 'auto'),  // アニメーション
+                });
+
+                // スクロールを停止して 50ms 後に終了とする
+                comment_draw_box.onscroll = (event) => {
+                    clearTimeout(is_autoscroll_now_timer);
+                    is_autoscroll_now_timer = setTimeout(() => {
+                        // スクロール中フラグをオフ
+                        is_autoscroll_now = false;
                         // イベントを削除
                         comment_draw_box.onscroll = null;
+                    }, 50);
+                };
+            }
+        }
+
+        // コメントサーバーの WebSocket
+        commentsession = new WebSocket(commentsession_info.commentsession_url, 'msg.nicovideo.jp#json');
+
+        // WebSocket を開いたとき
+        commentsession.addEventListener('open', (event) => {
+
+            // コメントの送信をリクエスト
+            commentsession.send(JSON.stringify([
+                { 'ping': {'content': 'rs:0'} },
+                { 'ping': {'content': 'ps:0'} },
+                { 'ping': {'content': 'pf:0'} },
+                { 'ping': {'content': 'rf:0'} },
+                {
+                    'thread':{
+                        'thread': commentsession_info.thread_id,
+                        'threadkey': commentsession_info.postkey,
+                        'version': '20061206',
+                        'user_id': commentsession_info.user_id,
+                        'res_from': 0,
+                        'with_global': 1,
+                        'scores': 1,
+                        'nicoru': 0,
                     }
+                },
+            ]));
+        });
 
-                    // ボタンを非表示
-                    document.getElementById('comment-scroll').style.visibility = 'hidden';
-                    document.getElementById('comment-scroll').style.opacity = 0;
+        // WebSocket でメッセージを受信したとき
+        // コメントを描画する
+        commentsession.addEventListener('message', async (event) => {
 
-                    // スクロール中フラグをオン
-                    is_autoscroll_now = true;
+            // コメント送信リクエストの結果
+            if (JSON.parse(event.data).thread !== undefined) {
 
-                    // スクロール
-                    comment_draw_box.scrollTo({
-                        top: comment_draw_box.scrollHeight,
-                        left: 0,
-                        behavior: (animation ? 'smooth': 'auto'),  // アニメーション
-                    });
+                // スレッド情報
+                const thread = JSON.parse(event.data).thread;
 
-                    // スクロールを停止して 50ms 後に終了とする
-                    comment_draw_box.onscroll = (event) => {
-                        clearTimeout(is_autoscroll_now_timer);
-                        is_autoscroll_now_timer = setTimeout(() => {
-                            // スクロール中フラグをオフ
-                            is_autoscroll_now = false;
-                            // イベントを削除
-                            comment_draw_box.onscroll = null;
-                        }, 50);
-                    };
+                // リクエスト成功
+                if (thread.resultcode === 0) {
+
+                    // 接続成功のコールバックを DPlayer に通知
+                    console.log(commentsession_info);
+                    options.success([{}]);  // 空のコメントを入れておく
+
+                // リクエスト失敗
+                } else {
+
+                    // 接続失敗のコールバックを DPlayer に通知
+                    const message = 'コメントサーバーに接続できませんでした。';
+                    console.error('Error: ' + message);
+                    if (dp.danmaku.showing) {
+                        options.error(message);  // エラーメッセージを送信
+                    } else {
+                        options.success([{}]);  // 成功したことにして通知を抑制
+                    }
                 }
             }
 
-            // コメントサーバーの WebSocket
-            commentsession = new WebSocket(commentsession_info.commentsession_url, 'msg.nicovideo.jp#json');
+            // コメントを取得
+            const comment = JSON.parse(event.data).chat;
 
-            // WebSocket を開いたとき
-            commentsession.addEventListener('open', (event) => {
+            // コメントがない or 広告用など特殊な場合は弾く
+            if (comment === undefined ||
+                comment.content === undefined ||
+                comment.content.match(/\/[a-z]+ /)) {
+                return;
+            }
 
-                // コメントの送信をリクエスト
-                commentsession.send(JSON.stringify([
-                    { 'ping': {'content': 'rs:0'} },
-                    { 'ping': {'content': 'ps:0'} },
-                    { 'ping': {'content': 'pf:0'} },
-                    { 'ping': {'content': 'rf:0'} },
-                    {
-                        'thread':{
-                            'thread': commentsession_info.thread_id,
-                            'threadkey': commentsession_info.postkey,
-                            'version': '20061206',
-                            'user_id': commentsession_info.user_id,
-                            'res_from': 0,
-                            'with_global': 1,
-                            'scores': 1,
-                            'nicoru': 0,
-                        }
-                    },
-                ]));
-            });
+            // 自分のコメントも表示しない
+            if (comment.yourpost && comment.yourpost === 1) {
+                return;
+            }
 
-            // WebSocket でメッセージを受信したとき
-            // コメントを描画する
-            commentsession.addEventListener('message', async (event) => {
-
-                // コメント送信リクエストの結果
-                if (JSON.parse(event.data).thread !== undefined) {
-
-                    // スレッド情報
-                    const thread = JSON.parse(event.data).thread;
-
-                    // リクエスト成功
-                    if (thread.resultcode === 0) {
-
-                        // 接続成功のコールバックを DPlayer に通知
-                        console.log(commentsession_info);
-                        options.success([{}]);  // 空のコメントを入れておく
-
-                    // リクエスト失敗
-                    } else {
-
-                        // 接続失敗のコールバックを DPlayer に通知
-                        const message = 'コメントサーバーに接続できませんでした。';
-                        console.error('Error: ' + message);
-                        if (dp.danmaku.showing) {
-                            options.error(message);  // エラーメッセージを送信
-                        } else {
-                            options.success([{}]);  // 成功したことにして通知を抑制
-                        }
+            // 色・位置
+            let color = '#FFFFFF';  // 色のデフォルト
+            let position = 'right';  // 位置のデフォルト
+            if (comment.mail !== undefined && comment.mail !== null) {
+                // コマンドをスペースで区切って配列にしたもの
+                const command = comment.mail.replace('184', '').split(' ');
+                for (const item of command) {  // コマンドごとに
+                    if (getCommentColor(item) !== null) {
+                        color = getCommentColor(item);
+                    }
+                    if (getCommentPosition(item) !== null) {
+                        position = getCommentPosition(item);
                     }
                 }
+            }
 
-                // コメントを取得
-                const comment = JSON.parse(event.data).chat;
+            // 描画用の配列に変換
+            const time = moment.unix(comment.date).format('HH:mm:ss');
+            const danmaku = {
+                text: comment.content,
+                color: color,
+                type: position,
+            }
 
-                // コメントがない or 広告用など特殊な場合は弾く
-                if (comment === undefined ||
-                    comment.content === undefined ||
-                    comment.content.match(/\/[a-z]+ /)) {
-                    return;
-                }
-
-                // 自分のコメントも表示しない
-                if (comment.yourpost && comment.yourpost === 1) {
-                    return;
-                }
-
-                // 色・位置
-                let color = '#FFFFFF';  // 色のデフォルト
-                let position = 'right';  // 位置のデフォルト
-                if (comment.mail !== undefined && comment.mail !== null) {
-                    // コマンドをスペースで区切って配列にしたもの
-                    const command = comment.mail.replace('184', '').split(' ');
-                    for (const item of command) {  // コマンドごとに
-                        if (getCommentColor(item) !== null) {
-                            color = getCommentColor(item);
-                        }
-                        if (getCommentPosition(item) !== null) {
-                            position = getCommentPosition(item);
-                        }
-                    }
-                }
-
-                // 描画用の配列に変換
-                const time = moment.unix(comment.date).format('HH:mm:ss');
-                const danmaku = {
-                    text: comment.content,
-                    color: color,
-                    type: position,
-                }
-
-                // HLS 配信に伴う遅延（指定された秒数）分待ってから描画
-                await new Promise(r => setTimeout(r, settings.comment_delay * 1000));
-                
-                // コメントリストが表示されている場合のみ
-                if (settings['comment_show']) {
-
-                    // 768px 以上のみ
-                    if (document.body.clientWidth > 768){
-
-                        // コメントリストに表示する
-                        document.querySelector('#comment-draw-box > tbody').insertAdjacentHTML('beforeend',`
-                            <tr class="comment-live">
-                                <td class="time" align="center">` + time + `</td>
-                                <td class="comment">` + danmaku.text + `</td>
-                            </tr>`
-                        );
-
-                        // スクロールする（自動スクロールが有効な場合のみ）
-                        if (is_autoscroll_mode) {
-                            scroll();
-                        }
-                    }
-                }
-
-                // コメント描画 (再生時のみ)
-                if (!dp.video.paused){
-                    dp.danmaku.draw(danmaku);
-                }
-
-                // コメント数が 500 を超えたら
-                if (settings['comment_show']) {
-                    if (document.getElementsByClassName('comment-live').length > 500){
-
-                        // 古いコメントを削除
-                        document.getElementsByClassName('comment-live')[0].remove();
-                    }
-                }
-            });
-
+            // HLS 配信に伴う遅延（指定された秒数）分待ってから描画
+            await new Promise(r => setTimeout(r, settings.comment_delay * 1000));
+            
             // コメントリストが表示されている場合のみ
             if (settings['comment_show']) {
 
-                // コメントリストが手動スクロールされたときのイベント
-                let timeout;
-                document.getElementById('comment-draw-box').addEventListener('scroll', (event) => {
-    
-                    // setTimeout() がセットされていたら無視
-                    if (timeout) return;
-                    timeout = setTimeout(() => {
-                        timeout = 0;
-    
-                        // コメントボックス
-                        const comment_draw_box = document.getElementById('comment-draw-box');
-    
-                        // 自動スクロール中でない
-                        if (is_autoscroll_now === false) {
-    
-                            // 手動スクロールでかつ下まで完全にスクロールされている
-                            // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
-                            function isManualBottomScroll() {
-                                if (is_autoscroll_mode === false) {
-                                    const height = Math.ceil(comment_draw_box.scrollHeight); // ボックス全体の高さ
-                                    const scroll = Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
-                                    const diff = Math.abs(height - scroll); // 絶対値を取得
-                                    // 差が 3 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
-                                    if (diff <= 3) {
-                                        return true;
-                                    } else {
-                                        return false;
-                                    }
+                // 768px 以上のみ
+                if (document.body.clientWidth > 768){
+
+                    // コメントリストに表示する
+                    document.querySelector('#comment-draw-box > tbody').insertAdjacentHTML('beforeend',`
+                        <tr class="comment-live">
+                            <td class="time" align="center">` + time + `</td>
+                            <td class="comment">` + danmaku.text + `</td>
+                        </tr>`
+                    );
+
+                    // スクロールする（自動スクロールが有効な場合のみ）
+                    if (is_autoscroll_mode) {
+                        scroll();
+                    }
+                }
+            }
+
+            // コメント描画 (再生時のみ)
+            if (!dp.video.paused){
+                dp.danmaku.draw(danmaku);
+            }
+
+            // コメント数が 500 を超えたら
+            if (settings['comment_show']) {
+                if (document.getElementsByClassName('comment-live').length > 500){
+
+                    // 古いコメントを削除
+                    document.getElementsByClassName('comment-live')[0].remove();
+                }
+            }
+        });
+
+        // コメントリストが表示されている場合のみ
+        if (settings['comment_show']) {
+
+            // コメントリストが手動スクロールされたときのイベント
+            let timeout;
+            document.getElementById('comment-draw-box').addEventListener('scroll', (event) => {
+
+                // setTimeout() がセットされていたら無視
+                if (timeout) return;
+                timeout = setTimeout(() => {
+                    timeout = 0;
+
+                    // コメントボックス
+                    const comment_draw_box = document.getElementById('comment-draw-box');
+
+                    // 自動スクロール中でない
+                    if (is_autoscroll_now === false) {
+
+                        // 手動スクロールでかつ下まで完全にスクロールされている
+                        // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
+                        function isManualBottomScroll() {
+                            if (is_autoscroll_mode === false) {
+                                const height = Math.ceil(comment_draw_box.scrollHeight); // ボックス全体の高さ
+                                const scroll = Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
+                                const diff = Math.abs(height - scroll); // 絶対値を取得
+                                // 差が 3 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
+                                if (diff <= 3) {
+                                    return true;
                                 } else {
                                     return false;
                                 }
-                            }
-            
-                            // 手動スクロールでかつ下まで完全にスクロールされている場合は自動スクロールに戻す
-                            if (isManualBottomScroll()) {
-    
-                                // 自動スクロール中
-                                is_autoscroll_mode = true;
-    
-                                // ボタンを非表示
-                                document.getElementById('comment-scroll').style.visibility = 'hidden';
-                                document.getElementById('comment-scroll').style.opacity = 0;
-    
                             } else {
-                            
-                                // 手動スクロール中
-                                is_autoscroll_mode = false;
-    
-                                // ボタンを表示
-                                document.getElementById('comment-scroll').style.visibility = 'visible';
-                                document.getElementById('comment-scroll').style.opacity = 1;
+                                return false;
                             }
                         }
-    
-                    }, 100);  // 100ms ごと
-                });
-
-                // コメントスクロールボタンがクリックされた時のイベント
-                document.getElementById('comment-scroll').addEventListener('click', (event) => {
-            
-                    // ボタンを非表示
-                    document.getElementById('comment-scroll').style.visibility = 'hidden';
-                    document.getElementById('comment-scroll').style.opacity = 0;
-                
-                    // 自動スクロールに戻す
-                    is_autoscroll_mode = true;
-    
-                    // スクロール
-                    scroll(true);
-                });
-            }
-
-            // ウインドウがリサイズされたとき
-            window.addEventListener('resize', (event) => {
-                        
-                // スクロール
-                setTimeout(() => {
         
-                    // ボタンを非表示
-                    document.getElementById('comment-scroll').style.visibility = 'hidden';
-                    document.getElementById('comment-scroll').style.opacity = 0;
-                
-                    // 自動スクロールに戻す
-                    is_autoscroll_mode = true;
-    
-                    // スクロール
-                    scroll(true);
-                    
-                }, 300);
+                        // 手動スクロールでかつ下まで完全にスクロールされている場合は自動スクロールに戻す
+                        if (isManualBottomScroll()) {
 
+                            // 自動スクロール中
+                            is_autoscroll_mode = true;
+
+                            // ボタンを非表示
+                            document.getElementById('comment-scroll').style.visibility = 'hidden';
+                            document.getElementById('comment-scroll').style.opacity = 0;
+
+                        } else {
+                        
+                            // 手動スクロール中
+                            is_autoscroll_mode = false;
+
+                            // ボタンを表示
+                            document.getElementById('comment-scroll').style.visibility = 'visible';
+                            document.getElementById('comment-scroll').style.opacity = 1;
+                        }
+                    }
+
+                }, 100);  // 100ms ごと
             });
 
-        // 接続不能
-        } else {
+            // コメントスクロールボタンがクリックされた時のイベント
+            document.getElementById('comment-scroll').addEventListener('click', (event) => {
+        
+                // ボタンを非表示
+                document.getElementById('comment-scroll').style.visibility = 'hidden';
+                document.getElementById('comment-scroll').style.opacity = 0;
+            
+                // 自動スクロールに戻す
+                is_autoscroll_mode = true;
 
-            // 接続失敗のコールバックを DPlayer に通知
-            console.error('Error: ' + commentsession_info);
-            if (dp.danmaku.showing) {
-                options.error(commentsession_info);  // エラーメッセージを送信
-            } else {
-                options.success([{}]);  // 成功したことにして通知を抑制
-            }
+                // スクロール
+                scroll(true);
+            });
         }
+
+        // ウインドウがリサイズされたとき
+        window.addEventListener('resize', (event) => {
+                    
+            // スクロール
+            setTimeout(() => {
+    
+                // ボタンを非表示
+                document.getElementById('comment-scroll').style.visibility = 'hidden';
+                document.getElementById('comment-scroll').style.opacity = 0;
+            
+                // 自動スクロールに戻す
+                is_autoscroll_mode = true;
+
+                // スクロール
+                scroll(true);
+                
+            }, 300);
+
+        });
 
         // ストリームの更新イベントを受け取ったとき
         function restart() {
@@ -770,8 +755,23 @@ function newNicoJKAPIBackendONAir() {
                 commentsession_connectable = commentsession_connectable_;
                 commentsession_info = commentsession_info_;
 
-                // コメントを受信・描画する
-                receiveComment(options);
+                // 視聴セッションを取得できていれば
+                if (commentsession_connectable) {
+
+                    // コメントを受信・描画する
+                    receiveComment(options);
+
+                // 視聴セッションを取得できなかった
+                } else {
+        
+                    // 接続失敗のコールバックを DPlayer に通知
+                    console.error('Error: ' + commentsession_info);
+                    if (dp.danmaku.showing) {
+                        options.error(commentsession_info);  // エラーメッセージを送信
+                    } else {
+                        options.success([{}]);  // 成功したことにして通知を抑制
+                    }
+                }
             });
         },
 
