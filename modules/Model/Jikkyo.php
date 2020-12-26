@@ -76,6 +76,7 @@ class Jikkyo {
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+        curl_setopt($curl, CURLOPT_USERAGENT, Utils::getUserAgent()); // ユーザーエージェントを送信
         curl_setopt($curl, CURLOPT_COOKIEJAR, $this->cookie_file); // Cookie をファイルに保存する（重要）
 
         // 空実行する
@@ -185,6 +186,7 @@ class Jikkyo {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+        curl_setopt($curl, CURLOPT_USERAGENT, Utils::getUserAgent()); // ユーザーエージェントを送信
         $response = json_decode(curl_exec($curl), true);  // リクエストを実行
         curl_close($curl);
 
@@ -235,6 +237,7 @@ class Jikkyo {
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+            curl_setopt($curl, CURLOPT_USERAGENT, Utils::getUserAgent()); // ユーザーエージェントを送信
             if (file_exists($cookie_file)) curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file); // Cookie を送信する（ファイルがあれば）
             $nicolive_html = curl_exec($curl);  // リクエストを実行
             $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
@@ -332,16 +335,16 @@ class Jikkyo {
      * @param string $nicojikkyo_id ニコニコ実況の ID
      * @param integer $start_timestamp 取得を開始する時刻のタイムスタンプ
      * @param integer $end_timestamp 取得を終了する時刻のタイムスタンプ
-     * @return array|string 過去ログ（DPlayer 互換）or エラーメッセージ
+     * @return array [過去ログ（DPlayer 互換）or エラーメッセージ, 過去ログ API の URL]
      */
-    public function getNicoJikkyoKakolog(string $nicojikkyo_id, int $start_timestamp, int $end_timestamp) {
+    public function getNicoJikkyoKakolog(string $nicojikkyo_id, int $start_timestamp, int $end_timestamp) :array {
 
         /**
          * ニコニコの色指定を 16 進数カラーコードに置換する
          * @param string $color ニコニコの色指定
-         * @return string 16 進数カラーコード
+         * @return ?string 16 進数カラーコード
          */
-        function getCommentColor($color) {
+        function getCommentColor($color): ?string {
             $color_table = [
                 'red' => '#E54256',
                 'pink' => '#FF8080',
@@ -381,9 +384,9 @@ class Jikkyo {
         /**
          * ニコニコの位置指定を DPlayer の位置指定に置換する
          * @param string $position ニコニコの位置指定
-         * @return string DPlayer の位置指定
+         * @return ?string DPlayer の位置指定
          */
-        function getCommentPosition($position) {
+        function getCommentPosition($position): ?string {
             switch ($position) {
                 case 'ue':
                     return 'top';
@@ -407,6 +410,7 @@ class Jikkyo {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+        curl_setopt($curl, CURLOPT_USERAGENT, Utils::getUserAgent()); // ユーザーエージェントを送信
         $kakolog_json = curl_exec($curl);  // リクエストを実行
         $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
         curl_close($curl);

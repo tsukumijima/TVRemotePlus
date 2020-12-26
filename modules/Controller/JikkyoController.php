@@ -98,7 +98,7 @@ class JikkyoController {
                 // 実況 ID が存在する
                 if ($nicojikkyo_id !== null) {
 
-                    // 過去ログを（ DPlayer 互換フォーマットで）取得
+                    // 過去ログと過去ログの URL を（ DPlayer 互換フォーマットで）取得
                     // JavaScript 側で変換することもできるけどコメントが大量だと重くなりそうで
                     list($kakolog, $kakolog_url) = $instance->getNicoJikkyoKakolog($nicojikkyo_id, $start_timestamp, $end_timestamp);
 
