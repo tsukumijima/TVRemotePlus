@@ -173,6 +173,7 @@ class Jikkyo {
      * @param string $nicochannel_id ニコニコチャンネルID
      * @return ?string ニコ生の放送ID or null
      */
+    /*
     public function getNicoLiveID(string $nicochannel_id): ?string {
 
         // ベース URL
@@ -205,6 +206,7 @@ class Jikkyo {
         // アイテムごとに回したけど現在放送中の番組がなかった
         return null;
     }
+    */
 
 
     /**
