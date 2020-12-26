@@ -237,7 +237,18 @@ class Jikkyo {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
             if (file_exists($cookie_file)) curl_setopt($curl, CURLOPT_COOKIEFILE, $cookie_file); // Cookie を送信する（ファイルがあれば）
             $nicolive_html = curl_exec($curl);  // リクエストを実行
+            $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
             curl_close($curl);
+    
+            // ステータスコードを判定
+            switch ($status_code) {
+                // 500：Internal Server Error
+                case 500:
+                    return ['error' => '現在、ニコニコ実況で障害が発生しています。(HTTP Error 500)'];
+                // 503：Service Unavailable
+                case 503:
+                    return ['error' => '現在、ニコニコ実況はメンテナンス中です。(HTTP Error 503)'];
+            }
             
             // json をスクレイピング
             preg_match('/<script id="embedded-data" data-props="(.*?)"><\/script>/s', $nicolive_html, $result);
@@ -249,6 +260,11 @@ class Jikkyo {
         // 情報を取得
         $nicolive_json = getSession($nicolive_id, $this->cookie_file);
 
+
+        // HTTP エラー
+        if (isset($nicolive_json['error'])) {
+            return $nicolive_json;
+        }
 
         // 現在放送中 (ON_AIR) でないなら null を返す
         if ($nicolive_json['program']['status'] !== 'ON_AIR') {
@@ -392,11 +408,11 @@ class Jikkyo {
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
         $kakolog_json = curl_exec($curl);  // リクエストを実行
-        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
+        $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
         curl_close($curl);
 
         // ステータスコードを判定
-        switch ($code) {
+        switch ($status_code) {
             // 500：Internal Server Error
             case 500:
                 return ['過去ログ API でサーバーエラーが発生しました。過去ログ API に不具合がある可能性があります。(HTTP Error 500)', $kakologapi_url];

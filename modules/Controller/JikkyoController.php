@@ -60,9 +60,17 @@ class JikkyoController {
     
                         // 現在放送中でない（タイムシフト or 予約中）
                         if ($nicolive_session === null) {
+                            
                             $message = '現在放送中のニコニコ実況がありません。';
+
+                        // HTTP エラー
+                        } else if (isset($nicolive_session['error'])) {
+                            
+                            $message = $nicolive_session['error'];
+
                         // WebSocket の URL が空
                         } else if (empty($nicolive_session['watchsession_url'])) {
+
                             $message = '視聴セッションを取得できませんでした。';
                         }
                         
