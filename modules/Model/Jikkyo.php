@@ -390,7 +390,18 @@ class Jikkyo {
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
         $kakolog_json = curl_exec($curl);  // リクエストを実行
+        $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
         curl_close($curl);
+
+        // ステータスコードを判定
+        switch ($code) {
+            // 500：Internal Server Error
+            case 500:
+                return ['過去ログ API でサーバーエラーが発生しました。過去ログ API に不具合がある可能性があります。(HTTP Error 500)', $kakologapi_url];
+            // 503：Service Unavailable
+            case 503:
+                return ['現在、過去ログ API は一時的に利用できなくなっています。(HTTP Error 503)', $kakologapi_url];
+        }
 
         // json をデコード
         $kakologs = json_decode($kakolog_json, true);
