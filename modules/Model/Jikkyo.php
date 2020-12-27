@@ -226,13 +226,13 @@ class Jikkyo {
     public function getNicoliveSession(string $nicolive_id): ?array {
 
         /**
-         * 二回使うので関数内関数にした
+         * 二回使うのでクロージャにした
          *
          * @param string $nicolive_id ニコ生の放送 ID (ex: lv329283198・ch2646436)
          * @param string $cookie_file Cookie のあるファイル
          * @return array 処理結果
          */
-        function getSession(string $nicolive_id, string $cookie_file): array {
+        $getSession = function(string $nicolive_id, string $cookie_file): array {
 
             // ベース URL
             $nicolive_baseurl = 'https://live2.nicovideo.jp/watch/';
@@ -264,10 +264,10 @@ class Jikkyo {
             $nicolive_json = json_decode(htmlspecialchars_decode($result[1]), true);
 
             return $nicolive_json;
-        }
+        };
 
         // 情報を取得
-        $nicolive_json = getSession($nicolive_id, $this->cookie_file);
+        $nicolive_json = $getSession($nicolive_id, $this->cookie_file);
 
 
         // HTTP エラー
@@ -292,7 +292,7 @@ class Jikkyo {
             $this->login();
 
             // 再度情報を取得
-            $nicolive_json = getSession($nicolive_id, $this->cookie_file);
+            $nicolive_json = $getSession($nicolive_id, $this->cookie_file);
         }
 
         // タイトル
@@ -350,7 +350,7 @@ class Jikkyo {
          * @param string $color ニコニコの色指定
          * @return ?string 16 進数カラーコード
          */
-        function getCommentColor($color): ?string {
+        $getCommentColor = function($color): ?string {
             $color_table = [
                 'red' => '#E54256',
                 'pink' => '#FF8080',
@@ -385,14 +385,14 @@ class Jikkyo {
             } else {
                 return null;
             }
-        }
+        };
     
         /**
          * ニコニコの位置指定を DPlayer の位置指定に置換する
          * @param string $position ニコニコの位置指定
          * @return ?string DPlayer の位置指定
          */
-        function getCommentPosition($position): ?string {
+        $getCommentPosition = function($position): ?string {
             switch ($position) {
                 case 'ue':
                     return 'top';
@@ -403,7 +403,7 @@ class Jikkyo {
                 default:
                     return null;
             }
-        }
+        };
 
 
         // 過去ログ API の URL
@@ -454,11 +454,11 @@ class Jikkyo {
                 // コマンドをスペースで区切って配列にしたもの
                 $command = explode(' ', str_replace('184', '', $kakolog['mail']));
                 foreach ($command as $item) {  // コマンドごとに
-                    if (getCommentColor($item) !== null) {
-                        $color = getCommentColor($item);
+                    if ($getCommentColor($item) !== null) {
+                        $color = $getCommentColor($item);
                     }
-                    if (getCommentPosition($item) !== null) {
-                        $position = getCommentPosition($item);
+                    if ($getCommentPosition($item) !== null) {
+                        $position = $getCommentPosition($item);
                     }
                 }
             }
