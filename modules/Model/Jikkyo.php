@@ -469,13 +469,15 @@ class Jikkyo {
             } else {
                 $user_id = '';
             }
-
-            // vpos を小数として取得
-            $vpos = floatval('0.'.$kakolog['vpos']);
             
             // コメント時間（秒単位）を算出
-            $time = ($kakolog['date'] - $start_timestamp) + $vpos + intval(isSettingsItem('comment_file_delay')); // 遅延分を足す
-            if ($time < 0) $time = 0;  // 万が一時間がマイナスになった場合は 0 に設定
+            $time = floatval(($kakolog['date'] - $start_timestamp).'.'.$kakolog['date_usec']);
+
+            // コメント時間を遅延
+            $time += intval(isSettingsItem('comment_file_delay'));
+
+            // 万が一コメント時間がマイナスになった場合は 0 に設定
+            if ($time < 0) $time = 0;
 
             // 配列の末尾に追加
             $danmaku[] = [
