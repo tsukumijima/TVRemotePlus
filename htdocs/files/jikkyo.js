@@ -3,6 +3,177 @@
 // ニコ生チャンネルにリニューアルされる新ニコニコ実況対応用のコード
 
 
+class Scroll {
+
+    /**
+     * コンストラクタ
+     * @param {HTMLElement} comment_draw_box 
+     * @param {HTMLElement} comment_scroll 
+     */
+    constructor(comment_draw_box, comment_scroll) {
+        
+        // 引数をセット
+        this.comment_draw_box = comment_draw_box;
+        this.comment_scroll = comment_scroll;
+
+        // 自動スクロールモードか
+        this.is_autoscroll_mode = true;
+    
+        // 自動スクロール中か
+        this.is_autoscroll_now = false;
+    
+        // setTimeout の ID
+        this.is_autoscroll_now_timer;
+    }
+
+    /**
+     * コメントをスクロールする
+     * @param {Boolean} animation アニメーションするかどうか
+     */
+    scroll(animation = false) {
+
+        // スクロールする余地が存在する
+        if (!(Math.ceil(this.comment_draw_box.scrollHeight) === Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight))) {
+
+            // 既に自動スクロール中
+            if (this.is_autoscroll_now === true) {
+                // タイマーをクリア
+                clearTimeout(this.is_autoscroll_now_timer);
+                // イベントを削除
+                this.comment_draw_box.onscroll = null;
+            }
+
+            // ボタンを非表示
+            this.comment_scroll.classList.remove('show');
+
+            // スクロール中フラグをオン
+            this.is_autoscroll_now = true;
+
+            // スクロール
+            this.comment_draw_box.scrollTo({
+                top: this.comment_draw_box.scrollHeight,
+                left: 0,
+                behavior: (animation ? 'smooth': 'auto'),  // アニメーション
+            });
+
+            // スクロールを停止して 100ms 後に終了とする
+            this.comment_draw_box.onscroll = (event) => {
+                clearTimeout(this.is_autoscroll_now_timer);
+                this.is_autoscroll_now_timer = setTimeout(() => {
+                    // スクロール中フラグをオフ
+                    this.is_autoscroll_now = false;
+                    // イベントを削除
+                    this.comment_draw_box.onscroll = null;
+                }, 100);
+            };
+        }
+    }
+    
+    /**
+     * 手動スクロールでかつ下まで完全にスクロールされているかどうか
+     * 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
+     * @return {Boolean} 手動スクロールでかつ下まで完全にスクロールされているなら true
+     */
+    isManualBottomScroll() {
+        if (this.is_autoscroll_mode === false) {
+            const height = Math.ceil(this.comment_draw_box.scrollHeight); // ボックス全体の高さ
+            const scroll = Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
+            const diff = Math.abs(height - scroll); // 絶対値を取得
+            // 差が 3 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
+            if (diff <= 3) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * コメントリストが手動スクロールされたときのイベント
+     */
+    manualScrollEvent() {
+
+        let timeout;
+        this.comment_draw_box.addEventListener('scroll', (event) => {
+    
+            // setTimeout() がセットされていたら無視
+            if (timeout) return;
+            timeout = setTimeout(() => {
+                timeout = 0;
+    
+                // 自動スクロール中でない
+                if (this.is_autoscroll_now === false) {
+    
+                    // 手動スクロールでかつ下まで完全にスクロールされている場合は自動スクロールに戻す
+                    if (this.isManualBottomScroll()) {
+    
+                        // 自動スクロール中
+                        this.is_autoscroll_mode = true;
+    
+                        // ボタンを非表示
+                        this.comment_scroll.classList.remove('show');
+    
+                    } else {
+                    
+                        // 手動スクロール中
+                        this.is_autoscroll_mode = false;
+    
+                        // ボタンを表示
+                        this.comment_scroll.classList.add('show');
+                    }
+                }
+    
+            }, 100);  // 100ms ごと
+        });
+    }
+
+    /**
+     * コメントスクロールボタンがクリックされた時のイベント
+     */
+    clickScrollButtonEvent() {
+
+        this.comment_scroll.addEventListener('click', (event) => {
+    
+            // ボタンを非表示
+            this.comment_scroll.classList.remove('show');
+
+            // スクロール
+            this.scroll(true);
+        
+            // 500ms 後に自動スクロールに戻す
+            setTimeout(() => {
+                this.is_autoscroll_mode = true;
+            }, 500);
+        });
+    }
+
+    /**
+     * ウインドウがリサイズされたときのイベント
+     */
+    windowResizeEvent() {
+        
+        window.addEventListener('resize', (event) => {
+                        
+            // 300ms 後に実行
+            setTimeout(() => {
+    
+                // ボタンを非表示
+                this.comment_scroll.classList.remove('show');
+            
+                // 自動スクロールに戻す
+                this.is_autoscroll_mode = true;
+
+                // スクロール
+                this.scroll(true);
+                
+            }, 300);
+        });
+    }
+}
+
+
 /**
  * 一旦この関数に集約
  * @param {string} stream_state ストリームの状態 (ONAir / File / Offline) 
@@ -305,54 +476,8 @@ function newNicoJKAPIBackendONAir() {
      */
     function receiveComment(options) {
 
-        // 自動スクロールモードか
-        let is_autoscroll_mode = true;
-
-        // 自動スクロール中か
-        let is_autoscroll_now = false;
-
-        // setTimeout の ID
-        let is_autoscroll_now_timer;
-
-        // コメントをスクロールする
-        function scroll(animation = false) {
-
-            // スクロールする余地が存在する
-            if (!(Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight))) {
-
-                // 既に自動スクロール中
-                if (is_autoscroll_now === true) {
-                    // タイマーをクリア
-                    clearTimeout(is_autoscroll_now_timer);
-                    // イベントを削除
-                    comment_draw_box.onscroll = null;
-                }
-
-                // ボタンを非表示
-                comment_scroll.classList.remove('show');
-
-                // スクロール中フラグをオン
-                is_autoscroll_now = true;
-
-                // スクロール
-                comment_draw_box.scrollTo({
-                    top: comment_draw_box.scrollHeight,
-                    left: 0,
-                    behavior: (animation ? 'smooth': 'auto'),  // アニメーション
-                });
-
-                // スクロールを停止して 100ms 後に終了とする
-                comment_draw_box.onscroll = (event) => {
-                    clearTimeout(is_autoscroll_now_timer);
-                    is_autoscroll_now_timer = setTimeout(() => {
-                        // スクロール中フラグをオフ
-                        is_autoscroll_now = false;
-                        // イベントを削除
-                        comment_draw_box.onscroll = null;
-                    }, 100);
-                };
-            }
-        }
+        // Scroll クラスのインスタンス
+        let scroll_instance = new Scroll(comment_draw_box, comment_scroll);
 
         // コメントサーバーの WebSocket
         commentsession = new WebSocket(commentsession_info.commentsession_url, 'msg.nicovideo.jp#json');
@@ -469,8 +594,8 @@ function newNicoJKAPIBackendONAir() {
                     );
 
                     // スクロールする（自動スクロールが有効な場合のみ）
-                    if (is_autoscroll_mode) {
-                        scroll();
+                    if (scroll_instance.is_autoscroll_mode) {
+                        scroll_instance.scroll();
                     }
 
                     // 初回のみ .comment-live のエレメントを取得
@@ -495,89 +620,13 @@ function newNicoJKAPIBackendONAir() {
         if (settings['comment_show']) {
 
             // コメントリストが手動スクロールされたときのイベント
-            let timeout;
-            comment_draw_box.addEventListener('scroll', (event) => {
+            scroll_instance.manualScrollEvent();
 
-                // setTimeout() がセットされていたら無視
-                if (timeout) return;
-                timeout = setTimeout(() => {
-                    timeout = 0;
+            // コメントスクロールボタンがクリックされたときのイベント
+            scroll_instance.clickScrollButtonEvent();
 
-                    // 自動スクロール中でない
-                    if (is_autoscroll_now === false) {
-
-                        // 手動スクロールでかつ下まで完全にスクロールされている
-                        // 参考: https://developer.mozilla.org/ja/docs/Web/API/Element/scrollHeight
-                        function isManualBottomScroll() {
-                            if (is_autoscroll_mode === false) {
-                                const height = Math.ceil(comment_draw_box.scrollHeight); // ボックス全体の高さ
-                                const scroll = Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
-                                const diff = Math.abs(height - scroll); // 絶対値を取得
-                                // 差が 3 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
-                                if (diff <= 3) {
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            } else {
-                                return false;
-                            }
-                        }
-        
-                        // 手動スクロールでかつ下まで完全にスクロールされている場合は自動スクロールに戻す
-                        if (isManualBottomScroll()) {
-
-                            // 自動スクロール中
-                            is_autoscroll_mode = true;
-
-                            // ボタンを非表示
-                            comment_scroll.classList.remove('show');
-
-                        } else {
-                        
-                            // 手動スクロール中
-                            is_autoscroll_mode = false;
-
-                            // ボタンを表示
-                            comment_scroll.classList.add('show');
-                        }
-                    }
-
-                }, 100);  // 100ms ごと
-            });
-
-            // コメントスクロールボタンがクリックされた時のイベント
-            comment_scroll.addEventListener('click', (event) => {
-        
-                // ボタンを非表示
-                comment_scroll.classList.remove('show');
-
-                // スクロール
-                scroll(true);
-            
-                // 500ms 後に自動スクロールに戻す
-                setTimeout(() => {
-                    is_autoscroll_mode = true;
-                }, 500);
-            });
-
-            // ウインドウがリサイズされたとき
-            window.addEventListener('resize', (event) => {
-                        
-                // 300ms 後に実行
-                setTimeout(() => {
-        
-                    // ボタンを非表示
-                    comment_scroll.classList.remove('show');
-                
-                    // 自動スクロールに戻す
-                    is_autoscroll_mode = true;
-
-                    // スクロール
-                    scroll(true);
-                    
-                }, 300);
-            });
+            // ウインドウがリサイズされたときのイベント
+            scroll_instance.windowResizeEvent();
         }
     }
 
