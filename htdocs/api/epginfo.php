@@ -29,34 +29,7 @@
 	function getEpgInfo($ch, $chnum, $sid, $onid, $tsid){
 		
 		global $EDCB_http_url, $nicologin_mail, $nicologin_password;
-
-		/*
-		// 実況IDを取得する
-		$jkch = getJKchannel($ch[$chnum]);
-
-		if (!empty($jkchannels)){
-			// 実況勢いを先に取得しておいたデータから見つけて代入
-			foreach ($jkchannels->channel as $i => $value) {
-				if (strval($value->id) == $jkch){ // 地デジのチャンネル番号が一致したら
-					$ikioi = intval($value->thread->force); // 勢いを代入
-				}
-			}
-			// 地デジで取得できなかったら
-			if (!isset($ikioi)){
-				foreach ($jkchannels->bs_channel as $i => $value) {
-					if (strval($value->id) == $jkch){ // BSのチャンネル番号が一致したら
-						$ikioi = intval($value->thread->force); // 勢いを代入
-					}
-				}
-			}
-		}
-		// BSでも取得できなかったら空にしておく
-		if (!isset($ikioi)){
-			$ikioi = ' - ';
-		}
-		*/
-
-
+		
 		// ------------- 実況勢い -------------
 
 		// モデルを初期化
