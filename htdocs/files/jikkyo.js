@@ -43,6 +43,22 @@ function newNicoJKAPIBackendONAir() {
 
     // コメントセッション WebSocket への接続情報など
     let commentsession_info;
+  
+    // コメントボックス
+    let comment_draw_box;
+
+    // コメントボックスの実際の描画領域
+    let comment_draw_box_draw;
+
+    // コメントスクロールボタン
+    let comment_scroll;
+
+    // DOM 構築を待ってから要素を取得
+    window.addEventListener('DOMContentLoaded', (event) => {
+        comment_draw_box = document.getElementById('comment-draw-box');
+        comment_draw_box_draw = comment_draw_box.getElementsByTagName('tbody')[0];
+        comment_scroll = document.getElementById('comment-scroll');
+    });
 
     /**
      * 視聴セッションサーバーに接続し、コメントサーバーへの接続情報を取得する
@@ -294,9 +310,6 @@ function newNicoJKAPIBackendONAir() {
 
         // コメントをスクロールする
         function scroll(animation = false) {
-                    
-            // コメントボックス
-            const comment_draw_box = document.querySelector('#comment-draw-box');
 
             // スクロールする余地が存在する
             if (!(Math.ceil(comment_draw_box.scrollHeight) === Math.ceil(comment_draw_box.scrollTop + comment_draw_box.clientHeight))) {
@@ -310,8 +323,7 @@ function newNicoJKAPIBackendONAir() {
                 }
 
                 // ボタンを非表示
-                document.getElementById('comment-scroll').style.visibility = 'hidden';
-                document.getElementById('comment-scroll').style.opacity = 0;
+                comment_scroll.classList.remove('show');
 
                 // スクロール中フラグをオン
                 is_autoscroll_now = true;
@@ -443,7 +455,7 @@ function newNicoJKAPIBackendONAir() {
                 if (document.body.clientWidth > 768){
 
                     // コメントリストに表示する
-                    document.querySelector('#comment-draw-box > tbody').insertAdjacentHTML('beforeend',`
+                    comment_draw_box_draw.insertAdjacentHTML('beforeend',`
                         <tr class="comment-live">
                             <td class="time" align="center">` + time + `</td>
                             <td class="comment">` + danmaku.text + `</td>
@@ -477,15 +489,12 @@ function newNicoJKAPIBackendONAir() {
 
             // コメントリストが手動スクロールされたときのイベント
             let timeout;
-            document.getElementById('comment-draw-box').addEventListener('scroll', (event) => {
+            comment_draw_box.addEventListener('scroll', (event) => {
 
                 // setTimeout() がセットされていたら無視
                 if (timeout) return;
                 timeout = setTimeout(() => {
                     timeout = 0;
-
-                    // コメントボックス
-                    const comment_draw_box = document.getElementById('comment-draw-box');
 
                     // 自動スクロール中でない
                     if (is_autoscroll_now === false) {
@@ -515,8 +524,7 @@ function newNicoJKAPIBackendONAir() {
                             is_autoscroll_mode = true;
 
                             // ボタンを非表示
-                            document.getElementById('comment-scroll').style.visibility = 'hidden';
-                            document.getElementById('comment-scroll').style.opacity = 0;
+                            comment_scroll.classList.remove('show');
 
                         } else {
                         
@@ -524,8 +532,7 @@ function newNicoJKAPIBackendONAir() {
                             is_autoscroll_mode = false;
 
                             // ボタンを表示
-                            document.getElementById('comment-scroll').style.visibility = 'visible';
-                            document.getElementById('comment-scroll').style.opacity = 1;
+                            comment_scroll.classList.add('show');
                         }
                     }
 
@@ -533,11 +540,10 @@ function newNicoJKAPIBackendONAir() {
             });
 
             // コメントスクロールボタンがクリックされた時のイベント
-            document.getElementById('comment-scroll').addEventListener('click', (event) => {
+            comment_scroll.addEventListener('click', (event) => {
         
                 // ボタンを非表示
-                document.getElementById('comment-scroll').style.visibility = 'hidden';
-                document.getElementById('comment-scroll').style.opacity = 0;
+                comment_scroll.classList.remove('show');
 
                 // スクロール
                 scroll(true);
@@ -556,8 +562,7 @@ function newNicoJKAPIBackendONAir() {
             setTimeout(() => {
     
                 // ボタンを非表示
-                document.getElementById('comment-scroll').style.visibility = 'hidden';
-                document.getElementById('comment-scroll').style.opacity = 0;
+                comment_scroll.classList.remove('show');
             
                 // 自動スクロールに戻す
                 is_autoscroll_mode = true;

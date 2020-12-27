@@ -1124,17 +1124,21 @@ td {
     bottom: 25px;
     width: 46px;
     height: 46px;
-    opacity: 0;
-    visibility: hidden;
+    border-radius: 50%;
     font-size: 25px;
     color: #FFFFFF;
     background-color: var(--color-green);
+    visibility: hidden;
+    opacity: 0;
     transition: 0.2s ease-in-out;
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
     -webkit-tap-highlight-color: transparent;
-    border-radius: 50%;
     cursor: pointer;
     z-index: 90;
+}
+#comment-scroll.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 @media screen and (min-width: 1025px){
