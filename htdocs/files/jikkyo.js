@@ -457,8 +457,8 @@ function newNicoJKAPIBackendONAir() {
                     // コメントリストに表示する
                     comment_draw_box_draw.insertAdjacentHTML('beforeend',`
                         <tr class="comment-live">
-                            <td class="time" align="center">` + time + `</td>
-                            <td class="comment">` + danmaku.text + `</td>
+                            <td class="time" align="center">${time}</td>
+                            <td class="comment">${danmaku.text}</td>
                         </tr>`
                     );
 
