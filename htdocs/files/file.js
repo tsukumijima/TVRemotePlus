@@ -1,4 +1,5 @@
 
+/*
   // ロード時 & リサイズ時に発火
   $(window).on('DOMContentLoaded resize', function(event){
 
@@ -213,3 +214,4 @@
     });
 
   });
+  */

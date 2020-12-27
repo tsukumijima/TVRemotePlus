@@ -46,22 +46,24 @@ function newNicoJKAPIBackendONAir() {
   
     // 各要素
     // コメントボックス
-    let comment_draw_box;
+    let comment_draw_box = null;
     
     // コメントボックスの実際の描画領域
-    let comment_draw_box_real;
+    let comment_draw_box_real = null;
     
     // コメントスクロールボタン
-    let comment_scroll;
+    let comment_scroll = null;
 
     // コメント（ライブ配信）
     let comment_live = null;
 
     // DOM 構築を待ってから要素を取得
     window.addEventListener('DOMContentLoaded', (event) => {
-        comment_draw_box = document.getElementById('comment-draw-box');
-        comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
-        comment_scroll = document.getElementById('comment-scroll');
+        if (settings['comment_show']) {  // コメントリストが表示されている場合のみ
+            comment_draw_box = document.getElementById('comment-draw-box');
+            comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
+            comment_scroll = document.getElementById('comment-scroll');
+        }
     });
 
     /**
@@ -815,6 +817,19 @@ function newNicoJKAPIBackendONAir() {
  * ファイル再生向け
  */
 function newNicoJKAPIBackendFile() {
+  
+    // 各要素
+    // コメントボックス
+    let comment_draw_box = null;
+    
+    // コメントボックスの実際の描画領域
+    let comment_draw_box_real = null;
+    
+    // コメントスクロールボタン
+    let comment_scroll = null;
+
+    // コメント（ファイル再生）
+    let comment_file = null;
 
     /**
      * 最も近い配列の要素のインデックスを取得する
@@ -834,12 +849,82 @@ function newNicoJKAPIBackendFile() {
 
     // DOM 構築を待ってから実行
     window.addEventListener('DOMContentLoaded', (event) => {
-        
-        // コメントの読み込みが完了したときに発火
-        dp.on('danmaku_load_end', (event) => {
-            console.log('danmaku_load_end');
-        });
 
+        // コメントリストが表示されている場合のみ
+        if (settings['comment_show']) {
+            
+            // DOM 構築を待ってから要素を取得
+            comment_draw_box = document.getElementById('comment-draw-box');
+            comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
+            comment_scroll = document.getElementById('comment-scroll');
+
+            // コメントリストヘッダーの時間の幅を調整
+            document.getElementById('comment-time').style.width = '62px';
+
+            // コメント時間が入る配列
+            // 現在の再生時間に一番近いコメントを探すのに使う
+            let comment_time = [];
+            
+            // コメントの読み込みが完了したときのイベント
+            dp.on('danmaku_load_end', (event) => {
+            
+                let html = [];
+
+                // コメントごとに実行
+                for (danmaku of dp.danmaku.dan) {
+
+                    // コメントが空ならスルー
+                    if (danmaku['text'] === '') {
+                        continue;
+                    }
+
+                    // 再生時間を配列に追加
+                    comment_time.push(danmaku['time']);
+
+                    // 分と秒を計算
+                    let second = Math.floor(danmaku['time'] % 60);
+                    let minutes = Math.floor(danmaku['time'] / 60);
+                    if (second < 10) second = '0' + second;
+                    if (minutes < 10) minutes = '0' + minutes;
+                    let time = minutes + ':' + second;
+
+                    // 末尾に追加
+                    html.push(
+                        `<tr class="comment-file">
+                            <td class="time" align="center" data-time="${danmaku['time']}">${time}</td>
+                            <td class="comment">${danmaku['text']}</td>
+                        </tr>`
+                    );
+                }
+                
+                // コメントをコメントリストに一気に挿入
+                document.querySelector('#comment-draw-box > tbody').innerHTML = html.join('');
+
+                // 初回のみ .comment-file のエレメントを取得
+                if (comment_file === null) {
+                    comment_file = document.getElementsByClassName('comment-file');
+                }
+
+                // 動画の再生時間が変更されたときのイベント
+                function onTimeUpdate(event) {
+
+                    // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
+                    let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
+
+                    // 現在の再生時間に一番近い再生時間のコメントの要素を取得
+                    let comment_current = comment_file[comment_current_index];
+
+                    // 取得した要素までスクロールする
+                    comment_draw_box.scrollTo({
+                        top: comment_current.offsetTop - comment_draw_box.clientHeight,
+                        left: 0,
+                    });
+                }
+                dp.video.addEventListener('timeupdate', onTimeUpdate);
+                dp.video.addEventListener('seeking', onTimeUpdate);
+
+            });
+        }
     });
 
     return {
