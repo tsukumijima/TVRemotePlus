@@ -459,9 +459,9 @@ function newNicoJKAPIBackendONAir() {
                 dp.danmaku.draw(danmaku);
             }
 
-            // コメント数が 500 を超えたら
+            // コメント数が 100 個を超えたら
             if (settings['comment_show']) {
-                if (document.getElementsByClassName('comment-live').length > 500){
+                if (document.getElementsByClassName('comment-live').length > 100){
 
                     // 古いコメントを削除
                     document.getElementsByClassName('comment-live')[0].remove();
@@ -539,10 +539,10 @@ function newNicoJKAPIBackendONAir() {
                 // スクロール
                 scroll(true);
             
-                // 200ms 後に自動スクロールに戻す
+                // 500ms 後に自動スクロールに戻す
                 setTimeout(() => {
                     is_autoscroll_mode = true;
-                }, 200);
+                }, 500);
             });
         }
 
