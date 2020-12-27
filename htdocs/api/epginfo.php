@@ -1,8 +1,12 @@
 <?php
 
+	// カレントディレクトリを modules/ 以下に変更（こうしないと読み込んでくれない）
+	chdir('../../modules/');
+
 	// モジュール読み込み
-	require_once ('../../modules/require.php');
-	require_once ('../../modules/module.php');
+	require_once ('classloader.php');
+	require_once ('require.php');
+	require_once ('module.php');
 
 	// BonDriverとチャンネルを取得
 	list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
@@ -22,10 +26,11 @@
 	libxml_set_streams_context($ssl_context);
 
 	// 番組情報を取得する関数
-	function getEpgInfo($ch, $jkchannels, $chnum, $sid, $onid, $tsid){
+	function getEpgInfo($ch, $chnum, $sid, $onid, $tsid){
 		
-		global $EDCB_http_url;
+		global $EDCB_http_url, $nicologin_mail, $nicologin_password;
 
+		/*
 		// 実況IDを取得する
 		$jkch = getJKchannel($ch[$chnum]);
 
@@ -49,6 +54,30 @@
 		if (!isset($ikioi)){
 			$ikioi = ' - ';
 		}
+		*/
+
+
+		// ------------- 実況勢い -------------
+
+		// モデルを初期化
+		$instance = new Jikkyo($nicologin_mail, $nicologin_password);
+		
+		// 実況 ID を取得
+		$nicojikkyo_id = $instance->getNicoJikkyoID($ch[$chnum]);
+    
+		// 実況 ID が存在する
+		if ($nicojikkyo_id !== null) {
+
+			// 実況勢いを取得
+			$ikioi = $instance->getNicoJikkyoIkioi($nicojikkyo_id);
+
+		} else {
+
+			// 実況勢いを取得できなかった
+			$ikioi = '-';
+		}
+		
+		// -----------------------------------
 
 		if (!empty($EDCB_http_url)){
 		
@@ -182,15 +211,9 @@
 
 	$epginfo['api'] = 'epginfo';
 
-	// 実況勢いを取得してパースしておく
-	@$jkchannels = simplexml_load_file('http://jk.nicovideo.jp/api/v2_app/getchannels/');
-	if (!$jkchannels){
-		$jkchannels = array();
-	}
-
 	// 番組情報を取得
 	foreach ($sid as $key => $value) {
-		$epginfo['onair'][strval($key)] = getEpgInfo($ch, $jkchannels, $key, $value, $onid[strval($key)], $tsid[strval($key)]);
+		$epginfo['onair'][strval($key)] = getEpgInfo($ch, $key, $value, $onid[strval($key)], $tsid[strval($key)]);
 	}
 
 	if (!isset($epginfo['onair'])) $epginfo['onair'] = array();

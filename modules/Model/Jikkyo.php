@@ -8,8 +8,11 @@ class Jikkyo {
     // ログイン情報を保存する Cookie ファイル
     private $cookie_file;
 
-    // channel_table.json ファイル
-    private $channel_table_file;
+    // jikkyo_channel.json ファイル
+    private $jikkyo_channel_file;
+
+    // jikkyo_ikioi.json ファイル
+    private $jikkyo_ikioi_file;
 
     // ゲストかどうか
     private bool $is_guest;
@@ -18,7 +21,29 @@ class Jikkyo {
     private string $nicologin_mail;
     
     // ニコニコのパスワード
-    private string $nicologin_password;
+    private string $nicologin_password;    
+
+    // 変換テーブル
+    // ch は公式チャンネル・co はコミュニティ
+    private array $table = [
+        'jk1' => 'ch2646436',
+        'jk2' => 'ch2646437',
+        'jk4' => 'ch2646438',
+        'jk5' => 'ch2646439',
+        'jk6' => 'ch2646440',
+        'jk7' => 'ch2646441',
+        'jk8' => 'ch2646442',
+        'jk9' => 'ch2646485',
+        'jk101' => 'co5214081',
+        'jk103' => 'co5175227',
+        'jk141' => 'co5175341',
+        'jk151' => 'co5175345',
+        'jk161' => 'co5176119',
+        'jk171' => 'co5176122',
+        'jk181' => 'co5176125',
+        'jk211' => 'ch2646846',
+        'jk222' => 'co5193029',
+    ];
 
 
     /**
@@ -34,7 +59,8 @@ class Jikkyo {
         require ('require.php');
 
         $this->cookie_file = $cookiefile;
-        $this->channel_table_file = $channel_table_file;
+        $this->jikkyo_channel_file = $jikkyo_channel_file;
+        $this->jikkyo_ikioi_file = $jikkyo_ikioi_file;
         
         // メールアドレス・パスワードが空ならゲスト利用と判定
         $this->is_guest = (empty($nicologin_mail) or empty($nicologin_password));
@@ -95,19 +121,21 @@ class Jikkyo {
      */
     public function getNicoJikkyoID(string $channel_name): ?string {
 
-        // channel_table.json を読み込み
-        $channel_table = json_decode(file_get_contents($this->channel_table_file), true);
+        // jikkyo_channel.json を読み込み
+        $channel_table = json_decode(file_get_contents($this->jikkyo_channel_file), true);
 
         // 配列を回す
         foreach ($channel_table as $channel_record) {
 
             // 抽出したチャンネル名
             $channel_field = $channel_record['Channel'];
+            
+            // 正規表現用の文字をエスケープ
+            $channel_field_escape = str_replace('/', '\/', preg_quote($channel_field));
 
             // 正規表現パターン
-            // preg_quote() は正規表現用の文字をエスケープする用
             mb_regex_encoding('UTF-8');
-            $match = '/^'.str_replace('NHK総合', 'NHK総合[0-9]?', str_replace('NHKEテレ', 'NHKEテレ[0-9]?', $channel_field)).'[0-9]?/u';
+            $match = '/^'.str_replace('NHK総合', 'NHK総合[0-9]?', str_replace('NHKEテレ', 'NHKEテレ[0-9]?', $channel_field_escape)).'[0-9]?/u';
 
             // チャンネル名がいずれかのパターンに一致したら
             if ($channel_name === $channel_field or preg_match($match, $channel_name)) {
@@ -136,30 +164,8 @@ class Jikkyo {
      */
     public function getNicoChannelID(string $nicojikkyo_id): ?string {
 
-        // 変換テーブル
-        // ch は公式チャンネル・co はコミュニティ
-        $table = [
-            'jk1' => 'ch2646436',
-            'jk2' => 'ch2646437',
-            'jk4' => 'ch2646438',
-            'jk5' => 'ch2646439',
-            'jk6' => 'ch2646440',
-            'jk7' => 'ch2646441',
-            'jk8' => 'ch2646442',
-            'jk9' => 'ch2646485',
-            'jk101' => 'co5214081',
-            'jk103' => 'co5175227',
-            'jk141' => 'co5175341',
-            'jk151' => 'co5175345',
-            'jk161' => 'co5176119',
-            'jk171' => 'co5176122',
-            'jk181' => 'co5176125',
-            'jk211' => 'ch2646846',
-            'jk222' => 'co5193029',
-        ];
-
-        if (isset($table[$nicojikkyo_id])) {
-            return $table[$nicojikkyo_id];
+        if (isset($this->table[$nicojikkyo_id])) {
+            return $this->table[$nicojikkyo_id];
         } else {
             return null;
         }
@@ -483,5 +489,76 @@ class Jikkyo {
 
         // 変換した過去ログと過去ログ API の URL を返す
         return [$danmaku, $kakologapi_url];
+    }
+
+
+    /**
+     * 実況勢いをちくわちゃんランキング（ちくラン）から取得
+     * サーバーに負荷をかけないように、実行結果はファイルにキャッシュし 1 分以上経ったら更新する
+     *
+     * @param string $nicojikkyo_id 実況ID
+     * @return string 実況勢い
+     */
+    public function getNicoJikkyoIkioi(string $nicojikkyo_id): string {
+
+        // jikkyo_ikioi.json を更新
+        $update = function($table, $jikkyo_ikioi_file): void {
+
+            $chikuran_url = 'http://www.chikuwachan.com/live/index.cgi?search=%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E5%AE%9F%E6%B3%81';
+
+            // ちくランの検索結果から実況勢いを取得
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $chikuran_url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
+            curl_setopt($curl, CURLOPT_USERAGENT, Utils::getUserAgent()); // ユーザーエージェントを送信
+            $response = curl_exec($curl);  // リクエストを実行
+            curl_close($curl);
+
+            // HTML を解析
+            $document = new Document($response);
+
+            // 配列を用意
+            $jikkyo_ikioi = [];
+
+            // 実況チャンネルごとに勢いを取得
+            foreach ($table as $nicojikkyo_id => $nicochannel_id) {
+
+                // 実況勢いを取得
+                $jikkyo_ikioi_elem = $document->querySelector("div#comm_{$nicochannel_id} div.counts div.active");
+
+                // 実況勢いを配列に追加
+                if ($jikkyo_ikioi_elem !== null) {
+                    $jikkyo_ikioi[$nicojikkyo_id] = strval($jikkyo_ikioi_elem->textContent);
+                } else {
+                    $jikkyo_ikioi[$nicojikkyo_id] = '-';  // その実況チャンネルの勢いが取得できなかった
+                }
+            }
+            
+            // jikkyo_ikioi.json に保存
+            file_put_contents($jikkyo_ikioi_file, json_encode($jikkyo_ikioi, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+        };
+
+        // jikkyo_ikioi.json が存在しない or 更新されてから 1 分以上経っている
+        clearstatcache();  // キャッシュを削除（重要）
+        if ((file_exists($this->jikkyo_ikioi_file) === false) or
+            (time() - filemtime($this->jikkyo_ikioi_file) >= 60)) {
+
+            // jikkyo_ikioi.json を更新
+            $update($this->table, $this->jikkyo_ikioi_file);
+        }
+
+        // jikkyo_ikioi.json から実況勢いを取得
+        $jikkyo_ikioi = json_decode(file_get_contents($this->jikkyo_ikioi_file), true);
+
+        // 指定された実況チャンネルのものを返す
+        if (isset($jikkyo_ikioi[$nicojikkyo_id])) {
+            $jikkyo_ikioi_number = $jikkyo_ikioi[$nicojikkyo_id];
+        } else {
+            $jikkyo_ikioi_number = '-';
+        }
+
+        return $jikkyo_ikioi_number;
     }
 }

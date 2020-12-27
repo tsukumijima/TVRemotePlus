@@ -43,7 +43,7 @@ class JikkyoController {
                 } else if ($ch[intval($settings[$stream]['channel']).'_1']){
                     $nicojikkyo_id = $instance->getNicoJikkyoID($ch[intval($settings[$stream]['channel']).'_1']);
                 } else {
-                    $nicojikkyo_id = -2;
+                    $nicojikkyo_id = null;
                 }
     
                 // 実況 ID が存在する
@@ -127,6 +127,7 @@ class JikkyoController {
             // 出力
             $output = [
                 'api' => 'jikkyo',
+                'type' => 'onair',
                 'result' => 'success',
                 'session' => $nicolive_session,
             ];
@@ -138,6 +139,7 @@ class JikkyoController {
             // 出力
             $output = [
                 'api' => 'jikkyo',
+                'type' => 'file',
                 'result' => 'success',
                 'kakolog_url' => $kakolog_url,
                 'kakolog' => $kakolog,
@@ -150,6 +152,7 @@ class JikkyoController {
             // 出力
             $output = [
                 'api' => 'jikkyo',
+                'type' => 'error',
                 'result' => 'error',
                 'message' => (isset($message) ? $message : '不明なエラーが発生しました。'),
             ];

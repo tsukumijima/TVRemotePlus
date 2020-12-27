@@ -84,17 +84,17 @@ $historyfile = $base_dir.'htdocs/files/history.json';
 // 設定ファイルのパス
 $inifile = $base_dir.'data/settings.json';
 
-// コメント設定ファイルのパス
-$commentfile = $base_dir.'data/comment.json';
-
 // ニコニコのログイン Cookie 保存ファイルのパス
 $cookiefile = $base_dir.'data/niconico.cookie';
 
 // ch_sid.tsv のパス
 $ch_sidfile = $base_dir.'data/ch_sid.tsv';
 
-// channel_table.json のパス
-$channel_table_file = $base_dir.'data/channel_table.json';
+// jikkyo_channel.json のパス
+$jikkyo_channel_file = $base_dir.'data/jikkyo_channel.json';
+
+// jikkyo_ikioi.json のパス
+$jikkyo_ikioi_file = $base_dir.'data/jikkyo_ikioi.json';
 
 // オフライン時の m3u8 のパス
 $offline_m3u8 = $base_dir.'data/offline.m3u8';
