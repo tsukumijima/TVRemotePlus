@@ -560,26 +560,25 @@ function newNicoJKAPIBackendONAir() {
                     is_autoscroll_mode = true;
                 }, 500);
             });
-        }
 
-        // ウインドウがリサイズされたとき
-        window.addEventListener('resize', (event) => {
-                    
-            // スクロール
-            setTimeout(() => {
-    
-                // ボタンを非表示
-                comment_scroll.classList.remove('show');
-            
-                // 自動スクロールに戻す
-                is_autoscroll_mode = true;
-
-                // スクロール
-                scroll(true);
+            // ウインドウがリサイズされたとき
+            window.addEventListener('resize', (event) => {
+                        
+                // 300ms 後に実行
+                setTimeout(() => {
+        
+                    // ボタンを非表示
+                    comment_scroll.classList.remove('show');
                 
-            }, 300);
+                    // 自動スクロールに戻す
+                    is_autoscroll_mode = true;
 
-        });
+                    // スクロール
+                    scroll(true);
+                    
+                }, 300);
+            });
+        }
     }
 
     /**
@@ -924,8 +923,6 @@ function newNicoJKAPIBackendFile() {
                             left: 0,
                         });
                     }
-                    dp.video.addEventListener('timeupdate', onTimeUpdate);
-                    dp.video.addEventListener('seeking', onTimeUpdate);
 
                 // 軽量モード
                 } else {
@@ -956,9 +953,22 @@ function newNicoJKAPIBackendFile() {
                             left: 0,
                         });
                     }
-                    dp.video.addEventListener('timeupdate', onTimeUpdate);
-                    dp.video.addEventListener('seeking', onTimeUpdate);
                 }
+
+                // イベントを設定
+                dp.video.addEventListener('timeupdate', onTimeUpdate);
+                dp.video.addEventListener('seeking', onTimeUpdate);
+
+                // スクロールを停止して 100ms 後に終了とする
+                comment_draw_box.onscroll = (event) => {
+                    clearTimeout(is_autoscroll_now_timer);
+                    is_autoscroll_now_timer = setTimeout(() => {
+                        // スクロール中フラグをオフ
+                        is_autoscroll_now = false;
+                        // イベントを削除
+                        comment_draw_box.onscroll = null;
+                    }, 100);
+                };
 
             });
         }
