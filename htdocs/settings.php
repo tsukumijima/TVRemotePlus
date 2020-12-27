@@ -1049,7 +1049,7 @@
                   新規インストール時のデフォルトは 1 (秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlslive_time" type="number" min="1" max="60" placeholder="1" value="<?php echo $hlslive_time; ?>" required />
+              <input class="text-box" name="hlslive_time" type="number" step="0.1" min="0.5" max="60" placeholder="1" value="<?php echo $hlslive_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -1061,7 +1061,7 @@
                   新規インストール時のデフォルトは 5 (秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlsfile_time" type="number" min="1" max="60" placeholder="5" value="<?php echo $hlsfile_time; ?>" required />
+              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="5" value="<?php echo $hlsfile_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
