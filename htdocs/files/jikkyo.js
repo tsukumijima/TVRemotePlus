@@ -44,19 +44,23 @@ function newNicoJKAPIBackendONAir() {
     // コメントセッション WebSocket への接続情報など
     let commentsession_info;
   
+    // 各要素
     // コメントボックス
     let comment_draw_box;
-
+    
     // コメントボックスの実際の描画領域
-    let comment_draw_box_draw;
-
+    let comment_draw_box_real;
+    
     // コメントスクロールボタン
     let comment_scroll;
+
+    // コメント（ライブ配信）
+    let comment_live = null;
 
     // DOM 構築を待ってから要素を取得
     window.addEventListener('DOMContentLoaded', (event) => {
         comment_draw_box = document.getElementById('comment-draw-box');
-        comment_draw_box_draw = comment_draw_box.getElementsByTagName('tbody')[0];
+        comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
         comment_scroll = document.getElementById('comment-scroll');
     });
 
@@ -455,7 +459,7 @@ function newNicoJKAPIBackendONAir() {
                 if (document.body.clientWidth > 768){
 
                     // コメントリストに表示する
-                    comment_draw_box_draw.insertAdjacentHTML('beforeend',`
+                    comment_draw_box_real.insertAdjacentHTML('beforeend',`
                         <tr class="comment-live">
                             <td class="time" align="center">${time}</td>
                             <td class="comment">${danmaku.text}</td>
@@ -466,21 +470,22 @@ function newNicoJKAPIBackendONAir() {
                     if (is_autoscroll_mode) {
                         scroll();
                     }
+
+                    // 初回のみ .comment-live のエレメントを取得
+                    if (comment_live === null) {
+                        comment_live = document.getElementsByClassName('comment-live');
+                    }
+                    
+                    // コメント数が 100 個を超えたら古いコメントを削除
+                    if (comment_live.length > 100){
+                        comment_live[0].remove();
+                    }
                 }
             }
 
             // コメント描画 (再生時のみ)
             if (!dp.video.paused){
                 dp.danmaku.draw(danmaku);
-            }
-
-            // コメント数が 100 個を超えたら
-            if (settings['comment_show']) {
-                if (document.getElementsByClassName('comment-live').length > 100){
-
-                    // 古いコメントを削除
-                    document.getElementsByClassName('comment-live')[0].remove();
-                }
             }
         });
 
@@ -810,6 +815,32 @@ function newNicoJKAPIBackendONAir() {
  * ファイル再生向け
  */
 function newNicoJKAPIBackendFile() {
+
+    /**
+     * 最も近い配列の要素のインデックスを取得する
+     * 参考: https://qiita.com/shuuuuun/items/f0031d710ca50b21177a
+     * @param {array} array 調べたい配列
+     * @param {number} search 調べたい値
+     */
+    function getClosestArrayElementIndex(array, search) {
+        let diff = [];
+        let index = 0;
+        array.forEach(function(val, i){
+          diff[i] = Math.abs(search - val);
+          index = (diff[index] < diff[i]) ? index : i;
+        });
+        return index;
+    }
+
+    // DOM 構築を待ってから実行
+    window.addEventListener('DOMContentLoaded', (event) => {
+        
+        // コメントの読み込みが完了したときに発火
+        dp.on('danmaku_load_end', (event) => {
+            console.log('danmaku_load_end');
+        });
+
+    });
 
     return {
 
