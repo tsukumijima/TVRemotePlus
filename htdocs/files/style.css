@@ -1078,9 +1078,18 @@ td {
     height: 28px;
 }
 
-.comment-lightmode .comment-file:first-of-type,
-.comment-lightmode .comment-file:last-of-type {
-    height: 34.5px;
+.comment-lightmode #comment-draw-box .comment-file:first-of-type .time,
+.comment-lightmode #comment-draw-box .comment-file:last-of-type .time {
+    padding: 3px 0px;
+}
+.comment-lightmode #comment-draw-box .comment-file:first-of-type .comment,
+.comment-lightmode #comment-draw-box .comment-file:last-of-type .comment {
+    padding: 3px 12px;
+}
+
+.comment-lightmode #comment-draw-box tbody {
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
 }
 
 .comment-lightmode .comment-file .comment {

@@ -853,7 +853,7 @@ function newNicoJKAPIBackendFile() {
         // コメントリストが表示されている場合のみ
         if (settings['comment_show']) {
             
-            // DOM 構築を待ってから要素を取得
+            // 各要素を取得
             comment_draw_box = document.getElementById('comment-draw-box');
             comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
             comment_scroll = document.getElementById('comment-scroll');
@@ -896,32 +896,69 @@ function newNicoJKAPIBackendFile() {
                         </tr>`
                     );
                 }
+
+                // 標準モード
+                if (settings['comment_list_performance'] !== 'light') {
                 
-                // コメントをコメントリストに一気に挿入
-                document.querySelector('#comment-draw-box > tbody').innerHTML = html.join('');
+                    // コメントをコメントリストに一気に挿入
+                    comment_draw_box_real.innerHTML = html.join('');
 
-                // 初回のみ .comment-file のエレメントを取得
-                if (comment_file === null) {
-                    comment_file = document.getElementsByClassName('comment-file');
-                }
+                    // 初回のみ .comment-file のエレメントを取得
+                    if (comment_file === null) {
+                        comment_file = document.getElementsByClassName('comment-file');
+                    }
 
-                // 動画の再生時間が変更されたときのイベント
-                function onTimeUpdate(event) {
+                    // 動画の再生時間が変更されたときのイベント
+                    function onTimeUpdate(event) {
 
-                    // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
-                    let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
+                        // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
+                        let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
 
-                    // 現在の再生時間に一番近い再生時間のコメントの要素を取得
-                    let comment_current = comment_file[comment_current_index];
+                        // 現在の再生時間に一番近い再生時間のコメントの要素を取得
+                        let comment_current = comment_file[comment_current_index];
 
-                    // 取得した要素までスクロールする
-                    comment_draw_box.scrollTo({
-                        top: comment_current.offsetTop - comment_draw_box.clientHeight,
-                        left: 0,
+                        // 取得した要素までスクロールする
+                        // 5 (px) はパディング
+                        comment_draw_box.scrollTo({
+                            top: comment_current.offsetTop - comment_draw_box.clientHeight + 5,
+                            left: 0,
+                        });
+                    }
+                    dp.video.addEventListener('timeupdate', onTimeUpdate);
+                    dp.video.addEventListener('seeking', onTimeUpdate);
+
+                // 軽量モード
+                } else {
+
+                    // 識別用のクラスを付与
+                    document.querySelector('#comment-box').classList.add('comment-lightmode');
+
+                    // Clusterize.js で高速スクロール
+                    let clusterize = new Clusterize({
+                        rows: html,
+                        scrollElem: comment_draw_box,
+                        contentElem: comment_draw_box_real,
                     });
+
+                    // 動画の再生時間が変更されたときのイベント
+                    function onTimeUpdate(event) {
+
+                        // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
+                        let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
+
+                        // 軽量モードの場合、一番近い再生時間のコメントの要素が必ずしも存在するとは限らないため、
+                        // (コメントのインデックス × コメントの高さ (28px)) + パディング (11px) で擬似的に親要素からの高さを取得する
+                        let comment_current_time = (comment_current_index * 28) + 11;
+
+                        // 取得した要素までスクロールする
+                        comment_draw_box.scrollTo({
+                            top: comment_current_time - comment_draw_box.clientHeight,
+                            left: 0,
+                        });
+                    }
+                    dp.video.addEventListener('timeupdate', onTimeUpdate);
+                    dp.video.addEventListener('seeking', onTimeUpdate);
                 }
-                dp.video.addEventListener('timeupdate', onTimeUpdate);
-                dp.video.addEventListener('seeking', onTimeUpdate);
 
             });
         }
