@@ -122,13 +122,16 @@ function newNicoJKAPIBackendONAir() {
                     case 'seat':
 
                         // keepIntervalSec の秒数ごとに keepSeat を送信して座席を維持する
-                        setInterval(() => {
+                        let keepseat = setInterval(() => {
                             // セッションがまだ開いていれば
                             if (watchsession.readyState === 1) {
                                 // 座席を維持
                                 watchsession.send(JSON.stringify({
                                     'type': 'keepSeat',
                                 }));
+                            // setInterval を解除
+                            } else {
+                                clearInterval(keepseat);
                             }
                         }, message.data.keepIntervalSec * 1000);
 
@@ -565,24 +568,6 @@ function newNicoJKAPIBackendONAir() {
             }, 300);
 
         });
-
-        // ストリームの更新イベントを受け取ったとき
-        function restart() {
-
-            // WebSocket が開かれていれば閉じる
-            if (watchsession) watchsession.close();
-            if (commentsession) commentsession.close();
-
-            // プレイヤー側のコメント機能をリロード
-            dp.danmaku.dan = [];
-            dp.danmaku.clear();
-            dp.danmaku.load();
-            
-            // イベント自身を削除
-            document.getElementById('status').removeEventListener('update', restart);
-        }
-        // イベント追加
-        document.getElementById('status').addEventListener('update', restart);
     }
 
     /**
@@ -677,6 +662,22 @@ function newNicoJKAPIBackendONAir() {
         }
     }
 
+    // ストリームの更新イベントを受け取ったときのイベント
+    function restart() {
+
+        // WebSocket が開かれていれば閉じる
+        if (watchsession) watchsession.close();
+        if (commentsession) commentsession.close();
+
+        // プレイヤー側のコメント機能をリロード
+        dp.danmaku.dan = [];
+        dp.danmaku.clear();
+        dp.danmaku.load();
+        
+        // イベント自身を削除
+        document.getElementById('status').removeEventListener('update', restart);
+    }
+
     /**
      * ニコニコの色指定を 16 進数カラーコードに置換する
      * @param {string} color ニコニコの色指定
@@ -756,6 +757,9 @@ function newNicoJKAPIBackendONAir() {
                 // 他からも見れるように上のスコープに配置
                 commentsession_connectable = commentsession_connectable_;
                 commentsession_info = commentsession_info_;
+
+                // 再起動イベントを追加
+                document.getElementById('status').addEventListener('update', restart);
 
                 // 視聴セッションを取得できていれば
                 if (commentsession_connectable) {
