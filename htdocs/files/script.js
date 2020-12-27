@@ -209,6 +209,9 @@
             // ON Air
             document.getElementById('state').textContent = '● ON Air';
             document.getElementById('state').style.color = '#007cff';
+
+            // 実況勢い
+            document.getElementById('ikioi').textContent = `実況勢い: ${data['stream'][stream]['ikioi']}`;
           }
 
         } else if (data['stream'][stream]['state'] == 'Offline') {
