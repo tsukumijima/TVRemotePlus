@@ -75,7 +75,6 @@
 		echo '  <script type="text/javascript" src="/files/settings.js?'.$version.'"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'ONAir'){
 	} else if ($ini[$stream]['state'] == 'File'){
-		echo '  <script type="text/javascript" src="/files/file.js?'.$version.'"></script>'."\n";
 	}
 ?>
 

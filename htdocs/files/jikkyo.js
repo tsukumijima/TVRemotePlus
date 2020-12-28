@@ -7,14 +7,18 @@ class Scroll {
 
     /**
      * コンストラクタ
-     * @param {HTMLElement} comment_draw_box 
-     * @param {HTMLElement} comment_scroll 
+     * @param {HTMLElement} comment_draw_box コメントリスト
+     * @param {HTMLElement} comment_scroll コメントスクロールボタン
+     * @param {Function} scroll_amount スクロール量
+     * @param {Boolean} is_file ファイル再生かどうか
      */
-    constructor(comment_draw_box, comment_scroll) {
+    constructor(comment_draw_box, comment_scroll, scroll_amount, is_file = false) {
         
         // 引数をセット
         this.comment_draw_box = comment_draw_box;
         this.comment_scroll = comment_scroll;
+        this.getScrollAmount = scroll_amount
+        this.is_file = is_file
 
         // 自動スクロールモードか
         this.is_autoscroll_mode = true;
@@ -33,7 +37,7 @@ class Scroll {
     scroll(animation = false) {
 
         // スクロールする余地が存在する
-        if (!(Math.ceil(this.comment_draw_box.scrollHeight) === Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight))) {
+        if (!(Math.ceil(this.comment_draw_box.scrollHeight) === Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight)) || this.is_file) {
 
             // 既に自動スクロール中
             if (this.is_autoscroll_now === true) {
@@ -51,7 +55,7 @@ class Scroll {
 
             // スクロール
             this.comment_draw_box.scrollTo({
-                top: this.comment_draw_box.scrollHeight,
+                top: this.getScrollAmount(),
                 left: 0,
                 behavior: (animation ? 'smooth': 'auto'),  // アニメーション
             });
@@ -75,7 +79,8 @@ class Scroll {
      * @return {Boolean} 手動スクロールでかつ下まで完全にスクロールされているなら true
      */
     isManualBottomScroll() {
-        if (this.is_autoscroll_mode === false) {
+        // 自動スクロール状態でない & ファイル再生状態でない
+        if (this.is_autoscroll_mode === false && this.is_file === false) {
             const height = Math.ceil(this.comment_draw_box.scrollHeight); // ボックス全体の高さ
             const scroll = Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
             const diff = Math.abs(height - scroll); // 絶対値を取得
@@ -142,10 +147,10 @@ class Scroll {
             // スクロール
             this.scroll(true);
         
-            // 500ms 後に自動スクロールに戻す
+            // 700ms 後に自動スクロールに戻す
             setTimeout(() => {
                 this.is_autoscroll_mode = true;
-            }, 500);
+            }, 700);
         });
     }
 
@@ -161,12 +166,12 @@ class Scroll {
     
                 // ボタンを非表示
                 this.comment_scroll.classList.remove('show');
-            
-                // 自動スクロールに戻す
-                this.is_autoscroll_mode = true;
 
                 // スクロール
                 this.scroll(true);
+            
+                // 自動スクロールに戻す
+                this.is_autoscroll_mode = true;
                 
             }, 300);
         });
@@ -477,7 +482,7 @@ function newNicoJKAPIBackendONAir() {
     function receiveComment(options) {
 
         // Scroll クラスのインスタンス
-        let scroll_instance = new Scroll(comment_draw_box, comment_scroll);
+        let scroll_instance = new Scroll(comment_draw_box, comment_scroll, () => {return comment_draw_box.scrollHeight});
 
         // コメントサーバーの WebSocket
         commentsession = new WebSocket(commentsession_info.commentsession_url, 'msg.nicovideo.jp#json');
@@ -619,13 +624,13 @@ function newNicoJKAPIBackendONAir() {
         // コメントリストが表示されている場合のみ
         if (settings['comment_show']) {
 
-            // コメントリストが手動スクロールされたときのイベント
+            // コメントリストが手動スクロールされたときのイベントを設定
             scroll_instance.manualScrollEvent();
 
-            // コメントスクロールボタンがクリックされたときのイベント
+            // コメントスクロールボタンがクリックされたときのイベントを設定
             scroll_instance.clickScrollButtonEvent();
 
-            // ウインドウがリサイズされたときのイベント
+            // ウインドウがリサイズされたときのイベントを設定
             scroll_instance.windowResizeEvent();
         }
     }
@@ -879,6 +884,9 @@ function newNicoJKAPIBackendFile() {
     // コメント（ファイル再生）
     let comment_file = null;
 
+    // 進捗バー
+    let progressbar = null;
+
     /**
      * 最も近い配列の要素のインデックスを取得する
      * 参考: https://qiita.com/shuuuuun/items/f0031d710ca50b21177a
@@ -905,6 +913,7 @@ function newNicoJKAPIBackendFile() {
             comment_draw_box = document.getElementById('comment-draw-box');
             comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
             comment_scroll = document.getElementById('comment-scroll');
+            progressbar = document.getElementById('progress');
 
             // コメントリストヘッダーの時間の幅を調整
             document.getElementById('comment-time').style.width = '62px';
@@ -938,8 +947,8 @@ function newNicoJKAPIBackendFile() {
 
                     // 末尾に追加
                     html.push(
-                        `<tr class="comment-file">
-                            <td class="time" align="center" data-time="${danmaku['time']}">${time}</td>
+                        `<tr class="comment-file" onclick="dp.video.dispatchEvent(new CustomEvent('commentclick', {detail: ${danmaku['time']}}))">
+                            <td class="time" align="center">${time}</td>
                             <td class="comment">${danmaku['text']}</td>
                         </tr>`
                     );
@@ -956,8 +965,10 @@ function newNicoJKAPIBackendFile() {
                         comment_file = document.getElementsByClassName('comment-file');
                     }
 
-                    // 動画の再生時間が変更されたときのイベント
-                    function onTimeUpdate(event) {
+                    /**
+                     * スクロール量を取得
+                     */
+                    function getScrollTop() {
 
                         // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
                         let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
@@ -965,12 +976,9 @@ function newNicoJKAPIBackendFile() {
                         // 現在の再生時間に一番近い再生時間のコメントの要素を取得
                         let comment_current = comment_file[comment_current_index];
 
-                        // 取得した要素までスクロールする
+                        // スクロール量を返す
                         // 5 (px) はパディング
-                        comment_draw_box.scrollTo({
-                            top: comment_current.offsetTop - comment_draw_box.clientHeight + 5,
-                            left: 0,
-                        });
+                        return comment_current.offsetTop - comment_draw_box.clientHeight + 5;
                     }
 
                 // 軽量モード
@@ -986,8 +994,10 @@ function newNicoJKAPIBackendFile() {
                         contentElem: comment_draw_box_real,
                     });
 
-                    // 動画の再生時間が変更されたときのイベント
-                    function onTimeUpdate(event) {
+                    /**
+                     * スクロール量を取得
+                     */
+                    function getScrollTop() {
 
                         // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
                         let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
@@ -996,29 +1006,67 @@ function newNicoJKAPIBackendFile() {
                         // (コメントのインデックス × コメントの高さ (28px)) + パディング (11px) で擬似的に親要素からの高さを取得する
                         let comment_current_time = (comment_current_index * 28) + 11;
 
-                        // 取得した要素までスクロールする
-                        comment_draw_box.scrollTo({
-                            top: comment_current_time - comment_draw_box.clientHeight,
-                            left: 0,
-                        });
+                        // スクロール量を返す
+                        return comment_current_time - comment_draw_box.clientHeight;
                     }
                 }
 
-                // イベントを設定
+
+                // Scroll クラスのインスタンス
+                let scroll_instance = new Scroll(comment_draw_box, comment_scroll, getScrollTop, true);
+
+                // コメントがクリックされたときのイベント
+                function onCommentClick(event) {
+
+                    // 動画をシーク
+                    dp.seek(event.detail);
+    
+                    // 自動スクロール中
+                    scroll_instance.is_autoscroll_mode = true;
+
+                    // スクロール
+                    scroll_instance.scroll();
+                }
+
+                // コメントがクリックされたときのイベントを設定
+                // カスタムイベントを敢えてトリッキーな手法で使っている理由は、特に軽量モードで要素の追加/削除が発生し
+                // インラインでないと確実にイベントを発火させられず、さらにシーク後に自動スクロールに戻す場合 Scroll クラスの
+                // インスタンスが必要になるので、このあたりのコードに処理を戻す必要があるため
+                dp.video.addEventListener('commentclick', onCommentClick);
+
+                // 動画の再生時間が変更されたときのイベント
+                let last_scrolltop = getScrollTop();
+                function onTimeUpdate(event) {
+
+                    // プログレスバーの進捗割合を設定
+                    let percentage = (dp.video.currentTime / dp.video.duration) * 100;
+                    progressbar.style.width = percentage + '%';
+
+                    // 今取得した ScrollTop が以前と異なるなら
+                    if (getScrollTop() !== last_scrolltop) {
+
+                        // last_scrolltop を更新
+                        last_scrolltop = getScrollTop();
+
+                        // 取得した要素までスクロールする（自動スクロールが有効な場合のみ）
+                        if (scroll_instance.is_autoscroll_mode) {
+                            scroll_instance.scroll();
+                        }
+                    }
+                }
+
+                // 動画の再生時間が変更されたときのイベントを設定
                 dp.video.addEventListener('timeupdate', onTimeUpdate);
                 dp.video.addEventListener('seeking', onTimeUpdate);
 
-                // スクロールを停止して 100ms 後に終了とする
-                comment_draw_box.onscroll = (event) => {
-                    clearTimeout(is_autoscroll_now_timer);
-                    is_autoscroll_now_timer = setTimeout(() => {
-                        // スクロール中フラグをオフ
-                        is_autoscroll_now = false;
-                        // イベントを削除
-                        comment_draw_box.onscroll = null;
-                    }, 100);
-                };
-
+                // コメントリストが手動スクロールされたときのイベントを設定
+                scroll_instance.manualScrollEvent();
+    
+                // コメントスクロールボタンがクリックされたときのイベントを設定
+                scroll_instance.clickScrollButtonEvent();
+    
+                // ウインドウがリサイズされたときのイベントを設定
+                scroll_instance.windowResizeEvent();
             });
         }
     });
