@@ -578,14 +578,15 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 
 - **CSS ライブラリ**
   - Font Awesome (アイコンフォント)
-  - Material Icons（アイコンフォント）
-  - Google Fonts（Web フォント）
+  - Material Icons (アイコンフォント)
+  - Google Fonts (Web フォント)
 - **JavaScript ライブラリ**
   - jQuery (フレームワーク)
   - DPlayer (フォーク・JavaScript 製の動画プレイヤー)
   - hls.js (b24.js対応フォーク・HLS 形式の動画再生に利用)
   - CSS Browser Selector (ブラウザや OS ごとにクラスを付与してくれるライブラリ)
   - js-cookie (Cookie の読み取り・書き込みに利用)
+  - moment.js (日付操作ライブラリ)
   - PWACompat (PWA 対応を楽にしてくれるライブラリ)
   - Swiper (スライダーライブラリ)
   - Toastr (トースト通知ライブラリ)
@@ -602,13 +603,13 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
   - クライアント：**最新の Chrome・Firefox・Safari など**
     - **Chrome を強く推奨します**
       - Firefox でもいいですがあまり確認が取れていません（ macOS 版 Safari はほぼ未検証です）
-    - Chromium Edge・Opera・Vivaldi などはブラウザエンジンが Chrome (Blink) なので Chrome とみなします
+    - Chromium Edge・Opera・Vivaldi など Chromium 系ブラウザはブラウザエンジンが Chrome (Blink) なので Chrome とみなします
     - （言うまでもありませんが）**IE と 旧 Edge はサポートしていません**
     - iOS 端末ではブラウザエンジンが Safari に使われている Webkit 以外利用できないため、一部正常に動作しない機能があります
       - iOS 版 Chrome・Firefox の内部ブラウザエンジンは Webkit です
       - macOS は Chrome が使えるのでそっちを使ってください（そこまで手が回らない…）
     - キャプチャ付きツイートの投稿機能は、**Android 版 Firefox・macOS 版 Safari では対応していません**（ブラウザのバグによるエラーでキャプチャに失敗します）
-      - 動画のキャプチャはブラウザの仕様に依存するうえブラウザ側のバグが多いため、基本的に最新の Chrome を利用してください
+      - 動画のキャプチャはブラウザの仕様に依存する上ブラウザ側のバグが多いため、基本的に最新の Chrome を利用してください
 
 ## 動作確認
   - サーバー：Windows7 Professional 64bit (Desktop) + PLEX PX-Q3PE4
