@@ -42,8 +42,8 @@ class ClassLoader
             $base = str_replace('\\', '/', dirname(__FILE__));
             self::$dirs = array(
                 // ここに読み込んでほしいディレクトリを足していきます
-                $base . '/Controller',
-                $base . '/Model'
+                $base . '/Controllers',
+                $base . '/Models'
             );
         }
 
