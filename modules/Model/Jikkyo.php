@@ -8,8 +8,8 @@ class Jikkyo {
     // ログイン情報を保存する Cookie ファイル
     private $cookie_file;
 
-    // jikkyo_channel.json ファイル
-    private $jikkyo_channel_file;
+    // jikkyo_channels.json ファイル
+    private $jikkyo_channels_file;
 
     // jikkyo_ikioi.json ファイル
     private $jikkyo_ikioi_file;
@@ -59,7 +59,7 @@ class Jikkyo {
         require ('require.php');
 
         $this->cookie_file = $cookiefile;
-        $this->jikkyo_channel_file = $jikkyo_channel_file;
+        $this->jikkyo_channels_file = $jikkyo_channels_file;
         $this->jikkyo_ikioi_file = $jikkyo_ikioi_file;
         
         // メールアドレス・パスワードが空ならゲスト利用と判定
@@ -121,8 +121,8 @@ class Jikkyo {
      */
     public function getNicoJikkyoID(string $channel_name): ?string {
 
-        // jikkyo_channel.json を読み込み
-        $channel_table = json_decode(file_get_contents($this->jikkyo_channel_file), true);
+        // jikkyo_channels.json を読み込み
+        $channel_table = json_decode(file_get_contents($this->jikkyo_channels_file), true);
 
         // 配列を回す
         foreach ($channel_table as $channel_record) {

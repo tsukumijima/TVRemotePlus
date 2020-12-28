@@ -653,7 +653,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 
 TVTest (NicoJK)・TVRemoteViewer_VB・EDCB Material WebUI・EPGStation など、数多くの先駆者様・ソフトウェア・サイト、  
 また様々なネット上の文献を参考にし、ここまで作り上げる事ができました。  
-jikkyo_channel.json は TVRemoteViewer_VB にて使われていた ch_sid.txt をチャンネル名を現在の情報に修正し JSON 形式に変換した上で使わせて頂いています。  
+jikkyo_channels.json は TVRemoteViewer_VB にて使われていた ch_sid.txt をチャンネル名を現在の情報に修正し JSON 形式に変換した上で使わせて頂いています。  
 TVRemotePlus の字幕表示機能は EPGStation に使われていた b24.js を DPlayer に組み込んで使わせて頂いています。  
 また、QSVEncC・NVEncC・VCEEncC の作者の rigaya 様にはエンコード時の字幕対応等で多大な協力を頂きました。  
 この場で厚く御礼申し上げます。本当にありがとうございました！
