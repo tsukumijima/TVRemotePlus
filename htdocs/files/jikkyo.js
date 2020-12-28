@@ -161,7 +161,7 @@ class Scroll {
         
         window.addEventListener('resize', (event) => {
                         
-            // 300ms 後に実行
+            // 500ms 後に実行
             setTimeout(() => {
     
                 // ボタンを非表示
@@ -173,7 +173,7 @@ class Scroll {
                 // 自動スクロールに戻す
                 this.is_autoscroll_mode = true;
                 
-            }, 300);
+            }, 500);
         });
     }
 }
