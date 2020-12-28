@@ -896,9 +896,11 @@ function newNicoJKAPIBackendFile() {
     function getClosestArrayElementIndex(array, search) {
         let diff = [];
         let index = 0;
-        array.forEach(function(val, i){
-          diff[i] = Math.abs(search - val);
-          index = (diff[index] < diff[i]) ? index : i;
+        array.forEach((val, i) => {
+            if (val <= search) {  // 調べたい値より大きい値は弾く
+                diff[i] = Math.abs(search - val);
+                index = (diff[index] < diff[i]) ? index : i;
+            }
         });
         return index;
     }
@@ -970,8 +972,8 @@ function newNicoJKAPIBackendFile() {
                      */
                     function getScrollTop() {
 
-                        // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
-                        let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
+                        // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得（ +1 はおまじない）
+                        let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime) + 1;
 
                         // 現在の再生時間に一番近い再生時間のコメントの要素を取得
                         let comment_current = comment_file[comment_current_index];
@@ -999,8 +1001,8 @@ function newNicoJKAPIBackendFile() {
                      */
                     function getScrollTop() {
 
-                        // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得
-                        let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime);
+                        // 現在の再生時間に一番近い再生時間のコメントのインデックスを取得（ +1 はおまじない）
+                        let comment_current_index = getClosestArrayElementIndex(comment_time, dp.video.currentTime) + 1;
 
                         // 軽量モードの場合、一番近い再生時間のコメントの要素が必ずしも存在するとは限らないため、
                         // (コメントのインデックス × コメントの高さ (28px)) + パディング (11px) で擬似的に親要素からの高さを取得する
