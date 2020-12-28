@@ -425,7 +425,7 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>コメントリストのパフォーマンス</span>
+              <span>コメントリストのパフォーマンス（ファイル再生のみ）</span>
               <div class="select-wrap">
                 <select id="comment_list_performance" required>
 <?php	if (isSettingsItem('comment_list_performance', 'normal') !== false){ ?>
@@ -445,7 +445,7 @@
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
 
             <div class="setting-form setting-select">
-              <span>一度に表示する録画番組リストの番組数</span>
+              <span>一度に表示する録画番組リストの番組数（件）</span>
 <?php	if (isSettingsItem('list_view_number') !== false){ ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?php echo isSettingsItem('list_view_number'); ?>" required />
 <?php	} else { ?>
