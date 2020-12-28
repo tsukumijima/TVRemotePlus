@@ -87,9 +87,6 @@ $inifile = $base_dir.'data/settings.json';
 // ニコニコのログイン Cookie 保存ファイルのパス
 $cookiefile = $base_dir.'data/niconico.cookie';
 
-// ch_sid.tsv のパス
-$ch_sidfile = $base_dir.'data/ch_sid.tsv';
-
 // jikkyo_channel.json のパス
 $jikkyo_channel_file = $base_dir.'data/jikkyo_channel.json';
 
