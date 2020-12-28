@@ -1133,6 +1133,7 @@ td {
     bottom: 25px;
     width: 46px;
     height: 46px;
+    padding: 9px;
     border-radius: 50%;
     font-size: 25px;
     color: #FFFFFF;
@@ -1142,6 +1143,7 @@ td {
     transition: 0.2s ease-in-out;
     box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
     -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
     cursor: pointer;
     z-index: 90;
 }
