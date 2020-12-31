@@ -470,6 +470,37 @@ function newNicoJKAPIBackendONAir() {
                     break;
                 }
             });
+
+            // 視聴セッションの接続が閉じられたとき（ネットワークが切断された場合など）
+            // イベントを無効化できるように敢えて onclose で実装する
+            watchsession.onclose = (event) => {
+
+                // 接続切断の理由を表示
+                console.log(`disconnected. code: ${event.code}`);
+                if (dp.danmaku.showing) {
+                    dp.notice(`ニコニコ実況との接続が切断されました。(code: ${event.code})`);
+                }
+    
+                // コメントセッションがまだ開かれていれば閉じる
+                if (commentsession) commentsession.close();
+
+                // 10 秒ほど待ってから再接続
+                // ニコ生側から切断された場合と異なりネットワークが切断された可能性が高いので、間を多めに取る
+                setTimeout(() => {
+
+                    //　再接続表示
+                    if (dp.danmaku.showing) {
+                        dp.notice('ニコニコ実況に再接続しています…');
+                    }
+    
+                    // プレイヤー側のコメント機能をリロード
+                    dp.danmaku.dan = [];
+                    dp.danmaku.clear();
+                    dp.danmaku.load();
+
+                }, 10000);
+            };
+
         });
 
         return [true, commentsession_info];
@@ -731,6 +762,7 @@ function newNicoJKAPIBackendONAir() {
     function restart() {
 
         // WebSocket が開かれていれば閉じる
+        if (watchsession) watchsession.onclose = null;
         if (watchsession) watchsession.close();
         if (commentsession) commentsession.close();
 
@@ -806,6 +838,7 @@ function newNicoJKAPIBackendONAir() {
     // ページを閉じる/移動する前に WebSocket を閉じる
     // しなくても勝手に閉じられる気はするけど一応
     window.addEventListener('beforeunload', () => {
+        if (watchsession) watchsession.onclose = null;
         if (watchsession) watchsession.close();
         if (commentsession) commentsession.close();
     });
