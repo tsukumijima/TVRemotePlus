@@ -408,6 +408,9 @@ function newNicoJKAPIBackendONAir() {
 
                         let disconnect;
 
+                        // イベントを削除
+                        if (watchsession) watchsession.onclose = null;
+
                         // 接続切断の理由
                         switch (message.data.reason) {
 
@@ -448,9 +451,6 @@ function newNicoJKAPIBackendONAir() {
                         if (dp.danmaku.showing) {
                             dp.notice(disconnect);
                         }
-            
-                        // コメントセッションがまだ開かれていれば閉じる
-                        if (commentsession) commentsession.close();
 
                         // 5 秒ほど待ってから再接続
                         setTimeout(() => {
@@ -461,9 +461,7 @@ function newNicoJKAPIBackendONAir() {
                             }
             
                             // プレイヤー側のコメント機能をリロード
-                            dp.danmaku.dan = [];
-                            dp.danmaku.clear();
-                            dp.danmaku.load();
+                            restart();
 
                         }, 5000);
 
@@ -480,9 +478,6 @@ function newNicoJKAPIBackendONAir() {
                 if (dp.danmaku.showing) {
                     dp.notice(`ニコニコ実況との接続が切断されました。(code: ${event.code})`);
                 }
-    
-                // コメントセッションがまだ開かれていれば閉じる
-                if (commentsession) commentsession.close();
 
                 // 10 秒ほど待ってから再接続
                 // ニコ生側から切断された場合と異なりネットワークが切断された可能性が高いので、間を多めに取る
@@ -494,9 +489,7 @@ function newNicoJKAPIBackendONAir() {
                     }
     
                     // プレイヤー側のコメント機能をリロード
-                    dp.danmaku.dan = [];
-                    dp.danmaku.clear();
-                    dp.danmaku.load();
+                    restart()
 
                 }, 10000);
             };
