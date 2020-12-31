@@ -447,6 +447,11 @@ class Jikkyo {
 
             $kakolog = $kakolog_['chat'];
 
+            // 運営コメントは今のところ全て弾く（今後変えるかも）
+            if (preg_match('/\/[a-z]+ /', $kakolog['content'])) {
+                continue;
+            }
+
             // 色・位置
             $color = '#FFFFFF';  // 色のデフォルト
             $position = 'right';  // 位置のデフォルト
