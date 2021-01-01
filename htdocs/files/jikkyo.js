@@ -233,12 +233,16 @@ function newNicoJKAPIBackendONAir() {
     // コメント（ライブ配信）
     let comment_live = null;
 
+    // コメント数
+    let comment_counter = null;
+
     // DOM 構築を待ってから要素を取得
     window.addEventListener('DOMContentLoaded', (event) => {
         if (settings['comment_show']) {  // コメントリストが表示されている場合のみ
             comment_draw_box = document.getElementById('comment-draw-box');
             comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
             comment_scroll = document.getElementById('comment-scroll');
+            comment_counter = document.getElementById('comment-counter');
         }
     });
 
@@ -332,6 +336,18 @@ function newNicoJKAPIBackendONAir() {
                                 clearInterval(keepseat);
                             }
                         }, message.data.keepIntervalSec * 1000);
+
+                    break;
+
+                    // 統計情報
+                    case 'statistics':
+
+                        // 総コメント数を取得
+                        // スレッド開始からの合計なので、毎分・毎時間のコメント数ではない
+                        let comment_count = message.data.comments;
+
+                        // コメント数を表示
+                        comment_counter.textContent = `コメント数: ${comment_count}`;
 
                     break;
 
@@ -910,6 +926,9 @@ function newNicoJKAPIBackendFile() {
     // コメント（ファイル再生）
     let comment_file = null;
 
+    // コメント数
+    let comment_counter = null;
+
     // 進捗バー
     let progressbar = null;
 
@@ -941,6 +960,7 @@ function newNicoJKAPIBackendFile() {
             comment_draw_box = document.getElementById('comment-draw-box');
             comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
             comment_scroll = document.getElementById('comment-scroll');
+            comment_counter = document.getElementById('comment-counter');
             progressbar = document.getElementById('progress');
 
             // コメントリストヘッダーの時間の幅を調整
@@ -954,6 +974,9 @@ function newNicoJKAPIBackendFile() {
             dp.on('danmaku_load_end', (event) => {
             
                 let html = [];
+
+                // コメント数を表示
+                comment_counter.textContent = `コメント数: ${dp.danmaku.dan.length}`;
 
                 // コメントごとに実行
                 for (danmaku of dp.danmaku.dan) {

@@ -257,6 +257,9 @@
 <?php	if ($ini[$stream]['state'] == 'ONAir'): ?>
             <span id="ikioi">実況勢い: -</span>
 <?php	endif; ?>
+<?php	if ($ini[$stream]['state'] == 'ONAir' or $ini[$stream]['state'] == 'File'): ?>
+            <span id="comment-counter">コメント数: -</span>
+<?php	endif; ?>
           </div>
         </div>
 

@@ -1833,12 +1833,13 @@ td {
 #watch {
     display: block;
     color: var(--color-gray);
+    margin-top: 4px;
     margin-left: 3px;
     margin-right: 3px;
 }
 
-#ikioi {
-    margin-left: 4px;
+#ikioi, #comment-counter {
+    margin-left: 6px;
 }
 
 @media screen and (max-width: 500px){
