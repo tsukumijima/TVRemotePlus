@@ -231,31 +231,31 @@
 
     <script type="text/javascript">
 
-  $(function(){
+    $(function(){
 
-    // リストを更新
-    toastr.info('リストを更新しています…');
-    $.ajax({
-      url: '/api/listupdate',
-      dataType: 'json',
-      cache: false,
-    }).done(function(data) {
-      if (data['status'] == 'success') {
-        $('#rec-new').addClass('search-find-selected');
-        $('#rec-old').removeClass('search-find-selected');
-        $('#name-up').removeClass('search-find-selected');
-        $('#name-down').removeClass('search-find-selected');
-        $('#play-history').removeClass('search-find-selected');
-        sortFileinfo('fileinfo', 1);
-        toastr.success('リストを更新しました。');
-      } else {
-          $('#search-info').html('録画リストを更新中です。しばらく待ってからリロードしてみてください。');
-      }
-    }).fail(function(data) {
-      toastr.error('リストの更新に失敗しました…');
+        // リストを更新
+        toastr.info('リストを更新しています…');
+        $.ajax({
+            url: '/api/listupdate',
+            dataType: 'json',
+            cache: false,
+        }).done(function(data) {
+            if (data['status'] == 'success') {
+                $('#rec-new').addClass('search-find-selected');
+                $('#rec-old').removeClass('search-find-selected');
+                $('#name-up').removeClass('search-find-selected');
+                $('#name-down').removeClass('search-find-selected');
+                $('#play-history').removeClass('search-find-selected');
+                sortFileinfo('fileinfo', 1);
+                toastr.success('リストを更新しました。');
+            } else {
+                $('#search-info').html('録画リストを更新中です。しばらく待ってからリロードしてみてください。');
+            }
+        }).fail(function(data) {
+            toastr.error('リストの更新に失敗しました…');
+        });
+
     });
-  
-  });
 
     </script>
 <?php	} // 括弧終了 ?>

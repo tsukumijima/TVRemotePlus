@@ -18,6 +18,7 @@
 <html lang="ja">
 
 <head>
+
 <?php	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ ?>
   <title>録画番組 - <?php echo $site_title; ?></title>
 <?php	} else if (strpos($backtrace[0]['file'], 'settings.php') !== false){ ?>
@@ -28,6 +29,7 @@
   <meta charset="UTF-8">
   <meta name="theme-color" content="#191919">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
   <!-- Style -->
   <link rel="manifest" href="/manifest.json">
   <link rel="manifest" href="/manifest.webmanifest">
@@ -49,6 +51,7 @@
 		echo '  <link rel="stylesheet" type="text/css" href="/files/settings.css">'."\n";
 	}
 ?>
+
   <!-- Script -->
   <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
   <script type="text/javascript" src="/files/pwacompat.min.js" async></script>
@@ -79,33 +82,35 @@
 ?>
 
   <script>
+
+    // 個人設定のデフォルト値
     settings = {
-      twitter_show: true,
-      comment_show: true,
-      dark_theme: false,
-      subchannel_show: false,
-      list_view: false,
-      logo_show: true,
-      comment_size: 35,
-      comment_delay: 5,
-      comment_file_delay: 0,
-      comment_list_performance: 'normal',
-      list_view_number: 30,
-      onclick_stream: false,
-      player_floating: true,
-      ljicrop_magnify: 100,
-      ljicrop_coordinateX: 0,
-      ljicrop_coordinateY: 0,
-      ljicrop_type: 'upperright',
+        twitter_show: true,
+        comment_show: true,
+        dark_theme: false,
+        subchannel_show: false,
+        list_view: false,
+        logo_show: true,
+        comment_size: 35,
+        comment_delay: 5,
+        comment_file_delay: 0,
+        comment_list_performance: 'normal',
+        list_view_number: 30,
+        onclick_stream: false,
+        player_floating: true,
+        ljicrop_magnify: 100,
+        ljicrop_coordinateX: 0,
+        ljicrop_coordinateY: 0,
+        ljicrop_type: 'upperright',
     };
     if (Cookies.get('settings') === undefined){
-      var json = JSON.stringify(settings);
-      Cookies.set('settings', json, { expires: 365 });
+        var json = JSON.stringify(settings);
+        Cookies.set('settings', json, { expires: 365 });
     } else {
-      settings = JSON.parse(Cookies.get('settings'));
+        settings = JSON.parse(Cookies.get('settings'));
     }
     if (settings['dark_theme']){
-      document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('dark');
     }
 
     window.addEventListener('load', function() {
@@ -113,15 +118,14 @@
             navigator.serviceWorker.register("/serviceworker.js");
         }
     });
+
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
 <?php		if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){ ?>
-    
     stream = '<?php echo $stream; ?>';
     streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream/<?php echo $stream; ?>';
     streamtype = 'video/mp4';
 
 <?php		} else { ?>
-    
     stream = '<?php echo $stream; ?>';
     streamurl = 'http://<?php echo $_SERVER['SERVER_NAME'].':'.$http_port; ?>/stream/stream<?php echo $stream; ?>.m3u8';
     streamtype = 'application/vnd.apple.mpegurl';
