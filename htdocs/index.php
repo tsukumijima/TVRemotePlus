@@ -624,7 +624,12 @@
         <div id="chromecast-device-box">
         </div>
         <div id="button-box" class="broadcast-button-box">
-          <button class="redbutton" type="button"><i class="fas fa-times"></i>キャンセル</button>
+          <button id="cast-scan" class="bluebutton" type="button" aria-label="キャストするデバイスをスキャンします" data-balloon-pos="up">
+            <i class="fas fa-sync-alt"></i><span class="menu-link-href">デバイスをスキャン</span>
+          </button>
+          <button class="redbutton" type="button">
+            <i class="fas fa-times"></i>キャンセル
+          </button>
         </div>
       </div>
     </div>

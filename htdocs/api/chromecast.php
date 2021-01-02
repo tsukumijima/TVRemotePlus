@@ -23,7 +23,7 @@
 	if (isset($_GET['cmd'])){
 		$cast['cmd'] = $_GET['cmd'];
 
-		// スタートならChromeCast起動
+		// スタートならChromecast起動
 		if ($cast['cmd'] == 'start' and isset($_GET['ip']) and isset($_GET['port'])){
 
 			if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){

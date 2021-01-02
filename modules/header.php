@@ -180,10 +180,6 @@
         </svg>
         <span class="menu-link-href">キャストを開始</span>
       </div>
-      <div id="cast-scan" class="menu-link" aria-label="キャストするデバイスをスキャンします" data-balloon-pos="up">
-        <i class="fas fa-sync-alt"></i>
-        <span class="menu-link-href">デバイスをスキャン</span>
-      </div>
     </div>
   </nav>
 <?php	} // 括弧終了 ?>

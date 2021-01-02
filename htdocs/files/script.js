@@ -393,8 +393,8 @@
     });
 
     // 再生開始
-    $('.bluebutton').click(function(){
-      $('.bluebutton').addClass('disabled');
+    $('#broadcast-stream-box .bluebutton').click(function(){
+      $('#broadcast-stream-box .bluebutton').addClass('disabled');
     });
 
     // キャンセル

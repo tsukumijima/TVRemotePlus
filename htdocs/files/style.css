@@ -721,7 +721,7 @@ section {
 
 google-cast-launcher {
     position: absolute !important;
-    bottom: 56px;
+    bottom: 8px;
     width: 100%;
     height: 48px;
     opacity: 0;

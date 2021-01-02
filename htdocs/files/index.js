@@ -418,15 +418,40 @@
 
     // ***** キャスト関連 *****
 
+    // デバイスをスキャン
+    $('#cast-scan').click(function(){
+      $('#cast-scan').prop('disabled', true).addClass('disabled');
+      toastr.info('スキャンしています…');
+      $.ajax({
+        url: '/api/chromecast/' + stream + '?cmd=scan',
+        dataType: 'json',
+        cache: false,
+      }).done(function(data) {
+        $('#cast-scan').prop('disabled', false).removeClass('disabled');
+        if (data['scan'] == true){
+          toastr.success('スキャンに成功しました。');
+        } else {
+          toastr.error('スキャンに失敗しました…');
+          toastr.error('Chromecast が同じ Wi-Fi ネットワーク上にないか、Bonjour がインストールされていない可能性があります。');
+          if (data['bonjour'] == false){
+            toastr.error('TVRemotePlus (Apache) を管理者権限で起動させてから、もう一度試してみてください。');
+          } else {
+            toastr.error('もう一度試してみてください。');
+          }
+        }
+      });
+    });
+
+    // ボックス開閉
     $('#chromecast-box').click(function(event){
       $('#nav-close').removeClass('open');
       $('#chromecast-box').removeClass('open');
     });
-
     $('#chromecast-wrap').click(function(event){
       event.stopPropagation();
     });
 
+    // 現在すでにキャスト中かを調べる
     $.ajax({
       url: '/api/chromecast/' + stream,
       dataType: 'json',
@@ -444,6 +469,7 @@
       }
     });
 
+    // ︙メニューの「キャストを開始」がクリックされたとき
     $('#cast-toggle').click(function(){
 
       // キャスト画面
@@ -520,29 +546,6 @@
 
         });
       }
-
-    });
-
-
-    $('#cast-scan').click(function(){
-      toastr.info('スキャンしています…');
-      $.ajax({
-        url: '/api/chromecast/' + stream + '?cmd=scan',
-        dataType: 'json',
-        cache: false,
-      }).done(function(data) {
-        if (data['scan'] == true){
-          toastr.success('スキャンに成功しました。');
-        } else {
-          toastr.error('スキャンに失敗しました…');
-          toastr.error('ChromeCast が同じ Wi-Fi ネットワーク上にないか、Bonjour がインストールされていない可能性があります。');
-          if (data['bonjour'] == false){
-            toastr.error('TVRemotePlus (Apache) を管理者権限で起動させてから、もう一度試してみてください。');
-          } else {
-            toastr.error('もう一度試してみてください。');
-          }
-        }
-      });
 
     });
 
