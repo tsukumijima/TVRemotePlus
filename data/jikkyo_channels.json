@@ -371,7 +371,7 @@
     { "JikkyoID": -1,  "NetworkID": 7,  "ServiceID": "329",  "Area": "*",  "Channel": "歌謡ポップス"}, 
     { "JikkyoID": -1,  "NetworkID": 7,  "ServiceID": "330",  "Area": "*",  "Channel": "キッズステーション"}, 
     { "JikkyoID": -1,  "NetworkID": 7,  "ServiceID": "331",  "Area": "*",  "Channel": "カートゥーン"}, 
-    { "JikkyoID": -1,  "NetworkID": 7,  "ServiceID": "333",  "Area": "*",  "Channel": "AT-X"}, 
+    { "JikkyoID": 333,  "NetworkID": 7,  "ServiceID": "333",  "Area": "*",  "Channel": "AT-X"}, 
     { "JikkyoID": -1,  "NetworkID": 7,  "ServiceID": "334",  "Area": "*",  "Channel": "ディズニーXD"}, 
     { "JikkyoID": -1,  "NetworkID": 6,  "ServiceID": "339",  "Area": "*",  "Channel": "ディズニージュニア"}, 
     { "JikkyoID": -1,  "NetworkID": 7,  "ServiceID": "340",  "Area": "*",  "Channel": "ディスカバリー"}, 
