@@ -25,32 +25,46 @@ class JikkyoController {
             // ストリーム状態が ON Air & チャンネルが 0 でない
             if ($settings[$stream]['state'] === 'ONAir' and intval($settings[$stream]['channel']) !== 0){ 
     
-                // BonDriver とチャンネルを取得
-                // 実際はチャンネルしか使わないのでこんなにいらない（👈技術的負債）
-                list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
-                    $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
-                    $sid, $sid_T, $sid_S, $sid_CS, // SID
-                    $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
-                    $tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
-                    = initBonChannel($BonDriver_dir);
-    
                 // モデルを初期化
                 $instance = new Jikkyo($nicologin_mail, $nicologin_password);
-    
-                // 実況 ID を取得
-                if (isset($ch[$settings[$stream]['channel']])){
-                    $nicojikkyo_id = $instance->getNicoJikkyoID($ch[$settings[$stream]['channel']]);
-                } else if ($ch[intval($settings[$stream]['channel']).'_1']){
-                    $nicojikkyo_id = $instance->getNicoJikkyoID($ch[intval($settings[$stream]['channel']).'_1']);
+
+                // クエリに放送 ID が存在する場合はそれを使う
+                if (isset($_GET['live_id']) and !empty($_GET['live_id'])) {
+
+                    // ニコニコチャンネル/コミュニティ ID として設定　lv から始まる ID が入る場合もあるが、
+                    // getNicoliveSession() はいずれの ID も処理できるので問題はない
+                    $nicochannel_id = $_GET['live_id'];
+
+                // ストリーム番号から現在放送中のチャンネルの実況 ID を使う
                 } else {
-                    $nicojikkyo_id = null;
+    
+                    // BonDriver とチャンネルを取得
+                    // 実際はチャンネルしか使わないのでこんなにいらない（👈技術的負債）
+                    list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
+                        $ch, $ch_T, $ch_S, $ch_CS, // チャンネル番号
+                        $sid, $sid_T, $sid_S, $sid_CS, // SID
+                        $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
+                        $tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
+                        = initBonChannel($BonDriver_dir);
+        
+                    // 実況 ID を取得
+                    if (isset($ch[$settings[$stream]['channel']])){
+                        $nicojikkyo_id = $instance->getNicoJikkyoID($ch[$settings[$stream]['channel']]);
+                    } else if ($ch[intval($settings[$stream]['channel']).'_1']){
+                        $nicojikkyo_id = $instance->getNicoJikkyoID($ch[intval($settings[$stream]['channel']).'_1']);
+                    } else {
+                        $nicojikkyo_id = null;
+                    }
                 }
     
-                // 実況 ID が存在する
-                if ($nicojikkyo_id !== null) {
+                // ニコニコチャンネル/コミュニティ ID が定義済み or 実況 ID が存在する
+                if (isset($nicochannel_id) or $nicojikkyo_id !== null) {
     
+                    // ニコニコチャンネル/コミュニティ ID が定義されていない場合のみ、
                     // 実況 ID からニコニコチャンネル/コミュニティ ID を取得する
-                    $nicochannel_id = $instance->getNicoChannelID($nicojikkyo_id);
+                    if (!isset($nicochannel_id)) {
+                        $nicochannel_id = $instance->getNicoChannelID($nicojikkyo_id);
+                    }
     
                     // ニコニコチャンネル/コミュニティ ID が存在する（＝実況 ID がニコニコチャンネル上に存在する）
                     if ($nicochannel_id !== null) {
@@ -122,7 +136,7 @@ class JikkyoController {
 
         // ライブ配信
         // ニコ生のセッション情報を取得できているか
-        if ($settings[$stream]['state'] == 'ONAir' && isset($nicolive_session) && !empty($nicolive_session['watchsession_url'])) {
+        if (isset($settings[$stream]) and $settings[$stream]['state'] == 'ONAir' and isset($nicolive_session) and !empty($nicolive_session['watchsession_url'])) {
 
             // 出力
             $output = [
@@ -134,7 +148,7 @@ class JikkyoController {
 
         // ファイル再生
         // 過去ログが取得できていれば
-        } else if ($settings[$stream]['state'] == 'File' && isset($kakolog) && is_array($kakolog)) {
+        } else if (isset($settings[$stream]) and $settings[$stream]['state'] == 'File' and isset($kakolog) and is_array($kakolog)) {
 
             // 出力
             $output = [
