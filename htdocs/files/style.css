@@ -208,6 +208,7 @@ pre:empty {
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
+    font-feature-settings: 'liga';
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
 }
@@ -1722,7 +1723,7 @@ td {
 }
 
 #reload-box {
-    display: inline-block;
+    display: block;
     float: right;
     clear: both;
     margin-top: 9px;
