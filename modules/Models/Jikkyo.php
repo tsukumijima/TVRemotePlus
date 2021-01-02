@@ -464,6 +464,16 @@ class Jikkyo {
 
             $kakolog = $kakolog_['chat'];
 
+            // content が存在しないコメントを除外
+            if (!isset($kakolog['content'])) {
+                continue;
+            }
+
+            // 削除されているコメントを除外
+            if (isset($kakolog['deleted'])) {
+                continue;
+            }
+
             // 運営コメントは今のところ全て弾く（今後変えるかも）
             if (preg_match('/\/[a-z]+ /', $kakolog['content'])) {
                 continue;

@@ -941,13 +941,17 @@ function newNicoJKAPIBackendFile() {
     function getClosestArrayElementIndex(array, search) {
         let diff = [];
         let index = 0;
-        array.forEach((val, i) => {
-            if (val <= search) {  // 調べたい値より大きい値は弾く
-                diff[i] = Math.abs(search - val);
-                index = (diff[index] < diff[i]) ? index : i;
-            }
-        });
-        return index;
+        if (array.length !== 0){
+            array.forEach((val, i) => {
+                if (val <= search) {  // 調べたい値より大きい値は弾く
+                    diff[i] = Math.abs(search - val);
+                    index = (diff[index] < diff[i]) ? index : i;
+                }
+            });
+            return index;
+        } else {
+            return 0;
+        }
     }
 
     // DOM 構築を待ってから実行
@@ -1029,7 +1033,11 @@ function newNicoJKAPIBackendFile() {
 
                         // スクロール量を返す
                         // 5 (px) はパディング
-                        return comment_current.offsetTop - comment_draw_box.clientHeight + 5;
+                        if (comment_current !== undefined) {
+                            return comment_current.offsetTop - comment_draw_box.clientHeight + 5;
+                        } else {
+                            return 0;
+                        }
                     }
 
                 // 軽量モード
