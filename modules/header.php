@@ -39,16 +39,16 @@
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap">
   <link rel="stylesheet" type="text/css" href="/files/toastr.min.css">
   <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
-  <link rel="stylesheet" type="text/css" href="/files/style.css">
+  <link rel="stylesheet" type="text/css" href="/files/style.css?<?php echo $version; ?>">
 <?php
 	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/swiper.min.css">'."\n";
 	}
 	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
-		echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css">'."\n";
+		echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css?'.$version.'">'."\n";
 	}
 	if (strpos($backtrace[0]['file'], 'settings.php') !== false){ // settings.phpのみ
-		echo '  <link rel="stylesheet" type="text/css" href="/files/settings.css">'."\n";
+		echo '  <link rel="stylesheet" type="text/css" href="/files/settings.css?'.$version.'">'."\n";
 	}
 ?>
 
