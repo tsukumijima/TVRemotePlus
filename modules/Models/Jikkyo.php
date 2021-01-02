@@ -221,7 +221,7 @@ class Jikkyo {
     /**
      * ニコ生の視聴セッション情報を取得する
      *
-     * @param string $nicolive_id ニコ生の放送ID (ex: lv329283198・ch2646436)
+     * @param string $nicolive_id ニコ生の放送 ID として利用できる文字列 (ex: lv329283198・ch2646436)
      * @return ?array 視聴セッション情報が含まれる連想配列 or null
      */
     public function getNicoliveSession(string $nicolive_id): ?array {
@@ -252,16 +252,32 @@ class Jikkyo {
     
             // ステータスコードを判定
             switch ($status_code) {
+                // 200：OK
+                case 200:
+                    break;
+                // 404：Not found
+                case 404:
+                    return ['error' => '指定された放送 ID は存在しません。(HTTP Error 404)'];
                 // 500：Internal Server Error
                 case 500:
                     return ['error' => '現在、ニコニコ実況で障害が発生しています。(HTTP Error 500)'];
                 // 503：Service Unavailable
                 case 503:
                     return ['error' => '現在、ニコニコ実況はメンテナンス中です。(HTTP Error 503)'];
+                // それ以外のステータスコード
+                default:
+                    return ['error' => "現在、ニコニコ実況でエラーが発生しています。(HTTP Error {$status_code})"];
             }
             
             // json をスクレイピング
             preg_match('/<script id="embedded-data" data-props="(.*?)"><\/script>/s', $nicolive_html, $result);
+
+            // $result が存在しない
+            if (!isset($result[1])) {
+                return ['error' => 'ニコニコ実況の番組情報の取得に失敗しました。'];
+            }
+
+            // ニコ生の番組情報諸々が入った連想配列
             $nicolive_json = json_decode(htmlspecialchars_decode($result[1]), true);
 
             return $nicolive_json;
