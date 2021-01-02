@@ -1838,8 +1838,17 @@ td {
     margin-right: 3px;
 }
 
-#ikioi, #comment-counter {
-    margin-left: 6px;
+#watching {
+    margin-right: 6px;
+}
+
+#ikioi {
+    margin-right: 6px;
+}
+
+#comment-counter {
+    margin-right: 6px;
+    white-space: nowrap;
 }
 
 @media screen and (max-width: 500px){
