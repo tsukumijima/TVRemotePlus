@@ -566,7 +566,12 @@ class Jikkyo {
                 if ($jikkyo_ikioi_elem !== null) {
                     $jikkyo_ikioi[$nicojikkyo_id] = strval($jikkyo_ikioi_elem->textContent);
                 } else {
-                    $jikkyo_ikioi[$nicojikkyo_id] = '-';  // その実況チャンネルの勢いが取得できなかった
+                    // 実況勢いはないけど、.box_active は存在する
+                    if ($document->querySelector("div#comm_{$nicochannel_id} div.counts div.box_active") !== null) {
+                        $jikkyo_ikioi[$nicojikkyo_id] = '0';  // 常に 0 に設定
+                    } else {
+                        $jikkyo_ikioi[$nicojikkyo_id] = '-';  // その実況チャンネルの勢いが取得できなかった
+                    }
                 }
             }
             
