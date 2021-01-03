@@ -705,11 +705,11 @@ function newNicoJKAPIBackendONAir() {
         watchsession.send(JSON.stringify({
             'type': 'postComment',
             'data': {
-                'text': options.data.text,
-                'color': color_table[options.data.color.toString()],
-                'position': position_table[options.data.type.toString()],
-                'vpos': vpos,
-                'isAnonymous': true,
+                'text': options.data.text,  // コメント本文
+                'color': color_table[options.data.color.toString()],  // コメントの色
+                'position': position_table[options.data.type.toString()],  // コメントの位置
+                'vpos': vpos,  // 開始時間からの累計秒（10ミリ秒単位）
+                'isAnonymous': true,  // 匿名コメント (184)
             }
         }));
 
