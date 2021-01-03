@@ -136,7 +136,7 @@ class Jikkyo {
 
             // 正規表現パターン
             mb_regex_encoding('UTF-8');
-            $match = '/^'.str_replace('NHK総合', 'NHK総合[0-9]?', str_replace('NHKEテレ', 'NHKEテレ[0-9]?', $channel_field_escape)).'[0-9]?/u';
+            $match = '/^'.str_replace('NHK総合', 'NHK総合[0-9]?', str_replace('NHKEテレ', 'NHKEテレ[0-9]?', $channel_field_escape)).'[0-9]?$/u';
 
             // チャンネル名がいずれかのパターンに一致したら
             if ($channel_name === $channel_field or preg_match($match, $channel_name)) {
