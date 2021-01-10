@@ -456,6 +456,11 @@ class Jikkyo {
             return [$kakologs['error'], $kakologapi_url];
         }
 
+        // 過去ログのコメントが空の場合は処理中断
+        if (empty($kakologs['packet'])) {
+            return ['この番組の過去ログは存在しないか、現在取得中です。', $kakologapi_url];
+        }
+
         // 変換後のコメント
         $danmaku = [];
 
