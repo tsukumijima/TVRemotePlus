@@ -242,7 +242,6 @@ function newNicoJKAPIBackendONAir() {
             comment_draw_box = document.getElementById('comment-draw-box');
             comment_draw_box_real = comment_draw_box.getElementsByTagName('tbody')[0];
             comment_scroll = document.getElementById('comment-scroll');
-            comment_counter = document.getElementById('comment-counter');
         }
     });
 
@@ -347,6 +346,9 @@ function newNicoJKAPIBackendONAir() {
                         let comment_count = message.data.comments;
 
                         // コメント数を表示
+                        if (comment_counter === null) {
+                            comment_counter = document.getElementById('comment-counter');
+                        }
                         comment_counter.textContent = `コメント数: ${comment_count}`;
 
                     break;
