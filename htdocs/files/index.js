@@ -28,7 +28,7 @@ function isFullScreen(){
 
 // ロード時 & リサイズ時に発火
 var timer = false;
-var lastWindowWidth = document.documentElement.clientWidth;
+var lastWindowWidth = window.innerWidth;
 $(window).on('DOMContentLoaded resize', function(event){
 
     // ロード時のみ発火
@@ -46,9 +46,9 @@ $(window).on('DOMContentLoaded resize', function(event){
     }
 
     // 画面の横幅を取得
-    var windowWidth = document.documentElement.clientWidth;
+    var windowWidth = window.innerWidth;
     // 画面の高さを取得
-    var windowHeight = document.documentElement.clientHeight;
+    var windowHeight = window.innerHeight;
     // 画面の向きを取得
     var orientation = window.orientation;
 
@@ -68,12 +68,13 @@ $(window).on('DOMContentLoaded resize', function(event){
     // スマホならスクロールに応じて動画を固定できるようdivを移動させる
     // フルスクリーンで無いことを確認してから
     // 縦画面のみ発動
-    if (windowWidth <= 500 && (orientation === 0 || orientation === undefined)
-            && (isset(document.getElementById('dplayer-script').previousElementSibling)
-            && document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()){
+    console.log(windowWidth)
+    if (windowWidth <= 500 && (orientation === 0 || orientation === undefined) &&
+        (isset(document.getElementById('dplayer-script').previousElementSibling) &&
+        document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()) {
         $('#content-wrap').before($('#dplayer'));
-    } else if (windowWidth > 500 && (isset(document.getElementById('content-wrap').previousElementSibling)
-                            && document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()){
+    } else if (windowWidth > 500 && (isset(document.getElementById('content-wrap').previousElementSibling) &&
+               document.getElementById('content-wrap').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()) {
         $('#dplayer-script').before($('#dplayer'));
     }
 
@@ -145,7 +146,7 @@ $(function(){
     // ***** スクロールで動画をフロート表示 *****
 
     // 個人設定で有効 & 501px より大きい（スマホを除外）
-    if (settings['player_floating'] && document.documentElement.clientWidth > 500) {
+    if (settings['player_floating'] && window.innerWidth > 500) {
 
         // スクロール時のイベント
         $(window).scroll(function(){
