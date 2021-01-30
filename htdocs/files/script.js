@@ -1402,58 +1402,22 @@ $(function(){
 
         $('#tweet-status').text('キャプチャ中…');
         $('#tweet-submit').prop('disabled', true).addClass('disabled');
-        // 動画のキャンバス
-        var canvas = document.createElement('canvas');
-        var video = document.getElementsByClassName('dplayer-video-current')[0];
-        var subtitles = video.textTracks[1].activeCues;
 
-        // 字幕オン & Shift キーが押されていないなら
-        if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length && (!event.shiftKey || !window.isShiftKey)){
+        // 要素を取得
+        const video = document.querySelector('video.dplayer-video-current');
 
-            var subtitle_html = '<div class="video-subtitle-box">\n';
-            for(var i = (subtitles.length - 1); i >= 0; i--){
+        // キャプチャを実行する
+        videoToCanvas(video).then(({canvas}) => {
+            canvas.toBlob(function(blob){
+            
+                $('#tweet-status').text('キャプチャしました。');
                 
-                // 下からの高さ
-                var bottom = 18 + i * 8.5;
-
-                // html用に置換する
-                subtitle_html = subtitle_html + subtitles[i].text.replace(/<v.b24js rgb(.*?)>/,
-                    '<span class="video-subtitle-wrap" style="bottom: ' + bottom + '%; color: #$1;"><span class="video-subtitle">')
-                    .replace(/<v.b24js rgb(.*?)>/g, '').replace(/<\/v>/g, '')
-                    .replace(/color: #ffff;/, 'color: #00ffff;').replace(/color: #ff00;/, 'color: #00ff00;') + '</span></span>\n';
-            }
-
-            html = subtitle_html + '</div>\n';
-
-            // 字幕をHTMLにゴリ押しで変換した後にレンダリング
-            nicoVideoToCanvas({video, html}).then(({canvas}) => {
-                canvas.toBlob(function(blob){
-
-                    $('#tweet-status').text('キャプチャしました。');
-
-                    // キャプチャした画像を格納
-                    console.log('Render Blob: ' + URL.createObjectURL(blob));
-                    addCaptureImage(blob);
-                
-                }, 'image/jpeg', 1);
-            });
-
-        } else {
-
-            // 普通にキャプチャする
-            videoToCanvas(video).then(({canvas}) => {
-                canvas.toBlob(function(blob){
-                
-                    $('#tweet-status').text('キャプチャしました。');
-                    
-                    // キャプチャした画像を格納
-                    console.log('Render Blob: ' + URL.createObjectURL(blob));
-                    addCaptureImage(blob);
-                
-                }, 'image/jpeg', 1);
-            });
-
-        }
+                // キャプチャした画像を格納
+                console.log('Render Blob: ' + URL.createObjectURL(blob));
+                addCaptureImage(blob);
+            
+            }, 'image/jpeg', 1);
+        });
     }
 
     // キャプチャした画像をコメント付きでblobにして格納する関数
@@ -1463,35 +1427,15 @@ $(function(){
         $('#tweet-submit').prop('disabled', true).addClass('disabled');
 
         // 要素を取得
-        var video = document.getElementsByClassName('dplayer-video-current')[0];
-        var html = document.querySelector('.dplayer-danmaku').outerHTML;
-        var danmaku = document.getElementsByClassName('dplayer-danmaku-move');
-        var subtitles = video.textTracks[1].activeCues;
+        const video = document.querySelector('video.dplayer-video-current');
+        const danmaku = document.querySelectorAll('.dplayer-danmaku-move');
+        let html = document.querySelector('.dplayer-danmaku').outerHTML;
 
-        // このままだとSVG化に失敗するため修正する
-        for (var i = 0; i < danmaku.length; i++){ // コメントの数だけ置換
+        // このままだと SVG 化に失敗するため修正する
+        for (let i = 0; i < danmaku.length; i++){ // コメントの数だけ置換
             // コメント位置を計算
-            var position = danmaku[i].getBoundingClientRect().left - video.getBoundingClientRect().left;
+            let position = danmaku[i].getBoundingClientRect().left - video.getBoundingClientRect().left;
             html = html.replace(/transform: translateX\(.*?\)\;/, 'left: ' + position + 'px;');
-        }
-
-        // 字幕オン & Shift キーが押されていないなら
-        if (video.textTracks[1].mode == 'showing' && video.textTracks[1].cues.length && !event.shiftKey){
-
-            var subtitle_html = '<div class="video-subtitle-box">\n';
-            for(var i = (subtitles.length - 1); i >= 0; i--){
-                
-                // 下からの高さ
-                var bottom = 18 + i * 8.5;
-
-                // html用に置換する
-                subtitle_html = subtitle_html + subtitles[i].text.replace(/<v.b24js rgb(.*?)>/,
-                    '<span class="video-subtitle-wrap" style="bottom: ' + bottom + '%; color: #$1;"><span class="video-subtitle">')
-                    .replace(/<v.b24js rgb(.*?)>/g, '').replace(/<\/v>/g, '')
-                    .replace(/color: #ffff;/, 'color: #00ffff;').replace(/color: #ff00;/, 'color: #00ff00;') + '</span></span>\n';
-            }
-
-            html = subtitle_html + '</div>\n' + html;
         }
 
         nicoVideoToCanvas({video, html}).then(({canvas}) => {
@@ -1514,38 +1458,12 @@ $(function(){
     // https://qiita.com/kjunichi/items/f5993d34838e1623daf5
     
     const htmlToSvg = function(html, width = 640, height = 360) {
-        scale = 1;
-        var tablet = document.body.clientWidth <= 768;
-        var mobile = document.body.clientWidth <= 500;
-        var subtitle_fontsize = tablet ? (mobile ? 55 : 100) : 125;
+        let scale = 1;
         const data =
             (`<svg xmlns='http://www.w3.org/2000/svg' width='${width*scale}' height='${height*scale}'>
                     <foreignObject width='100%' height='100%'>
                         <div xmlns="http://www.w3.org/1999/xhtml">
                             <style>
-                            .video-subtitle-box {
-                                position: absolute;
-                                left: 0;
-                                right: 0;
-                                top: 0;
-                                bottom: 0;
-                                font-size: 22px;
-                                font-family: 'Open Sans','Segoe UI','Arial',sans-serif;
-                                color: #ffffff;
-                            }
-                            .video-subtitle-wrap {
-                                display: inline-block;
-                                position: absolute;
-                                width: 100%;
-                                text-align: center;
-                            }
-                            .video-subtitle {
-                                display: inline-block;
-                                padding: 2px 2px 0px 2px;
-                                font-size: ${subtitle_fontsize}%;
-                                text-align: center;
-                                background: rgba(0,0,0,.5);
-                            }
                             .dplayer-danmaku {
                                 position: absolute;
                                 left: 0;
@@ -1601,20 +1519,24 @@ $(function(){
 
     const videoToCanvas = function(video) {
         // 動画のキャンバス
-        var canvas = document.createElement('canvas');
-        var video = document.getElementsByClassName('dplayer-video-current')[0];
+        const canvas = document.createElement('canvas');
+        const caption = video.nextElementSibling;
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         // 描画
         return new Promise((resolve, reject) => {
-            var draw = function(){
+            const draw = function() {
                 try {
+                    // キャプチャを描画
                     canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                    // 字幕を描画（ Shift キーが押されていない場合のみ）
+                    if (!window.isShiftKey) {
+                        canvas.getContext('2d').drawImage(caption, 0, 0, canvas.width, canvas.height);
+                    }
                 } catch (error){
-                    // エラー補足（Android版Firefoxのバグ対策のはずだった）
-                    console.log('catch:' + error.name)
+                    // エラー補足（ Android 版 Firefox のバグ対策のはずだった）
+                    console.log('Error:' + error.name)
                     if (error.name == 'NS_ERROR_NOT_AVAILABLE'){
-                        // return setTimeout(draw, 100);
                         $('#tweet-status').html('<span class="error">キャプチャに失敗しました…（ Android 版 Firefox コアの技術的問題によるものです）</span>');
                         throw error;
                     } else { 
