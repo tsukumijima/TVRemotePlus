@@ -68,7 +68,6 @@ $(window).on('DOMContentLoaded resize', function(event){
     // スマホならスクロールに応じて動画を固定できるようdivを移動させる
     // フルスクリーンで無いことを確認してから
     // 縦画面のみ発動
-    console.log(windowWidth)
     if (windowWidth <= 500 && (orientation === 0 || orientation === undefined) &&
         (isset(document.getElementById('dplayer-script').previousElementSibling) &&
         document.getElementById('dplayer-script').previousElementSibling.getAttribute('id') == 'dplayer') && !isFullScreen()) {
