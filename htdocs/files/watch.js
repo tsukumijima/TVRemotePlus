@@ -131,7 +131,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
             
             // 検索キーワードがあるなら上までスクロール
             if (flg == 'search'){
-                $('html, body').velocity('scroll', { duration: 700, offset: -54 });
+                $('html, body').velocity('scroll', { duration: 700, offset: (settings['vertical_navmenu'] ? 0 : -54) });
             }
 
         // 1件も見つからなかった場合

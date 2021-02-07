@@ -91,6 +91,7 @@
         subchannel_show: false,
         list_view: false,
         logo_show: true,
+        vertical_navmenu: false,
         comment_size: 35,
         comment_delay: 5,
         comment_file_delay: 0,
@@ -110,7 +111,10 @@
         settings = JSON.parse(Cookies.get('settings'));
     }
     if (settings['dark_theme']){
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('dark-theme');
+    }
+    if (settings['vertical_navmenu']){
+        document.documentElement.classList.add('vertical-navmenu');
     }
 
     window.addEventListener('load', function() {

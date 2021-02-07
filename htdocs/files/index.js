@@ -91,7 +91,7 @@ $(window).on('DOMContentLoaded resize', function(event){
             // リサイズ対象の幅
             var targetWidth = document.getElementById('content-wrap').clientWidth * 0.99;
             var targetHeight = document.getElementById('content-wrap').clientHeight;
-            var headerheight = document.getElementById('top').clientHeight; // ヘッダーの高さ分
+            var headerheight = (settings['vertical_navmenu'] ? 0 : 54); // ヘッダーの高さ分
             var percentage = (windowHeight - headerheight) / targetHeight; // windowHeight は targetHeight の percentage 倍
 
             // リサイズする
@@ -150,7 +150,7 @@ $(function(){
         // スクロール時のイベント
         $(window).scroll(function(){
 
-            const position_current = $(this).scrollTop() + 54; // 54px はヘッダー分
+            const position_current = $(this).scrollTop() + (settings['vertical_navmenu'] ? 0 : 54);
             const position_target = $('#epg-box').offset().top; // 計算めんどいのであえて jQuery
 
             // State を取得

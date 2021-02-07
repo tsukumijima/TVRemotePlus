@@ -17,11 +17,11 @@ section {
     z-index: 50;
 }
 
-.dark #search-find-box, .dark #search-find-link-box {
+.dark-theme #search-find-box, .dark-theme #search-find-link-box {
     background-color: #46b2aa;
 }
 
-.dark .search-find-selected {
+.dark-theme .search-find-selected {
     background-color: var(--color-green);
 }
 
@@ -29,6 +29,11 @@ section {
     position: -webkit-sticky;
     position: sticky;
     top: 54px;
+}
+@media screen and (min-width: 769px) {
+    .vertical-header #search-find-wrap {
+        top: 0px;
+    }
 }
 
 #search-find-title {

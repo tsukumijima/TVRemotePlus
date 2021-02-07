@@ -39,9 +39,16 @@ $(function(){
 
     // ***** ダークモード *****
     if (settings['dark_theme']){
-        $('html').addClass('dark');
+        $('html').addClass('dark-theme');
     } else {
-        $('html').removeClass('dark');
+        $('html').removeClass('dark-theme');
+    }
+
+    // ***** 垂直ヘッダー *****
+    if (settings['vertical_navmenu']){
+        $('html').addClass('vertical-navmenu');
+    } else {
+        $('html').removeClass('vertical-navmenu');
     }
 
     // ***** メニュー開 *****
@@ -109,7 +116,7 @@ $(function(){
 
 
         // スクロール位置を取得
-        let position_current = $(this).scrollTop() + 54; // 54 はヘッダー分
+        let position_current = $(this).scrollTop() + (settings['vertical_navmenu'] ? 0 : 54); // 54 はヘッダー分
         let position_target = 450;
 
         if ($('#epg-box').offset() !== undefined) {
@@ -136,7 +143,7 @@ $(function(){
         var topPos = $(window).scrollTop();
         
         if (topPos > 400) {
-            $('html, body').velocity('scroll', { duration: 700, offset: -54 });
+            $('html, body').velocity('scroll', { duration: 700, offset: (settings['vertical_navmenu'] ? 0 : -54) });
             setTimeout(function(){
                 $('#scroll').removeClass('hover');
             }, 700);

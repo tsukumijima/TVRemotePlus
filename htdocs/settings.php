@@ -379,6 +379,18 @@
               </div>
             </div>
 
+            <div class="setting-form">
+              <span>ナビゲーションメニューを垂直に表示</span>
+              <div class="toggle-switch">
+<?php	if (isSettingsItem('vertical_navmenu', true, false) !== false){ ?>
+                <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" checked />
+<?php	} else { ?>
+                <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" /> 
+<?php	} // 括弧終了 ?>
+                <label for="vertical_navmenu" class="toggle-label"></label>
+              </div>
+            </div>
+
             <h4><i class="fas fa-comment-alt"></i>コメント</h4>
 
             <div class="setting-form setting-select">

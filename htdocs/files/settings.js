@@ -29,6 +29,7 @@ $(function(){
         settings['subchannel_show'] = $('#subchannel_show').prop('checked');
         settings['list_view'] = $('#list_view').prop('checked');
         settings['logo_show'] = $('#logo_show').prop('checked');
+        settings['vertical_navmenu'] = $('#vertical_navmenu').prop('checked');
         settings['comment_size'] = $('#comment_size').val();
         settings['comment_delay'] = $('#comment_delay').val();
         settings['comment_file_delay'] = $('#comment_file_delay').val();
@@ -39,9 +40,16 @@ $(function(){
 
         // ダークモード切り替え
         if (settings['dark_theme']){
-            $('html').addClass('dark');
+            $('html').addClass('dark-theme');
         } else {
-            $('html').removeClass('dark');
+            $('html').removeClass('dark-theme');
+        }
+
+        // ナビゲーションメニュー切り替え
+        if (settings['vertical_navmenu']){
+            $('html').addClass('vertical-navmenu');
+        } else {
+            $('html').removeClass('vertical-navmenu');
         }
 
         var json = JSON.stringify(settings);

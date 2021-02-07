@@ -26,7 +26,7 @@
     --color-text-darkgray: #4f565c;
 }
 
-.dark {
+.dark-theme {
     --color-white: #15202B;
     --color-white-light: #16212C;
     --color-menu: #2e2d3a;
@@ -87,13 +87,13 @@ body {
     background-color: rgba(60, 60, 60, 0.7);
 }
 
-.dark .scrollbar::-webkit-scrollbar-thumb {
+.dark-theme .scrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(141, 153, 161, 0.5);
 }
-.dark .scrollbar::-webkit-scrollbar-thumb:hover {
+.dark-theme .scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: rgba(141, 153, 161, 0.42);
 }
-.dark .scrollbar::-webkit-scrollbar-thumb:active {
+.dark-theme .scrollbar::-webkit-scrollbar-thumb:active {
     background-color: rgba(141, 153, 161, 0.3);
 }
 
@@ -501,7 +501,7 @@ section {
     margin-left: 2vw;
     margin-right: 2vw;
     border-radius: 50%;
-    transition: 0.2s ease;
+    transition: background-color 0.2s ease;
     cursor: pointer;
 }
   
@@ -557,7 +557,7 @@ section {
     margin-right: 2vw;
     color: #FFFFFF;
     border-radius: 50%;
-    transition: 0.2s ease;
+    transition: background-color 0.2s ease;
     cursor: pointer;
 }
 
@@ -745,6 +745,58 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     #menu-content {
         top: 4px;
         right: 7px;
+    }
+}
+
+/** 縦ヘッダー **/
+
+@media screen and (min-width: 769px) {
+    
+    .vertical-navmenu body {
+        margin-left: 54px;
+    }
+
+    .vertical-navmenu #main {
+        margin-top: 0px;
+    }
+
+    .vertical-navmenu #top {
+        width: 54px;
+        height: 100%;
+        flex-direction: column;
+        box-shadow: 0px 0px 4px #272727;
+    }
+
+    .vertical-navmenu #top #logo {
+        margin-top: 15px;
+        margin-left: -2px;
+        order: 1;
+    }
+
+    .vertical-navmenu #top #nav-open {
+        margin-top: 5px;
+        margin-left: 0;
+        margin-right: 0;
+        order: 2;
+    }
+
+    .vertical-navmenu #top #menu-button, .vertical-navmenu #top #menu-fakebutton {
+        margin-top: auto;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 15px;
+        order: 3;
+    }
+
+    .vertical-navmenu #menu-content {
+        top: calc(100vh - 208px - 54px - 15px);
+        left: 8px;
+        right: auto;
+    }
+    @media screen and (max-width: 1024px){
+        .vertical-navmenu #menu-content {
+            top: calc(100vh - 160px - 54px - 15px);
+        }
     }
 }
 
@@ -985,11 +1037,11 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     height: 100%;
 }
 
-.dark #comment-draw-box-header {
+.dark-theme #comment-draw-box-header {
     background-color: rgb(56, 68, 77);
 }
 
-.dark #comment-draw-box-header .time {
+.dark-theme #comment-draw-box-header .time {
     border-right: 1px solid #4d4d4d;
 }
 
@@ -1576,7 +1628,7 @@ td {
     visibility: hidden;
     opacity: 0;
 }
-.dark .tweet-capture-cover {
+.dark-theme .tweet-capture-cover {
     background: rgb(39, 39, 39, 70%);
 }
 .tweet-capture.selected .tweet-capture-cover {
@@ -1592,7 +1644,7 @@ td {
     visibility: visible;
     opacity: 1;
 }
-.dark .tweet-capture.disabled .tweet-capture-cover {
+.dark-theme .tweet-capture.disabled .tweet-capture-cover {
     background: rgb(245, 245, 245, 30%);
 }
 .tweet-capture:last-of-type .tweet-capture-cover {
