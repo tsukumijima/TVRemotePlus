@@ -60,18 +60,6 @@ body {
     overflow-x: hidden;
 }
 
-/* 字幕 */
-
-video::cue {
-    font-family: 'Open Sans','Segoe UI','Arial',sans-serif;
-    font-size: 110%;
-}
-/* macOS 環境で字幕の背景が表示されない問題への対処 */
-/* Windows などで適用させると今度は透明度が 0.5 とは思えない濃さになってしまうので macOS のみに適用する */
-.mac video::cue {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-}
-
 /* 本体のスクロールバー */
 
 .scrollbar {
