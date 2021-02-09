@@ -31,8 +31,8 @@ section {
     top: 54px;
 }
 @media screen and (min-width: 769px) {
-    .vertical-header #search-find-wrap {
-        top: 0px;
+    .vertical-navmenu #search-find-wrap {
+        top: 8px;
     }
 }
 
