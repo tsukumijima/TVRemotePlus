@@ -36,7 +36,7 @@
 		$instance = new Jikkyo($nicologin_mail, $nicologin_password);
 		
 		// 実況 ID を取得
-		$nicojikkyo_id = $instance->getNicoJikkyoID(intval($sid));
+		$nicojikkyo_id = $instance->getNicoJikkyoID($ch[$chnum]);
     
 		// 実況 ID が存在する
 		if ($nicojikkyo_id !== null) {
