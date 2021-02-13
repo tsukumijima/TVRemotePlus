@@ -132,22 +132,25 @@ class Jikkyo {
 
         // 配列を回す
         foreach ($channel_table as $channel_record) {
-	
-	    if(intval($channel_sid) > 333){ // 地上波の時
-	        $jikkyo_sid = hexdec(mb_substr($channel_record['ServiceID'],2));
-	    }else { // 地上波以外
-	        $jikkyo_sid = $channel_record['ServiceID'];
-	    }
+            
+            // 地上波の時は ServiceID を 10進数に変換する（変換時に頭の 0x は不要なので除去）
+            // BS CS の時はそのまま流す
+            // 切り替え基準の sid は衛星で存在する実況チャンネルが AT-X(333)までなのでそれを目安に設定
+            if　(intval($channel_sid) > 333) {
+                $jikkyo_sid = hexdec(mb_substr($channel_record['ServiceID'], 2));
+            } else {
+                $jikkyo_sid = $channel_record['ServiceID'];
+            }
 
-        // チャンネルが一致したら、かつ実況チャンネルが存在するとき
-        if ($jikkyo_sid == $channel_sid and ($channel_record['JikkyoID']) != '-1') {
-            return 'jk'.($channel_record['JikkyoID']);
-            break;
+            // チャンネルが一致したら、かつ実況チャンネル (JikkyoIDが -1 でない) が存在するとき
+            if ($jikkyo_sid == $channel_sid and ($channel_record['JikkyoID']) != '-1') {
+                return 'jk'.($channel_record['JikkyoID']);
+            }
         }
-	    }
-            // 一致するチャンネルがない
-            return null;
-        }
+        
+        // 一致するチャンネルがない
+        return null;
+    }
 
 
     /**
