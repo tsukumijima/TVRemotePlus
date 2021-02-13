@@ -125,37 +125,30 @@ class Jikkyo {
      * @param string $channel_name チャンネル名（放送局名）
      * @return ?string そのチャンネルの実況 ID
      */
-    public function getNicoJikkyoID(string $channel_name): ?string {
+    public function getNicoJikkyoID(string $channel_sid): ?string {
 
         // jikkyo_channels.json を読み込み
         $channel_table = json_decode(file_get_contents($this->jikkyo_channels_file), true);
 
         // 配列を回す
         foreach ($channel_table as $channel_record) {
-
-            // 抽出したチャンネル名
-            $channel_field = $channel_record['Channel'];
             
-            // 正規表現用の文字をエスケープ
-            $channel_field_escape = str_replace('/', '\/', preg_quote($channel_field));
+            // 地上波の時は ServiceID を 10進数に変換する（変換時に頭の 0x は不要なので除去）
+            // BS CS の時はそのまま流す
+            // 切り替え基準の sid は衛星で存在する実況チャンネルが AT-X(333)までなのでそれを目安に設定
+            if　(intval($channel_sid) > 333) {
+                $jikkyo_sid = hexdec(mb_substr($channel_record['ServiceID'], 2));
+            } else {
+                $jikkyo_sid = $channel_record['ServiceID'];
+            }
 
-            // 正規表現パターン
-            mb_regex_encoding('UTF-8');
-            $match = '/^'.str_replace('NHK総合', 'NHK総合[0-9]?', str_replace('NHKEテレ', 'NHKEテレ[0-9]?', $channel_field_escape)).'[0-9]?$/u';
-
-            // チャンネル名がいずれかのパターンに一致したら
-            if ($channel_name === $channel_field or preg_match($match, $channel_name)) {
-
-                // 実況 ID を返す
-                if (intval($channel_record['JikkyoID']) > 0) {
-                    return 'jk'.$channel_record['JikkyoID'];
-                } else {
-                    return null;
-                }
+            // チャンネルが一致したら、かつ実況チャンネル (JikkyoIDが -1 でない) が存在するとき
+            if ($jikkyo_sid == $channel_sid and ($channel_record['JikkyoID']) != '-1') {
+                return 'jk'.($channel_record['JikkyoID']);
             }
         }
-
-        // チャンネル名が一致しなかった
+        
+        // 一致するチャンネルがない
         return null;
     }
 
