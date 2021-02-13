@@ -49,9 +49,9 @@ class JikkyoController {
         
                     // 実況 ID を取得
                     if (isset($ch[$settings[$stream]['channel']])){
-                        $nicojikkyo_id = $instance->getNicoJikkyoID($sid[$settings[$stream]['channel']]);
+                        $nicojikkyo_id = $instance->getNicoJikkyoID(intval($sid[$settings[$stream]['channel']]));
                     } else if ($ch[intval($settings[$stream]['channel']).'_1']){
-                        $nicojikkyo_id = $instance->getNicoJikkyoID($sid[intval($settings[$stream]['channel']).'_1']);
+                        $nicojikkyo_id = $instance->getNicoJikkyoID(intval($sid[intval($settings[$stream]['channel']).'_1']));
                     } else {
                         $nicojikkyo_id = null;
                     }
@@ -107,7 +107,7 @@ class JikkyoController {
                 $instance = new Jikkyo($nicologin_mail, $nicologin_password);
 
                 // 実況 ID を取得
-                $nicojikkyo_id = $instance->getNicoJikkyoID($settings[$stream]['filechannel']);
+                $nicojikkyo_id = $instance->getNicoJikkyoID(intval($settings[$stream]['filechannel']));
 
                 // 実況 ID が存在する
                 if ($nicojikkyo_id !== null) {

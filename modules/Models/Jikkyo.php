@@ -122,10 +122,10 @@ class Jikkyo {
      * チャンネル名から実況 ID を取得する
      * そのチャンネルにニコニコ実況のチャンネルが存在しない場合は null を返す
      *
-     * @param string $channel_name チャンネル名（放送局名）
+     * @param int $channel_sid チャンネルの Service ID (SID)
      * @return ?string そのチャンネルの実況 ID
      */
-    public function getNicoJikkyoID(string $channel_sid): ?string {
+    public function getNicoJikkyoID(int $channel_sid): ?string {
 
         // jikkyo_channels.json を読み込み
         $channel_table = json_decode(file_get_contents($this->jikkyo_channels_file), true);
@@ -136,10 +136,10 @@ class Jikkyo {
             // 地上波の時は ServiceID を 10進数に変換する（変換時に頭の 0x は不要なので除去）
             // BS CS の時はそのまま流す
             // 切り替え基準の sid は衛星で存在する実況チャンネルが AT-X(333)までなのでそれを目安に設定
-            if (intval($channel_sid) > 333) {
+            if ($channel_sid > 333) {
                 $channel_field = hexdec(mb_substr($channel_record['ServiceID'], 2));
             } else {
-                $channel_field = $channel_record['ServiceID'];
+                $channel_field = intval($channel_record['ServiceID']);
             }
 
             // チャンネルが一致したら、かつ実況チャンネル (JikkyoIDが -1 でない) が存在するとき
