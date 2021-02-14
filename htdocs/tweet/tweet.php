@@ -47,12 +47,19 @@
 			if ($_POST['hashtag'] !== ''){ // 空でないなら
 
 				$hashtag = '';
-				$hashtag_text = explode(' ', str_replace('　', ' ', $_POST['hashtag'])); //スペースで分割
+				$hashtag_text_raw = str_replace('　', ' ', $_POST['hashtag']);  // 全角スペースを半角スペースに置換
+				$hashtag_text_raw = preg_replace('/\s(?=\s)/', '', $hashtag_text_raw);  // 複数のスペースを一つへ
+				$hashtag_text_raw = trim($hashtag_text_raw);  // 左右のスペースを除去
+				$hashtag_text = explode(' ', $hashtag_text_raw);  // スペースで分割
 
 				// ハッシュタグの数だけ
 				foreach ($hashtag_text as $i => $value) {
-					if (strpos($hashtag_text[$i], '#') === false){ // # が付いてなかったら
-						$hashtag_text[$i] = '#'.$hashtag_text[$i]; // それぞれ付けておく
+					$hashtag_text[$i] = trim($hashtag_text[$i]);  // 左右のスペースを除去
+					if (empty($hashtag_text[$i])) {
+						continue;  // 空文字は無視
+					}
+					if (strpos($hashtag_text[$i], '#') === false){  // # が付いてなかったら
+						$hashtag_text[$i] = '#'.$hashtag_text[$i];  // それぞれ付けておく
 					}
 					$hashtag = $hashtag.$hashtag_text[$i].' ';
 				}
@@ -63,7 +70,7 @@
 				if (($now_tweettime - $previous_tweettime) > $tweet_time){
 
 					// 間隔が空いててハッシュタグあるならハッシュタグもつける
-					$tweet_text = $hashtag."\n".$_POST['tweet'];
+					$tweet_text = $_POST['tweet'].' '.$hashtag;
 					
 					// ハッシュタグついてるのでタイムスタンプをCookieに記録する
 					$cookie['tweet_latest'] = time();
@@ -71,7 +78,7 @@
 
 				} else { 
 					// 指定した秒数空いてないのでハッシュタグを無効化
-					$tweet_text = str_replace('#', '# ', $hashtag)."\n".$_POST['tweet'];
+					$tweet_text = $_POST['tweet'].' '.str_replace('#', '# ', $hashtag);
 				}
 
 			} else {
