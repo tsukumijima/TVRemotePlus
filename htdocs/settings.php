@@ -1070,12 +1070,12 @@
                 <span>HLS セグメントあたりの秒数 (ファイル再生時)</span>
                 <p>
                   通常は変更する必要はありませんが、外出先から視聴する場合など回線が不安定な場合、
-                  秒数を 15 (秒) や 20 (秒) などに伸ばすことで、安定して再生できる場合があります<br>
+                  秒数を 10 (秒) や 20 (秒) などに伸ばすことで、安定して再生できる場合があります<br>
                   ただし、秒数を伸ばせば伸ばすほど、再生開始までにかかる待機時間が長くなります<br>
-                  新規インストール時のデフォルトは 10 (秒) です<br>
+                  新規インストール時のデフォルトは 7 (秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="10" value="<?php echo $hlsfile_time; ?>" required />
+              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="7" value="<?php echo $hlsfile_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
