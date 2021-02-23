@@ -751,10 +751,6 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 /** 縦ヘッダー **/
 
 @media screen and (min-width: 769px) {
-    
-    .vertical-navmenu body {
-        margin-left: 54px;
-    }
 
     .vertical-navmenu #main {
         margin-top: 0px;
