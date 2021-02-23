@@ -541,7 +541,7 @@
                   ffmpeg が通常のエンコーダー(ソフトウェアエンコーダー)、
                   QSVEncC・NVEncC・VCEEncC がハードウェアエンコーダーです<br>
                   QSVEncC・NVEncC・VCEEncC の方が CPU を消費しない・エンコードが早いためおすすめですが、
-                  QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 環境、VCEEncC は AMD の Radeon GPU でしか利用できません<br>
+                  QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 、VCEEncC は AMD の Radeon GPU でしか利用できません<br>
                 </p>
               </div>
               <div class="select-wrap">

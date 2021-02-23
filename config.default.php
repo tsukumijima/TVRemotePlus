@@ -23,7 +23,7 @@ $quality_default = '1080p'; // 1080p-high・1080p・810p・720p・540p・360p・
 // ffmpeg が通常のエンコーダー(ソフトウェアエンコード)、
 // QSVEncC・NVEncC・VCEEncC がハードウェアエンコーダーです
 // QSVEncC・NVEncC・VCEEncC の方が CPU を消費しない・エンコードが早いためおすすめですが、
-// QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 環境、VCEEncC は AMD の Radeon GPU でしか利用できません
+// QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 、VCEEncC は AMD の Radeon GPU でしか利用できません
 $encoder_default = 'QSVEncC'; // ffmpeg・QSVEncC・NVEncC・VCEEncC から選択
 
 // BonDriver は (TVRemotePlusをインストールしたフォルダ)/bin/TSTask/BonDriver/ に配置してください
