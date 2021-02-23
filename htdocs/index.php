@@ -97,6 +97,12 @@
             height: settings['comment_size'],
             unlimited: false
         },
+        pluginOptions: {
+            aribb24: {
+                forceStrokeColor: 'black',
+                normalFont: '"Windows TV MaruGothic",sans-serif',
+            }
+        },
         subtitle: {
             type: 'webvtt',
         },
