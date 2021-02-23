@@ -1074,10 +1074,10 @@
                   通常は変更する必要はありませんが、外出先から視聴する場合など回線が不安定な場合、
                   秒数を 10 (秒) や 20 (秒) などに伸ばすことで、安定して再生できる場合があります<br>
                   ただし、秒数を伸ばせば伸ばすほど、再生開始までにかかる待機時間が長くなります<br>
-                  新規インストール時のデフォルトは 7 (秒) です<br>
+                  新規インストール時のデフォルトは 8 (秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="7" value="<?php echo $hlsfile_time; ?>" required />
+              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="8" value="<?php echo $hlsfile_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -1088,10 +1088,10 @@
                   秒数を 10 (個) や 20 (個) などに設定することで、安定して再生できる場合があります<br>
                   ただし、秒数を伸ばせば伸ばすほど、放送波との遅延が大きくなってしまいます<br>
                   ファイル再生時は全てのセグメントをプレイリストに載せています<br>
-                  新規インストール時のデフォルトは 5 (個) です<br>
+                  新規インストール時のデフォルトは 8 (個) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlslive_list" type="number" min="1" max="60" placeholder="5" value="<?php echo $hlslive_list; ?>" required />
+              <input class="text-box" name="hlslive_list" type="number" min="1" max="60" placeholder="8" value="<?php echo $hlslive_list; ?>" required />
             </div>
 
 		  </form>
