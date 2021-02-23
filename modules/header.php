@@ -57,7 +57,7 @@
   <script type="text/javascript" src="/files/pwacompat.min.js" async></script>
   <script type="text/javascript" src="/files/jquery.min.js"></script>
   <script type="text/javascript" src="/files/DPlayer.min.js"></script>
-  <script type="text/javascript" src="/files/hls.min.js"></script>
+  <script type="text/javascript" src="/files/hls-b24.min.js"></script>
   <script type="text/javascript" src="/files/toastr.min.js"></script>
   <script type="text/javascript" src="/files/js.cookie.min.js"></script>
   <script type="text/javascript" src="/files/velocity.min.js"></script>
