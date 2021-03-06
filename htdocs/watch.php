@@ -79,6 +79,7 @@
         <div id="search-stream-info"></div>
         <form id="setting-form" action="/settings/" method="post">
 
+          <input type="hidden" name="_csrf_token" value="<?= $csrf_token ?>">
           <input type="hidden" name="state" value="File">
           <input id="stream-filepath" type="hidden" name="filepath" value="">
           <input id="stream-filetitle" type="hidden" name="filetitle" value="">

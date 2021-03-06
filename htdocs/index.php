@@ -496,6 +496,7 @@
       <div id="broadcast-stream-title"></div>
       <div id="broadcast-stream-info"></div>
       <form id="setting-form" action="/settings/" method="post">
+        <input type="hidden" name="_csrf_token" value="<?= $csrf_token ?>">
         <input type="hidden" name="state" value="ONAir">
         <input id="broadcast-stream-channel" type="hidden" name="channel" value="">
 

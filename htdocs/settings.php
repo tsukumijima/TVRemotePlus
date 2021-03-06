@@ -25,6 +25,10 @@
 	// POSTでフォームが送られてきた場合
 	if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
+		if (!isset($_POST['_csrf_token']) || $_POST['_csrf_token'] !== $csrf_token) {
+			trigger_error('Csrf token error', E_USER_ERROR);
+		}
+
 		// ストリーム番号を取得
 		if (!empty($_POST['stream'])){
 			$stream = strval($_POST['stream']);
@@ -240,10 +244,8 @@
 				// 配列で回す
 				foreach ($_POST as $key => $value) {
 
-					// シングルクォーテーションを取る（セキュリティ対策）
-					$value = str_replace('\'', '', $value);
-					// ダブルクォーテーションを取る（セキュリティ対策）
-					$value = str_replace('"', '', $value);
+					// PHPの文字列リテラルにあると面倒な文字を取り除く
+					$value = str_replace(array("\n", "\r", '\'', '"'), '', $value);
 
 					// 数値化できるものは数値に変換しておく
 					if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
@@ -257,8 +259,11 @@
 						$set = str_replace('\\', '/', $set);
 					}
 					
-					// config.php を書き換え
-					$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+					// キーに不正な文字がなければ
+					if (preg_match('/[^0-9A-Za-z_]/', $key) === 0) {
+						// config.php を書き換え
+						$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // 置換
+					}
 
 				}
 				
@@ -513,6 +518,7 @@
 
           <form id="setting-env" class="setting-form-wrap">
           
+            <input type="hidden" name="_csrf_token" value="<?= $csrf_token ?>">
             <input type="hidden" name="setting-env" value="true" />
 
             <h3 class="red">

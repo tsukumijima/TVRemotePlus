@@ -46,6 +46,7 @@ $(function() {
                     url: '/settings/',
                     type: 'post',
                     data: {
+                        '_csrf_token': Cookies.get('tvrp_csrf_token'),
                         'state': 'Offline',
                         'stream': stream
                     },
@@ -61,6 +62,7 @@ $(function() {
                     url: '/settings/',
                     type: 'post',
                     data: {
+                        '_csrf_token': Cookies.get('tvrp_csrf_token'),
                         'state': 'ONAir',
                         'stream': stream,
                         'restart': 'true'
@@ -452,7 +454,7 @@ $(function() {
             $.ajax({
                 url: '/settings/',
                 type: 'post',
-                data: {state: 'Offline', stream: streamnum},
+                data: {_csrf_token: Cookies.get('tvrp_csrf_token'), state: 'Offline', stream: streamnum},
                 cache: false,
             }).done(function(data) {
 
