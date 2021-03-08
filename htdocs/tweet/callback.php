@@ -49,7 +49,7 @@
 
 		// トップページにリダイレクト
 		if (isset($_GET['stream']) and !empty($_GET['stream'])) {  // ストリーム番号があるか
-			header('Location: '.$site_url.$_GET['stream'].'/');
+			header('Location: '.$site_url.filter_var($_GET['stream'], FILTER_VALIDATE_INT).'/');
 		} else {
 			header('Location: '.$site_url);
 		}

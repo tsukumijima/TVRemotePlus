@@ -8,7 +8,7 @@ class JikkyoController {
     /**
      * コンストラクタ
      */
-    public function __construct() {
+    public function __construct($live_id = null) {
 
         require ('module.php');
         require ('require.php');
@@ -28,12 +28,12 @@ class JikkyoController {
                 // モデルを初期化
                 $instance = new Jikkyo($nicologin_mail, $nicologin_password);
 
-                // クエリに放送 ID が存在する場合はそれを使う
-                if (isset($_GET['live_id']) and !empty($_GET['live_id'])) {
+                // 放送 ID が指定された場合はそれを使う
+                if (isset($live_id)) {
 
                     // ニコニコチャンネル/コミュニティ ID として設定　lv から始まる ID が入る場合もあるが、
                     // getNicoliveSession() はいずれの ID も処理できるので問題はない
-                    $nicochannel_id = $_GET['live_id'];
+                    $nicochannel_id = $live_id;
 
                 // ストリーム番号から現在放送中のチャンネルの実況 ID を使う
                 } else {

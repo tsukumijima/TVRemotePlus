@@ -595,7 +595,9 @@ $(function() {
         $('#cast-scan').prop('disabled', true).addClass('disabled');
         toastr.info('スキャンしています…');
         $.ajax({
-            url: '/api/chromecast/' + stream + '?cmd=scan',
+            url: '/api/chromecast/' + stream,
+            type: 'post',
+            data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'scan'},
             dataType: 'json',
             cache: false,
         }).done(function(data) {
@@ -626,6 +628,8 @@ $(function() {
     // 現在すでにキャスト中かを調べる
     $.ajax({
         url: '/api/chromecast/' + stream,
+        type: 'post',
+        data: {_csrf_token: Cookies.get('tvrp_csrf_token')},
         dataType: 'json',
         cache: false,
     }).done(function(data) {
@@ -653,6 +657,8 @@ $(function() {
 
             $.ajax({
                 url: '/api/chromecast/' + stream,
+                type: 'post',
+                data: {_csrf_token: Cookies.get('tvrp_csrf_token')},
                 dataType: 'json',
                 cache: false,
             }).done(function(data) {
@@ -702,7 +708,9 @@ $(function() {
         } else if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
             $.ajax({
-                url: '/api/chromecast/' + stream + '?cmd=stop',
+                url: '/api/chromecast/' + stream,
+                type: 'post',
+                data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'stop'},
                 dataType: 'json',
                 cache: false,
             }).done(function(data) {
@@ -989,7 +997,9 @@ function initServerCast(elem){
 
     // Chromecast を起動
     $.ajax({
-        url: '/api/chromecast/' + stream + '?cmd=start&ip=' + $(elem).attr('data-ip') + '&port=' + $(elem).attr('data-port'),
+        url: '/api/chromecast/' + stream,
+        type: 'post',
+        data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'start', ip: $(elem).attr('data-ip'), port: $(elem).attr('data-port')},
         dataType: 'json',
         cache: false,
     }).done(function(data) {
@@ -1025,7 +1035,9 @@ function controlServerCast(state){
 
         // 再生系処理 
         $.ajax({
-            url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
+            url: '/api/chromecast/' + stream,
+            type: 'post',
+            data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'seek', arg: dp.video.currentTime},
             dataType: 'json',
             cache: false,
         }).done(function(data) {
@@ -1043,7 +1055,9 @@ function controlServerCast(state){
         if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
             $.ajax({
-                url: '/api/chromecast/' + stream + '?cmd=restart',
+                url: '/api/chromecast/' + stream,
+                type: 'post',
+                data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'restart'},
                 dataType: 'json',
                 cache: false,
             }).done(function(data) {
@@ -1061,7 +1075,9 @@ function controlServerCast(state){
             if (state == 'File'){
 
                 $.ajax({
-                    url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
+                    url: '/api/chromecast/' + stream,
+                    type: 'post',
+                    data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'seek', arg: dp.video.currentTime},
                     dataType: 'json',
                     cache: false,
                 }).done(function(data) {
@@ -1070,7 +1086,9 @@ function controlServerCast(state){
             } else {
 
                 $.ajax({
-                    url: '/api/chromecast/' + stream + '?cmd=pause',
+                    url: '/api/chromecast/' + stream,
+                    type: 'post',
+                    data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'pause'},
                     dataType: 'json',
                     cache: false,
                 }).done(function(data) {
@@ -1090,7 +1108,9 @@ function controlServerCast(state){
             if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
                 $.ajax({
-                    url: '/api/chromecast/' + stream + '?cmd=seek&arg=' + dp.video.currentTime,
+                    url: '/api/chromecast/' + stream,
+                    type: 'post',
+                    data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'seek', arg: dp.video.currentTime},
                     dataType: 'json',
                     cache: false,
                 }).done(function(data) {
@@ -1107,7 +1127,9 @@ function controlServerCast(state){
         if ($('#cast-toggle > .menu-link-href').text() == 'キャストを終了'){
 
             $.ajax({
-                url: '/api/chromecast/' + stream + '?cmd=volume&arg=' + dp.video.volume,
+                url: '/api/chromecast/' + stream,
+                type: 'post',
+                data: {_csrf_token: Cookies.get('tvrp_csrf_token'), cmd: 'volume', arg: dp.video.volume},
                 dataType: 'json',
                 cache: false,
             }).done(function(data) {

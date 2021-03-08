@@ -100,8 +100,12 @@
 	}
 
 	if (isset($_GET['file'])){
-		$file = rawurldecode($_GET['file']);
-		$pathinfo = pathinfo($TSfile_dir.'/'.$file);
+		$file = str_replace('\\', '/', (string)filter_var($_GET['file']));
+		if (strpos($file, '../') === false){
+			$pathinfo = pathinfo($TSfile_dir.'/'.$file);
+		} else {
+			unset($file);
+		}
 	}
 
 	// 指定されたファイル
@@ -109,7 +113,7 @@
 	if (isset($file) and file_exists($TSfile_dir.'/'.$file) and isset($pathinfo['extension']) and
 	    ($pathinfo['extension'] == 'mp4' or $pathinfo['extension'] == 'mkv')){
 
-		loadVideo($TSfile_dir.'/'.$_GET['file'], $pathinfo['extension']);
+		loadVideo($TSfile_dir.'/'.$file, $pathinfo['extension']);
 		exit();	
 		
 	// 指定されたストリームのファイルを出力する(stateがFileでかつMP4・MKVのみ)

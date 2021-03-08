@@ -261,6 +261,8 @@ function newNicoJKAPIBackendONAir() {
         try {
             watchsession_info = await $.ajax({
                 url: '/api/jikkyo/' + stream,
+                type: 'post',
+                data: {_csrf_token: Cookies.get('tvrp_csrf_token')},
                 dataType: 'json',
                 cache: false,
             });
@@ -1143,6 +1145,8 @@ function newNicoJKAPIBackendFile() {
             try {
                 comment = await $.ajax({
                     url: '/api/jikkyo/' + stream,
+                    type: 'post',
+                    data: {_csrf_token: Cookies.get('tvrp_csrf_token')},
                     dataType: 'json',
                     cache: false,
                 });

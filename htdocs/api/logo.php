@@ -6,17 +6,17 @@
 	// モジュール読み込み
 	require_once ('../../modules/require.php');
 
+	// クエリ
+	$logo_onid = isset($_REQUEST['onid']) ? filter_var($_REQUEST['onid'], FILTER_VALIDATE_INT) : false;
+	$logo_sid = isset($_REQUEST['sid']) ? filter_var($_REQUEST['sid'], FILTER_VALIDATE_INT) : false;
+
 	// onid と sid がついている場合のみ
-	if (isset($_REQUEST['onid']) and isset($_REQUEST['sid'])) {
+	if ($logo_onid !== false and $logo_sid !== false) {
 		
 		// ブラウザにキャッシュしてもらえるようにヘッダーを設定
 		// 参考: https://qiita.com/yuuuking/items/4f11ccfc822f4c198ab0
 		header('Cache-Control: public, max-age=2592000');  // 30日間
 		header('Content-Type: image/bmp');
-
-		// クエリ
-		$logo_onid = $_REQUEST['onid'];
-		$logo_sid = $_REQUEST['sid'];
 
 		// 局ロゴの URL
 		$logo_url = $EDCB_http_url.'api/logo?onid='.$logo_onid.'&sid='.$logo_sid;

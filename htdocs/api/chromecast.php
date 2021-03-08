@@ -19,12 +19,18 @@
 		'api' => 'chromecast'
 	);
 
+	if (!isset($_COOKIE['tvrp_csrf_token']) || !is_string($_COOKIE['tvrp_csrf_token']) ||
+	    !isset($_POST['_csrf_token']) || $_POST['_csrf_token'] !== $_COOKIE['tvrp_csrf_token']) {
+		trigger_error('Csrf token error', E_USER_ERROR);
+	}
+	// 以下、$_POSTへのインジェクション対策は省略するので注意
+
 	// コマンド確認
-	if (isset($_GET['cmd'])){
-		$cast['cmd'] = $_GET['cmd'];
+	if (isset($_POST['cmd'])){
+		$cast['cmd'] = $_POST['cmd'];
 
 		// スタートならChromecast起動
-		if ($cast['cmd'] == 'start' and isset($_GET['ip']) and isset($_GET['port'])){
+		if ($cast['cmd'] == 'start' and isset($_POST['ip']) and isset($_POST['port'])){
 
 			if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){
 				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/api/stream/'.$stream;
@@ -35,7 +41,7 @@
 			}
 
 			$cmd = 'pushd "'.str_replace('/', '\\', $base_dir).'bin\Apache\bin\" && start "Chromecast Connect" /min '.
-				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'modules/Cast/cast.php" '.$streamurl.' '.$streamtype.' '.$_GET['ip'].' '.$_GET['port'];
+				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'modules/Cast/cast.php" '.$streamurl.' '.$streamtype.' '.$_POST['ip'].' '.$_POST['port'];
 			// echo $cmd."\n";
 			win_exec($cmd);
 			$cast['cast'] = true;
@@ -113,17 +119,17 @@
 	}
 
 	// 引数確認
-	if (isset($_GET['arg'])){
-		$cast['arg'] = $_GET['arg'];
+	if (isset($_POST['arg'])){
+		$cast['arg'] = $_POST['arg'];
 	} else {
 		$cast['arg'] = '';
 	}
 
 	// JSON
 	$json['cmd'] = $cast['cmd'];
-	if ($cast['cmd'] == 'start' and isset($_GET['host']) and isset($_GET['ip']) and isset($_GET['port'])){
-		$json['ip'] = $_GET['ip'];
-		$json['port'] = $_GET['port'];
+	if ($cast['cmd'] == 'start' and isset($_POST['host']) and isset($_POST['ip']) and isset($_POST['port'])){
+		$json['ip'] = $_POST['ip'];
+		$json['port'] = $_POST['port'];
 	}
 	$json['arg'] = $cast['arg'];
 	if ($cast['cmd'] == 'scan'){
@@ -145,7 +151,7 @@
 	// スタート時のみ Play になるまで待つ
 	$i = 0;
 
-	if ($cast['cmd'] == 'start' and isset($_GET['ip']) and isset($_GET['port'])){
+	if ($cast['cmd'] == 'start' and isset($_POST['ip']) and isset($_POST['port'])){
 		while (true){
 			
 			// 0.5秒ごとに読み込み
