@@ -514,7 +514,7 @@ class Jikkyo {
             }
             
             // コメント時間（秒単位）を算出
-            $time = floatval(($kakolog['date'] - $start_timestamp).'.'.$kakolog['date_usec']);
+            $time = floatval(($kakolog['date'] - $start_timestamp).'.'.($kakolog['date_usec'] ?? '0'));
 
             // コメント時間を遅延
             $time += intval(isSettingsItem('comment_file_delay'));
