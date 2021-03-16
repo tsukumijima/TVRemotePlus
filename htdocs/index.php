@@ -73,6 +73,7 @@
         volume: 1.0,
         autoplay: true,
         screenshot: true,
+        airplay: false,
         apiBackend: newNicoJKAPIBackend('<?php echo $ini[$stream]['state']; ?>'),
         live: <?php echo ($ini[$stream]['state'] !== 'File' ? 'true' : 'false'); ?>,
         loop: true,
