@@ -98,9 +98,12 @@
             unlimited: false
         },
         pluginOptions: {
+            // aribb24.js
             aribb24: {
                 forceStrokeColor: 'black',
-                normalFont: '"Windows TV MaruGothic",sans-serif',
+                normalFont: '"Windows TV MaruGothic","Yu Gothic",sans-serif',
+                gaijiFont: '"Windows TV MaruGothic","Yu Gothic",sans-serif',
+                drcsReplacement: true
             }
         },
         subtitle: {
@@ -108,13 +111,12 @@
         },
     });
 
-    document.getElementsByClassName('dplayer-video-current')[0].addEventListener('loadeddata', function(){
-        dp.subtitle.toggle();
-        dp.subtitle.toggle();
-    }, false);
-
 <?php	if ($ini[$stream]['state'] == 'File'): ?>
-    dp.seek(1);
+    // ファイル再生でエンコード中、再生時間が最新のセグメントの範囲にシークされてしまうのを防ぐ
+    // 動画の読み込みが終わった後に（👈重要）currentTime を 0（秒）に設定する
+    dp.video.addEventListener('loadedmetadata', (event) => {
+        dp.video.currentTime = 0;
+    });
 <?php	endif; ?>
 
           </script>
