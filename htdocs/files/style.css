@@ -58,6 +58,8 @@ body {
     color: var(--color-text);
     margin: 0px;
     overflow-x: hidden;
+    /* Pull-to-Refresh 対策 (https://qiita.com/TanakaMidnight/items/979cd7f044fb03a12a9d) */
+    overscroll-behavior-y: none;
 }
 
 /* 本体のスクロールバー */
