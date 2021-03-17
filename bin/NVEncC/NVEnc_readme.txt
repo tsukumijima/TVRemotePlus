@@ -26,6 +26,7 @@ NVEnc 4.00 NVIDIA グラフィックドライバ 390.77以降
 NVEnc 4.31 NVIDIA グラフィックドライバ 418.81以降
 NVEnc 4.51 NVIDIA グラフィックドライバ 436.15以降
 NVEnc 5.10 NVIDIA グラフィックドライバ 418.81以降
+NVEnc 5.24 NVIDIA グラフィックドライバ 456.81 以降
 
 
 【NVIDIA CORPORATION CUDA SAMPLES EULA のライセンス規定の準拠表記】
@@ -167,11 +168,75 @@ NVIDIA グラフィックドライバ 446.14
 NVIDIA グラフィックドライバ 451.67
 NVIDIA グラフィックドライバ 456.71
 NVIDIA グラフィックドライバ 457.09
+NVIDIA グラフィックドライバ 461.09
+NVIDIA グラフィックドライバ 461.40
 
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2021.02.14 (5.29)
+・AvisynthのUnicode対応に伴い、プロセスの文字コードがUTF-8になっているのを
+  OSのデフォルトの文字コード(基本的にShiftJIS)に戻すオプションを追加。(--process-codepage os)
+  これにより、従来のShiftJISのavsファイルも読み込めるようになる。
+  NVEncC実行ファイルと同じ場所に実行ファイルのコピーを作るので、
+  Program Files等書き込みに管理者権限の必要な場所に置かないよう注意。
+
+2021.02.12 (5.28)
+・5.26から--vpp-edgelevelを使用すると画面が暗くなってしまうのを修正。
+・AvisynthのUnicode対応を追加。
+
+2021.02.11 (5.27)
+・--vpp-subburnで埋め込みフォントを使用可能なように。
+・--vpp-subburnでフォントの存在するフォルダを指定可能なように。
+・Windows 10のlong path supportの追加。
+・--audio-source / --sub-source でmetadataを指定可能なよう拡張。
+・--vpp-warpsharpのhelpを修正。
+
+2021.01.31 (5.26)
+・細線化フィルタの追加。(--vpp-warpsharp)
+・--vpp-subburnで短いassファイルが正常に処理できなかったのを改善。
+
+2021.01.10 (5.25)
+・--vpp-subburnで一部のassファイルを焼きこもうとすると異常終了していたのを修正。
+・--vpp-smoothでPascal GPUで実行しようとすると正常に動作せず、緑色の絵になってしまっていたのを修正。
+・--videoformatからautoを削除。正常に動作していなかった。
+・5.24で --vpp-colorspace hdr2sdr=mobius/reinhardが異常終了するのを修正。
+
+2020.12.30 (5.24)
+・x86版をCUDA11ベースに更新し、VS2019に移行。
+  NVIDIA グラフィックドライバ 456.81 以降が必要。
+・timecodeの出力を追加。(--timecode)
+・--check-featureでLevelの値を表示するように。
+・--vpp-colorspace hdr2sdr=bt2390の実装見直し。
+  処理時の規格化の有無について誤解していた。
+・--vpp-colorspace hdr2sdrにdesaturation curveの実装。
+  desat_base, desat_strength, desat_expの追加。
+・libvmaf 2.0.0+ に更新。従来(v1.3.15)と比べ高速化。
+  それでもCPU処理なのでまだエンコードには追いつかない模様。
+・YUV444でnppを使用したリサイズを行うとエラーで落ちてしまうのを修正。
+
+2020.12.20 (5.23)
+・--tier highで720p等でmax-bitrateが0になってしまうのを修正。
+・bit深度を下げるときの丸め方法を変更。
+・vpp-colorspaceのhdr2sdrにbt2390によるtone mappingを追加。
+・vpp-colorspaceのAmpereへの対応。
+・言語による音声や字幕の選択に対応。
+
+2020.12.01 (5.22)
+・bit深度を下げるときの丸め方法を変更。
+・chapterを読み込む際に、msの値を正しく取得できない場合があったのを修正。
+
+2020.11.19 (5.21)
+・重複フレームを削除したVFR動画を作成することで実効的なエンコード速度を向上させるフィルタを追加。(--vpp-mpdecimate )
+・VMAFスコアを計算するオプションを追加。(Win x64版のみ、libvmaf v1.3.15を使用した実装)
+  CPUでの処理なので非常に重く、VMAF計算のほうで律速してしまうので注意。あまり実用的ではないかも。
+
+2020.11.15 (5.20)
+・HLG用のAlternative Transfer Characteristicsを設定する場合は、コンテナ側にはVUI情報をもたせないようにする。
+  コンテナ側にはatcの情報をもたせられないので、かちあってしまう。
+・--vpp-tweakのswapuvの修正。
+
 2020.11.01 (5.19)
 ・HLG用のAlternative Transfer Characteristicsを指定するオプションを追加。( --atc-sei )
 ・--sub-copy指定時に常にすべての字幕がコピーされるようになっていた問題を修正。
