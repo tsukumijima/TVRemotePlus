@@ -627,7 +627,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
         - いずれのブラウザも Chrome と同じ Blink ブラウザエンジンを採用しています
     - **IE11・Edge Legacy・macOS 版 Safari はサポートしていません**
       - このうち Edge Legacy と macOS 版 Safari では一応動きますが、ブラウザ側の問題で一部の機能が動作しません
-    - **キャプチャ機能は Android 版 Firefox・macOS 版 Safari では動作しません**
+    - **キャプチャ機能は Firefox 向け Android・macOS 向け Safari では動作しません**
       - ブラウザ側のバグによるエラーでキャプチャに失敗します
     - **iOS・iPadOS 端末は、ブラウザ側の問題で一部の機能が動作しません**
       - 自動再生されない、字幕を表示できない、などの問題で、Safari 側の仕様やバグに起因するものです

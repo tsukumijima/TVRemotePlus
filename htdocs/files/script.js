@@ -1534,12 +1534,15 @@ $(function(){
                     if (!window.isShiftKey && caption !== null) {
                         context.drawImage(caption, 0, 0, canvas.width, canvas.height);
                     }
-                } catch (error){
-                    // エラー補足（ Android 版 Firefox のバグ対策のはずだった）
-                    console.log('Error:' + error.name)
-                    if (error.name == 'NS_ERROR_NOT_AVAILABLE'){
-                        $('#tweet-status').html('<span class="error">キャプチャに失敗しました…（ Android 版 Firefox コアの技術的問題によるものです）</span>');
+                } catch (error) {
+                    // エラーを捕捉
+                    console.error(`Error: Capture failed. (${error.name}: ${error.message})`)
+                    // Android 向け Firefox 
+                    if (error.name === 'NS_ERROR_NOT_AVAILABLE' ||
+                        error.message === 'CanvasRenderingContext2D.drawImage: Passed-in image is "broken"') {
+                        $('#tweet-status').html('<span class="error">Android 向け Firefox では、ブラウザの不具合が原因でキャプチャができません。</span>');
                         throw error;
+                    // それ以外
                     } else { 
                         $('#tweet-status').html('<span class="error">キャプチャに失敗しました…</span>');
                         throw error;
