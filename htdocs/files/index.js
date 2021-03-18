@@ -14,15 +14,19 @@ function isset(data){
     }
 }
 
-// フルスクリーンかどうか
-// フルスクリーンならtrue、そうでないならfalseを返す
-function isFullScreen(){
-    if ((document.FullscreenElement !== undefined && document.FullscreenElement !== null) || // Firefox
-            (document.webkitFullscreenElement !== undefined && document.webkitFullscreenElement !== null) || // Chrome・Safari など
-            (document.msFullscreenElement !== undefined && document.msFullscreenElement !== null)){ // IE
-        return true; // FullscreenElementに何か入ってる = フルスクリーン中
+/**
+ * フルスクリーンかどうかを返す
+ * @return {Boolean} フルスクリーンなら true、そうでないなら false
+ */
+function isFullScreen() {
+    if ((document.fullscreenElement !== undefined && document.fullscreenElement !== null) || // HTML5 標準
+        (document.mozFullScreenElement !== undefined && document.mozFullScreenElement !== null) || // Firefox
+        (document.webkitFullscreenElement !== undefined && document.webkitFullscreenElement !== null) || // Chrome・Safari
+        (document.webkitCurrentFullScreenElement !== undefined && document.webkitCurrentFullScreenElement !== null) || // Chrome・Safari (old)
+        (document.msFullscreenElement !== undefined && document.msFullscreenElement !== null)){ // IE・Edge Legacy
+        return true; // fullscreenElement に何か入ってる = フルスクリーン中
     } else {
-        return false; // フルスクリーンではない or フルスクリーン非対応の環境(iOS Safariとか)
+        return false; // フルスクリーンではない or フルスクリーン非対応の環境（iOS Safari など）
     }
 }
 
