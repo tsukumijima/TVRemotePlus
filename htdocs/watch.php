@@ -94,44 +94,44 @@
             <div class="select-wrap">
               <select name="stream">
 <?php	if ($stream_current_file == 'true'){ ?>
-                <option value="1" selected>Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1" selected>Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		if (isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
 <?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
-              <option value="<?php echo $i; ?>">Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
+              <option value="<?= $i; ?>">Stream <?= $i; ?> - <?= getFormattedState($ini, $i, true); ?></option>
 <?php			} //括弧終了 ?>
 <?php		} //括弧終了 ?>
 <?php	} else { ?>
 <?php		if (!isStreamActive($ini, 1)){ ?>
-                <option value="1" selected>Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1" selected>Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		} else if (!isStreamActive($ini, 2)){ ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2" selected>Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2" selected>Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		} else if (!isStreamActive($ini, 3)){ ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3" selected>Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3" selected>Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		} else if (!isStreamActive($ini, 4)){ ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4" selected>Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4" selected>Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		} //括弧終了 ?>
 <?php		if (isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)){ ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++){ ?>
-                <option value="<?php echo $i; ?>"<?php if (!isStreamActive($ini, $i)) echo ' selected'; ?>>Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
+                <option value="<?= $i; ?>"<?php if (!isStreamActive($ini, $i)) echo ' selected'; ?>>Stream <?= $i; ?> - <?= getFormattedState($ini, $i, true); ?></option>
 <?php			} //括弧終了 ?>
 <?php		} //括弧終了 ?>
 <?php	} //括弧終了 ?>
@@ -143,7 +143,7 @@
             <span>動画の画質：</span>
             <div class="select-wrap">
             	<select name="quality">
-                <option name="quality_default" value="<?php echo $quality_default; ?>" data-value="<?php echo $quality_default; ?>" data-text="デフォルト (<?php echo $quality_default; ?>)">デフォルト (<?php echo $quality_default; ?>)</option>
+                <option name="quality_default" value="<?= $quality_default; ?>" data-value="<?= $quality_default; ?>" data-text="デフォルト (<?= $quality_default; ?>)">デフォルト (<?= $quality_default; ?>)</option>
                 <option value="1080p-high">1080p-high (1920×1080)</option>
                 <option value="1080p">1080p (1440×1080)</option>
                 <option value="810p">810p (1440×810)</option>
@@ -160,7 +160,7 @@
             <span>エンコード：</span>
             <div class="select-wrap">
               <select name="encoder">
-                <option name="encoder_default" value="<?php echo $encoder_default; ?>" data-value="<?php echo $encoder_default; ?>" data-text="デフォルト (<?php echo $encoder_default; ?>)">デフォルト (<?php echo $encoder_default; ?>)</option>
+                <option name="encoder_default" value="<?= $encoder_default; ?>" data-value="<?= $encoder_default; ?>" data-text="デフォルト (<?= $encoder_default; ?>)">デフォルト (<?= $encoder_default; ?>)</option>
                 <option name="ffmpeg" value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
                 <option name="QSVEncC" value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
                 <option name="NVEncC" value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
@@ -174,9 +174,9 @@
             <div class="select-wrap">
               <select name="subtitle">
 <?php		if ($subtitle_file_default == 'true'){ ?>
-                <option value="<?php echo $subtitle_file_default; ?>">デフォルト (字幕オン)</option>
+                <option value="<?= $subtitle_file_default; ?>">デフォルト (字幕オン)</option>
 <?php		} else { ?>
-                <option value="<?php echo $subtitle_file_default; ?>">デフォルト (字幕オフ)</option>
+                <option value="<?= $subtitle_file_default; ?>">デフォルト (字幕オフ)</option>
 <?php		} //括弧終了 ?>
                 <option value="true">字幕オン</option>
                 <option value="false">字幕オフ</option>
@@ -200,7 +200,7 @@
   </section>
 
   <section id="footer">
-    <?php echo $site_title.' '.$version; ?>
+    <?= $site_title.' '.$version; ?>
     
   </section>
 

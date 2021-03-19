@@ -287,7 +287,7 @@
           </h2>
 
           <p>
-            <?php echo $site_title; ?> の設定を Web 上から行えます。<br>
+            <?= $site_title; ?> の設定を Web 上から行えます。<br>
           </p>
           
           <form id="setting-user" class="setting-form-wrap">
@@ -421,7 +421,7 @@
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（ライブ配信・秒）</span>
 <?php	if (isSettingsItem('comment_delay') !== false){ ?>
-              <input class="text-box" id="comment_delay" type="number" min="0" max="120" placeholder="5" value="<?php echo isSettingsItem('comment_delay'); ?>" required />
+              <input class="text-box" id="comment_delay" type="number" min="0" max="120" placeholder="5" value="<?= isSettingsItem('comment_delay'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="comment_delay" type="number" min="0" max="120" placeholder="5" value="5" required />
 <?php	} // 括弧終了 ?>
@@ -430,7 +430,7 @@
             <div class="setting-form setting-select">
               <span>コメントの遅延時間（ファイル再生・秒）</span>
 <?php	if (isSettingsItem('comment_file_delay') !== false){ ?>
-              <input class="text-box" id="comment_file_delay" type="number" min="0" max="120" placeholder="0" value="<?php echo isSettingsItem('comment_file_delay'); ?>" required />
+              <input class="text-box" id="comment_file_delay" type="number" min="0" max="120" placeholder="0" value="<?= isSettingsItem('comment_file_delay'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="comment_file_delay" type="number" min="0" max="120" placeholder="0" value="0" required />
 <?php	} // 括弧終了 ?>
@@ -459,7 +459,7 @@
             <div class="setting-form setting-select">
               <span>一度に表示する録画番組リストの番組数（件）</span>
 <?php	if (isSettingsItem('list_view_number') !== false){ ?>
-              <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?php echo isSettingsItem('list_view_number'); ?>" required />
+              <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?= isSettingsItem('list_view_number'); ?>" required />
 <?php	} else { ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="30" required />
 <?php	} // 括弧終了 ?>
@@ -568,9 +568,9 @@
                 <select name="BonDriver_default_T">
 <?php		foreach ($BonDriver_dll_T as $i => $value){ //chの数だけ繰り返す ?>
 <?php			if ($value == $BonDriver_default_T){ ?>
-                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
+                  <option value="<?= $value; ?>" selected><?= $value; ?></option>
 <?php			} else { ?>
-                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                  <option value="<?= $value; ?>"><?= $value; ?></option>
 <?php			} //括弧終了 ?>
 <?php		} //括弧終了 ?>
                 </select>
@@ -591,9 +591,9 @@
                 <select name="BonDriver_default_S">
 <?php		foreach ($BonDriver_dll_S as $i => $value){ //chの数だけ繰り返す ?>
 <?php			if ($value == $BonDriver_default_S){ ?>
-                  <option value="<?php echo $value; ?>" selected><?php echo $value; ?></option>
+                  <option value="<?= $value; ?>" selected><?= $value; ?></option>
 <?php			} else { ?>
-                  <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                  <option value="<?= $value; ?>"><?= $value; ?></option>
 <?php			} //括弧終了 ?>
 <?php		} //括弧終了 ?>
                 </select>
@@ -690,7 +690,7 @@
                   UNC パスなど、特殊なパスは認識できないかもしれません<br>
                 </p>
               </div>
-              <input class="text-box" name="TSfile_dir" type="text" value="<?php echo $TSfile_dir; ?>" placeholder="E:/TV-Record/" required />
+              <input class="text-box" name="TSfile_dir" type="text" value="<?= $TSfile_dir; ?>" placeholder="E:/TV-Record/" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -701,7 +701,7 @@
                   フォルダを指定しない場合、録画ファイルと同じファイル名の .ts.program.txt を参照します<br>
                 </p>
               </div>
-              <input class="text-box" name="TSinfo_dir" type="text" value="<?php echo $TSinfo_dir; ?>" placeholder="E:/TV-Record/録画情報/" />
+              <input class="text-box" name="TSinfo_dir" type="text" value="<?= $TSinfo_dir; ?>" placeholder="E:/TV-Record/録画情報/" />
             </div>
 
             <div class="setting-form setting-input">
@@ -714,7 +714,7 @@
                   TVRock 等を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
-              <input class="text-box" name="EDCB_http_url" type="url" value="<?php echo $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/" />
+              <input class="text-box" name="EDCB_http_url" type="url" value="<?= $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/" />
             </div>
 
             <div class="setting-form setting-input">
@@ -727,7 +727,7 @@
                   <a href="https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Twitter_Develop.md#%E3%82%A2%E3%83%97%E3%83%AA%E4%BD%9C%E6%88%90%E7%94%BB%E9%9D%A2%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E4%BE%8B" target="_blank">こちら</a> を参考に Twitter API アプリ作成フォームの Callback URLs に (ここで指定したURL)/tweet/callback.php と追加しておいてください<br>
                 </p>
               </div>
-              <input class="text-box" name="reverse_proxy_url" type="url" value="<?php echo $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
+              <input class="text-box" name="reverse_proxy_url" type="url" value="<?= $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
             </div>
 
             <div class="setting-form setting-input">
@@ -777,7 +777,7 @@
                   新規インストール時のデフォルトは15件です<br>
                 </p>
               </div>
-              <input class="text-box" name="history_keep" type="number" min="1" max="100" placeholder="15" value="<?php echo $history_keep; ?>" required />
+              <input class="text-box" name="history_keep" type="number" min="1" max="100" placeholder="15" value="<?= $history_keep; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -810,7 +810,7 @@
                   また、同時視聴者数が多くなった場合に追い出されやすくなります<br>
                 </p>
               </div>
-              <input class="text-box" name="nicologin_mail" type="email" value="<?php echo $nicologin_mail; ?>" placeholder="example@gmail.com" autocomplete="off" />
+              <input class="text-box" name="nicologin_mail" type="email" value="<?= $nicologin_mail; ?>" placeholder="example@gmail.com" autocomplete="off" />
             </div>
 
             <div class="setting-form setting-input">
@@ -824,7 +824,7 @@
                 </p>
               </div>
               <div class="password-box-wrap">
-                <input class="password-box" name="nicologin_password" type="password" value="<?php echo $nicologin_password; ?>" placeholder="password" autocomplete="new-password" />
+                <input class="password-box" name="nicologin_password" type="password" value="<?= $nicologin_password; ?>" placeholder="password" autocomplete="new-password" />
                 <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
@@ -842,7 +842,7 @@
                   連投と判定されたツイートは 「#」の右にスペースを入れハッシュタグとして機能しないようにしてから投稿されますが、鬱陶しい場合は 0 (秒) に設定すればオフになります<br>
                 </p>
               </div>
-              <input class="text-box" name="tweet_time" type="number" min="0" max="120" placeholder="60" value="<?php echo $tweet_time; ?>" required />
+              <input class="text-box" name="tweet_time" type="number" min="0" max="120" placeholder="60" value="<?= $tweet_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -853,7 +853,7 @@
                 ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、適宜録画用の HDD 内のフォルダを指定しておくのも良いと思います<br>
                 </p>
               </div>
-              <input class="text-box" name="tweet_upload" type="text" value="<?php echo $tweet_upload; ?>" placeholder="E:/TV-Capture/" />
+              <input class="text-box" name="tweet_upload" type="text" value="<?= $tweet_upload; ?>" placeholder="E:/TV-Capture/" />
             </div>
 
             <div class="setting-form setting-input">
@@ -883,7 +883,7 @@
                 コンシューマーキーは25文字のランダムな英数字です<br>
                 </p>
               </div>
-              <input class="text-box" name="CONSUMER_KEY" type="text" pattern="[A-Za-z0-9]{25}" value="<?php echo $CONSUMER_KEY; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXX" />
+              <input class="text-box" name="CONSUMER_KEY" type="text" pattern="[A-Za-z0-9]{25}" value="<?= $CONSUMER_KEY; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXX" />
             </div>
 
             <div class="setting-form setting-input">
@@ -894,7 +894,7 @@
                 コンシューマーシークレットは50文字のランダムな英数字です<br>
                 </p>
               </div>
-              <input class="text-box" name="CONSUMER_SECRET" type="text" pattern="[A-Za-z0-9]{50}" value="<?php echo $CONSUMER_SECRET; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
+              <input class="text-box" name="CONSUMER_SECRET" type="text" pattern="[A-Za-z0-9]{50}" value="<?= $CONSUMER_SECRET; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
             </div>
             
             <h4><i class="fas fa-lock"></i>Basic 認証</h4>
@@ -926,7 +926,7 @@
                   デフォルトは user ですが、Basic 認証を利用する場合はできるだけ変更してください<br>
                 </p>
               </div>
-              <input class="text-box" name="basicauth_user" type="text" pattern="^[0-9A-Za-z]+$" value="<?php echo $basicauth_user; ?>" placeholder="user" required autocomplete="off" />
+              <input class="text-box" name="basicauth_user" type="text" pattern="^[0-9A-Za-z]+$" value="<?= $basicauth_user; ?>" placeholder="user" required autocomplete="off" />
             </div>
 
             <div class="setting-form setting-input">
@@ -938,7 +938,7 @@
                 </p>
               </div>
               <div class="password-box-wrap">
-                <input class="password-box" name="basicauth_password" type="password" value="<?php echo $basicauth_password; ?>" placeholder="password" required autocomplete="new-password" />
+                <input class="password-box" name="basicauth_password" type="password" value="<?= $basicauth_password; ?>" placeholder="password" required autocomplete="new-password" />
                 <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
@@ -1051,7 +1051,7 @@
                   その場合は、UDP 送信ポートを空いているポートに変更してください<br>
                 </p>
               </div>
-              <input class="text-box" name="udp_port" type="number" min="1" max="40000" placeholder="8200" value="<?php echo $udp_port; ?>" required />
+              <input class="text-box" name="udp_port" type="number" min="1" max="40000" placeholder="8200" value="<?= $udp_port; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -1064,7 +1064,7 @@
                   新規インストール時のデフォルトは 1 (秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlslive_time" type="number" step="0.1" min="0.5" max="60" placeholder="1" value="<?php echo $hlslive_time; ?>" required />
+              <input class="text-box" name="hlslive_time" type="number" step="0.1" min="0.5" max="60" placeholder="1" value="<?= $hlslive_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -1077,7 +1077,7 @@
                   新規インストール時のデフォルトは 8 (秒) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="8" value="<?php echo $hlsfile_time; ?>" required />
+              <input class="text-box" name="hlsfile_time" type="number" step="0.1" min="0.5" max="60" placeholder="8" value="<?= $hlsfile_time; ?>" required />
             </div>
 
             <div class="setting-form setting-input">
@@ -1091,7 +1091,7 @@
                   新規インストール時のデフォルトは 8 (個) です<br>
                 </p>
               </div>
-              <input class="text-box" name="hlslive_list" type="number" min="1" max="60" placeholder="8" value="<?php echo $hlslive_list; ?>" required />
+              <input class="text-box" name="hlslive_list" type="number" min="1" max="60" placeholder="8" value="<?= $hlslive_list; ?>" required />
             </div>
 
 		  </form>
@@ -1127,7 +1127,7 @@
                   HTTPS アクセスの方が上位互換なので、自己署名証明書をインポートした端末では普段も HTTPS でアクセスする事をお勧めします<br>
                 </p>
               </div>
-              <a class="download" href="https://<?php echo $_SERVER['SERVER_NAME']; ?>:<?php echo $https_port; ?>/">
+              <a class="download" href="https://<?= $_SERVER['SERVER_NAME']; ?>:<?= $https_port; ?>/">
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -1140,7 +1140,7 @@
                   リバースプロキシ用 URL で TVRemotePlus にアクセスできます<br>
                 </p>
               </div>
-              <a class="download" href="<?php echo $reverse_proxy_url; ?>">
+              <a class="download" href="<?= $reverse_proxy_url; ?>">
                 <i class="fas fa-external-link-alt"></i>
               </a>
             </div>
@@ -1177,38 +1177,38 @@
 <?php			} else { ?>
             <p>ストリームを終了します。</p>
 <?php			} //括弧終了 ?>
-            <p>稼働状態：<?php echo $_POST['state']; ?></p>
+            <p>稼働状態：<?= $_POST['state']; ?></p>
 <?php			if (!isset($_POST['allstop'])){ ?>
-            <p>ストリーム：Stream <?php echo $stream; ?></p>
+            <p>ストリーム：Stream <?= $stream; ?></p>
 <?php			} else { ?>
             <p>ストリーム：全てのストリーム</p>
 <?php			} //括弧終了 ?>
 <?php			if ($_POST['state'] == 'ONAir'){ ?>
-            <p>チャンネル：<?php echo $ch[$ini[$stream]['channel']]; ?></p>
-            <p>動画の画質：<?php echo $ini[$stream]['quality']; ?></p>
-            <p>エンコーダー：<?php echo $ini[$stream]['encoder']; ?></p>
-            <p>字幕の表示：<?php echo $ini[$stream]['subtitle']; ?></p>
-            <p>使用 BonDriver：<?php echo $ini[$stream]['BonDriver']; ?></p>
-            <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
-            <p>TSTask 起動コマンド：<?php echo $tstask_cmd; ?></p>
+            <p>チャンネル：<?= $ch[$ini[$stream]['channel']]; ?></p>
+            <p>動画の画質：<?= $ini[$stream]['quality']; ?></p>
+            <p>エンコーダー：<?= $ini[$stream]['encoder']; ?></p>
+            <p>字幕の表示：<?= $ini[$stream]['subtitle']; ?></p>
+            <p>使用 BonDriver：<?= $ini[$stream]['BonDriver']; ?></p>
+            <p>エンコードコマンド：<?= $stream_cmd; ?></p>
+            <p>TSTask 起動コマンド：<?= $tstask_cmd; ?></p>
 
 <?php			} else if ($_POST['state'] == 'File'){ ?>
-            <p>タイトル：<?php echo $ini[$stream]['filetitle']; ?></p>
-            <p>動画の画質：<?php echo $ini[$stream]['quality']; ?></p>
-            <p>エンコーダー：<?php echo $ini[$stream]['encoder']; ?></p>
-            <p>エンコードコマンド：<?php echo $stream_cmd; ?></p>
+            <p>タイトル：<?= $ini[$stream]['filetitle']; ?></p>
+            <p>動画の画質：<?= $ini[$stream]['quality']; ?></p>
+            <p>エンコーダー：<?= $ini[$stream]['encoder']; ?></p>
+            <p>エンコードコマンド：<?= $stream_cmd; ?></p>
 <?php			} //括弧終了 ?>
           
 <?php		} else if (!($reverse_proxy and $setting_hide == 'true')){ ?>
           <div class="setting-form-wrap">
             <p>環境設定を保存しました。</p>
 <?php			foreach ($_POST as $key => $value) { ?>
-            <p><?php echo $key; ?>：<?php echo $value; ?></p>
+            <p><?= $key; ?>：<?= $value; ?></p>
 <?php			} //括弧終了 ?>
 
 <?php		} //括弧終了 ?>
             <div id="button-box">
-              <button class="redbutton" type="button" onclick="location.href='<?php echo $site_url.$stream; ?>/'"><i class="fas fa-home"></i>ホームに戻る</button>
+              <button class="redbutton" type="button" onclick="location.href='<?= $site_url.$stream; ?>/'"><i class="fas fa-home"></i>ホームに戻る</button>
             </div>
           </div>
 
@@ -1227,7 +1227,7 @@
   </section>
 	
   <section id="footer">
-    <?php echo $site_title.' '.$version; ?>
+    <?= $site_title.' '.$version; ?>
 
   </section>
 </body>

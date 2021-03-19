@@ -74,18 +74,18 @@
         autoplay: true,
         screenshot: true,
         airplay: false,
-        apiBackend: newNicoJKAPIBackend('<?php echo $ini[$stream]['state']; ?>'),
-        live: <?php echo ($ini[$stream]['state'] !== 'File' ? 'true' : 'false'); ?>,
+        apiBackend: newNicoJKAPIBackend('<?= $ini[$stream]['state']; ?>'),
+        live: <?= ($ini[$stream]['state'] !== 'File' ? 'true' : 'false'); ?>,
         loop: true,
         lang: 'ja-jp',
         theme: '#007cff',
         // 読み込む m3u8 を指定する
         video: {
 <?php	if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'): ?>
-            url: '/api/stream/<?php echo $stream; ?>?_=<?php echo time(); ?>',
+            url: '/api/stream/<?= $stream; ?>?_=<?= time(); ?>',
             type: 'normal'
 <?php	else: ?>
-            url: '/stream/stream<?php echo $stream; ?>.m3u8',
+            url: '/stream/stream<?= $stream; ?>.m3u8',
             type: 'hls'
 <?php	endif; ?>
         },
@@ -213,7 +213,7 @@
       <div id="epg-box">
         <div id="epg">
 <?php	if ($ini[$stream]['state'] == 'File'): ?>
-          <div id="epg-title"><?php echo $ini[$stream]['filetitle']; ?></div>
+          <div id="epg-title"><?= $ini[$stream]['filetitle']; ?></div>
 <?php	elseif ($ini[$stream]['state'] == 'Offline'): ?>
           <div id="epg-title">配信休止中…</div>
 <?php	else: ?>
@@ -221,7 +221,7 @@
 <?php	endif; ?>
           <div id="reload-box">
             <a id="reload" aria-label="再生が止まった時に押してください" data-balloon-pos="up">
-              <span id="clock"><?php echo $clock; ?></span>
+              <span id="clock"><?= $clock; ?></span>
               <i class="fas fa-redo-alt"></i>
             </a>
           </div>
@@ -231,7 +231,7 @@
           </div>
 <?php	endif; ?>
 <?php	if ($ini[$stream]['state'] == 'File'): ?>
-          <div id="epg-info"><?php echo $ini[$stream]['fileinfo']; ?></div>
+          <div id="epg-info"><?= $ini[$stream]['fileinfo']; ?></div>
 <?php	else: ?>
           <div id="epg-info"></div>
 <?php	endif; ?>
@@ -243,9 +243,9 @@
           <span id="status"></span>
           <div id="epg-chinfo"> 
 <?php		if ($ini[$stream]['channel'] < 55): ?>
-            <span id="epg-channel">Ch: <?php echo sprintf('%03d', str_replace('_', '', $ini[$stream]['channel'])).' '.$channel; ?></span>
+            <span id="epg-channel">Ch: <?= sprintf('%03d', str_replace('_', '', $ini[$stream]['channel'])).' '.$channel; ?></span>
 <?php		else: ?>
-            <span id="epg-channel">Ch: <?php echo sprintf('%03d', $ini[$stream]['channel']).' '.$channel; ?></span>
+            <span id="epg-channel">Ch: <?= sprintf('%03d', $ini[$stream]['channel']).' '.$channel; ?></span>
 <?php		endif; ?>
             <span id="epg-time">
               <span id="epg-starttime"></span> <span id="epg-to"></span> <span id="epg-endtime"></span>
@@ -255,9 +255,9 @@
           <span id="status"></span>
           <div id="epg-chinfo"> 
             <span id="state" style="color: #4ECDC4;" value="File">● File</span>
-            <span id="epg-channel"><?php echo $ini[$stream]['filechannel']; ?></span>
+            <span id="epg-channel"><?= $ini[$stream]['filechannel']; ?></span>
           </div>
-          <span id="epg-time"><?php echo $ini[$stream]['filetime']; ?></span>
+          <span id="epg-time"><?= $ini[$stream]['filetime']; ?></span>
 <?php	else: ?>
           <span id="state" style="color: gray;" value="Offline">● Offline</span>
           <span id="status"></span>
@@ -287,10 +287,10 @@
       <div id="stream-view-box">
 <?php	foreach ($ini as $key => $value): // 地デジchの数だけ繰り返す ?>
 <?php		if ($value['state'] != 'Offline' || $key == '1'): ?>
-        <div class="stream-view stream-view-<?php echo $key; ?>" data-num="<?php echo $key; ?>" data-url="/<?php echo $key; ?>/">
+        <div class="stream-view stream-view-<?= $key; ?>" data-num="<?= $key; ?>" data-url="/<?= $key; ?>/">
           <div class="stream-box">
-            <div class="stream-number-title">Stream</div><div class="stream-number"><?php echo $key; ?></div>
-            <div class="stream-stop <?php echo $value['state'] == 'Offline' ? 'disabled' : ''; ?>">
+            <div class="stream-number-title">Stream</div><div class="stream-number"><?= $key; ?></div>
+            <div class="stream-stop <?= $value['state'] == 'Offline' ? 'disabled' : ''; ?>">
               <i class="stream-stop-icon far fa-stop-circle"></i>
             </div>
 <?php			if ($value['state'] == 'ONAir'): ?>
@@ -301,9 +301,9 @@
             <div class="stream-state">● Offline</div>
 <?php			endif; ?>
             <div class="stream-info">
-              <div class="stream-title"><?php echo $value['state'] == 'Offline' ? '配信休止中…' : '取得中…'; ?></div>
+              <div class="stream-title"><?= $value['state'] == 'Offline' ? '配信休止中…' : '取得中…'; ?></div>
               <div class="stream-channel">
-                <?php echo $value['state'] == 'File' ? $value['filechannel'] : ($value['state'] == 'ONAir' ? @$ch[strval($value['channel'])] : '') ?>
+                <?= $value['state'] == 'File' ? $value['filechannel'] : ($value['state'] == 'ONAir' ? @$ch[strval($value['channel'])] : '') ?>
               </div>
               <div class="stream-description"></div>
             </div>
@@ -365,18 +365,18 @@
 				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i)).$subchcount;
 			}
 ?>
-              <div id="ch<?php echo str_replace('.', '_', $i); ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
-                    data-channel="<?php echo $ch_T_channel; ?>" data-name="<?php echo $value; ?>">
+              <div id="ch<?= str_replace('.', '_', $i); ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
+                    data-channel="<?= $ch_T_channel; ?>" data-name="<?= $value; ?>">
 
                 <div class="broadcast">
                   <div class="broadcast-img material-icons">tv
-                    <div class="broadcast-logo" style="background-image: url(<?php echo getLogoURL($i); ?>);"></div>
+                    <div class="broadcast-logo" style="background-image: url(<?= getLogoURL($i); ?>);"></div>
                   </div>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel"><?php echo $ch_T_channel; ?></div>
+                      <div class="broadcast-channel"><?= $ch_T_channel; ?></div>
                       <div class="broadcast-name-box">
-                        <div class="broadcast-name"><?php echo $value; ?></div>
+                        <div class="broadcast-name"><?= $value; ?></div>
                         <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
                       </div>
                     </div>
@@ -406,18 +406,18 @@
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_S as $i => $value): // BSchの数だけ繰り返す ?>
 <?php		$ch_S_channel = 'Ch: '.sprintf('%03d', $i); ?>
-              <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
-                    data-channel="<?php echo $ch_S_channel; ?>" data-name="<?php echo $value; ?>">
+              <div id="ch<?= $i; ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
+                    data-channel="<?= $ch_S_channel; ?>" data-name="<?= $value; ?>">
 
                 <div class="broadcast">
                   <div class="broadcast-img material-icons">tv
-                    <div class="broadcast-logo" style="background-image: url(<?php echo getLogoURL($i); ?>);"></div>
+                    <div class="broadcast-logo" style="background-image: url(<?= getLogoURL($i); ?>);"></div>
                   </div>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel"><?php echo $ch_S_channel; ?></div>
+                      <div class="broadcast-channel"><?= $ch_S_channel; ?></div>
                       <div class="broadcast-name-box">
-                        <div class="broadcast-name"><?php echo $value; ?></div>
+                        <div class="broadcast-name"><?= $value; ?></div>
                         <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
                       </div>
                     </div>
@@ -447,18 +447,18 @@
             <nav class="broadcast-nav swiper-slide">
 <?php	foreach ($ch_CS as $i => $value): // CSchの数だけ繰り返す ?>
 <?php		$ch_CS_channel = 'Ch: '.sprintf('%03d', $i); ?>
-              <div id="ch<?php echo $i; ?>" class="broadcast-wrap" data-ch="<?php echo $i; ?>"
-                    data-channel="<?php echo $ch_CS_channel; ?>" data-name="<?php echo $value; ?>">
+              <div id="ch<?= $i; ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
+                    data-channel="<?= $ch_CS_channel; ?>" data-name="<?= $value; ?>">
 
                 <div class="broadcast">
                   <div class="broadcast-img material-icons">tv
-                    <div class="broadcast-logo" style="background-image: url(<?php echo getLogoURL($i); ?>);"></div>
+                    <div class="broadcast-logo" style="background-image: url(<?= getLogoURL($i); ?>);"></div>
                   </div>
                   <div class="broadcast-content">
                     <div class="broadcast-channel-box">
-                      <div class="broadcast-channel"><?php echo $ch_CS_channel; ?></div>
+                      <div class="broadcast-channel"><?= $ch_CS_channel; ?></div>
                       <div class="broadcast-name-box">
-                        <div class="broadcast-name"><?php echo $value; ?></div>
+                        <div class="broadcast-name"><?= $value; ?></div>
                         <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi"> - </span></div>
                       </div>
                     </div>
@@ -502,44 +502,44 @@
           <div class="select-wrap">
             <select name="stream">
 <?php	if ($stream_current_live == 'true'): ?>
-              <option value="1"<?php if ($stream == '1') echo ' selected'; ?>>Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-              <option value="2"<?php if ($stream == '2') echo ' selected'; ?>>Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-              <option value="3"<?php if ($stream == '3') echo ' selected'; ?>>Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-              <option value="4"<?php if ($stream == '4') echo ' selected'; ?>>Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+              <option value="1"<?php if ($stream == '1') echo ' selected'; ?>>Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+              <option value="2"<?php if ($stream == '2') echo ' selected'; ?>>Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+              <option value="3"<?php if ($stream == '3') echo ' selected'; ?>>Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+              <option value="4"<?php if ($stream == '4') echo ' selected'; ?>>Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		if (isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)): ?>
 <?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++): ?>
-              <option value="<?php echo $i; ?>"<?php if ($stream == $i) echo ' selected'; ?>>Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
+              <option value="<?= $i; ?>"<?php if ($stream == $i) echo ' selected'; ?>>Stream <?= $i; ?> - <?= getFormattedState($ini, $i, true); ?></option>
 <?php			endfor; ?>
 <?php		endif; ?>
 <?php	else: ?>
 <?php		if (!isStreamActive($ini, 1)): ?>
-                <option value="1" selected>Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1" selected>Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		elseif (!isStreamActive($ini, 2)): ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2" selected>Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2" selected>Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		elseif (!isStreamActive($ini, 3)): ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3" selected>Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3" selected>Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		elseif (!isStreamActive($ini, 4)): ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4" selected>Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4" selected>Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php		endif; ?>
 <?php		if (isStreamActive($ini, 2) and isStreamActive($ini, 3) and isStreamActive($ini, 4)): ?>
-                <option value="1">Stream 1 - <?php echo getFormattedState($ini, 1, true); ?></option>
-                <option value="2">Stream 2 - <?php echo getFormattedState($ini, 2, true); ?></option>
-                <option value="3">Stream 3 - <?php echo getFormattedState($ini, 3, true); ?></option>
-                <option value="4">Stream 4 - <?php echo getFormattedState($ini, 4, true); ?></option>
+                <option value="1">Stream 1 - <?= getFormattedState($ini, 1, true); ?></option>
+                <option value="2">Stream 2 - <?= getFormattedState($ini, 2, true); ?></option>
+                <option value="3">Stream 3 - <?= getFormattedState($ini, 3, true); ?></option>
+                <option value="4">Stream 4 - <?= getFormattedState($ini, 4, true); ?></option>
 <?php			for ($i = 5; isStreamActive($ini, ($i - 1)); $i++): ?>
-                <option value="<?php echo $i; ?>"<?php if (!isStreamActive($ini, $i)) echo ' selected'; ?>>Stream <?php echo $i; ?> - <?php echo getFormattedState($ini, $i, true); ?></option>
+                <option value="<?= $i; ?>"<?php if (!isStreamActive($ini, $i)) echo ' selected'; ?>>Stream <?= $i; ?> - <?= getFormattedState($ini, $i, true); ?></option>
 <?php			endfor; ?>
 <?php		endif; ?>
 <?php	endif; ?>
@@ -551,7 +551,7 @@
           <span>動画の画質：</span>
           <div class="select-wrap">
             <select name="quality">
-              <option value="<?php echo $quality_default; ?>">デフォルト (<?php echo $quality_default; ?>)</option>
+              <option value="<?= $quality_default; ?>">デフォルト (<?= $quality_default; ?>)</option>
               <option value="1080p-high">1080p-high (1920×1080)</option>
               <option value="1080p">1080p (1440×1080)</option>
               <option value="810p">810p (1440×810)</option>
@@ -568,7 +568,7 @@
           <span>エンコード：</span>
           <div class="select-wrap">
             <select name="encoder">
-              <option value="<?php echo $encoder_default; ?>">デフォルト (<?php echo $encoder_default; ?>)</option>
+              <option value="<?= $encoder_default; ?>">デフォルト (<?= $encoder_default; ?>)</option>
               <option value="ffmpeg">ffmpeg (ソフトウェアエンコーダー)</option>
               <option value="QSVEncC">QSVEncC (ハードウェアエンコーダー)</option>
               <option value="NVEncC">NVEncC (ハードウェアエンコーダー)</option>
@@ -582,9 +582,9 @@
           <div class="select-wrap">
             <select name="subtitle">
 <?php		if ($subtitle_default == 'true'): ?>
-              <option value="<?php echo $subtitle_default; ?>">デフォルト (字幕オン)</option>
+              <option value="<?= $subtitle_default; ?>">デフォルト (字幕オン)</option>
 <?php		else: ?>
-              <option value="<?php echo $subtitle_default; ?>">デフォルト (字幕オフ)</option>
+              <option value="<?= $subtitle_default; ?>">デフォルト (字幕オフ)</option>
 <?php		endif; ?>
               <option value="true">字幕オン</option>
               <option value="false">字幕オフ</option>
@@ -600,7 +600,7 @@
               <option value="default">デフォルトの BonDriver</option>
 <?php		endif; ?>
 <?php		foreach ($BonDriver_dll_T as $i => $value): //chの数だけ繰り返す ?>
-              <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+              <option value="<?= $value; ?>"><?= $value; ?></option>
 <?php		endforeach; ?>
             </select>
           </div>
@@ -610,7 +610,7 @@
               <option value="default">デフォルトの BonDriver</option>
 <?php		endif; ?>
 <?php		foreach ($BonDriver_dll_S as $i => $value): //chの数だけ繰り返す ?>
-              <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+              <option value="<?= $value; ?>"><?= $value; ?></option>
 <?php		endforeach; ?>
             </select>
           </div>
@@ -914,7 +914,7 @@
   </section>
 
   <section id="footer">
-    <?php echo $site_title.' '.$version; ?>
+    <?= $site_title.' '.$version; ?>
 
   </section>
 </body>
