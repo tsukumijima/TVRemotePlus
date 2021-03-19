@@ -99,6 +99,10 @@
             unlimited: false
         },
         pluginOptions: {
+            // hls-b24.js
+            hls: {
+              liveSyncDurationCount: 1
+            },
             // aribb24.js
             aribb24: {
                 forceStrokeColor: 'black',
@@ -115,8 +119,11 @@
 <?php	if ($ini[$stream]['state'] == 'File'): ?>
     // ファイル再生でエンコード中、再生時間が最新のセグメントの範囲にシークされてしまうのを防ぐ
     // 動画の読み込みが終わった後に（👈重要）currentTime を 0（秒）に設定する
-    dp.video.addEventListener('loadedmetadata', (event) => {
-        dp.video.currentTime = 0;
+    dp.video.addEventListener('loadedmetadata', () => {
+        // Safari のネイティブ HLS プレイヤーでは再生開始前に 0 秒にシークすることができない
+        // 0.000001 秒にすることで再生開始前でもシークできるようになる
+        dp.video.currentTime = 0.000001;
+        console.log(dp.video.currentTime)
     });
 <?php	endif; ?>
 
