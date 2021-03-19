@@ -355,7 +355,7 @@ $(function(){
         }).fail(function(data, status, error) {
 
             // エラーメッセージ
-            message = 'failed to get tvguide. status: ' + status + '\nerror: ' + error.message;
+            message = 'failed to get epginfo. status: ' + status + '\nerror: ' + error.message;
             console.error(message);
 
         });

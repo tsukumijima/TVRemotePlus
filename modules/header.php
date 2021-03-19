@@ -41,13 +41,13 @@
   <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
   <link rel="stylesheet" type="text/css" href="/files/style.css?<?= $version; ?>">
 <?php
-	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
+	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.php のみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/swiper.min.css">'."\n";
 	}
-	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
+	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.php のみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/watch.css?'.$version.'">'."\n";
 	}
-	if (strpos($backtrace[0]['file'], 'settings.php') !== false){ // settings.phpのみ
+	if (strpos($backtrace[0]['file'], 'settings.php') !== false){ // settings.php のみ
 		echo '  <link rel="stylesheet" type="text/css" href="/files/settings.css?'.$version.'">'."\n";
 	}
 ?>
@@ -65,16 +65,16 @@
   <script type="text/javascript" src="/files/css_browser_selector.js"></script>
   <script type="text/javascript" src="/files/common.js?<?= $version; ?>"></script>
 <?php
-	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.phpのみ
+	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.php のみ
 		echo '  <script type="text/javascript" src="/files/clusterize.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/index.js?'.$version.'"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/script.js?'.$version.'"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/jikkyo.js?'.$version.'"></script>'."\n";
 	}
-	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.phpのみ
+	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.php のみ
 		echo '  <script type="text/javascript" src="/files/watch.js?'.$version.'"></script>'."\n";
-	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false){ // settings.phpのみ
+	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false){ // settings.php のみ
 		echo '  <script type="text/javascript" src="/files/settings.js?'.$version.'"></script>'."\n";
 	} else if ($ini[$stream]['state'] == 'ONAir'){
 	} else if ($ini[$stream]['state'] == 'File'){
@@ -123,7 +123,7 @@
         }
     });
 
-<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.php のみ ?>
 <?php		if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){ ?>
     stream = '<?= $stream; ?>';
     streamurl = 'http://<?= $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream/<?= $stream; ?>';
@@ -149,7 +149,15 @@
     <a id="logo" href="/">
       <img src="<?= $icon_file; ?>">
     </a>
-<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false or strpos($backtrace[0]["file"], 'watch.php') !== false){ // index.php・watch.phpのみ ?>
+    <a class="top-link<?= (strpos($backtrace[0]["file"], 'watch.php') !== false ? ' top-link-current' : '') ?>" href="/watch/">
+      <i class="fas fa-video"></i>
+      <span class="top-link-href">録画番組</span>
+    </a>
+    <a class="top-link<?= (strpos($backtrace[0]["file"], 'settings.php') !== false ? ' top-link-current' : '') ?>" href="/settings/">
+      <i class="fas fa-cog"></i>
+      <span class="top-link-href">設定</span>
+    </a>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false or strpos($backtrace[0]["file"], 'watch.php') !== false){ // index.php・watch.php のみ ?>
     <div id="menu-button">
       <i class="material-icons">more_vert</i>
     </div>
@@ -157,7 +165,7 @@
     <div id="menu-fakebutton"></div>
 <?php	} // 括弧終了 ?>
   </nav>
-<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.php のみ ?>
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
@@ -191,7 +199,7 @@
     </div>
   </nav>
 <?php	} // 括弧終了 ?>
-<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.php のみ ?>
 
   <nav id="menu-content">
     <div id="menu-link-wrap">
@@ -230,7 +238,7 @@
       <i class="fas fa-home"></i>
       <span class="nav-link-href">ホーム</span>
     </a>
-<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'index.php') !== false){ // index.php のみ ?>
     <form method="post" name="quickstop" action="/settings/">
       <input type="hidden" name="state" value="Offline">
       <input type="hidden" name="stream" value="<?= $stream; ?>">
@@ -285,7 +293,7 @@
       </span>
     </a>
   </nav>
-<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.phpのみ ?>
+<?php	if (strpos($backtrace[0]["file"], 'watch.php') !== false){ // watch.php のみ ?>
   <div id="cover" class="open"></div>
 <?php	} else { ?>
   <div id="cover"></div>

@@ -130,7 +130,7 @@ pre:empty {
     background: rgba(0, 0, 0, 0.8) !important;
 }
 
-@media screen and (min-width: 500px){
+@media screen and (min-width: 500px) {
     pre::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -146,7 +146,7 @@ pre:empty {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
     pre {
         padding: 15px 10px;
     }
@@ -218,7 +218,7 @@ pre:empty {
     font-size: 16px;
 }
 
-@media (max-width: 480px) and (min-width: 241px){
+@media (max-width: 480px) and (min-width: 241px) {
     #toast-container>div {
         padding: 15px 15px 15px 50px;
     }
@@ -296,7 +296,7 @@ input::-moz-focus-inner, button::-moz-focus-inner {
     z-index: 150;
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     #scroll:hover {
         background-color: #46b2aa;
     }
@@ -364,7 +364,7 @@ select:-moz-focusring {
     pointer-events: none;
 }
 
-@media screen and (max-width : 500px){
+@media screen and (max-width : 500px) {
     select{
         width: 100%;
     }
@@ -437,7 +437,7 @@ section {
     box-shadow: 0px 6px 6px 3px var(--color-shadow);
 }
 
-@media screen and (max-width : 1024px){
+@media screen and (max-width : 1024px) {
     section {
         max-width: 100%;
     }
@@ -464,7 +464,7 @@ section {
     max-height: 100%;
 }
 
-@media screen and (max-width : 768px){
+@media screen and (max-width : 768px) {
     #content {
         width: 100%;
     }
@@ -498,13 +498,15 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 54px;
-    height: 54px;
+    width: 47px;
+    height: 47px;
     margin-left: 2vw;
     margin-right: 2vw;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
+    border-radius: 4px;
+    transition: background-color 0.15s cubic-bezier(0.4, 0, 0.6, 1);
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }
   
 #nav-open, #nav-open:before, #nav-open:after {
@@ -547,30 +549,73 @@ section {
     display: block;
 }
 
+/** リンク **/
+
+.top-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 44px;
+    padding: 0px 15px;
+    margin: 0;
+    margin-right: 2vw;
+    border-radius: 4px;
+    font-size: 16.5px;
+    line-height: 18px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background-color 0.15s cubic-bezier(0.4, 0, 0.6, 1);
+    box-sizing: border-box;
+}
+.top-link, .top-link:link, .top-link:visited {
+    color: #fafafa;
+}
+.top-link-current, .top-link-current:link, .top-link-current:visited {
+    color: #75e1b7;
+}
+.top-link i {
+    margin-right: 13px;
+}
+
+@media screen and (min-width: 1025px) {
+    .top-link:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+}
+@media screen and (max-width: 767px) {
+    .top-link {
+        display: none;
+    }
+}
+
 /** サブメニューボタン **/
 
 #menu-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 54px;
-    height: 54px;
+    width: 47px;
+    height: 47px;
     margin-left: 2vw;
     margin-right: 2vw;
     color: #FFFFFF;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
+    border-radius: 4px;
+    transition: background-color 0.15s cubic-bezier(0.4, 0, 0.6, 1);
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #menu-fakebutton {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 54px;
-    height: 54px;
+    width: 47px;
+    height: 47px;
     margin-left: 2vw;
     margin-right: 2vw;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 @media screen and (min-width: 1025px) {
@@ -593,7 +638,7 @@ section {
     visibility: visible;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1024px) {
 
     #nav-open {
         margin-left: 20px;
@@ -615,7 +660,7 @@ section {
     }
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
 
     #main {
         margin-top: 0px;
@@ -627,7 +672,7 @@ section {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
 
     #nav-open {
         margin-left: 8px;
@@ -653,7 +698,7 @@ section {
     }
 }
 
-@media screen and (max-width: 350px){
+@media screen and (max-width: 350px) {
 
     #logo img {
         height: 34px;
@@ -734,7 +779,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     opacity: 1;
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
 
     #menu-content {
         top: 10px;
@@ -742,7 +787,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
 
     #menu-content {
         top: 4px;
@@ -750,9 +795,13 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     }
 }
 
-/** 縦ヘッダー **/
+/** 縦メニュー **/
 
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 767px) {
+
+    .vertical-navmenu body {
+        margin-left: 54px;
+    }
 
     .vertical-navmenu #main {
         margin-top: 0px;
@@ -778,12 +827,32 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
         order: 2;
     }
 
+    .vertical-navmenu .top-link {
+        order: 3;
+        padding: 0px;
+        margin: 0px;
+        width: 47px;
+        height: 47px;
+    }
+    .vertical-navmenu .top-link:nth-child(1) {  /* 録画番組 */
+        font-size: 15.5px;
+    }
+    .vertical-navmenu .top-link:nth-child(2) {  /* 設定 */
+        font-size: 21px;
+    }
+    .vertical-navmenu .top-link i {
+        margin-right: 0px;
+    }
+    .vertical-navmenu .top-link-href {
+        display: none;
+    }
+
     .vertical-navmenu #top #menu-button, .vertical-navmenu #top #menu-fakebutton {
         margin-top: auto;
         margin-left: 0;
         margin-right: 0;
         margin-bottom: 15px;
-        order: 3;
+        order: 4;
     }
 
     .vertical-navmenu #menu-content {
@@ -791,7 +860,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
         left: 8px;
         right: auto;
     }
-    @media screen and (max-width: 1024px){
+    @media screen and (max-width: 1024px) {
         .vertical-navmenu #menu-content {
             top: calc(100vh - 160px - 54px - 15px);
         }
@@ -970,7 +1039,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     transition: opacity 0.2s ease-in-out;
 }
 
-@media (max-width: 1024px){
+@media (max-width: 1024px) {
 
     .dplayer-floating {
         width: 230px !important;
@@ -978,7 +1047,7 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     }
 }
 
-@media (max-width: 500px){
+@media (max-width: 500px) {
 
     #dplayer-box {
         height: auto;
@@ -1153,7 +1222,7 @@ td {
     width: 62px;
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     .comment-file:hover {
         color: var(--color-blue);
     }
@@ -1196,7 +1265,7 @@ td {
     opacity: 1;
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     #comment-scroll:hover {
         background-color: #46b2aa;
     }
@@ -1710,7 +1779,7 @@ td {
     background-color: var(--color-tweet-disabled);
 }
 
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 1000px) {
 
     #tweet-main {
         width: 80%;
@@ -1725,7 +1794,7 @@ td {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
  
     #tweet-main {
         width: 65%;
@@ -1795,7 +1864,7 @@ td {
     line-height: 150%;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1024px) {
 
     #reload:before {
         display: none;
@@ -1806,7 +1875,7 @@ td {
     }
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
 
     #reload-box {
         margin-top: 6px;
@@ -1818,7 +1887,7 @@ td {
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
 
     #epg {
         padding-left: 5px;
@@ -1895,7 +1964,7 @@ td {
     white-space: nowrap;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
     #epg-subinfo {
         padding-left: 5px;
         padding-right: 5px;
@@ -2024,13 +2093,13 @@ td {
     text-overflow: ellipsis;
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     .stream-view:hover {
         background-color: var(--color-hover);
     }
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
 
     .stream-view {
         padding: 0px 10px;
@@ -2106,7 +2175,7 @@ td {
     transition: ease 0.3s !important;
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     .broadcast-button:hover {
         background: var(--color-hover);
     }
@@ -2155,7 +2224,7 @@ td {
     box-sizing: border-box;
 }
 
-@media screen and (min-width: 1025px){
+@media screen and (min-width: 1025px) {
     .broadcast-wrap:hover {
         background-color: var(--color-hover);
     }
@@ -2198,7 +2267,7 @@ td {
     color: var(--color-text);
 }
 
-@media screen and (max-width: 350px){
+@media screen and (max-width: 350px) {
     .broadcast {
         padding-left: 13px;
         padding-right: 13px;
@@ -2235,7 +2304,7 @@ td {
     display: none;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
     .broadcast-channel {
         display: none;
     }
@@ -2347,7 +2416,7 @@ td {
     }
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
     #broadcast-stream-box {
         top: auto;
         width: 100%;
@@ -2458,7 +2527,7 @@ td {
     color: var(--color-text-gray);
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
     #chromecast-box {
         top: auto;
         transform: translateY(350px);
@@ -2865,7 +2934,7 @@ td {
     margin-left: 20px;
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 767px) {
     #ljicrop-box {
         top: auto;
         transform: translateY(600px);
@@ -3021,7 +3090,7 @@ td {
     margin-top: 10px;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1024px) {
     #hotkey {
         display: none;
     }
@@ -3050,7 +3119,7 @@ td {
     width: 100%;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px) {
 
     .form {
         align-items: normal;

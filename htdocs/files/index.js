@@ -56,9 +56,9 @@ $(window).on('DOMContentLoaded resize', function(event){
     // 画面の向きを取得
     var orientation = window.orientation;
 
-    $(window).on('load', function(){
+    $(window).on('load', function() {
         // スマホ・タブレットならplaceholder書き換え
-        if (settings['twitter_show']){
+        if (settings['twitter_show']) {
             if (windowWidth > 1024) {
                 if (navigator.userAgent.indexOf('Macintosh') != -1) {
                     document.getElementById('tweet').setAttribute('placeholder', 'ツイート (Command + Enterで送信)');
@@ -113,6 +113,17 @@ $(window).on('DOMContentLoaded resize', function(event){
                 
         }
 
+        // 縦メニューで横の余白が広い時、メインカラムが右に寄っているように見えるのを解消する
+        // メインカラムの margin-left が 0px 以外なら、body に margin-right: 54px を設定する
+        // メインカラムの margin-left が 0px なら、body の margin-right: 54px を解除する
+        if (settings['vertical_navmenu']) {
+            if (getComputedStyle(document.getElementById('main')).marginLeft !== '0px') {
+                document.body.style.marginRight = '54px';
+            } else {
+                document.body.style.marginRight = '';
+            }
+        }
+
         // DOMContentLoaded or resize(横方向)
         if (event.type == 'DOMContentLoaded' || (event.type == 'resize' && lastWindowWidth != windowWidth)){
             
@@ -144,7 +155,7 @@ $(window).on('DOMContentLoaded resize', function(event){
 });
 
 
-$(function(){
+$(function() {
     
     // ***** スクロールで動画をフロート表示 *****
 
