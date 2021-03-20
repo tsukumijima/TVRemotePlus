@@ -147,13 +147,15 @@ $(function() {
         slideActiveClass: 'swiper-slide-active',
         slidesPerView: 'auto',  // コンテナーに同時に表示されるスライドの数
         autoHeight: true,  // コンテナの高さを自動調整するか
+        resizeObserver: true, // ResizeObserver を利用する
         updateOnWindowResize: true,  // リサイズ時にコンテナの幅や高さを調整する
         watchSlidesProgress: true,  // 各スライドの進行状況を計算する
     });
 
     // ボタンを初期化
     // 最初に表示するスライドのインデックス
-    const sliderInitialIndex = 0;
+    // localStorage の値か、ない場合は 0（地デジ）
+    const sliderInitialIndex = localStorage.getItem('tvrp-slider-index') || 0;
     // スライドする
     slider.slideTo(sliderInitialIndex, 0);  // 第二引数を 0 にするとアニメーションされない
     // ハイライト用のクラスを付与
@@ -178,6 +180,12 @@ $(function() {
         // ハイライト用のクラスを付与
         $(`.broadcast-button[data-index=${slider.activeIndex}]`).addClass('swiper-slide-thumb-active');
     });
+
+    // ページから離れるときのイベント
+    $(window).on('beforeunload', () => {
+        // localStorage に現在アクティブなスライドのインデックスを保存
+        localStorage.setItem('tvrp-slider-index', slider.activeIndex);
+    });
     
     // ***** スクロールで動画をフロート表示 *****
 
@@ -198,15 +206,12 @@ $(function() {
 
                 // ターゲット座標以上
                 if (position_current > position_target) {
-
                     if (!dp.video.classList.contains('dplayer-floating')) {
 
                         // 一旦 transition を削除
                         dp.video.style.transition = 'none';
-
                         // 透明度を 0 に設定
                         dp.video.style.opacity = 0;
-
                         // transition を再付与
                         dp.video.style.transition = 'opacity 0.2s ease-in-out';
 
@@ -214,32 +219,27 @@ $(function() {
 
                             // 動画をフロート化
                             dp.video.classList.add('dplayer-floating');
-
                             // 透明度を 1 に設定
                             dp.video.style.opacity = 1;
 
                         }, 200);
-
                     }
 
                 // ターゲット座標以内
                 } else if (position_current < position_target) {
-
                     if (dp.video.classList.contains('dplayer-floating')) {
 
                         // 透明度を 0 に設定
                         dp.video.style.opacity = 0;
 
-                        setTimeout(function(){
+                        setTimeout(function() {
 
                             // 動画のフロート化を解除
                             dp.video.classList.remove('dplayer-floating');
-
                             // 透明度を 1 に設定
                             dp.video.style.opacity = 1;
 
                         }, 200);
-
                     }
                 }
             }
