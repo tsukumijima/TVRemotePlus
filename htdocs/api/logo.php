@@ -9,7 +9,9 @@
 	// onid と sid がついている場合のみ
 	if (isset($_REQUEST['onid']) and isset($_REQUEST['sid'])) {
 		
-		// ヘッダー
+		// ブラウザにキャッシュしてもらえるようにヘッダーを設定
+		// 参考: https://qiita.com/yuuuking/items/4f11ccfc822f4c198ab0
+		header('Cache-Control: public, max-age=2592000');  // 30日間
 		header('Content-Type: image/bmp');
 
 		// クエリ
