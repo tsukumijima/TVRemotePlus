@@ -2236,9 +2236,9 @@ td {
     justify-content: center;
     flex-shrink: 0;
     position: relative;
-    width: 40px;
+    width: 71px;
     height: 40px;
-    border-radius: 18%;
+    border-radius: 7px;
     color: #FFFFFF;
     background-color: var(--color-green);
     font-size: 24px;
@@ -2252,7 +2252,7 @@ td {
     right: 0;
     bottom: 0;
     flex-shrink: 0;
-    border-radius: 18%;
+    border-radius: 7px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -2267,14 +2267,40 @@ td {
     color: var(--color-text);
 }
 
-@media screen and (max-width: 350px) {
+@media screen and (max-width: 500px) {
     .broadcast {
-        padding-left: 13px;
-        padding-right: 13px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .broadcast-img {
+        width: 54px;
+        height: 30px;
+        border-radius: 5.5px;
+    }
+
+    .broadcast-logo {
+        border-radius: 5.5px;
     }
 
     .broadcast-content {
-        padding-left: 15px;
+        padding-left: 14px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .broadcast {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .broadcast-img {
+        width: 48px;
+        height: 27px;
+    }
+
+    .broadcast-content {
+        padding-left: 11px;
     }
 }
 
