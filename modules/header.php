@@ -83,11 +83,11 @@
 
   <script>
 
-    // 個人設定のデフォルト値
+    // 個人設定の初期値
     settings = {
         twitter_show: true,
         comment_show: true,
-        dark_theme: false,
+        dark_theme: matchMedia('(prefers-color-scheme: dark)').matches,  // ダークモードなら true になる
         subchannel_show: false,
         list_view: false,
         logo_show: true,
