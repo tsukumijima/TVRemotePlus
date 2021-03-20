@@ -123,7 +123,6 @@
         // Safari のネイティブ HLS プレイヤーでは再生開始前に 0 秒にシークすることができない
         // 0.000001 秒にすることで再生開始前でもシークできるようになる
         dp.video.currentTime = 0.000001;
-        console.log(dp.video.currentTime)
     });
 <?php	endif; ?>
 
@@ -340,9 +339,9 @@
 
         <div id="broadcast-tab-box" class="swiper-container">
           <div id="broadcast-tab" class="swiper-wrapper">
-            <div class="broadcast-button swiper-slide">地デジ</div>
-            <div class="broadcast-button swiper-slide">BS</div>
-            <div class="broadcast-button swiper-slide">CS</div>
+            <div class="broadcast-button swiper-slide" data-index="0">地デジ</div>
+            <div class="broadcast-button swiper-slide" data-index="1">BS</div>
+            <div class="broadcast-button swiper-slide" data-index="2">CS</div>
           </div>
         </div>
 

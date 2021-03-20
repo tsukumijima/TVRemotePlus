@@ -126,36 +126,58 @@ $(window).on('DOMContentLoaded resize', function(event){
 
         // DOMContentLoaded or resize(横方向)
         if (event.type == 'DOMContentLoaded' || (event.type == 'resize' && lastWindowWidth != windowWidth)){
-            
-            lastWindowWidth = windowWidth; // 記録しておく
-        
-            // 既に初期化されているなら一旦破棄する
-            if (typeof slideTab !== 'undefined'){
-                slideTabButton.destroy(false, true);
-                slideTab.destroy(false, true);
-            }
-
-            // タブを初期化
-            slideTab = new Swiper('#broadcast-tab-box', {
-                slidesPerView: 'auto',
-                watchSlidesVisibility: true,
-                watchSlidesProgress: true,
-                updateOnWindowResize: true,
-                slideActiveClass: 'swiper-slide-active'
-            });
-            slideTabButton = new Swiper('#broadcast-box', {
-                autoHeight: true,
-                thumbs: {
-                    swiper: slideTab
-                }
-            });
-
+            // 幅を記録しておく
+            lastWindowWidth = windowWidth;        
+            // スライダーのサイズを更新（重要）
+            // プレイヤー周辺を独自でリサイズしている関係で Swiper 本体のリサイズ検知機構がうまく動かない
+            // そのため手動でサイズを更新してあげる必要がある
+            slider.update();
         }
+
     }, 200);
 });
 
 
 $(function() {
+
+    // ***** スライダー *****
+
+    // タブを初期化
+    slider = new Swiper('#broadcast-box', {
+        slideActiveClass: 'swiper-slide-active',
+        slidesPerView: 'auto',  // コンテナーに同時に表示されるスライドの数
+        autoHeight: true,  // コンテナの高さを自動調整するか
+        updateOnWindowResize: true,  // リサイズ時にコンテナの幅や高さを調整する
+        watchSlidesProgress: true,  // 各スライドの進行状況を計算する
+    });
+
+    // ボタンを初期化
+    // 最初に表示するスライドのインデックス
+    const sliderInitialIndex = 0;
+    // スライドする
+    slider.slideTo(sliderInitialIndex, 0);  // 第二引数を 0 にするとアニメーションされない
+    // ハイライト用のクラスを付与
+    $(`.broadcast-button[data-index=${sliderInitialIndex}]`).addClass('swiper-slide-thumb-active');
+
+    // ボタンクリックでスライド
+    $('.broadcast-button').click((event) => {
+        // クリックされたボタンのインデックス
+        const sliderCurrentIndex = event.target.dataset.index;
+        // スライドする
+        slider.slideTo(sliderCurrentIndex);
+        // 一旦全てのクラスを削除
+        $('.broadcast-button').removeClass('swiper-slide-thumb-active');
+        // ハイライト用のクラスを付与
+        $(`.broadcast-button[data-index=${sliderCurrentIndex}]`).addClass('swiper-slide-thumb-active');
+    });
+    
+    // スライド時のイベント
+    slider.on('slideChange', () => {
+        // 一旦全てのクラスを削除
+        $('.broadcast-button').removeClass('swiper-slide-thumb-active');
+        // ハイライト用のクラスを付与
+        $(`.broadcast-button[data-index=${slider.activeIndex}]`).addClass('swiper-slide-thumb-active');
+    });
     
     // ***** スクロールで動画をフロート表示 *****
 
