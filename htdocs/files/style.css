@@ -2260,10 +2260,11 @@ td {
 
 .broadcast-content {
     display: flex;
-    width: 81%;
     flex-direction: column;
-    font-family: inherit;
+    width: 100%;
+    min-width: 0;
     padding-left: 20px;
+    font-family: inherit;
     color: var(--color-text);
 }
 
