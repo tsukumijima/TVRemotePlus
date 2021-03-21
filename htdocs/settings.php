@@ -380,7 +380,7 @@
             </div>
 
             <div class="setting-form">
-              <span>ナビゲーションメニューを垂直に配置（PCのみ）</span>
+              <span>ナビゲーションメニューを垂直に配置（PC・タブレットのみ）</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('vertical_navmenu', true, false) !== false){ ?>
                 <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" checked />

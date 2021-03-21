@@ -30,7 +30,7 @@ section {
     position: sticky;
     top: 54px;
 }
-@media screen and (min-width: 769px) {
+@media screen and (min-width: 767px) {
     .vertical-navmenu #search-find-wrap {
         top: 4px;
     }
@@ -100,6 +100,13 @@ section {
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
+}
+@media screen and (min-width: 767px) {
+    @media screen and (max-width: 900px) {
+        .vertical-navmenu .search-find-link {
+            padding: 16px 15px 16px 20px;
+        }
+    }
 }
 
 .search-find-link:hover{
