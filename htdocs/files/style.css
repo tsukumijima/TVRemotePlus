@@ -2954,11 +2954,17 @@ td {
 }
 
 .ljicrop-range-start {
-    margin-right: 20px;
+    flex-shrink: 0;
+    width: 39px;
+    margin-right: 14px;
+    text-align: left;
 }
 
 .ljicrop-range-end {
-    margin-left: 20px;
+    flex-shrink: 0;
+    width: 39px;
+    margin-left: 14px;
+    text-align: right;
 }
 
 @media screen and (max-width: 767px) {

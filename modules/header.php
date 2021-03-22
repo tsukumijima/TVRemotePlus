@@ -99,10 +99,6 @@
         list_view_number: 30,
         onclick_stream: false,
         player_floating: true,
-        ljicrop_magnify: 100,
-        ljicrop_coordinateX: 0,
-        ljicrop_coordinateY: 0,
-        ljicrop_type: 'upperright',
     };
     if (Cookies.get('settings') === undefined){
         var json = JSON.stringify(settings);

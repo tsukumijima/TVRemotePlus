@@ -657,11 +657,11 @@
         </div>
         <div class="ljicrop-head-box">
           <i class="fas fa-search-plus" style="font-size: 13.5px;"></i>
-          <span class="ljicrop-head">拡大率 : <span id="ljicrop-magnify-percentage">100%<span></span>
+          <span class="ljicrop-head">拡大率 : <span id="ljicrop-magnification-percentage">100%<span></span>
         </div>
         <div class="ljicrop-range-box">
           <span class="ljicrop-range-start">100%</span>
-          <input id="ljicrop-magnify" class="custom-range" name="ljicrop_magnify" type="range" min="100" max="200" value="100">
+          <input id="ljicrop-magnification" class="custom-range" name="ljicrop_magnification" type="range" min="100" max="200" value="100">
           <span class="ljicrop-range-end">200%</span>
         </div>
         <div class="ljicrop-head-box">
@@ -669,7 +669,7 @@
           <span class="ljicrop-head">X 座標 : <span id="ljicrop-coordinatex-percentage">0%<span></span>
         </div>
         <div class="ljicrop-range-box">
-          <span class="ljicrop-range-start" style="padding-left: 18px;">0%</span>
+          <span class="ljicrop-range-start">0%</span>
           <input id="ljicrop-coordinatex" class="custom-range" name="ljicrop_coordinateX" type="range" min="0" max="100" value="0">
           <span class="ljicrop-range-end">100%</span>
         </div>
@@ -678,7 +678,7 @@
           <span class="ljicrop-head">Y 座標 : <span id="ljicrop-coordinatey-percentage">0%<span></span>
         </div>
         <div class="ljicrop-range-box">
-          <span class="ljicrop-range-start" style="padding-left: 18px;">0%</span>
+          <span class="ljicrop-range-start">0%</span>
           <input id="ljicrop-coordinatey" class="custom-range" name="ljicrop_coordinateY" type="range" min="0" max="100" value="0">
           <span class="ljicrop-range-end">100%</span>
         </div>

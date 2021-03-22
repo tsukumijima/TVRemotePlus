@@ -296,30 +296,30 @@ $(function() {
     });
 
     // 設定読み込み
-    if (typeof settings['ljicrop_magnify'] !== 'undefined') {
-        $('input[name="ljicrop_magnify"]').val(settings['ljicrop_magnify']);
-        $('input[name="ljicrop_coordinateX"]').val(settings['ljicrop_coordinateX']);
-        $('input[name="ljicrop_coordinateY"]').val(settings['ljicrop_coordinateY']);
-        $('input[name="ljicrop_type"]').val([settings['ljicrop_type']]);
-        ljicrop();
-    }
+    // 設定が存在しないなら初期値を使う
+    $('input[name="ljicrop_magnification"]').val(localStorage.getItem('tvrp-ljicrop-magnification') || 100);
+    $('input[name="ljicrop_coordinateX"]').val(localStorage.getItem('tvrp-ljicrop-coordinateX') || 0);
+    $('input[name="ljicrop_coordinateY"]').val(localStorage.getItem('tvrp-ljicrop-coordinateY') || 0);
+    $('input[name="ljicrop_type"]').val([localStorage.getItem('tvrp-ljicrop-type') || 'upperright']);  // ラジオボタンにおいては配列にするのが重要
 
     // イベントハンドラーを設定
-    $('input[name="ljicrop_magnify"]').on('input', ljicrop);
+    $('input[name="ljicrop_magnification"]').on('input', ljicrop);
     $('input[name="ljicrop_coordinateX"]').on('input', ljicrop);
     $('input[name="ljicrop_coordinateY"]').on('input', ljicrop);
     $('input[name="ljicrop_type"]').on('input', ljicrop);
+
+    // Ｌ字クロップを実行
+    ljicrop();
 
     function ljicrop() {
 
         // 要素を取得
         const ljicrop_video = dp.video;
-        const ljicrop_video_aspect = dp.video.parentNode;
 
         if (ljicrop_video) {
 
             // 拡大率
-            const ljicrop_magnify = parseInt(document.querySelector('input[name=ljicrop_magnify]').value);
+            const ljicrop_magnification = parseInt(document.querySelector('input[name=ljicrop_magnification]').value);
             // X座標
             const ljicrop_coordinateX = parseInt(document.querySelector('input[name=ljicrop_coordinateX]').value);
             // Y座標
@@ -328,19 +328,18 @@ $(function() {
             const ljicrop_type = document.querySelector('input[name=ljicrop_type]:checked').value;
     
             // 設定を保存
-            settings['ljicrop_magnify'] = ljicrop_magnify;
-            settings['ljicrop_coordinateX'] = ljicrop_coordinateX;
-            settings['ljicrop_coordinateY'] = ljicrop_coordinateY;
-            settings['ljicrop_type'] = ljicrop_type;
-            Cookies.set('settings', JSON.stringify(settings), { expires: 365 });
+            localStorage.setItem('tvrp-ljicrop-magnification', ljicrop_magnification);
+            localStorage.setItem('tvrp-ljicrop-coordinateX', ljicrop_coordinateX);
+            localStorage.setItem('tvrp-ljicrop-coordinateY', ljicrop_coordinateY);
+            localStorage.setItem('tvrp-ljicrop-type', ljicrop_type);
     
             // 表示
-            document.querySelector('#ljicrop-magnify-percentage').textContent = ljicrop_magnify + '%';
+            document.querySelector('#ljicrop-magnification-percentage').textContent = ljicrop_magnification + '%';
             document.querySelector('#ljicrop-coordinatex-percentage').textContent = ljicrop_coordinateX + '%';
             document.querySelector('#ljicrop-coordinatey-percentage').textContent = ljicrop_coordinateY + '%';
     
             // 全てデフォルト（オフ）状態ならスタイルを削除
-            if (ljicrop_magnify === 100 && ljicrop_coordinateX === 0 && ljicrop_coordinateY === 0) {
+            if (ljicrop_magnification === 100 && ljicrop_coordinateX === 0 && ljicrop_coordinateY === 0) {
 
                 // 空文字を入れると style 属性から当該スタイルが除去される
                 ljicrop_video.style.position = '';
@@ -348,85 +347,71 @@ $(function() {
                 ljicrop_video.style.height = '';
                 ljicrop_video.style.left = '';
                 ljicrop_video.style.bottom = '';
-                ljicrop_video_aspect.style.width = '';
-                ljicrop_video_aspect.style.height = '';
 
             } else {
 
                 // video 要素を拡大
                 ljicrop_video.style.position = 'relative';
-                ljicrop_video.style.width = ljicrop_magnify + '%';
-                ljicrop_video.style.height = ljicrop_magnify + '%';
+                ljicrop_video.style.width = ljicrop_magnification + '%';
+                ljicrop_video.style.height = ljicrop_magnification + '%';
 
-                // magic
-                ljicrop_video_aspect.style.width = '100%';
-                ljicrop_video_aspect.style.height = '100%';
-    
                 // 拡大起点別
                 switch (ljicrop_type) {
-        
+
                     // 右上
                     case 'upperright':
-        
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
-                            ljicrop_video.style.left = -(ljicrop_magnify - ljicrop_coordinateX - 100) + '%';
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
+                            ljicrop_video.style.left = -(ljicrop_magnification - ljicrop_coordinateX - 100) + '%';
                         } else {
-                            ljicrop_video.style.left = -(ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+                            ljicrop_video.style.left = -(ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
                         }
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
                             ljicrop_video.style.bottom = ljicrop_coordinateY + '%';
                         } else {
-                            ljicrop_video.style.bottom = (ljicrop_magnify - 100) + '%';
+                            ljicrop_video.style.bottom = (ljicrop_magnification - 100) + '%';
                         }
-        
                     break;
         
                     // 右下
                     case 'lowerright':
-        
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
-                            ljicrop_video.style.left = -(ljicrop_magnify - ljicrop_coordinateX - 100) + '%';
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
+                            ljicrop_video.style.left = -(ljicrop_magnification - ljicrop_coordinateX - 100) + '%';
                         } else {
-                            ljicrop_video.style.left = -(ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+                            ljicrop_video.style.left = -(ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
                         }
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
-                            ljicrop_video.style.bottom = (ljicrop_magnify - ljicrop_coordinateY - 100) + '%';
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
+                            ljicrop_video.style.bottom = (ljicrop_magnification - ljicrop_coordinateY - 100) + '%';
                         } else {
-                            ljicrop_video.style.bottom = (ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+                            ljicrop_video.style.bottom = (ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
                         }
-        
                     break;
         
                     // 左上
                     case 'upperleft':
-        
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
                             ljicrop_video.style.left = -ljicrop_coordinateX + '%';
                         } else {
-                            ljicrop_video.style.left = -(ljicrop_magnify - 100) + '%';
+                            ljicrop_video.style.left = -(ljicrop_magnification - 100) + '%';
                         }
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
                             ljicrop_video.style.bottom = ljicrop_coordinateY + '%';
                         } else {
-                            ljicrop_video.style.bottom = (ljicrop_magnify - 100) + '%';
+                            ljicrop_video.style.bottom = (ljicrop_magnification - 100) + '%';
                         }
-        
                     break;
         
                     // 左下
                     case 'lowerleft':
-        
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateX) {
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
                             ljicrop_video.style.left = -ljicrop_coordinateX + '%';
                         } else {
-                            ljicrop_video.style.left = -(ljicrop_magnify - 100) + '%';
+                            ljicrop_video.style.left = -(ljicrop_magnification - 100) + '%';
                         }
-                        if ((ljicrop_magnify - 100) > ljicrop_coordinateY) {
-                            ljicrop_video.style.bottom = (ljicrop_magnify - ljicrop_coordinateY - 100) + '%';
+                        if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
+                            ljicrop_video.style.bottom = (ljicrop_magnification - ljicrop_coordinateY - 100) + '%';
                         } else {
-                            ljicrop_video.style.bottom = (ljicrop_magnify - (ljicrop_magnify - 100) - 100) + '%';
+                            ljicrop_video.style.bottom = (ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
                         }
-        
                     break;
                 }
             }
