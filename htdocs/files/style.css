@@ -394,8 +394,8 @@ select:-moz-focusring {
 }
 
 .toggle-label {
-    width: 56px;
-    height: 28px;
+    width: 100%;
+    height: 100%;
     background: #ccc;
     position: relative;
     display: inline-block;
@@ -408,8 +408,8 @@ select:-moz-focusring {
 .toggle-label:after {
     content: '';
     position: absolute;
-    width: 28px;
-    height: 28px;
+    width: 50%;
+    height: 100%;
     border-radius: 100%;
     left: 0;
     top: 0;
@@ -423,8 +423,8 @@ select:-moz-focusring {
     background-color: #4bd8a2;
 }
 
-.toggle-input:checked + .toggle-label:after{
-    left: 28px;
+.toggle-input:checked + .toggle-label:after {
+    left: 50%;
 }
 
 /* セクション */
@@ -2675,6 +2675,8 @@ td {
 
 .custom-radio .custom-control-label::before {
     border-radius: 50%;
+    -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
@@ -2682,7 +2684,9 @@ td {
 }
 
 .custom-radio .custom-control-input:disabled:checked ~ .custom-control-label::before {
-    background-color: rgba(0, 123, 255, 0.5);
+    /* background-color: rgba(0, 123, 255, 0.5); */
+    background-color: #adb5bd;
+    border-color: #adb5bd;
 }
 
 /* カスタムレンジコントロール（ Bootstrap4 より拝借）*/
@@ -2912,6 +2916,18 @@ td {
     margin-left: 7px;
 }
 
+.ljicrop-toggle-box {
+    width: 44px;
+    height: 22px;
+    margin-left: auto;
+}
+
+.ljicrop-toggle-box {
+    width: 42px;
+    height: 21px;
+    margin-left: auto;
+}
+
 #ljicrop-point-box {
     display: flex;
     align-items: center;
@@ -2953,18 +2969,18 @@ td {
     width: 100%;
 }
 
-.ljicrop-range-start {
+.ljicrop-range-start, .ljicrop-range-end {
     flex-shrink: 0;
     width: 39px;
+    text-align: right;
+}
+
+.ljicrop-range-start {
     margin-right: 14px;
-    text-align: left;
 }
 
 .ljicrop-range-end {
-    flex-shrink: 0;
-    width: 39px;
     margin-left: 14px;
-    text-align: right;
 }
 
 @media screen and (max-width: 767px) {

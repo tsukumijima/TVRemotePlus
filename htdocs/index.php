@@ -654,6 +654,10 @@
         <div class="ljicrop-head-box title">
           <i class="fas fa-tv"></i>
           <span class="ljicrop-head">Ｌ字画面のクロップ</span>
+          <div class="ljicrop-toggle-box toggle-switch">
+            <input class="toggle-input" name="ljicrop_toggle" type="checkbox">
+            <label for="ljicrop-toggle" class="toggle-label"></label>
+          </div>
         </div>
         <div class="ljicrop-head-box">
           <i class="fas fa-search-plus" style="font-size: 13.5px;"></i>
@@ -661,7 +665,7 @@
         </div>
         <div class="ljicrop-range-box">
           <span class="ljicrop-range-start">100%</span>
-          <input id="ljicrop-magnification" class="custom-range" name="ljicrop_magnification" type="range" min="100" max="200" value="100">
+          <input class="custom-range" name="ljicrop_magnification" type="range" min="100" max="200" value="100">
           <span class="ljicrop-range-end">200%</span>
         </div>
         <div class="ljicrop-head-box">
@@ -670,7 +674,7 @@
         </div>
         <div class="ljicrop-range-box">
           <span class="ljicrop-range-start">0%</span>
-          <input id="ljicrop-coordinatex" class="custom-range" name="ljicrop_coordinateX" type="range" min="0" max="100" value="0">
+          <input class="custom-range" name="ljicrop_coordinateX" type="range" min="0" max="100" value="0">
           <span class="ljicrop-range-end">100%</span>
         </div>
         <div class="ljicrop-head-box">
@@ -679,7 +683,7 @@
         </div>
         <div class="ljicrop-range-box">
           <span class="ljicrop-range-start">0%</span>
-          <input id="ljicrop-coordinatey" class="custom-range" name="ljicrop_coordinateY" type="range" min="0" max="100" value="0">
+          <input class="custom-range" name="ljicrop_coordinateY" type="range" min="0" max="100" value="0">
           <span class="ljicrop-range-end">100%</span>
         </div>
         <div class="ljicrop-head-box">
