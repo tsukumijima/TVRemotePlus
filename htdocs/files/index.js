@@ -88,7 +88,7 @@ $(window).on('DOMContentLoaded resize', function(event){
     timer = setTimeout(function() {
 
         // リサイズが終了した後に実行する
-        
+
         // 1024px以上
         if (windowWidth > 1024){
 
@@ -110,7 +110,7 @@ $(window).on('DOMContentLoaded resize', function(event){
 
             // フッターも忘れずに
             document.getElementById('footer').style.maxWidth = Math.ceil(targetWidth * percentage + (gap * 2.3)) + 'px';
-                
+
         }
 
         // 縦メニューで横の余白が広い時、メインカラムが右に寄っているように見えるのを解消する
@@ -127,7 +127,7 @@ $(window).on('DOMContentLoaded resize', function(event){
         // DOMContentLoaded or resize(横方向)
         if (event.type == 'DOMContentLoaded' || (event.type == 'resize' && lastWindowWidth != windowWidth)){
             // 幅を記録しておく
-            lastWindowWidth = windowWidth;        
+            lastWindowWidth = windowWidth;
             // スライダーのサイズを更新（重要）
             // プレイヤー周辺を独自でリサイズしている関係で Swiper 本体のリサイズ検知機構がうまく動かない
             // そのため手動でサイズを更新してあげる必要がある
@@ -172,7 +172,7 @@ $(function() {
         // ハイライト用のクラスを付与
         $(`.broadcast-button[data-index=${sliderCurrentIndex}]`).addClass('swiper-slide-thumb-active');
     });
-    
+
     // スライド時のイベント
     slider.on('slideChange', () => {
         // 一旦全てのクラスを削除
@@ -186,7 +186,7 @@ $(function() {
         // localStorage に現在アクティブなスライドのインデックスを保存
         localStorage.setItem('tvrp-slider-index', slider.activeIndex);
     });
-    
+
     // ***** スクロールで動画をフロート表示 *****
 
     // 個人設定で有効 & 501px より大きい（スマホを除外）
@@ -245,7 +245,7 @@ $(function() {
             }
         });
     }
-    
+
     // ***** リロードボタン *****
 
     $('#reload').click(function(){
@@ -330,14 +330,14 @@ $(function() {
             const ljicrop_coordinateY = parseInt(document.querySelector('input[name=ljicrop_coordinateY]').value);
             // 拡大起点
             const ljicrop_type = document.querySelector('input[name=ljicrop_type]:checked').value;
-    
+
             // 設定を保存
             localStorage.setItem('tvrp-ljicrop-toggle', Number(ljicrop_toggle)); // Number に変換
             localStorage.setItem('tvrp-ljicrop-magnification', ljicrop_magnification);
             localStorage.setItem('tvrp-ljicrop-coordinateX', ljicrop_coordinateX);
             localStorage.setItem('tvrp-ljicrop-coordinateY', ljicrop_coordinateY);
             localStorage.setItem('tvrp-ljicrop-type', ljicrop_type);
-    
+
             // 表示
             document.querySelector('#ljicrop-magnification-percentage').textContent = ljicrop_magnification + '%';
             document.querySelector('#ljicrop-coordinatex-percentage').textContent = ljicrop_coordinateX + '%';
@@ -367,7 +367,7 @@ $(function() {
                 $('input[name="ljicrop_coordinateX"]').prop('disabled', false);
                 $('input[name="ljicrop_coordinateY"]').prop('disabled', false);
                 $('input[name="ljicrop_type"]').prop('disabled', false);
-    
+
                 // 全てデフォルト（オフ）状態ならスタイルを削除
                 if (ljicrop_magnification === 100 && ljicrop_coordinateX === 0 && ljicrop_coordinateY === 0) {
 
@@ -401,7 +401,7 @@ $(function() {
                                 ljicrop_video.style.bottom = (ljicrop_magnification - 100) + '%';
                             }
                         break;
-            
+
                         // 右下
                         case 'lowerright':
                             if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
@@ -415,7 +415,7 @@ $(function() {
                                 ljicrop_video.style.bottom = (ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
                             }
                         break;
-            
+
                         // 左上
                         case 'upperleft':
                             if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
@@ -429,7 +429,7 @@ $(function() {
                                 ljicrop_video.style.bottom = (ljicrop_magnification - 100) + '%';
                             }
                         break;
-            
+
                         // 左下
                         case 'lowerleft':
                             if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
@@ -564,7 +564,7 @@ $(function() {
             }).done(function(data) {
 
                 var html = '';
-                
+
                 // デバイスごとに
                 Object.keys(data['scandata']).forEach(function(key){
 
@@ -592,10 +592,10 @@ $(function() {
 
                 // 一気に代入
                 document.getElementById('chromecast-device-box').innerHTML = html;
-                
+
                 // クリックイベントを付与
                 document.querySelectorAll('.chromecast-device').forEach(function(elem) {
-                    
+
                     // キャスト開始
                     elem.addEventListener('click', function() {
                         initServerCast(elem);
@@ -666,19 +666,19 @@ function initBrowserCast(){
     // キャストボタンクリック時に発火
     remotePlayerController.addEventListener(
         cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED, function() {
-            
+
             if (remotePlayer.isConnected){
 
                 $('#cast-toggle > .menu-link-href').text('キャストを終了');
                 toastr.info('キャストを開始しています…');
-                
+
                 // 動画を一旦止める
                 dp.video.pause();
                 // 端末はミュートにする
                 dp.video.muted = true;
                 // 音量を半分にする
                 dp.video.volume = 0.7;
-                
+
                 // シークを通知
                 $('#dplayer').addClass('dplayer-seeking');
                 // ローディング表示
@@ -686,7 +686,7 @@ function initBrowserCast(){
                 // 動画表示を消す
                 dp.video.style.transition = 'opacity 0.3s ease';
                 dp.video.style.opacity = 0;
-                
+
                 // キャスト端末の名前
                 var castName = cast.framework.CastContext.getInstance().getCurrentSession().getSessionObj().receiver.friendlyName;
 
@@ -721,7 +721,7 @@ function initBrowserCast(){
 
 // JavaScript から Chromecast を制御する関数
 function controlBrowserCast(){
-    
+
     // セッション周り
     var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
     var mediaInfo = new chrome.cast.media.MediaInfo(streamurl, streamtype);
@@ -754,7 +754,7 @@ function controlBrowserCast(){
 
                     // 読み込み中のとき
                     if (player.playerState == 'BUFFERING'){
-                        
+
                         buffering = true;
                         // シークを通知
                         $('#dplayer').addClass('dplayer-seeking');
@@ -806,7 +806,7 @@ function controlBrowserCast(){
             // 最初に現在の位置までシーク
             player.currentTime = dp.video.currentTime;
             playerController.seek();
-            
+
             // 再生
             $('.dplayer-video-current').on('play playing', function(){
                 if ($('#cast-toggle > .menu-link-href').text() === 'キャストを終了'){
@@ -877,7 +877,7 @@ function initServerCast(elem){
 
     // キャスト端末の名前
     var castName = $(elem).find('.chromecast-name').text();
-    
+
     // 「〇〇で再生しています」を出す
     if (!$('.dplayer-casting').length){
         $('.dplayer-danmaku').before('<div class="dplayer-casting">' + castName + 'で再生しています</div>');
@@ -954,7 +954,7 @@ function controlServerCast(state){
                 cache: false,
             }).done(function(data) {
             });
-        
+
         }
     });
 
@@ -1018,7 +1018,7 @@ function controlServerCast(state){
                 cache: false,
             }).done(function(data) {
             });
-            
+
             dp.video.muted = true; // 端末はミュートにする
 
         }

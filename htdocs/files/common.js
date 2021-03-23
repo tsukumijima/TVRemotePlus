@@ -29,7 +29,7 @@ function isClickScrollbar(event){
 }
 
 $(function(){
-    
+
     // ***** リンク *****
     $('a[href]:not(a[target="_blank"]):not(a[download]):not(a[href="javascript:void(0);"]), .stream-view, button[type="submit"]').click(function(event){
         if (!event.target.classList.contains('stream-stop-icon') && !event.target.classList.contains('setting')){
@@ -141,7 +141,7 @@ $(function(){
 
         $('#scroll').addClass('hover');
         var topPos = $(window).scrollTop();
-        
+
         if (topPos > 400) {
             $('html, body').velocity('scroll', { duration: 700, offset: (settings['vertical_navmenu'] ? 0 : -54) });
             setTimeout(function(){

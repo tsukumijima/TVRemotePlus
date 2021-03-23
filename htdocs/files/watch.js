@@ -13,7 +13,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
 
         // 中身を空にしてリセットする
         if ($('#search-info').html().indexOf('更新中') === -1) $('#search-info').empty();
-        
+
         if (flg != 'more') $('#search-list').empty();
 
         // 一旦もっと見るを消す
@@ -65,7 +65,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
                 });
                 break;
         }
-        
+
         // html
         var html = '';
 
@@ -78,7 +78,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
 
         // ファイルが1件以上あれば
         if (fileinfo.length > 0){
-        
+
             for (var i = $('.search-file-box').length; i < length; i++){
 
                 download = 
@@ -128,7 +128,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
 
             // 1つずつだと遅すぎるため一気に出す
             $('#search-list').append(html).hide().delay(200).velocity('fadeIn', 500);
-            
+
             // 検索キーワードがあるなら上までスクロール
             if (flg == 'search'){
                 $('html, body').velocity('scroll', { duration: 700, offset: (settings['vertical_navmenu'] ? 0 : -54) });
@@ -153,7 +153,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
         } else {
             $('#search-info').html('録画リストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);
         }
-            
+
     });
 }
 
@@ -255,7 +255,7 @@ $(function(){
                 break;
         }
     });
-    
+
     // 検索を実行
     $('#search-find-submit').click(function(event){
         $('#rec-new').addClass('search-find-selected');
