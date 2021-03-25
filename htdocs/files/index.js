@@ -2,8 +2,9 @@
 // 生放送・ファイル再生共通その2 (script.jsが肥大化したためこっちに)
 
 // 定義
-var remotePlayer;
-var remotePlayerController;
+let slider;
+let remotePlayer;
+let remotePlayerController;
 
 // php の isset みたいなの
 function isset(data){
@@ -131,7 +132,9 @@ $(window).on('DOMContentLoaded resize', function(event){
             // スライダーのサイズを更新（重要）
             // プレイヤー周辺を独自でリサイズしている関係で Swiper 本体のリサイズ検知機構がうまく動かない
             // そのため手動でサイズを更新してあげる必要がある
-            slider.update();
+            if (slider) {
+                slider.update();
+            }
         }
 
     }, 200);
