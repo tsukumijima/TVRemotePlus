@@ -56,8 +56,6 @@
   <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
   <script type="text/javascript" src="/files/pwacompat.min.js" async></script>
   <script type="text/javascript" src="/files/jquery.min.js"></script>
-  <script type="text/javascript" src="/files/DPlayer.min.js"></script>
-  <script type="text/javascript" src="/files/hls-b24.min.js"></script>
   <script type="text/javascript" src="/files/toastr.min.js"></script>
   <script type="text/javascript" src="/files/js.cookie.min.js"></script>
   <script type="text/javascript" src="/files/velocity.min.js"></script>
@@ -65,19 +63,19 @@
   <script type="text/javascript" src="/files/css_browser_selector.js"></script>
   <script type="text/javascript" src="/files/common.js?<?= $version; ?>"></script>
 <?php
-	if (strpos($backtrace[0]['file'], 'index.php') !== false){ // index.php のみ
+	if (strpos($backtrace[0]['file'], 'index.php') !== false) { // index.php のみ
+    echo '  <script type="text/javascript" src="/files/DPlayer.min.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="/files/hls-b24.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/clusterize.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/index.js?'.$version.'"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/script.js?'.$version.'"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/jikkyo.js?'.$version.'"></script>'."\n";
 	}
-	if (strpos($backtrace[0]['file'], 'watch.php') !== false){ // watch.php のみ
+	if (strpos($backtrace[0]['file'], 'watch.php') !== false) { // watch.php のみ
 		echo '  <script type="text/javascript" src="/files/watch.js?'.$version.'"></script>'."\n";
-	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false){ // settings.php のみ
+	} else if (strpos($backtrace[0]["file"], 'settings.php') !== false) { // settings.php のみ
 		echo '  <script type="text/javascript" src="/files/settings.js?'.$version.'"></script>'."\n";
-	} else if ($ini[$stream]['state'] == 'ONAir'){
-	} else if ($ini[$stream]['state'] == 'File'){
 	}
 ?>
 
