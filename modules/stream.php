@@ -507,10 +507,11 @@
 		}
 
 		// ストリームを開始する（エンコーダーを起動する）
-		if ($encoder_log == 'true'){
+		if ($encoder_log == 'true') {
 			// 既にエンコーダーのログがあれば削除する
-			if (file_exists($base_dir.'logs/stream'.$stream.'.encoder.log')){
-				@unlink($base_dir.'logs/stream'.$stream.'.encoder.log');
+			if (file_exists("{$base_dir}logs/stream{$stream}.encoder.log")){
+				// PHP の unlink() 関数では削除に失敗する事があるため、del コマンドを使って削除する
+				exec("del {$base_dir}logs/stream{$stream}.encoder.log");
 			}
 			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($stream_cmd).
 			              ' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
@@ -783,10 +784,11 @@
 		}
 
 		// ログを書き出すかどうか
-		if ($encoder_log == 'true'){
+		if ($encoder_log == 'true') {
 			// 既にエンコーダーのログがあれば削除する
-			if (file_exists($base_dir.'logs/stream'.$stream.'.encoder.log')){
-				@unlink($base_dir.'logs/stream'.$stream.'.encoder.log');
+			if (file_exists("{$base_dir}logs/stream{$stream}.encoder.log")){
+				// PHP の unlink() 関数では削除に失敗する事があるため、del コマンドを使って削除する
+				exec("del {$base_dir}logs/stream{$stream}.encoder.log");
 			}
 			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($stream_cmd).
 			              ' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
