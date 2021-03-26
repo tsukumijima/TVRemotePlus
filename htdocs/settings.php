@@ -287,7 +287,7 @@
           </h2>
 
           <p>
-            <?= $site_title; ?> の設定を Web 上から行えます。<br>
+            <?= $site_title; ?> の設定ができます。<br>
           </p>
           
           <form id="setting-user" class="setting-form-wrap">
@@ -304,6 +304,7 @@
             </h3>
 
             <p>個人設定はブラウザ・端末ごとに反映されます。</p>
+            <p>(＊) … PC・タブレットのみ適用される設定</p>
 
             <h4><i class="fas fa-eye"></i>表示</h4>
 
@@ -320,7 +321,7 @@
             </div>
 
             <div class="setting-form">
-              <span>コメントリスト</span>
+              <span>コメントリスト (＊)</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('comment_show', true, true) !== false){ ?>
                 <input id="comment_show" class="toggle-input" type="checkbox" value="true" checked />
@@ -380,7 +381,7 @@
             </div>
 
             <div class="setting-form">
-              <span>ナビゲーションメニューを垂直に配置（PC・タブレットのみ）</span>
+              <span>ナビゲーションメニューを垂直に配置 (＊)</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('vertical_navmenu', true, false) !== false){ ?>
                 <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" checked />
@@ -478,7 +479,7 @@
             </div>
 
             <div class="setting-form">
-              <span>番組表へスクロールした時にプレイヤーをフローティング表示する</span>
+              <span>番組表へスクロールした時にプレイヤーをフローティング表示する (＊)</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('player_floating', true) !== false){ ?>
                 <input id="player_floating" class="toggle-input" type="checkbox" value="true" checked />
@@ -560,7 +561,6 @@
                 <p>
                   デフォルトで利用する BonDriver (地デジ用) です<br>
                   うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
-                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
                   Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
@@ -583,7 +583,6 @@
                 <p>
                   デフォルトで利用する BonDriver (BS・CS用) です<br>
                   うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
-                  導入している場合は BonDriver_Spinel か BonDriver_Proxy を利用することをおすすめします<br>
                   BonDriver_Spinel よりも BonDriver_Proxy の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
@@ -1109,7 +1108,7 @@
                   PWA (Progressive Web Apps) 機能を利用する場合は、HTTPS でのアクセスが必須です<br>
                   そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
                   右 or 下のダウンロードボタンから証明書 (server.crt) をダウンロードしてください<br>
-                  証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#PWA%20%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="_blank">こちら</a> を参照してください<br>
+                  証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#pwa-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="_blank">こちら</a> を参照してください<br>
                 </p>
               </div>
               <a class="download" href="/files/TVRemotePlus.crt" download>
