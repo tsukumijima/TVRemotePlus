@@ -190,13 +190,95 @@ $(function() {
         localStorage.setItem('tvrp-slider-index', slider.activeIndex);
     });
 
+    // ***** フルスクリーン *****
+
+    $('#fullscreen').click((event) => {
+
+        // プロパティ名を統一
+        const fullscreenElement = (
+            document.fullscreenElement || // HTML5 standard
+            document.mozFullScreenElement || // Gecko
+            document.webkitFullscreenElement || // Webkit
+            document.webkitCurrentFullScreenElement || // Webkit (old)
+            document.msFullscreenElement // Trident
+        );
+
+        // すでにフルスクリーンになっている
+        if (fullscreenElement && fullscreenElement.tagName.toLowerCase() === 'html') {
+
+            // メソッド名を統一
+            document.exitFullscreen = (
+                document.exitFullscreen || // HTML5 standard
+                document.mozCancelFullScreen || // Gecko
+                document.webkitExitFullscreen || // Webkit
+                document.webkitCancelFullScreen || // Webkit (old)
+                document.msExitFullscreen // Trident
+            );
+
+            // フルスクリーンを終了
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+
+        } else {
+
+            // メソッド名を統一
+            document.documentElement.requestFullscreen = (
+                document.documentElement.requestFullscreen || // HTML5 standard
+                document.documentElement.mozRequestFullScreen || // Gecko
+                document.documentElement.webkitRequestFullscreen || // Webkit
+                document.documentElement.webkitRequestFullScreen || // Webkit (old)
+                document.documentElement.msRequestFullscreen // Trident
+            );
+
+            // フルスクリーンを開始
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else {  // FullScreen API をサポートしていないブラウザ（主に iOS Safari ）
+                if (/Mobile/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent)) {
+                    toastr.error('iOS Safari では、フルスクリーン機能はサポートされていません。');
+                } else {
+                    toastr.error('フルスクリーン機能はサポートされていません。');
+                }
+            }
+        }
+    });
+
+    // フルスクリーン状態が変わったとき
+    $(document).on('fullscreenchange', () => {
+
+        // プロパティ名を統一
+        const fullscreenElement = (
+            document.fullscreenElement || // HTML5 standard
+            document.mozFullScreenElement || // Gecko
+            document.webkitFullscreenElement || // Webkit
+            document.webkitCurrentFullScreenElement || // Webkit (old)
+            document.msFullscreenElement // Trident
+        );
+
+        // フルスクリーンを開始
+        if (fullscreenElement && fullscreenElement.tagName.toLowerCase() === 'html') {
+
+            $('#fullscreen').attr('aria-label', 'フルスクリーン表示を終了します');
+            $('#fullscreen i').removeClass('fa-expand').addClass('fa-compress');
+            $('#fullscreen .menu-link-href').text('フルスクリーンを終了');
+
+        // フルスクリーンを終了
+        } else {
+
+            $('#fullscreen').attr('aria-label', '画面全体をフルスクリーンで表示します');
+            $('#fullscreen i').removeClass('fa-compress').addClass('fa-expand');
+            $('#fullscreen .menu-link-href').text('フルスクリーンで表示');
+        }
+    });
+
     // ***** スクロールで動画をフロート表示 *****
 
     // 個人設定で有効 & 501px より大きい（スマホを除外）
     if (settings['player_floating'] && window.innerWidth > 500) {
 
         // スクロール時のイベント
-        $(window).scroll(function(){
+        $(window).scroll(() => {
 
             const position_current = $(this).scrollTop() + (settings['vertical_navmenu'] ? 0 : 54);
             const position_target = $('#epg-box').offset().top; // 計算めんどいのであえて jQuery
@@ -218,7 +300,7 @@ $(function() {
                         // transition を再付与
                         dp.video.style.transition = 'opacity 0.2s ease-in-out';
 
-                        setTimeout(function(){
+                        setTimeout(() => {
 
                             // 動画をフロート化
                             dp.video.classList.add('dplayer-floating');
@@ -235,7 +317,7 @@ $(function() {
                         // 透明度を 0 に設定
                         dp.video.style.opacity = 0;
 
-                        setTimeout(function() {
+                        setTimeout(() => {
 
                             // 動画のフロート化を解除
                             dp.video.classList.remove('dplayer-floating');
