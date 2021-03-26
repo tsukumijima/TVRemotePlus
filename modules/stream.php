@@ -225,10 +225,10 @@
 				$tstaskcentreex_cmd = (
 					// BonDriver をロード
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c LoadBonDriver -o \"FilePath:'{$BonDriver}'\" && ".
-				    // チューナーを開く
-				    "\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c OpenTuner && ".
-				    // チャンネルをセット
-				    "\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" "
+					// チューナーを開く
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c OpenTuner && ".
+					// チャンネルをセット
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" "
 				);
 			}
 

@@ -760,13 +760,13 @@
             <div class="hotkey-list">
               <div class="hotkey-list-name">15秒巻き戻し</div>
               <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">Ctrl (or Command)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
+                <div class="hotkey-list-key">Ctrl (or Cmd)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-left"></i></div>
               </div>
             </div>
             <div class="hotkey-list">
               <div class="hotkey-list-name">15秒早送り</div>
               <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">Ctrl (or Command)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
+                <div class="hotkey-list-key">Ctrl (or Cmd)</div> + <div class="hotkey-list-key"><i class="fas fa-arrow-right"></i></div>
               </div>
             </div>
             <div class="hotkey-list">
@@ -899,7 +899,7 @@
             <div class="hotkey-list">
               <div class="hotkey-list-name">クリップボードの画像を取り込む</div>
               <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">(ツイート入力フォームにフォーカス)</div> + <div class="hotkey-list-key">Ctrl (or Command)</div> + <div class="hotkey-list-key alphabet">V</div>
+                <div class="hotkey-list-key">(ツイート入力フォームにフォーカス)</div> + <div class="hotkey-list-key" style="flex-shrink: 0;">Ctrl (or Cmd)</div> + <div class="hotkey-list-key alphabet">V</div>
               </div>
             </div>
           </div>
