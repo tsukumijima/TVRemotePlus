@@ -245,7 +245,7 @@ $(function() {
     });
 
     // フルスクリーン状態が変わったとき
-    $(document).on('fullscreenchange', () => {
+    $(document).on('fullscreenchange webkitfullscreenchange', () => {
 
         // プロパティ名を統一
         const fullscreenElement = (
