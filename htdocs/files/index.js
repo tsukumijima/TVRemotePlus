@@ -272,61 +272,70 @@ $(function() {
         }
     });
 
-    // ***** スクロールで動画をフロート表示 *****
+    // ***** スクロールでプレイヤーをフロート表示 *****
 
-    // 個人設定で有効 & 501px より大きい（スマホを除外）
-    if (settings['player_floating'] && window.innerWidth > 500) {
+    // 個人設定で有効
+    if (settings['player_floating']) {
 
         // スクロール時のイベント
         $(window).scroll(() => {
 
-            const position_current = $(this).scrollTop() + (settings['vertical_navmenu'] ? 0 : 54);
-            const position_target = $('#epg-box').offset().top; // 計算めんどいのであえて jQuery
+            // 501px より大きい（スマホを除外）
+            if (window.innerWidth > 500) {
 
-            // State を取得
-            const state = document.getElementById('state').value;
+                const position_current = $(this).scrollTop() + (settings['vertical_navmenu'] ? 0 : 54);
+                const position_target = $('#epg-box').offset().top; // 計算めんどいのであえて jQuery
 
-            // State が Offline 以外
-            if (state !== 'Offline' && state !== '' && state !== undefined) {
+                // State を取得
+                const state = document.getElementById('state').value;
 
-                // ターゲット座標以上
-                if (position_current > position_target) {
-                    if (!dp.video.classList.contains('dplayer-floating')) {
+                // State が Offline 以外
+                if (state !== 'Offline' && state !== '' && state !== undefined) {
 
-                        // 一旦 transition を削除
-                        dp.video.style.transition = 'none';
-                        // 透明度を 0 に設定
-                        dp.video.style.opacity = 0;
-                        // transition を再付与
-                        dp.video.style.transition = 'opacity 0.2s ease-in-out';
+                    // ターゲット座標以上
+                    if (position_current > position_target) {
+                        if (!dp.video.classList.contains('dplayer-floating')) {
 
-                        setTimeout(() => {
+                            // 一旦 transition を削除
+                            dp.video.style.transition = 'none';
+                            // 透明度を 0 に設定
+                            dp.video.style.opacity = 0;
+                            // transition を再付与
+                            dp.video.style.transition = 'opacity 0.2s ease-in-out';
 
-                            // 動画をフロート化
-                            dp.video.classList.add('dplayer-floating');
-                            // 透明度を 1 に設定
-                            dp.video.style.opacity = 1;
+                            setTimeout(() => {
 
-                        }, 200);
-                    }
+                                // 動画をフロート化
+                                dp.video.classList.add('dplayer-floating');
+                                // 透明度を 1 に設定
+                                dp.video.style.opacity = 1;
 
-                // ターゲット座標以内
-                } else if (position_current < position_target) {
-                    if (dp.video.classList.contains('dplayer-floating')) {
+                            }, 200);
+                        }
 
-                        // 透明度を 0 に設定
-                        dp.video.style.opacity = 0;
+                    // ターゲット座標以内
+                    } else if (position_current < position_target) {
+                        if (dp.video.classList.contains('dplayer-floating')) {
 
-                        setTimeout(() => {
+                            // 透明度を 0 に設定
+                            dp.video.style.opacity = 0;
 
-                            // 動画のフロート化を解除
-                            dp.video.classList.remove('dplayer-floating');
-                            // 透明度を 1 に設定
-                            dp.video.style.opacity = 1;
+                            setTimeout(() => {
 
-                        }, 200);
+                                // 動画のフロート化を解除
+                                dp.video.classList.remove('dplayer-floating');
+                                // 透明度を 1 に設定
+                                dp.video.style.opacity = 1;
+
+                            }, 200);
+                        }
                     }
                 }
+
+            } else {
+
+                // 動画のフロート化を解除
+                dp.video.classList.remove('dplayer-floating');
             }
         });
     }
