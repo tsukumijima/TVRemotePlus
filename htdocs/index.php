@@ -550,7 +550,7 @@
           <span>動画の画質：</span>
           <div class="select-wrap">
             <select name="quality">
-              <option value="<?= $quality_default; ?>">デフォルト (<?= $quality_default; ?>)</option>
+              <option value="<?= getQualityDefault(); ?>">デフォルト (<?= getQualityDefault(); ?>)</option>
               <option value="1080p-high">1080p-high (1920×1080)</option>
               <option value="1080p">1080p (1440×1080)</option>
               <option value="810p">810p (1440×810)</option>

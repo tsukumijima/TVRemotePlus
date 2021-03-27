@@ -298,6 +298,27 @@
 		}
 	}
 
+	// デフォルトの動画の画質を取得する関数
+	// 個人設定があれば個人設定を優先する
+	function getQualityDefault() {
+
+		global $quality_default;
+
+		// 個人設定がある
+		if (isSettingsItem('quality_user_default')) {
+			// 「環境設定を引き継ぐ」以外なら個人設定を使う
+			if (isSettingsItem('quality_user_default') !== 'environment') {
+				return isSettingsItem('quality_user_default');
+			// 環境設定を使う
+			} else {
+				return $quality_default;
+			}
+		// 環境設定を使う
+		} else {
+			return $quality_default;
+		}
+	}
+
 	// 局ロゴの URL を取得する関数
 	function getLogoURL($channel) {
 

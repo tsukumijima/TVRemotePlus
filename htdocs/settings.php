@@ -57,7 +57,7 @@
 				if ($_POST['start_timestamp']) $ini[$stream]['start_timestamp'] = $_POST['start_timestamp'];
 				if ($_POST['end_timestamp']) $ini[$stream]['end_timestamp'] = $_POST['end_timestamp'];
 				if ($_POST['quality']) $ini[$stream]['quality'] = $_POST['quality'];
-				else $ini[$stream]['quality'] = $quality_default;
+				else $ini[$stream]['quality'] = getQualityDefault();
 				if ($_POST['encoder']) $ini[$stream]['encoder'] = $_POST['encoder'];
 				else $ini[$stream]['quality'] = $encoder_default;
 				if ($_POST['subtitle']) $ini[$stream]['subtitle'] = $_POST['subtitle'];
@@ -125,7 +125,7 @@
 				// 連想配列に格納
 				if (isset($_POST['channel'])) $ini[$stream]['channel'] = strval($_POST['channel']);
 				if (isset($_POST['quality'])) $ini[$stream]['quality'] = $_POST['quality'];
-				else $ini[$stream]['quality'] = $quality_default;
+				else $ini[$stream]['quality'] = getQualityDefault();
 				if (isset($_POST['encoder'])) $ini[$stream]['encoder'] = $_POST['encoder'];
 				else $ini[$stream]['encoder'] = $encoder_default;
 				if (isset($_POST['subtitle'])) $ini[$stream]['subtitle'] = $_POST['subtitle'];
@@ -456,6 +456,24 @@
             </div>
 
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
+
+            <div class="setting-form setting-select">
+              <span>デフォルトの動画の画質（環境設定よりも優先されます）</span>
+              <div class="select-wrap">
+                <select id="quality_user_default" required>
+                  <?php $quality_user_default = isSettingsItem('quality_user_default'); ?>
+                  <option value="environment"<?php if ($quality_user_default == 'environment') echo ' selected'; ?>>環境設定を引き継ぐ</option>
+                  <option value="1080p-high"<?php if ($quality_user_default == '1080p-high') echo ' selected'; ?>>1080p-high (1920×1080)</option>
+                  <option value="1080p"<?php if ($quality_user_default == '1080p') echo ' selected'; ?>>1080p (1440×1080)</option>
+                  <option value="810p"<?php if ($quality_user_default == '810p') echo ' selected'; ?>>810p (1440×810)</option>
+                  <option value="720p"<?php if ($quality_user_default == '720p') echo ' selected'; ?>>720p (1280×720)</option>
+                  <option value="540p"<?php if ($quality_user_default == '540p') echo ' selected'; ?>>540p (960×540)</option>
+                  <option value="360p"<?php if ($quality_user_default == '360p') echo ' selected'; ?>>360p (640×360)</option>
+                  <option value="240p"<?php if ($quality_user_default == '240p') echo ' selected'; ?>>240p (426×240)</option>
+                  <option value="144p"<?php if ($quality_user_default == '144p') echo ' selected'; ?>>144p (256×144)</option>
+                </select>
+              </div>
+            </div>
 
             <div class="setting-form setting-select">
               <span>一度に表示する録画番組リストの番組数（件）</span>

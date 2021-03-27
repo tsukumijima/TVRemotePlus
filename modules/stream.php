@@ -76,7 +76,7 @@
 
 			// 動画の画質
 			if (isset($argv[4]) and $argv[4] != 'default') $ini[$stream]['quality'] = $argv[4];
-			else $ini[$stream]['quality'] = $quality_default;
+			else $ini[$stream]['quality'] = getQualityDefault();
 
 			// エンコーダー
 			if (isset($argv[5]) and $argv[5] != 'default') $ini[$stream]['encoder'] = $argv[5];
