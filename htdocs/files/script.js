@@ -661,6 +661,7 @@ $(function() {
     // キーボードショートカット
     //   Ctrl + Enter：ツイートを送信
     //   Tab キー：フォーカス
+    //   E キー：画面全体のフルスクリーンの切り替え
     //   ? キー：ショートカット一覧
     //   Alt + Q キー: キャプチャ画像リストの表示 / 非表示の切り替え
     //   Alt + 1 キー：キャプチャ
@@ -732,6 +733,12 @@ $(function() {
                 }
 
             }
+        }
+
+        // E キー
+        if (document.activeElement.id != 'tweet' && document.activeElement.className != 'dplayer-comment-input' && event.key.toUpperCase() == 'E') {
+            event.preventDefault();
+            $('#fullscreen').click();
         }
 
         // ? キー

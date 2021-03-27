@@ -812,13 +812,13 @@
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">字幕の表示 / 非表示の切り替え</div>
+              <div class="hotkey-list-name">字幕の表示 / 非表示を切り替える</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">S</div>
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">コメントの表示 / 非表示の切り替え</div>
+              <div class="hotkey-list-name">コメントの表示 / 非表示を切り替える</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">D</div>
               </div>
@@ -842,19 +842,25 @@
               <span class="hotkey-head">全般</span>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">全画面のオン / オフの切り替え</div>
+              <div class="hotkey-list-name">フルスクリーンのオン / オフを切り替える</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">F</div>
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">ブラウザ全画面のオン / オフの切り替え</div>
+              <div class="hotkey-list-name">ブラウザフルスクリーンのオン / オフを切り替える</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">W</div>
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">ピクチャーインピクチャーのオン / オフの切り替え（対応ブラウザのみ）</div>
+              <div class="hotkey-list-name">画面全体のフルスクリーンのオン / オフを切り替える</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">E</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
+              <div class="hotkey-list-name">ピクチャーインピクチャーのオン / オフを切り替える（対応ブラウザのみ）</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">P</div>
               </div>
