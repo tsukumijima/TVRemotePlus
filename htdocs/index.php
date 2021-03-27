@@ -730,11 +730,14 @@
     </div>
 
     <div id="hotkey-box">
-      <div id="hotkey-wrap">
+      <div id="hotkey-wrap" class="scrollbar">
         <div class="hotkey-head-box title">
           <i class="fas fa-keyboard"></i>
           <span class="hotkey-head">キーボードショートカット一覧</span>
-          <span class="hotkey-head-sub">(＊) … ツイート入力フォーム以外にフォーカスした状態</span>
+          <span class="hotkey-head-sub">
+            (＊) … ツイート入力フォーム以外にフォーカスした状態　
+            (＃) … Shift キーを押しながらで字幕を入れずにキャプチャする
+          </span>
         </div>
         <div id="hotkey-list-box">
           <div class="hotkey-list-wrap">
@@ -821,6 +824,12 @@
               </div>
             </div>
             <div class="hotkey-list">
+              <div class="hotkey-list-name">コメント入力フォームを表示してフォーカスを当てる</div>
+              <div class="hotkey-list-key-box">
+                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">C</div>
+              </div>
+            </div>
+            <div class="hotkey-list">
               <div class="hotkey-list-name">ストリームを同期する（ライブ配信時のみ）</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">L</div>
@@ -851,12 +860,6 @@
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">コメント入力フォームを表示してフォーカスする</div>
-              <div class="hotkey-list-key-box">
-                <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">C</div>
-              </div>
-            </div>
-            <div class="hotkey-list">
               <div class="hotkey-list-name">キーボードショートカットの一覧を表示する</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">(＊)</div> + <div class="hotkey-list-key alphabet">?</div>
@@ -868,8 +871,8 @@
             </div>
             <div class="hotkey-list">
               <div class="hotkey-list-name">
-                ツイート入力フォームにフォーカスする / フォーカスを外す<br>
-                プレイヤーにフォーカスする / フォーカスを外す（キャプチャ画像リスト表示時のみ）
+                通常時：ツイート入力フォームにフォーカスを当てる / 外す<br>
+                キャプチャ画像リスト表示時：プレイヤーにフォーカスを当てる / 外す
               </div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">Tab</div>
@@ -882,19 +885,19 @@
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">ストリームをキャプチャする</div>
+              <div class="hotkey-list-name">ストリームをキャプチャする (＃)</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">1</div>
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">ストリームをコメント付きでキャプチャする</div>
+              <div class="hotkey-list-name">ストリームをコメント付きでキャプチャする (＃)</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">2</div>
               </div>
             </div>
             <div class="hotkey-list">
-              <div class="hotkey-list-name">キャプチャとツイートをリセットする</div>
+              <div class="hotkey-list-name">キャプチャの選択とツイートをリセットする</div>
               <div class="hotkey-list-key-box">
                 <div class="hotkey-list-key">Alt (or Option)</div> + <div class="hotkey-list-key">3</div>
               </div>
