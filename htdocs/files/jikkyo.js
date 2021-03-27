@@ -84,8 +84,9 @@ class Scroll {
             const height = Math.ceil(this.comment_draw_box.scrollHeight); // ボックス全体の高さ
             const scroll = Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
             const diff = Math.abs(height - scroll); // 絶対値を取得
-            // 差が 3 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
-            if (diff <= 3) {
+            // 差が 8 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
+            console.log(diff)
+            if (diff <= 8) {
                 return true;
             } else {
                 return false;
@@ -168,7 +169,7 @@ class Scroll {
                 this.comment_scroll.classList.remove('show');
 
                 // スクロール
-                this.scroll(true);
+                this.scroll();
 
                 // 自動スクロールに戻す
                 this.is_autoscroll_mode = true;
