@@ -719,7 +719,7 @@ section {
     box-shadow: -1px 4px 2px 0 rgba(0,0,0,.14),
                 0 3px 1px -2px rgba(0,0,0,.10),
                 5px 2px 5px 0 rgba(0,0,0,.12);
-    z-index:500;
+    z-index: 500;
     transition: opacity 0.2s, visibility 0.2s ease-out;
     opacity: 0;
     visibility: hidden;
@@ -1278,6 +1278,39 @@ td {
     margin-left: 3vw;
     margin-right: 3vw;
     font-size: 90%;
+}
+
+/* Luminous（キャプチャ画像拡大表示） */
+
+.lum-lightbox {
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 700;
+}
+
+.lum-close-button {
+    cursor: pointer;
+}
+
+.lum-gallery-button, .lum-gallery-button:hover {
+    background: none;
+    outline: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.lum-lightbox-inner img {
+    max-width: 77% !important;
+    max-height: 77% !important;
+}
+@media (max-width: 460px) {
+    .lum-lightbox-inner img {
+        max-width: 100% !important;
+        max-height: 100% !important;
+    }
+}
+
+.lum-img {
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* ツイート関連 */

@@ -34,11 +34,12 @@
   <link rel="manifest" href="/manifest.json">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+  <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap">
   <link rel="stylesheet" type="text/css" href="/files/toastr.min.css">
   <link rel="stylesheet" type="text/css" href="/files/balloon.min.css">
+  <link rel="stylesheet" type="text/css" href="/files/luminous.min.css">
   <link rel="stylesheet" type="text/css" href="/files/style.css?<?= $version; ?>">
 <?php
 	if (strpos($backtrace[0]['file'], 'index.php') !== false) { // index.php のみ
@@ -60,6 +61,7 @@
   <script type="text/javascript" src="/files/js.cookie.min.js"></script>
   <script type="text/javascript" src="/files/velocity.min.js"></script>
   <script type="text/javascript" src="/files/moment.min.js"></script>
+  <script type="text/javascript" src="/files/luminous.min.js"></script>
   <script type="text/javascript" src="/files/css_browser_selector.js"></script>
   <script type="text/javascript" src="/files/common.js?<?= $version; ?>"></script>
 <?php

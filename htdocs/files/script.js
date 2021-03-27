@@ -963,6 +963,9 @@ $(function() {
 
     // ***** キャプチャ画像リスト *****
 
+    // キャプチャ画像表示用の Luminous インスタンス
+    let luminous = null;
+
     // キャプチャした画像の一覧を表示
     $('#tweet-capture-list').click(function(event) {
 
@@ -994,7 +997,10 @@ $(function() {
         }
     });
 
-    // キャプチャした画像をリストに追加する関数
+    /**
+     * キャプチャした画像をリストに追加する
+     * @param {Blob} blob 
+     */
     function addCaptureImage(blob) {
 
         // キャプチャ画像が capture_maxcount を超えていたら
@@ -1050,11 +1056,30 @@ $(function() {
         // 自動選択
         selectCaptureImage(document.getElementsByClassName('tweet-capture')[0], true);
 
+        // Luminous がすでに初期化されていたら一旦破棄
+        if (luminous !== null) {
+            luminous.destroy();
+            luminous = null;
+        }
+
+        // Luminous を初期化
+        const luminousTrigger = document.querySelectorAll('.tweet-capture');
+        if (luminousTrigger !== null) {
+            luminous = new LuminousGallery(luminousTrigger, {
+                arrowNavigation: true,  // 左右のボタンを表示する
+            }, {
+                sourceAttribute: 'data-url',  // 拡大画像の URL がある属性
+                openTrigger: 'contextmenu',  // 右クリックで開く
+                closeTrigger: 'click',  // 普通のクリックで閉じる
+            });
+        }
     }
 
-    // キャプチャ画像を選択する関数
-    // 第1引数: 選択された要素を指定
-    // 第2引数: true を指定すると data-autoselect を付与する
+    /**
+     * キャプチャ画像を選択する
+     * @param {HTMLElement} elem 選択された要素
+     * @param {Boolean} autoselect true を指定すると data-autoselect を付与する
+     */
     function selectCaptureImage(elem, autoselect = false) {
 
         // 4枚未満なら実行（まだ追加されていないため「未満」）
@@ -1112,9 +1137,11 @@ $(function() {
         }
     }
 
-    // キャプチャ画像を選択解除する関数
-    // 第1引数: 選択された要素を指定
-    // 第2引数: true を指定すると data-autoselect が付与されている要素のみ選択を解除
+    /**
+     * キャプチャ画像を選択解除する
+     * @param {HTMLElement} elem 選択された要素
+     * @param {Boolean} autoselect true を指定すると data-autoselect が付与されている要素のみ選択を解除
+     */
     function deselectCaptureImage(this_, autoselect = false) {
 
         // order が定義されていれば
@@ -1176,7 +1203,9 @@ $(function() {
         }
     }
 
-    // キャプチャ画像をすべて選択解除する関数
+    /**
+     * キャプチャ画像をすべて選択解除する
+     */
     function deselectAllCaptureImage() {
 
         // 配列を空にする
