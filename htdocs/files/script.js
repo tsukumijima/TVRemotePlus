@@ -158,6 +158,23 @@ $(function() {
 
     // ***** 番組表・ストリーム一覧表示 *****
 
+    // 要素を一括取得
+    // 最初に全部取得しておいた方が負荷がかからない
+    const epginfo_epg_title = document.getElementById('epg-title');
+    const epginfo_epg_info = document.getElementById('epg-info');
+    const epginfo_epg_channel = document.getElementById('epg-channel');
+    const epginfo_epg_starttime = document.getElementById('epg-starttime');
+    const epginfo_epg_to = document.getElementById('epg-to');
+    const epginfo_epg_endtime = document.getElementById('epg-endtime');
+    const epginfo_epg_next_title = document.getElementById('epg-next-title');
+    const epginfo_epg_next_starttime = document.getElementById('epg-next-starttime');
+    const epginfo_epg_next_to = document.getElementById('epg-next-to');
+    const epginfo_epg_next_endtime = document.getElementById('epg-next-endtime');
+    const epginfo_state = document.getElementById('state');
+    const epginfo_ikioi = document.getElementById('ikioi');
+    const epginfo_progress = document.getElementById('progress');
+    let broadcast_elems = [];
+
     setInterval((function status() {
         $.ajax({
             url: '/api/epginfo/' + stream,
@@ -181,95 +198,108 @@ $(function() {
             if (data['stream'][stream]['state'] == 'ONAir') {
 
                 // 変化がある場合のみ書き換え
-                if (document.getElementById('epg-starttime').innerHTML != data['stream'][stream]['starttime'] ||
-                    document.getElementById('epg-title').innerHTML != data['stream'][stream]['program_name'] ||
-                    document.getElementById('epg-channel').innerHTML != data['stream'][stream]['channel']) {
+                if (epginfo_epg_starttime.innerHTML != data['stream'][stream]['starttime'] ||
+                    epginfo_epg_title.innerHTML != data['stream'][stream]['program_name'] ||
+                    epginfo_epg_channel.innerHTML != data['stream'][stream]['channel']) {
 
                     // 現在の番組
-                    document.getElementById('epg-starttime').textContent = data['stream'][stream]['starttime'];
-                    document.getElementById('epg-to').textContent = data['stream'][stream]['to'];
-                    document.getElementById('epg-endtime').textContent = data['stream'][stream]['endtime'];
+                    epginfo_epg_starttime.textContent = data['stream'][stream]['starttime'];
+                    epginfo_epg_to.textContent = data['stream'][stream]['to'];
+                    epginfo_epg_endtime.textContent = data['stream'][stream]['endtime'];
 
                     if (data['stream'][stream]['ch'] < 55) {
-                        document.getElementById('epg-channel').textContent =
+                        epginfo_epg_channel.textContent =
                             'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
                     } else {
-                        document.getElementById('epg-channel').textContent =
+                        epginfo_epg_channel.textContent =
                             'Ch: ' + zeroPadding(data['stream'][stream]['ch_str'].replace('_', ''), 3) + ' ' + data['stream'][stream]['channel'];
                     }
-                    document.getElementById('epg-title').innerHTML = data['stream'][stream]['program_name'];
-                    document.getElementById('epg-info').innerHTML = data['stream'][stream]['program_info'];
+                    epginfo_epg_title.innerHTML = data['stream'][stream]['program_name'];
+                    epginfo_epg_info.innerHTML = data['stream'][stream]['program_info'];
 
                     // 次の番組
-                    document.getElementById('epg-next-starttime').textContent = data['stream'][stream]['next_starttime'];
-                    document.getElementById('epg-next-to').textContent = data['stream'][stream]['to'];
-                    document.getElementById('epg-next-endtime').textContent = data['stream'][stream]['next_endtime'];
-                    document.getElementById('epg-next-title').innerHTML = data['stream'][stream]['next_program_name'];
+                    epginfo_epg_next_title.innerHTML = data['stream'][stream]['next_program_name'];
+                    epginfo_epg_next_starttime.textContent = data['stream'][stream]['next_starttime'];
+                    epginfo_epg_next_to.textContent = data['stream'][stream]['to'];
+                    epginfo_epg_next_endtime.textContent = data['stream'][stream]['next_endtime'];
 
                     // ON Air
-                    document.getElementById('state').textContent = '● ON Air';
-                    document.getElementById('state').style.color = '#007cff';
+                    epginfo_state.textContent = '● ON Air';
+                    epginfo_state.style.color = '#007cff';
 
                     // 実況勢い
-                    document.getElementById('ikioi').textContent = `実況勢い: ${data['stream'][stream]['ikioi']}`;
+                    epginfo_ikioi.textContent = `実況勢い: ${data['stream'][stream]['ikioi']}`;
                 }
 
             } else if (data['stream'][stream]['state'] == 'Offline') {
 
                 // Offline
-                document.getElementById('state').textContent = '● Offline';
-                document.getElementById('state').style.color = 'gray';
+                epginfo_state.textContent = '● Offline';
+                epginfo_state.style.color = 'gray';
             }
 
-            // stateを記録しておく
-            document.getElementById('state').value = data['stream'][stream]['state'];
+            // state を記録しておく
+            epginfo_state.value = data['stream'][stream]['state'];
 
-            // progressbarの割合を計算して代入
-            var percent = ((Math.floor(Date.now() / 1000) - data['stream'][stream]['timestamp']) / data['stream'][stream]['duration']) * 100;
-            document.getElementById('progress').style.width = percent + '%';
+            // progressbar の割合を計算して代入
+            let percentage = ((Math.floor(Date.now() / 1000) - data['stream'][stream]['timestamp']) / data['stream'][stream]['duration']) * 100;
+            epginfo_progress.style.width = `${percentage}%`;
 
-            // チャンネルごとに実行
+            // **** チャンネルリストの更新 ****
             for (key in data['onair']) {
 
+                // そのチャンネルの要素が取得されていないなら取得
+                if (!broadcast_elems[`ch${key}`]) {
+                    broadcast_elems[`ch${key}`] = {
+                        'wrap': document.querySelector(`#ch${key}`),
+                        'content': document.querySelector(`#ch${key} .broadcast-content`),
+                        'progress': document.querySelector(`#ch${key} .progress`),
+                    };
+                }
+
                 // 変化がある場合のみ書き換え
-                // 特に内容変わってもいないのにDOM再構築するの無駄じゃんやめろ
-                if (document.querySelector('#ch' + key + ' .broadcast-start').innerHTML != data['onair'][key]['starttime'] ||
-                        document.querySelector('#ch' + key + ' .broadcast-title').innerHTML != data['onair'][key]['program_name']) {
+                // 特に内容変わってもいないのに DOM を再構築するのはリソースの無駄
+                if (broadcast_elems[`ch${key}`]['wrap'].dataset.starttime != data['onair'][key]['starttime'] ||
+                    broadcast_elems[`ch${key}`]['wrap'].dataset.endtime != data['onair'][key]['endtime'] ||
+                    broadcast_elems[`ch${key}`]['wrap'].dataset.title != data['onair'][key]['program_name']) {
 
                     // 書き換え用html
                     var html = 
                         `<div class="broadcast-channel-box">
-                            <div class="broadcast-channel">` + document.getElementById('ch' + key).dataset.channel + `</div>
-                                <div class="broadcast-name-box">
-                                    <div class="broadcast-name">` + document.getElementById('ch' + key).dataset.name + `</div>
-                                    <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi">` + data['onair'][key]['ikioi'] + `</span></div>
-                                </div>
+                            <div class="broadcast-channel">` + broadcast_elems[`ch${key}`]['wrap'].dataset.channel + `</div>
+                            <div class="broadcast-name-box">
+                                <div class="broadcast-name">` + broadcast_elems[`ch${key}`]['wrap'].dataset.name + `</div>
+                                <div class="broadcast-jikkyo">実況勢い: <span class="broadcast-ikioi">` + data['onair'][key]['ikioi'] + `</span></div>
                             </div>
-                            <div class="broadcast-title">
-                                <span class="broadcast-start">` + data['onair'][key]['starttime'] + `</span>
-                                <span class="broadcast-to">` + data['onair'][key]['to'] + `</span>
-                                <span class="broadcast-end">` + data['onair'][key]['endtime'] + `</span>
-                                <span class="broadcast-title-id">` + data['onair'][key]['program_name'] + `</span>
-                            </div>
-                            <div class="broadcast-next">
-                                <span>` + data['onair'][key]['next_starttime'] + `</span>
-                                <span>` + data['onair'][key]['to'] + `</span>
-                                <span>` + data['onair'][key]['next_endtime'] + `</span>
-                                <span>` + data['onair'][key]['next_program_name'] + `</span>
-                            </div>
+                        </div>
+                        <div class="broadcast-title">
+                            <span class="broadcast-start">` + data['onair'][key]['starttime'] + `</span>
+                            <span class="broadcast-to">` + data['onair'][key]['to'] + `</span>
+                            <span class="broadcast-end">` + data['onair'][key]['endtime'] + `</span>
+                            <span class="broadcast-title-id">` + data['onair'][key]['program_name'] + `</span>
+                        </div>
+                        <div class="broadcast-next">
+                            <span>` + data['onair'][key]['next_starttime'] + `</span>
+                            <span>` + data['onair'][key]['to'] + `</span>
+                            <span>` + data['onair'][key]['next_endtime'] + `</span>
+                            <span>` + data['onair'][key]['next_program_name'] + `</span>
                         </div>`;
 
                     // 番組情報を書き換え
-                    document.querySelector('#ch' + key + ' .broadcast-content').innerHTML = html;
+                    broadcast_elems[`ch${key}`]['content'].innerHTML = html;
+
+                    // 番組情報を保存
+                    broadcast_elems[`ch${key}`]['wrap'].dataset.starttime = data['onair'][key]['starttime'];
+                    broadcast_elems[`ch${key}`]['wrap'].dataset.endtime = data['onair'][key]['endtime'];
+                    broadcast_elems[`ch${key}`]['wrap'].dataset.title =  data['onair'][key]['program_name'];
                 }
 
                 // プログレスバー
-                var percent = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
-                document.querySelector('#ch' + key + ' .progress').style.width = percent + '%';
-
+                let percentage_channel = ((Math.floor(Date.now() / 1000) - data['onair'][key]['timestamp']) / data['onair'][key]['duration']) * 100;
+                broadcast_elems[`ch${key}`]['progress'].style.width = `${percentage_channel}%`;
             }
 
-            // ストリーム番号ごとに実行
+            // **** ストリームリストの更新 ****
             for (key in data['stream']) {
 
                 var elem = document.getElementsByClassName('stream-view-' + key)[0];
@@ -299,7 +329,7 @@ $(function() {
                 if ((data['stream'][key]['state'] != 'Offline' || key == '1') &&
                         (elem === undefined || elem.getElementsByClassName('stream-title')[0].innerHTML != data['stream'][key]['program_name'])) {
 
-                    // 書き換え用html
+                    // 書き換え用 html
                     var streamview = 
                         `<div class="stream-box">
                             <div class="stream-number-title">Stream</div><div class="stream-number">` + key + `</div>
@@ -345,7 +375,6 @@ $(function() {
                     ).queue(function() {
                         $('.stream-view-' + key).remove();
                     });
-
                 }
             }
 
@@ -355,12 +384,10 @@ $(function() {
         }).fail(function(data, status, error) {
 
             // エラーメッセージ
-            message = 'failed to get epginfo. status: ' + status + '\nerror: ' + error.message;
-            console.error(message);
-
+            console.error(`failed to get epginfo. status: ${status}\nerror: ${error.message}`);
         });
         return status;
-    }()), 10000);
+    }()), 8000);
 
 
     // ***** ストリーム開始 *****

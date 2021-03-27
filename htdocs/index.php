@@ -365,7 +365,8 @@
 			}
 ?>
               <div id="ch<?= str_replace('.', '_', $i); ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
-                    data-channel="<?= $ch_T_channel; ?>" data-name="<?= $value; ?>">
+                    data-channel="<?= $ch_T_channel; ?>" data-name="<?= $value; ?>"
+                    data-starttime="00:00" data-endtime="00:00" data-title="取得中です…">
 
                 <div class="broadcast">
                   <div class="broadcast-img material-icons">tv
@@ -406,7 +407,8 @@
 <?php	foreach ($ch_S as $i => $value): // BSchの数だけ繰り返す ?>
 <?php		$ch_S_channel = 'Ch: '.sprintf('%03d', $i); ?>
               <div id="ch<?= $i; ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
-                    data-channel="<?= $ch_S_channel; ?>" data-name="<?= $value; ?>">
+                    data-channel="<?= $ch_S_channel; ?>" data-name="<?= $value; ?>"
+                    data-starttime="00:00" data-endtime="00:00" data-title="取得中です…">
 
                 <div class="broadcast">
                   <div class="broadcast-img material-icons">tv
@@ -447,7 +449,8 @@
 <?php	foreach ($ch_CS as $i => $value): // CSchの数だけ繰り返す ?>
 <?php		$ch_CS_channel = 'Ch: '.sprintf('%03d', $i); ?>
               <div id="ch<?= $i; ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
-                    data-channel="<?= $ch_CS_channel; ?>" data-name="<?= $value; ?>">
+                    data-channel="<?= $ch_CS_channel; ?>" data-name="<?= $value; ?>"
+                    data-starttime="00:00" data-endtime="00:00" data-title="取得中です…">
 
                 <div class="broadcast">
                   <div class="broadcast-img material-icons">tv
