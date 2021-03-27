@@ -1051,6 +1051,8 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
 @media screen and (max-width: 767px) {
     .dplayer-floating {
         top: 18px !important;
+        width: 190px !important;
+        height: calc(190px / 16 * 9) !important;
     }
 }
 @media (max-width: 500px) {
@@ -2923,11 +2925,14 @@ td {
     display: block;
     width: 95%;
     max-width: 540px;
+    max-height: 95vh;
     padding: 18px 22px;
     border-radius: 5px;
     font-size: 15px;
     background-color: var(--color-white);
     box-sizing: border-box;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .ljicrop-head-box {
