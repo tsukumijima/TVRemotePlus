@@ -8,7 +8,7 @@ $(function() {
     setInterval(clock, 1000);
 
     // 最初に実行
-    if (Cookies.get('twitter')) {
+    if (Cookies.get('tvrp_twitter_settings')) {
         $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
     } else {
         $('#tweet-status').html('<a id="tweet-login" href="/tweet/auth"><i class="fas fa-sign-in-alt"></i>ログイン</a>');
@@ -16,8 +16,8 @@ $(function() {
 
     // Twitterアカウント情報を読み込み
     twitter = {account_name:'ログインしていません', account_id:'', account_icon:'/files/account_default.jpg'};
-    if (Cookies.get('twitter') != undefined) { // Cookieがあれば読み込む
-        twitter = JSON.parse(Cookies.get('twitter'));
+    if (Cookies.get('tvrp_twitter_settings') != undefined) { // Cookieがあれば読み込む
+        twitter = JSON.parse(Cookies.get('tvrp_twitter_settings'));
     }
     $('#tweet-account-icon').attr('src', twitter['account_icon']);
     $('#tweet-account-name').text(twitter['account_name']);
@@ -1426,7 +1426,7 @@ $(function() {
         $('#content-box').show();
         $('#footer').show();
 
-        if (Cookies.get('twitter')) {
+        if (Cookies.get('tvrp_twitter_settings')) {
             $('#tweet-status').html('<a id="tweet-logout" href="javascript:void(0)"><i class="fas fa-sign-out-alt"></i>ログアウト</a>');
         } else {
             $('#tweet-status').html('<a id="tweet-login" href="/tweet/auth"><i class="fas fa-sign-in-alt"></i>ログイン</a>');

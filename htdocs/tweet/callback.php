@@ -8,7 +8,7 @@
 
 	// Twitter認証用セッション名
 	// 視聴数カウントにもセッションを使っていてIDが重複すると面倒な事になるので設定
-	session_name('twitter_session');
+	session_name('tvrp_twitter_session');
 
 	// セッション有効期限
 	ini_set('session.gc_maxlifetime', 7776000); // 3ヶ月
@@ -45,7 +45,7 @@
 			'account_id' => $info->screen_name,
 			'account_icon' => str_replace('_normal', '', $info->profile_image_url_https),
 		), JSON_UNESCAPED_UNICODE);
-		setcookie('twitter', $cookie, time() + 7776000, '/');
+		setcookie('tvrp_twitter_settings', $cookie, time() + 7776000, '/');
 
 		// トップページにリダイレクト
 		if (isset($_GET['stream']) and !empty($_GET['stream'])) {  // ストリーム番号があるか

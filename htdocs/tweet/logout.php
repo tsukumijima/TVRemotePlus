@@ -8,7 +8,7 @@
 
 	// Twitter認証用セッション名
 	// 視聴数カウントにもセッションを使っていてIDが重複すると面倒な事になるので設定
-	session_name('twitter_session');
+	session_name('tvrp_twitter_session');
 
 	// セッション有効期限
 	ini_set('session.gc_maxlifetime', 7776000); // 3ヶ月
@@ -28,7 +28,7 @@
 	}
 
 	// アカウント情報が入ったCookieを削除
-	setcookie('twitter', '', -1, '/');
+	setcookie('tvrp_twitter_settings', '', -1, '/');
 
 	// 最終的に、セッションを破壊する
 	session_destroy();

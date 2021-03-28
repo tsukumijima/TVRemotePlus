@@ -1353,6 +1353,7 @@ td {
 
 #tweet-account-info {
     display: flex;
+    align-items: flex-start;
     flex-direction: column;
     width: 100%;
     margin-left: 15px;
@@ -1360,7 +1361,7 @@ td {
 
 #tweet-account-name {
     display: block;
-    width: 190px;
+    max-width: 190px;
     color: var(--color-text);
     font-weight: bold;
     font-size: 17px;
@@ -1376,7 +1377,7 @@ td {
 
 #tweet-account-id {
     display: block;
-    width: 190px;
+    max-width: 190px;
     color: var(--color-text-darkgray);
     font-size: 15px;
     white-space: nowrap;
@@ -1431,17 +1432,17 @@ td {
 #tweet-title {
     display: block;
     position: relative;
-    width: 30px;
+    width: 40px;
     color: var(--color-tweet);
     font-size: 111%;
     float: left;
-    text-align: center;
+    text-align: left;
     cursor: pointer;
 }
 
 #tweet-status {
     display: block;
-    width: calc(100% - 30px);
+    width: calc(100% - 40px);
     color: var(--color-tweet);
     float: right;
     text-align: right;

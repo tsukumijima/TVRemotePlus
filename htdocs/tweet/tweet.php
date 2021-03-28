@@ -8,7 +8,7 @@
 
 	// Twitter認証用セッション名
 	// 視聴数カウントにもセッションを使っていてIDが重複すると面倒な事になるので設定
-	session_name('twitter_session');
+	session_name('tvrp_twitter_session');
 
 	// セッション有効期限
 	ini_set('session.gc_maxlifetime', 7776000); // 3ヶ月
@@ -31,7 +31,7 @@
 			$_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
 			// CookieからJSONを取得
-			$cookie = json_decode($_COOKIE['twitter'], true);
+			$cookie = json_decode($_COOKIE['tvrp_twitter_settings'], true);
 
 			// 現在のタイムスタンプ
 			$now_tweettime = time();
@@ -74,7 +74,7 @@
 					
 					// ハッシュタグついてるのでタイムスタンプをCookieに記録する
 					$cookie['tweet_latest'] = time();
-					setcookie('twitter', json_encode($cookie, JSON_UNESCAPED_UNICODE), time() + 7776000, '/');
+					setcookie('tvrp_twitter_settings', json_encode($cookie, JSON_UNESCAPED_UNICODE), time() + 7776000, '/');
 
 				} else { 
 					// 指定した秒数空いてないのでハッシュタグを無効化
