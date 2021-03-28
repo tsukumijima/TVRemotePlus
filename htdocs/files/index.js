@@ -354,7 +354,7 @@ $(function() {
         // Cookieに書き込み
         settings['subchannel_show'] = true;
         var json = JSON.stringify(settings);
-        Cookies.set('settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', json, { expires: 365 });
         // リロード
         setTimeout(function(){
             location.reload();
@@ -366,7 +366,7 @@ $(function() {
         // Cookieに書き込み
         settings['subchannel_show'] = false;
         var json = JSON.stringify(settings);
-        Cookies.set('settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', json, { expires: 365 });
         // リロード
         setTimeout(function(){
             location.reload();

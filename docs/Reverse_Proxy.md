@@ -129,7 +129,7 @@ https://example.com/ でアクセスする場合は、`location /tvrp/ {` とそ
             sub_filter 'data-url="/' 'data-url="/tvrp/';
             sub_filter "URL='/'" "URL='/tvrp/'";
             sub_filter "/serviceWorker.js" "/tvrp/serviceWorker.js";
-            sub_filter "Cookies.set('settings', json)" "Cookies.set('settings', json, {path: '/tvrp/'})";
+            sub_filter "Cookies.set('tvrp_settings', json)" "Cookies.set('tvrp_settings', json, {path: '/tvrp/'})";
           
             proxy_cookie_path / /tvrp/;
             proxy_set_header Accept-Encoding "";

@@ -54,7 +54,7 @@ $(function(){
         }
 
         var json = JSON.stringify(settings);
-        Cookies.set('settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', json, { expires: 365 });
         toastr.success('個人設定を保存しました。');
         setTimeout(function(){
             $('.bluebutton').attr('disabled', false);

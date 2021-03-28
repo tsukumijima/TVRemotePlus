@@ -420,7 +420,7 @@ $(function(){
         // Cookieに書き込み
         settings['list_view'] = true;
         var json = JSON.stringify(settings);
-        Cookies.set('settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', json, { expires: 365 });
         // 再表示
         sortFileinfo('fileinfo', 1, 'search');
         setTimeout(function(){
@@ -437,7 +437,7 @@ $(function(){
         // Cookieに書き込み
         settings['list_view'] = false;
         var json = JSON.stringify(settings);
-        Cookies.set('settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', json, { expires: 365 });
         // 再表示
         sortFileinfo('fileinfo', 1, 'search');
         setTimeout(function(){

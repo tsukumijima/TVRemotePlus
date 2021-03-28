@@ -275,10 +275,10 @@
 	function isSettingsItem($item, $match = null, $default = false){
 
 		// Cookieが存在する
-		if (isset($_COOKIE['settings'])){
+		if (isset($_COOKIE['tvrp_settings'])){
 
 			// 設定内容を読み込み
-			$settings = json_decode($_COOKIE['settings'], true);
+			$settings = json_decode($_COOKIE['tvrp_settings'], true);
 
 			if (isset($settings[$item])){
 				if ($settings[$item] === $match){

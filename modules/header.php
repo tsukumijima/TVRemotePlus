@@ -109,11 +109,11 @@
         onclick_stream: false,
         player_floating: true,
     };
-    if (Cookies.get('settings') === undefined) {
+    if (Cookies.get('tvrp_settings') === undefined) {
         var json = JSON.stringify(settings);
-        Cookies.set('settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', json, { expires: 365 });
     } else {
-        settings = JSON.parse(Cookies.get('settings'));
+        settings = JSON.parse(Cookies.get('tvrp_settings'));
     }
     if (settings['dark_theme']) {
         document.documentElement.classList.add('dark-theme');
