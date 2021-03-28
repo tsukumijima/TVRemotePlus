@@ -122,6 +122,7 @@
     { "JikkyoID": 4,  "NetworkID": 15,  "ServiceID": "0x5810",  "Area": "青森",  "Channel": "RAB青森放送"}, 
     { "JikkyoID": 6,  "NetworkID": 15,  "ServiceID": "0x5818",  "Area": "青森",  "Channel": "ATV青森テレビ"}, 
     { "JikkyoID": 5,  "NetworkID": 15,  "ServiceID": "0x5820",  "Area": "青森",  "Channel": "青森朝日放送"}, 
+    { "JikkyoID": 9,  "NetworkID": 15,  "ServiceID": "0x5C38",  "Area": "東京",  "Channel": "TOKYO MX"}, 
     { "JikkyoID": 9,  "NetworkID": 15,  "ServiceID": "0x5C38",  "Area": "東京",  "Channel": "TOKYO MX1"}, 
     { "JikkyoID": 9,  "NetworkID": 15,  "ServiceID": "0x5C3A",  "Area": "東京",  "Channel": "TOKYO MX2"}, 
     { "JikkyoID": 11,  "NetworkID": 15,  "ServiceID": "0x6038",  "Area": "神奈川",  "Channel": "tvk"}, 
