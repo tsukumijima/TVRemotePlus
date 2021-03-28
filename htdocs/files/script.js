@@ -720,7 +720,7 @@ $(function() {
                         dp.focus = false;
                         if (document.querySelectorAll('.tweet-capture').length > 0) { // キャプチャ画像があれば
 
-                            // コメント入力欄のフォーカスを外す
+                            // コメント入力フォームのフォーカスを外す
                             dp.comment.hide();
 
                             // 他のフォーカスがあれば削除
@@ -733,21 +733,26 @@ $(function() {
                         }
                     }
                 }
-
             }
         }
 
-        // E キー
-        if (document.activeElement.id != 'tweet' && document.activeElement.className != 'dplayer-comment-input' && event.key.toUpperCase() == 'E') {
-            event.preventDefault();
-            $('#fullscreen').click();
-        }
+        // ツイートフォーム・ハッシュタグフォーム・コメント入力フォームいずれにもフォーカスしていない
+        if (document.activeElement.id != 'tweet' &&
+            document.activeElement.id != 'tweet-hashtag' &&
+            document.activeElement.className != 'dplayer-comment-input') {
 
-        // ? キー
-        if (document.activeElement.id != 'tweet' && document.activeElement.className != 'dplayer-comment-input' && event.key == '?') {
-            event.preventDefault();
-            $('#hotkey-box').toggleClass('open');
-            $('#nav-close').toggleClass('open');
+            // E キー
+            if (event.key.toUpperCase() == 'E') {
+                event.preventDefault();
+                $('#fullscreen').click();
+            }
+
+            // ? キー
+            if (event.key == '?') {
+                event.preventDefault();
+                $('#hotkey-box').toggleClass('open');
+                $('#nav-close').toggleClass('open');
+            }
         }
 
         // Alt (or option) キー
@@ -828,7 +833,7 @@ $(function() {
                     // イベントをキャンセル
                     event.preventDefault();
 
-                    // コメント入力欄のフォーカスを外す
+                    // コメント入力フォームのフォーカスを外す
                     dp.comment.hide();
 
                     // focus_elem があれば
@@ -850,7 +855,7 @@ $(function() {
                     // イベントをキャンセル
                     event.preventDefault();
 
-                    // コメント入力欄のフォーカスを外す
+                    // コメント入力フォームのフォーカスを外す
                     dp.comment.hide();
 
                     // focus_elem があれば
@@ -911,7 +916,7 @@ $(function() {
                     // イベントをキャンセル
                     event.preventDefault();
 
-                    // コメント入力欄のフォーカスを外す
+                    // コメント入力フォームのフォーカスを外す
                     dp.comment.hide();
 
                     // focus_elem があれば
