@@ -16,7 +16,7 @@ Aviutl 1.00 以降
 VCEが載ったハードウェア
   AMD製 GPU Radeon HD 7xxx以降
   AMD製 APU Trinity世代(第2世代)以降
-AMD Radeon Software Adrenalin Edition 20.2.1 以降
+AMD Radeon Software Adrenalin Edition 20.11.2 以降
 
 
 【VCEEnc 使用にあたっての注意事項】
@@ -169,7 +169,6 @@ Radeon R7 360
 8GB RAM
 CatalystControlCenter 15.7
 
-
 【検証環境 2016.06】
 Win7 x64
 Core i7 4770K + Asrock Z97E-ITX/ac
@@ -194,10 +193,61 @@ Ryzen3 3200G + Asrock AB350 Pro4
 Radeon RX 460
 16GB RAM
 
+【検証環境 2021.01】
+Win10 x64
+Ryzen9 5950X + Gigabyte B550 AOURUS Master
+Radeon RX5500XT
+Radeon RX460
+32GB RAM
+
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【どうでもいいメモ】
+2021.02.18 (6.09)
+・AMF SDK 1.4.18に対応。これに伴い、AMD driver 20.11.2以降が必要。
+・VP9 HWデコードのサポートを追加。
+・AvisynthのUnicode対応に伴い、プロセスの文字コードがUTF-8になっているのを
+  OSのデフォルトの文字コード(基本的にShiftJIS)に戻すオプションを追加。(--process-codepage os)
+・AvisynthのUnicode対応を追加。
+・Windows 10のlong path supportの追加。
+・色空間変換を行うフィルタを追加。(--vpp-colorspace)
+・細線化フィルタを追加。(--vpp-warpsharp)
+・--vpp-subburnで埋め込みフォントを使用可能なように。
+・--vpp-subburnでフォントの存在するフォルダを指定可能なように。
+・--audio-source / --sub-source でmetadataを指定可能なよう拡張。
+・--ssim, --psnrの10bit深度対応を追加。
+・timecodeの出力を追加。(--timecode)
+・--check-featureで10bit深度エンコードのサポートの有無を表示するように。
+・--check-featureでHWデコーダの情報を表示するように。
+・マルチGPU環境でGPUの自動選択をする際に、10bit深度エンコードのサポートの有無をチェックするように。
+・マルチGPU環境でGPUの自動選択をする際に、--avhw使用時にはHWデコーダの有無をチェックするように。
+
+2021.01.27 (6.08)
+・RX5xxx以降での10bit深度のエンコードに対応。(--output-depth 10)
+・--vpp-smoothがRX5xxxで正常に動作しなかったのを修正。
+・timecodeの出力を追加。(--timecode)
+・言語による音声や字幕の選択に対応。
+・ビット深度を下げるときの丸め方法を改善。
+・パフォーマンスカウンター集計を改善。
+・--vpp-tweakのsaturation,hueを指定した場合に異常終了してしまうのを修正。
+・--ssim計算時にエラーで異常終了する場合があったのを修正。
+・NVEncと同様に--qualityを--presetに変更。
+
+2020.11.23 (6.07)
+[VCEEncC]
+・VUIを設定すると出力が異常になる場合があったのを修正。
+・--chapterが効かなかったのを修正。
+
+2020.11.03 (6.06)
+[VCEEncC]
+・ノイズを除去するフィルタの追加。(--vpp-smooth)
+・字幕トラックを焼きこむフィルタを追加。( --vpp-subburn )
+・YUV422読み込みのサポートを追加。
+・HEVCのlowlatencyが正しく設定されないのを修正。
+・H.264のlowlatencyモードが、指定していないのに動作してしまうのを修正。
+・異常終了が発生した場合のフリーズを回避。
+
 2020.09.23 (6.05)
 [VCEEncC]
 ・ログメッセージでlowlatencyが無効の場合もいつもlowlatencyと表示されていたのを修正。
