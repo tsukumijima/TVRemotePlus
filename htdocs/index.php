@@ -106,8 +106,8 @@
             // aribb24.js
             aribb24: {
                 forceStrokeColor: 'black',
-                normalFont: '"Windows TV MaruGothic","Yu Gothic",sans-serif',
-                gaijiFont: '"Windows TV MaruGothic","Yu Gothic",sans-serif',
+                normalFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
+                gaijiFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
                 drcsReplacement: true
             }
         },
