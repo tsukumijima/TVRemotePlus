@@ -447,14 +447,14 @@
               <div class="select-wrap">
                 <select id="comment_list_performance" required>
 <?php	if (isSettingsItem('comment_list_performance', 'normal') !== false){ ?>
-                  <option value="normal" selected>標準</option>
                   <option value="light">軽量</option>
+                  <option value="normal" selected>標準</option>
 <?php	} else if (isSettingsItem('comment_list_performance', 'light') !== false){ ?>
-                  <option value="normal">標準</option>
                   <option value="light" selected>軽量</option>
+                  <option value="normal">標準</option>
 <?php	} else { ?>
-                  <option value="normal" selected>標準</option>
-                  <option value="light">軽量</option>
+                  <option value="light" selected>軽量</option>
+                  <option value="normal">標準</option>
 <?php	} // 括弧終了 ?>
                 </select>
               </div>
