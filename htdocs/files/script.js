@@ -228,10 +228,10 @@ $(function() {
                     // ON Air
                     epginfo_state.textContent = '● ON Air';
                     epginfo_state.style.color = '#007cff';
-
-                    // 実況勢い
-                    epginfo_ikioi.textContent = `実況勢い: ${data['stream'][stream]['ikioi']}`;
                 }
+
+                // 実況勢いは変化に関わらず常に更新
+                epginfo_ikioi.textContent = `実況勢い: ${data['stream'][stream]['ikioi']}`;
 
             } else if (data['stream'][stream]['state'] == 'Offline') {
 
@@ -266,7 +266,7 @@ $(function() {
                     broadcast_elems[`ch${key}`]['wrap'].dataset.title != data['onair'][key]['program_name']) {
 
                     // 書き換え用html
-                    var html = 
+                    let html = 
                         `<div class="broadcast-channel-box">
                             <div class="broadcast-channel">` + broadcast_elems[`ch${key}`]['wrap'].dataset.channel + `</div>
                             <div class="broadcast-name-box">
@@ -294,6 +294,11 @@ $(function() {
                     broadcast_elems[`ch${key}`]['wrap'].dataset.starttime = data['onair'][key]['starttime'];
                     broadcast_elems[`ch${key}`]['wrap'].dataset.endtime = data['onair'][key]['endtime'];
                     broadcast_elems[`ch${key}`]['wrap'].dataset.title =  data['onair'][key]['program_name'];
+
+                } else {
+
+                    // 実況勢いは変化に関わらず常に更新
+                    broadcast_elems[`ch${key}`]['wrap'].querySelector('.broadcast-ikioi').textContent = data['onair'][key]['ikioi'];
                 }
 
                 // プログレスバー

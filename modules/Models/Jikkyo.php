@@ -549,51 +549,63 @@ class Jikkyo {
         // jikkyo_ikioi.json を更新
         $update = function($table, $jikkyo_ikioi_file): void {
 
-            $chikuran_url = 'http://www.chikuwachan.com/live/index.cgi?search=%E3%83%8B%E3%82%B3%E3%83%8B%E3%82%B3%E5%AE%9F%E6%B3%81';
+            $namami_url = 'http://jk.from.tv/api/v2_app/getchannels';
 
-            // ちくランの検索結果から実況勢いを取得
+            // namami から実況勢いを取得
             $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $chikuran_url);
+            curl_setopt($curl, CURLOPT_URL, $namami_url);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // これがないと HTTPS で接続できない
             curl_setopt($curl, CURLOPT_USERAGENT, Utils::getUserAgent()); // ユーザーエージェントを送信
             $response = curl_exec($curl);  // リクエストを実行
+            $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
             curl_close($curl);
 
-            // HTML を解析
-            $document = new Document($response);
+            // 成功時のみ
+            if ($status_code === 200) {
 
-            // 配列を用意
-            $jikkyo_ikioi = [];
+                // HTML を解析
+                $document = new SimpleXMLElement($response);
 
-            // 実況チャンネルごとに勢いを取得
-            foreach ($table as $nicojikkyo_id => $nicochannel_id) {
+                // 配列を用意
+                $jikkyo_ikioi = [];
 
-                // 実況勢いを取得
-                $jikkyo_ikioi_elem = $document->querySelector("div#comm_{$nicochannel_id} div.counts div.active");
+                // 実況チャンネルごとに勢いを取得
+                foreach ($table as $nicojikkyo_id => $nicochannel_id) {
 
-                // 実況勢いを配列に追加
-                if ($jikkyo_ikioi_elem !== null) {
-                    $jikkyo_ikioi[$nicojikkyo_id] = strval($jikkyo_ikioi_elem->textContent);
-                } else {
-                    // 実況勢いはないけど、.box_active は存在する
-                    if ($document->querySelector("div#comm_{$nicochannel_id} div.counts div.box_active") !== null) {
-                        $jikkyo_ikioi[$nicojikkyo_id] = '0';  // 常に 0 に設定
+                    // 実況勢いを取得
+                    $jikkyo_ikioi_elem = $document->xpath("/channels//video[text()=\"{$nicojikkyo_id}\"]/..")[0];
+
+                    if ($jikkyo_ikioi_elem !== null) {
+
+                        // 実況勢いを配列に追加
+                        // プロパティは SimpleXMLObject なので、文字列に変換してあげる必要がある
+                        $jikkyo_ikioi[$nicojikkyo_id] = strval($jikkyo_ikioi_elem->thread->force);
+
                     } else {
-                        $jikkyo_ikioi[$nicojikkyo_id] = '-';  // その実況チャンネルの勢いが取得できなかった
+
+                        // その実況チャンネルの勢いが取得できなかった（存在しないチャンネルなど）
+                        $jikkyo_ikioi[$nicojikkyo_id] = '-';
                     }
                 }
+
+            } else {
+
+                // 取得失敗
+                foreach ($table as $nicojikkyo_id => $nicochannel_id) {
+                    $jikkyo_ikioi[$nicojikkyo_id] = "取得失敗 ({$status_code} Error)";
+                }
             }
-            
+
             // jikkyo_ikioi.json に保存
             file_put_contents($jikkyo_ikioi_file, json_encode($jikkyo_ikioi, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
         };
 
-        // jikkyo_ikioi.json が存在しない or 更新されてから 1 分以上経っている
+        // jikkyo_ikioi.json が存在しない or 更新されてから 20 秒以上経っている
         clearstatcache();  // キャッシュを削除（重要）
         if ((file_exists($this->jikkyo_ikioi_file) === false) or
-            (time() - filemtime($this->jikkyo_ikioi_file) >= 60)) {
+            (time() - filemtime($this->jikkyo_ikioi_file) >= 20)) {
 
             // jikkyo_ikioi.json を更新
             $update($this->table, $this->jikkyo_ikioi_file);
