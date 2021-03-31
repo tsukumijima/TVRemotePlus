@@ -152,7 +152,9 @@ $vceencc_path =  $base_dir.'bin/VCEEncC/'.$vceencc_exe;
 require ($base_dir.'/config.php');
 
 // EDCB_http_url の書き換え (互換用)
-$EDCB_http_url = str_replace('api/', '', rtrim($EDCB_http_url, '/').'/'); // 常に末尾にスラッシュをつける
+if (!empty($EDCB_http_url)) {
+	$EDCB_http_url = str_replace('api/', '', rtrim($EDCB_http_url, '/').'/'); // 常に末尾にスラッシュをつける
+}
 
 // $reverse_proxy_url が空でないかを確かめるため
 // 敢えて設定を読み込んだ後に処理を行う

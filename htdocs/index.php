@@ -332,7 +332,7 @@
 
 		if (empty($EDCB_http_url) or !@file_get_contents($EDCB_http_url.'api/EnumEventInfo', false, $ssl_context)): // EMWUI ?>
         <div class="error">
-          EEDCB Material WebUI のある URL が正しく設定されていないため、番組情報が表示できません。<br>
+          EDCB Material WebUI のある URL が正しく設定されていないため、番組情報が表示できません。<br>
           設定ページの「EDCB Material WebUI (EMWUI) のある URL」が正しく設定されているかどうか、確認してください。<br>
         </div>
 <?php	endif; ?>

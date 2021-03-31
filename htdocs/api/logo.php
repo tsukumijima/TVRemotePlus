@@ -18,21 +18,29 @@
 		header('Cache-Control: public, max-age=2592000');  // 30日間
 		header('Content-Type: image/bmp');
 
-		// 局ロゴの URL
-		$logo_url = $EDCB_http_url.'api/logo?onid='.$logo_onid.'&sid='.$logo_sid;
-		$logo_url_fallback = $EDCB_http_url.'EMWUI/logo.lua?onid='.$logo_onid.'&sid='.$logo_sid;
+		if (!empty($EDCB_http_url)) {
 
-		// 局ロゴを取得
-		$logo = @file_get_contents($logo_url, false, $ssl_context);
+			// 局ロゴの URL
+			$logo_url = $EDCB_http_url.'api/logo?onid='.$logo_onid.'&sid='.$logo_sid;
+			$logo_url_fallback = $EDCB_http_url.'EMWUI/logo.lua?onid='.$logo_onid.'&sid='.$logo_sid;
 
-		// 新 API が 404 だったらフォールバック
-		if (isset($http_response_header[0]) and strpos($http_response_header[0], '200') === false) {
-			$logo = @file_get_contents($logo_url_fallback, false, $ssl_context);
+			// 局ロゴを取得
+			$logo = @file_get_contents($logo_url, false, $ssl_context);
+
+			// 新 API が 404 だったらフォールバック
+			if (isset($http_response_header[0]) and strpos($http_response_header[0], '200') === false) {
+				$logo = @file_get_contents($logo_url_fallback, false, $ssl_context);
+			}
+
+			// 局ロゴを出力
+			echo $logo;
+
+		} else {
+			// 空文字を出力する
+			// 画像が空だと background-image は描画されない
+			echo '';
 		}
 
-		// 局ロゴを出力
-		echo $logo;
-		
 		exit();
 
 	} else {
@@ -42,5 +50,4 @@
 		readfile('../files/thumb_default.jpg');
 		
 		exit();
-
 	}

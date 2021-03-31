@@ -54,8 +54,8 @@
 
 		if (!empty($EDCB_http_url)){
 		
-			// 番組表API読み込み
-			$epg = simplexml_load_file($EDCB_http_url.'api/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
+			// 番組表 API
+			@$epg = simplexml_load_file($EDCB_http_url.'api/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
 
 			// チャンネル名
 			if (isset($epg->items->eventinfo[0]->service_name)){
