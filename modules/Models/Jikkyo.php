@@ -599,7 +599,7 @@ class Jikkyo {
             }
 
             // jikkyo_ikioi.json に保存
-            file_put_contents($jikkyo_ikioi_file, json_encode($jikkyo_ikioi, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+            file_put_contents($jikkyo_ikioi_file, json_encode($jikkyo_ikioi, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
         };
 
         // jikkyo_ikioi.json が存在しない or 更新されてから 20 秒以上経っている
@@ -612,7 +612,7 @@ class Jikkyo {
         }
 
         // jikkyo_ikioi.json から実況勢いを取得
-        $jikkyo_ikioi = json_decode(file_get_contents($this->jikkyo_ikioi_file), true);
+        $jikkyo_ikioi = json_decode(file_get_contents_lock_sh($this->jikkyo_ikioi_file), true);
 
         // 指定された実況チャンネルのものを返す
         if (isset($jikkyo_ikioi[$nicojikkyo_id])) {

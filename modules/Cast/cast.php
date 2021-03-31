@@ -40,9 +40,9 @@ $cc->DMP->SetVolume(0.7);
 $cc->DMP->UnMute();
 
 // 通知
-$cast = json_decode(file_get_contents(dirname(__FILE__).'/cast.json'), true);
+$cast = json_decode(file_get_contents_lock_sh(dirname(__FILE__).'/cast.json'), true);
 $cast['status'] = 'play';
-file_put_contents(dirname(__FILE__).'/cast.json', json_encode($cast, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+file_put_contents(dirname(__FILE__).'/cast.json', json_encode($cast, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 echo '  Chromecast Play.'."\n\n";
 
@@ -55,7 +55,7 @@ while(true){
 	} else {
 		$cmd_old = '';
 	}
-	$cmd = json_decode(file_get_contents(dirname(__FILE__).'/cast.json'), true);
+	$cmd = json_decode(file_get_contents_lock_sh(dirname(__FILE__).'/cast.json'), true);
 
 	if ($cmd != $cmd_old){
 

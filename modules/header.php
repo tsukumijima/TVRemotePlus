@@ -16,7 +16,7 @@
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// iniファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
+	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 
 	$backtrace = debug_backtrace();
 

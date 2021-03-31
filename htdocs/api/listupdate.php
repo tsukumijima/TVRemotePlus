@@ -9,17 +9,18 @@
 	set_time_limit(0);
 
 	// jsonからデコードして代入
-	if (file_exists($infofile)){
-		$TSfile = json_decode(file_get_contents($infofile), true);
+	$TSfile = file_get_contents_lock_sh($infofile);
+	if ($TSfile !== false) {
+		$TSfile = json_decode($TSfile, true);
 	} else {
-		$TSfile = array();
+		$TSfile = array('data' => array());
 	}
 
 	// リストリセット
 	if (isset($_GET['list_reset'])){
 
-		// jsonを削除
-		@unlink($infofile);
+		// jsonを空にする
+		file_put_contents($infofile, json_encode(array('data' => array()), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 		// ロックファイルを削除
 		@unlink($infofile.'.lock');
 
@@ -37,8 +38,8 @@
 	// 再生履歴を削除
 	if (isset($_GET['history_reset'])){
 
-		// jsonを削除
-		@unlink($historyfile);
+		// jsonを空にする
+		file_put_contents($historyfile, json_encode(array('data' => array()), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 		$json = array(
 			'api' => 'listupdate',
@@ -371,7 +372,7 @@
 		}
 
 		// ファイルに保存
-		file_put_contents($infofile, json_encode($TSfile, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+		file_put_contents($infofile, json_encode($TSfile, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 		// lockファイルを削除
 		@unlink($infofile.'.lock');

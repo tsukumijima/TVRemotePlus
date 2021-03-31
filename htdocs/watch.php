@@ -219,10 +219,11 @@
 		$search = array();
 	}
   
-	if (file_exists($infofile)){
-		$TSfile = json_decode(file_get_contents($infofile), true);
+	$TSfile = file_get_contents_lock_sh($infofile);
+	if ($TSfile !== false) {
+		$TSfile = json_decode($TSfile, true);
 	} else {
-		$TSfile['data'] = array();
+		$TSfile = array('data' => array());
 	}
 
 	// ファイルリストに記録されたファイル数と異なる場合

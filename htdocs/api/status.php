@@ -8,7 +8,7 @@
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
+	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 
 	// セッションのファイル数を返す関数
 	function getActiveCount() {

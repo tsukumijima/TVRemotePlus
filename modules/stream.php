@@ -19,7 +19,7 @@
 			= initBonChannel($BonDriver_dir);
 
 		// 設定読み込み
-		$ini = json_decode(file_get_contents($inifile), true);
+		$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 
 		// コマンドラインからのストリーム開始・停止はおまけ機能です
 		// ファイル再生機能は今の所ついていません
@@ -125,7 +125,7 @@
 			}
 
 			// ファイル書き込み
-			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 			echo ' ---------------------------------------------------'."\n";
 			echo '   Stream started.'."\n";
@@ -173,7 +173,7 @@
 			}
 
 			// ファイル書き込み
-			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 			echo ' ---------------------------------------------------'."\n";
 			echo '   Stream stoped.'."\n";
@@ -196,7 +196,7 @@
 		global $inifile, $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $tstaskcentreex_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window, $TSTask_window;
 
 		// 設定ファイル読み込み
-		$settings = json_decode(file_get_contents($inifile), true);
+		$settings = json_decode(file_get_contents_lock_sh($inifile), true);
 
 		// 以前の state が ONAir (TSTask を再利用できる)
 		if ($settings[strval($stream)]['state'] === 'ONAir') {
@@ -859,7 +859,7 @@
 			$stream_port = $udp_port + intval($stream);
 
 			// 録画ファイルのファイルパス
-			$filepath = @json_decode(file_get_contents($inifile), true)[$stream]['filepath'];
+			$filepath = @json_decode(file_get_contents_lock_sh($inifile), true)[$stream]['filepath'];
 			if ($filepath === null) $filepath = '';
 
 			// 現在のプロセスのコマンドライン引数とプロセスIDを取得する

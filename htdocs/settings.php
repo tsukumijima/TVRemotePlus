@@ -37,7 +37,7 @@
 		}
 
 		// 設定ファイル読み込み
-		$ini = json_decode(file_get_contents($inifile), true);
+		$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 
 		// POSTデータ読み込み
 		// もし存在するなら$iniの連想配列に格納
@@ -68,14 +68,16 @@
 				else $ini[$stream]['quality'] = $subtitle_default;
 
 				// jsonからデコードして代入
-				if (file_exists($infofile)){
-					$TSfile = json_decode(file_get_contents($infofile), true);
+				$TSfile = file_get_contents_lock_sh($infofile);
+				if ($TSfile !== false) {
+					$TSfile = json_decode($TSfile, true);
 				} else {
-					$TSfile = array();
+					$TSfile = array('data' => array());
 				}
 
-				if (file_exists($historyfile)){
-					$history = json_decode(file_get_contents($historyfile), true);
+				$history = file_get_contents_lock_sh($historyfile);
+				if ($history !== false) {
+					$history = json_decode($history, true);
 				} else {
 					$history = array(
 						'data' => array()
@@ -103,7 +105,7 @@
 				}
 
 				// 再生履歴をファイルに保存
-				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+				file_put_contents($historyfile, json_encode($history, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 				// MP4・MKV(progressive)は除外
 				if (!(($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv') and $ini[$stream]['encoder'] == 'Progressive')){
@@ -214,11 +216,32 @@
 				}
 			}
 
-			// 昇順にソート
-			ksort($ini);
-
 			// iniファイル書き込み
-			file_put_contents($inifile, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+			$fp = fopen($inifile, 'c+');
+			if ($fp) {
+				if (flock($fp, LOCK_EX)) {
+					// 全てのストリームを終了、でなければ
+					if ($_POST['state'] != 'Offline' || !isset($_POST['allstop'])) {
+						$merged_ini = json_decode(stream_get_contents($fp), true);
+						if (isset($merged_ini) && is_array($merged_ini)) {
+							// 対象ストリームの情報だけ更新する
+							if (isset($ini[$stream])) {
+								$merged_ini[$stream] = $ini[$stream];
+							} else {
+								unset($merged_ini[$stream]);
+							}
+							$ini = $merged_ini;
+						}
+					}
+					// 昇順にソート
+					ksort($ini);
+
+					ftruncate($fp, 0);
+					rewind($fp);
+					fwrite($fp, json_encode($ini, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+				}
+				fclose($fp);
+			}
 
 			// リダイレクトが有効なら
 			if ($setting_redirect == 'true'){

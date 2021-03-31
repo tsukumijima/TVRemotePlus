@@ -8,7 +8,7 @@
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
+	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 
 	// 動画を出力する関数
 	// https://blog.logicky.com/2019/05/29/151209?utm_source=feed

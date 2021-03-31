@@ -40,6 +40,19 @@
 		return false;
 	}
 
+	// 共有ロックでファイルの内容を読み込む
+	function file_get_contents_lock_sh($path) {
+		$s = false;
+		$fp = @fopen($path, 'r');
+		if ($fp) {
+			if (flock($fp, LOCK_SH)) {
+				$s = stream_get_contents($fp);
+			}
+			fclose($fp);
+		}
+		return $s;
+	}
+
 	// Windows用コマンド実行関数
 	// proc_open を用いることで非同期でも実行できるようにする
 	function win_exec($cmd, $log = null, $errorlog = null){
@@ -127,9 +140,16 @@
 		// basic認証有効
 		if ($basicauth == 'true'){
 
-			// .htpasswd ファイル作成
-			$htpasswd_conf = $basicauth_user.':'.password_hash($basicauth_password, PASSWORD_BCRYPT);
-			file_put_contents($htpasswd, $htpasswd_conf);
+			// 更新が必要なら
+			$htpasswd_conf = @file_get_contents($htpasswd);
+			if ($htpasswd_conf === false ||
+			    strncmp($htpasswd_conf, $basicauth_user.':', strlen($basicauth_user) + 1) !== 0 ||
+			    !password_verify($basicauth_password, substr($htpasswd_conf, strlen($basicauth_user) + 1))) {
+
+				// .htpasswd ファイル作成
+				$htpasswd_conf = $basicauth_user.':'.password_hash($basicauth_password, PASSWORD_BCRYPT);
+				file_put_contents($htpasswd, $htpasswd_conf);
+			}
 
 			// .htaccess 書き換え
 			$htaccess_conf = file_get_contents($htaccess);
