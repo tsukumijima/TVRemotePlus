@@ -2,9 +2,13 @@
 
 // サムネイルが404ならデフォルト画像を返すようにする
 if (strpos($_SERVER['REQUEST_URI'], '/files/thumb/') !== false){
-  http_response_code(200);
-	header('Content-Type: image/jpg');
-	readfile('../thumb_default.jpg');	
+	$name = '../thumb_default.jpg';
+	if (is_file($name)) {
+		http_response_code(200);
+		header('Content-Type: image/jpeg');
+		readfile($name);
+		exit;
+	}
 }
 
 // 通常のなら404ページを表示
