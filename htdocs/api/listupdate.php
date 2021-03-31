@@ -125,10 +125,20 @@
 
 		// ファイルを四階層まで検索する
 		// MP4・MKVファイルも検索する
-		$search = array_merge(glob($TSfile_dir.'/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE),
-							glob($TSfile_dir.'/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE),
-							glob($TSfile_dir.'/*/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE),
-							glob($TSfile_dir.'/*/*/*/*{.ts,.mts,.m2t,.m2ts,.mp4,.mkv}', GLOB_BRACE));
+		$search_extensions = array('ts', 'mts', 'm2t', 'm2ts', 'mp4', 'mkv');
+		$search = @scandir_and_match_files($TSfile_dir, '/.\\.('.implode('|', $search_extensions).')$/i', 4);
+		if ($search === false) {
+			$search = array();
+		}
+
+		// 拡張子順にソート
+		usort($search, function ($a, $b) use ($search_extensions) {
+			$cmp = array_search(strtolower(substr($a, strrpos($a, '.') + 1)), $search_extensions, true) -
+			       array_search(strtolower(substr($b, strrpos($b, '.') + 1)), $search_extensions, true);
+			return $cmp !== 0 ? $cmp : strcmp($a, $b);
+		});
+
+		$TSfile['data'] = array();
 
 		foreach ($search as $key => $value) {
 			
@@ -138,18 +148,22 @@
 				  $ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
 			// 録画ファイル保存フォルダからのパスを含めたファイル名
-			$TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
+			$TSfile['data'][$key]['file'] = '/'.$value;
 			// Pathinfo
-			$TSfile['data'][$key]['pathinfo'] = pathinfo($value);
+			$TSfile['data'][$key]['pathinfo'] = pathinfo($TSfile_dir.'/'.$value);
 			// 拡張子なしファイル名を暫定でタイトルにしておく
 			$TSfile['data'][$key]['title'] = decorateMark(str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']));
 			// タイトル(HTML抜き)
 			$TSfile['data'][$key]['title_raw'] = str_replace('　', ' ', $TSfile['data'][$key]['pathinfo']['filename']);
 			// ファイルの更新日時(Unix時間)
-			$TSfile['data'][$key]['update'] = filemtime($value);
+			$TSfile['data'][$key]['update'] = filemtime($TSfile_dir.'/'.$value);
+
+			// dirnameは削除しておく(セキュリティ上の問題)
+			$pathinfo_dirname = $TSfile['data'][$key]['pathinfo']['dirname'];
+			unset($TSfile['data'][$key]['pathinfo']['dirname']);
 
 			// ファイル名のmd5
-			$md5 = md5($value);
+			$md5 = md5($TSfile_dir.'/'.$value);
 
 			// サムネイルが存在するなら
 			if (file_exists($base_dir.'htdocs/files/thumb/'.$md5.'.jpg')){
@@ -171,7 +185,7 @@
 				$TSfile['data'][$key]['thumb'] = 'thumb_default.jpg'; // サムネイル画像のパス
 
 				// ffmpegでサムネイルを生成
-				$ffmpeg_cmd = '"'.$ffmpeg_path.'" -y -ss 72 -i "'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
+				$ffmpeg_cmd = '"'.$ffmpeg_path.'" -y -ss 72 -i "'.$TSfile_dir.'/'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
 				exec($ffmpeg_cmd, $ffmpeg_result, $ffmpeg_return);
 
 				// 生成成功
@@ -216,7 +230,7 @@
 				$TSfile['data'][$key] = $TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']];
 
 				// ファイルパスがTSのものに上書きされてしまうのでここで戻しておく
-				$TSfile['data'][$key]['file'] = str_replace($TSfile_dir, '', $value);
+				$TSfile['data'][$key]['file'] = '/'.$value;
 
 				// 拡張子も.tsとして上書きされてしまうのでこれも戻しておく（ついでに小文字化）
 				$TSfile['data'][$key]['pathinfo']['extension'] = strtolower($extension);
@@ -229,7 +243,7 @@
 			} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4' and $TSfile['data'][$key]['pathinfo']['extension'] != 'mkv'){
 
 				// rplsinfoでファイル情報を取得
-				$rplsinfo_cmd = '"'.$rplsinfo_path.'" -C -dtpcbieg -l 10 "'.$value.'" 2>&1';
+				$rplsinfo_cmd = '"'.$rplsinfo_path.'" -C -dtpcbieg -l 10 "'.$TSfile_dir.'/'.$value.'" 2>&1';
 				exec($rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return);
 
 				// 取得成功
@@ -276,12 +290,12 @@
 				if (!empty($TSinfo_dir)){
 
 					$program_file = $TSinfo_dir.'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
-					$program_file_ = str_replace('\\', '/', $TSfile['data'][$key]['pathinfo']['dirname']).'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
+					$program_file_ = str_replace('\\', '/', $pathinfo_dirname).'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
 
 				// 録画情報フォルダが空（録画ファイルと同じフォルダに設定）
 				} else {
 
-					$program_file = str_replace('\\', '/', $TSfile['data'][$key]['pathinfo']['dirname']).'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
+					$program_file = str_replace('\\', '/', $pathinfo_dirname).'/'.$TSfile['data'][$key]['pathinfo']['filename'].'.ts.program.txt';
 					$program_file_ = $program_file;
 				}
 
@@ -313,7 +327,7 @@
 				} else {
 				
 					// コマンドを実行
-					$ffprobe_cmd = '"'.$ffprobe_path.'" -i "'.$value.'" -loglevel quiet -show_streams -print_format json';
+					$ffprobe_cmd = '"'.$ffprobe_path.'" -i "'.$TSfile_dir.'/'.$value.'" -loglevel quiet -show_streams -print_format json';
 					exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
 					if ($ffprobe_return === 0){
@@ -337,15 +351,23 @@
 					}
 				}
 			}
-			
-			// dirnameは削除しておく(セキュリティ上の問題)
-			unset($TSfile['data'][$key]['pathinfo']['dirname']);
 
 			// 無駄な空白や改行を削除
 			if (isset($TSfile['data'][$key]['title'])) $TSfile['data'][$key]['title'] = trim($TSfile['data'][$key]['title']);
 			if (isset($TSfile['data'][$key]['title_raw'])) $TSfile['data'][$key]['title_raw'] = trim($TSfile['data'][$key]['title_raw']);
 			if (isset($TSfile['data'][$key]['info'])) $TSfile['data'][$key]['info'] = trim($TSfile['data'][$key]['info']);
 
+		}
+
+		// もう存在しないファイルの情報を削除
+		if (isset($TSfile['info'])) {
+			$swept_info = array();
+			foreach ($TSfile['data'] as $value) {
+				if (isset($TSfile['info'][$value['pathinfo']['filename']])) {
+					$swept_info[$value['pathinfo']['filename']] = $TSfile['info'][$value['pathinfo']['filename']];
+				}
+			}
+			$TSfile['info'] = $swept_info;
 		}
 
 		// ファイルに保存

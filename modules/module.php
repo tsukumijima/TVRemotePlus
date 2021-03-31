@@ -12,6 +12,34 @@
 		}
 	}
 
+	// ディレクトリを (再帰的に) スキャンして正規表現にマッチするファイルを返す
+	function scandir_and_match_files($dir, $pattern = null, $depth = 1) {
+		$dir = realpath($dir);
+		if ($dir !== false && ($dh = opendir($dir))) {
+			$ret = array();
+			while (($file = readdir($dh)) !== false) {
+				if ($file !== '.' && $file !== '..') {
+					$path = $dir.DIRECTORY_SEPARATOR.$file;
+					if (!is_dir($path)) {
+						if (!isset($pattern) || preg_match($pattern, $file)) {
+							$ret[] = $file;
+						}
+					} elseif ($depth > 1) {
+						$sub = scandir_and_match_files($path, $pattern, $depth - 1);
+						if ($sub !== false) {
+							foreach ($sub as $v) {
+								$ret[] = $file.'/'.$v;
+							}
+						}
+					}
+				}
+			}
+			closedir($dh);
+			return $ret;
+		}
+		return false;
+	}
+
 	// Windows用コマンド実行関数
 	// proc_open を用いることで非同期でも実行できるようにする
 	function win_exec($cmd, $log = null, $errorlog = null){
