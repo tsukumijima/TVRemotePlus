@@ -31,7 +31,7 @@
 	}
 
 	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
+	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 
 	// basic 認証設定を実行
 	basicAuth($basicauth, $basicauth_user, $basicauth_password);

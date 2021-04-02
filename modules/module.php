@@ -12,6 +12,47 @@
 		}
 	}
 
+	// ディレクトリを (再帰的に) スキャンして正規表現にマッチするファイルを返す
+	function scandir_and_match_files($dir, $pattern = null, $depth = 1) {
+		$dir = realpath($dir);
+		if ($dir !== false && ($dh = opendir($dir))) {
+			$ret = array();
+			while (($file = readdir($dh)) !== false) {
+				if ($file !== '.' && $file !== '..') {
+					$path = $dir.DIRECTORY_SEPARATOR.$file;
+					if (!is_dir($path)) {
+						if (!isset($pattern) || preg_match($pattern, $file)) {
+							$ret[] = $file;
+						}
+					} elseif ($depth > 1) {
+						$sub = scandir_and_match_files($path, $pattern, $depth - 1);
+						if ($sub !== false) {
+							foreach ($sub as $v) {
+								$ret[] = $file.'/'.$v;
+							}
+						}
+					}
+				}
+			}
+			closedir($dh);
+			return $ret;
+		}
+		return false;
+	}
+
+	// 共有ロックでファイルの内容を読み込む
+	function file_get_contents_lock_sh($path) {
+		$s = false;
+		$fp = @fopen($path, 'r');
+		if ($fp) {
+			if (flock($fp, LOCK_SH)) {
+				$s = stream_get_contents($fp);
+			}
+			fclose($fp);
+		}
+		return $s;
+	}
+
 	// Windows用コマンド実行関数
 	// proc_open を用いることで非同期でも実行できるようにする
 	function win_exec($cmd, $log = null, $errorlog = null){
@@ -99,9 +140,16 @@
 		// basic認証有効
 		if ($basicauth == 'true'){
 
-			// .htpasswd ファイル作成
-			$htpasswd_conf = $basicauth_user.':'.password_hash($basicauth_password, PASSWORD_BCRYPT);
-			file_put_contents($htpasswd, $htpasswd_conf);
+			// 更新が必要なら
+			$htpasswd_conf = @file_get_contents($htpasswd);
+			if ($htpasswd_conf === false ||
+			    strncmp($htpasswd_conf, $basicauth_user.':', strlen($basicauth_user) + 1) !== 0 ||
+			    !password_verify($basicauth_password, substr($htpasswd_conf, strlen($basicauth_user) + 1))) {
+
+				// .htpasswd ファイル作成
+				$htpasswd_conf = $basicauth_user.':'.password_hash($basicauth_password, PASSWORD_BCRYPT);
+				file_put_contents($htpasswd, $htpasswd_conf);
+			}
 
 			// .htaccess 書き換え
 			$htaccess_conf = file_get_contents($htaccess);

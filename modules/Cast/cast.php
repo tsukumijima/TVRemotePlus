@@ -7,7 +7,8 @@
 // your Chromecast through your firewall. Preferably with port forwarding
 // from a different port address.
 
-@require_once (str_replace('Cast', '', dirname(__FILE__)).'require.php');
+require_once (preg_replace('#[^/\\\\]*$#', '', __DIR__).'require.php');
+require_once (preg_replace('#[^/\\\\]*$#', '', __DIR__).'module.php');
 require_once ('Chromecast.php');
 
 // 引数確認
@@ -40,9 +41,9 @@ $cc->DMP->SetVolume(0.7);
 $cc->DMP->UnMute();
 
 // 通知
-$cast = json_decode(file_get_contents(dirname(__FILE__).'/cast.json'), true);
+$cast = json_decode(file_get_contents_lock_sh(dirname(__FILE__).'/cast.json'), true);
 $cast['status'] = 'play';
-file_put_contents(dirname(__FILE__).'/cast.json', json_encode($cast, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+file_put_contents(dirname(__FILE__).'/cast.json', json_encode($cast, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
 echo '  Chromecast Play.'."\n\n";
 
@@ -55,7 +56,7 @@ while(true){
 	} else {
 		$cmd_old = '';
 	}
-	$cmd = json_decode(file_get_contents(dirname(__FILE__).'/cast.json'), true);
+	$cmd = json_decode(file_get_contents_lock_sh(dirname(__FILE__).'/cast.json'), true);
 
 	if ($cmd != $cmd_old){
 

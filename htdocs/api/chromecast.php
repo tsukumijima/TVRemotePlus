@@ -12,8 +12,8 @@
 	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
 
 	// 設定ファイル読み込み
-	$ini = json_decode(file_get_contents($inifile), true);
-	$cast = json_decode(file_get_contents($castfile), true);
+	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
+	$cast = json_decode(file_get_contents_lock_sh($castfile), true);
 
 	$json = array(
 		'api' => 'chromecast'
@@ -96,7 +96,7 @@
 				}
 
 				// 取得できなかった時用に結果を保存しておく
-				file_put_contents($scanfile, json_encode($scandata, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+				file_put_contents($scanfile, json_encode($scandata, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 			}
 
 		}
@@ -111,8 +111,9 @@
 		$scanflg = false;
 
 		// 保存されてあれば読み込む
-		if (file_exists($scanfile)){
-			$scandata = json_decode(file_get_contents($scanfile), true);
+		$scandata = file_get_contents_lock_sh($scanfile);
+		if ($scandata !== false) {
+			$scandata = json_decode($scandata, true);
 		} else {
 			$scandata = array();
 		}
@@ -156,7 +157,7 @@
 			
 			// 0.5秒ごとに読み込み
 			usleep(500000);
-			$cast_ = json_decode(file_get_contents($castfile), true);
+			$cast_ = json_decode(file_get_contents_lock_sh($castfile), true);
 			// 再生が開始されたらbreak
 			if ($cast_['status'] == 'play'){
 				$cast['status'] = 'play';
@@ -178,6 +179,6 @@
 
 	// 出力
 	header('content-type: application/json; charset=utf-8');
-	file_put_contents($castfile, json_encode($cast, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+	file_put_contents($castfile, json_encode($cast, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 	echo json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
 
