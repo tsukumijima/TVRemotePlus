@@ -873,25 +873,25 @@
 
 				// ffmpeg
 				if (strpos($value['CommandLine'], $ffmpeg_exe) !== false and 
-				(@strpos($value['CommandLine'], strval($stream_port)) !== false) or (@strpos($value['CommandLine'], $filepath) !== false)) {
+				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
 					win_exec('taskkill /F /PID '.$value['ProcessId']);
 				}
 
 				// QSVEncC
 				if (strpos($value['CommandLine'], $qsvencc_exe) !== false and 
-				(@strpos($value['CommandLine'], strval($stream_port)) !== false) or (@strpos($value['CommandLine'], $filepath) !== false)) {
+				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
 					win_exec('taskkill /F /PID '.$value['ProcessId']);
 				}
 
 				// NVEncC
 				if (strpos($value['CommandLine'], $nvencc_exe) !== false and 
-				(@strpos($value['CommandLine'], strval($stream_port)) !== false) or (@strpos($value['CommandLine'], $filepath) !== false)) {
+				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
 					win_exec('taskkill /F /PID '.$value['ProcessId']);
 				}
 
 				// VCEEncC
 				if (strpos($value['CommandLine'], $vceencc_exe) !== false and 
-				(@strpos($value['CommandLine'], strval($stream_port)) !== false) or (@strpos($value['CommandLine'], $filepath) !== false)) {
+				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
 					win_exec('taskkill /F /PID '.$value['ProcessId']);
 				}
 
@@ -899,7 +899,7 @@
 				if ($exclude_tstask === false) { // TSTask を終了する場合のみ実行
 
 					if (strpos($value['CommandLine'], $tstask_exe) !== false and 
-					(@strpos($value['CommandLine'], strval($stream_port)) !== false) or (@strpos($value['CommandLine'], $filepath) !== false)) {
+					    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
 
 						if ($TSTask_shutdown == 'true') { // 強制終了
 							win_exec('taskkill /F /PID '.$value['ProcessId']);
