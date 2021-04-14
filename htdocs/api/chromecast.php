@@ -23,14 +23,16 @@
 	    !isset($_POST['_csrf_token']) || $_POST['_csrf_token'] !== $_COOKIE['tvrp_csrf_token']) {
 		trigger_error('Csrf token error', E_USER_ERROR);
 	}
-	// 以下、$_POSTへのインジェクション対策は省略するので注意
+
+	$start_ip = filter_var($_POST['ip'] ?? null, FILTER_VALIDATE_IP);
+	$start_port = filter_var($_POST['port'] ?? null, FILTER_VALIDATE_INT);
+	$cast['cmd'] = (string)filter_var($_POST['cmd'] ?? null);
 
 	// コマンド確認
-	if (isset($_POST['cmd'])){
-		$cast['cmd'] = $_POST['cmd'];
+	if (preg_match('/^[a-z]+$/', $cast['cmd'])){
 
 		// スタートならChromecast起動
-		if ($cast['cmd'] == 'start' and isset($_POST['ip']) and isset($_POST['port'])){
+		if ($cast['cmd'] == 'start' and $start_ip !== false and $start_port !== false){
 
 			if ($ini[$stream]['state'] == 'File' and !preg_match('/^(?:ts|mts|m2t|m2ts)$/', $ini[$stream]['fileext']) and $ini[$stream]['encoder'] == 'Progressive'){
 				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/api/stream/'.$stream;
@@ -41,7 +43,7 @@
 			}
 
 			$cmd = 'pushd "'.str_replace('/', '\\', $base_dir).'bin\Apache\bin\" && start "Chromecast Connect" /min '.
-				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'modules/Cast/cast.php" '.$streamurl.' '.$streamtype.' '.$_POST['ip'].' '.$_POST['port'];
+				   '..\..\php\php.exe -c "'.$base_dir.'bin/PHP/php.ini" "'.$base_dir.'modules/Cast/cast.php" '.$streamurl.' '.$streamtype.' '.$start_ip.' '.$start_port;
 			// echo $cmd."\n";
 			win_exec($cmd);
 			$cast['cast'] = true;
@@ -121,16 +123,16 @@
 
 	// 引数確認
 	if (isset($_POST['arg'])){
-		$cast['arg'] = $_POST['arg'];
+		$cast['arg'] = (string)round((float)$_POST['arg'], 3);
 	} else {
 		$cast['arg'] = '';
 	}
 
 	// JSON
 	$json['cmd'] = $cast['cmd'];
-	if ($cast['cmd'] == 'start' and isset($_POST['host']) and isset($_POST['ip']) and isset($_POST['port'])){
-		$json['ip'] = $_POST['ip'];
-		$json['port'] = $_POST['port'];
+	if ($cast['cmd'] == 'start' and isset($_POST['host']) and $start_ip !== false and $start_port !== false){
+		$json['ip'] = $start_ip;
+		$json['port'] = (string)$start_port;
 	}
 	$json['arg'] = $cast['arg'];
 	if ($cast['cmd'] == 'scan'){
@@ -152,7 +154,7 @@
 	// スタート時のみ Play になるまで待つ
 	$i = 0;
 
-	if ($cast['cmd'] == 'start' and isset($_POST['ip']) and isset($_POST['port'])){
+	if ($cast['cmd'] == 'start' and $start_ip !== false and $start_port !== false){
 		while (true){
 			
 			// 0.5秒ごとに読み込み

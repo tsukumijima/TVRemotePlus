@@ -30,8 +30,9 @@
 		}
 
 		// ストリーム番号を取得
-		if (!empty($_POST['stream'])){
-			$stream = strval($_POST['stream']);
+		$stream = filter_var($_POST['stream'] ?? null, FILTER_VALIDATE_INT);
+		if ($stream !== false && $stream >= 1 && $stream <= 99) {
+			$stream = strval($stream);
 		} else {
 			$stream = '1';
 		}
