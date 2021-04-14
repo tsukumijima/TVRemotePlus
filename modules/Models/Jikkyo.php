@@ -19,9 +19,9 @@ class Jikkyo {
 
     // ニコニコのメールアドレス
     private string $nicologin_mail;
-    
+
     // ニコニコのパスワード
-    private string $nicologin_password;    
+    private string $nicologin_password;
 
     // 変換テーブル
     // ch は公式チャンネル・co はコミュニティ
@@ -36,7 +36,8 @@ class Jikkyo {
         'jk9' => 'ch2646485', // TOKYO MX
         'jk10' => 'co5253063', // テレ玉
         'jk11' => 'co5215296', // tvk
-        'jk101' => 'co5214081', // NHK BS1 
+        'jk12' => 'co5359761', // チバテレビ
+        'jk101' => 'co5214081', // NHK BS1
         'jk103' => 'co5175227', // NHK BSプレミアム
         'jk141' => 'co5175341', // BS日テレ
         'jk151' => 'co5175345', // BS朝日
@@ -61,14 +62,14 @@ class Jikkyo {
      * @return void
      */
     public function __construct(string $nicologin_mail, string $nicologin_password) {
-        
+
         // require.php 内の変数をインスタンス変数に設定
         require ('require.php');
 
         $this->cookie_file = $cookiefile;
         $this->jikkyo_channels_file = $jikkyo_channels_file;
         $this->jikkyo_ikioi_file = $jikkyo_ikioi_file;
-        
+
         // メールアドレス・パスワードが空ならゲスト利用と判定
         $this->is_guest = (empty($nicologin_mail) or empty($nicologin_password));
 
@@ -76,7 +77,7 @@ class Jikkyo {
         $this->nicologin_mail = $nicologin_mail;
         $this->nicologin_password = $nicologin_password;
     }
-    
+
 
     /**
      * ニコニコにログインし、Cookie を保存する
@@ -136,7 +137,7 @@ class Jikkyo {
 
             // 抽出したチャンネル名
             $channel_field = $channel_record['Channel'];
-            
+
             // 正規表現用の文字をエスケープ
             $channel_field_escape = str_replace('/', '\/', preg_quote($channel_field));
 
@@ -209,7 +210,7 @@ class Jikkyo {
 
         // アイテムごとに回す
         foreach ($response['data']['items'] as $item) {
-            
+
             // アイテムの category が current（放送中）であれば
             if ($item['category'] === 'current') {
 
@@ -255,7 +256,7 @@ class Jikkyo {
             $nicolive_html = curl_exec($curl);  // リクエストを実行
             $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);  // ステータスコードを取得
             curl_close($curl);
-    
+
             // ステータスコードを判定
             switch ($status_code) {
                 // 200：OK
@@ -274,7 +275,7 @@ class Jikkyo {
                 default:
                     return ['error' => "現在、ニコニコ実況でエラーが発生しています。(HTTP Error {$status_code})"];
             }
-            
+
             // json をスクレイピング
             preg_match('/<script id="embedded-data" data-props="(.*?)"><\/script>/s', $nicolive_html, $result);
 
@@ -307,7 +308,7 @@ class Jikkyo {
         if ($nicolive_json['user']['isLoggedIn'] === true or $this->is_guest) {
 
             // 今のところ処理なし
-        
+
         // ログイン利用だが実際にはログインされていない（セッション切れなど）
         } else {
 
@@ -356,7 +357,7 @@ class Jikkyo {
         ];
     }
 
-    
+
     /**
      * ニコニコ実況の過去ログを取得する
      * 過去ログが取得できたら DPlayer 互換フォーマットの過去ログを、取得できなければエラーメッセージを返す
@@ -409,7 +410,7 @@ class Jikkyo {
                 return null;
             }
         };
-    
+
         /**
          * ニコニコの位置指定を DPlayer の位置指定に置換する
          * @param string $position ニコニコの位置指定
@@ -512,7 +513,7 @@ class Jikkyo {
             } else {
                 $user_id = '';
             }
-            
+
             // コメント時間（秒単位）を算出
             $time = floatval(($kakolog['date'] - $start_timestamp).'.'.($kakolog['date_usec'] ?? '0'));
 
