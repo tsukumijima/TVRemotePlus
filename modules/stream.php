@@ -368,7 +368,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' -dual_mono_mode main -i "'.$receive.'"'.
+					' -f mpegts -probesize 8192 -analyzeduration 0 -dual_mono_mode main -i "'.$receive.'"'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
