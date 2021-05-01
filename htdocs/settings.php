@@ -162,9 +162,10 @@
 
 				// このストリームを終了
 				if (!isset($_POST['allstop'])){
-					
+
 					// 現在のストリームを終了する
 					stream_stop($stream);
+          usleep(100000);  // magic!（これがないとタイミングの関係で m3u8 のコピーがうまくいかない）
 
 					// Offline に設定する
 					$ini[$stream]['state'] = 'Offline';
@@ -194,7 +195,7 @@
 					foreach ($ini as $key => $value) {
 
 						$key = strval($key);
-					
+
 						// 全てのストリームを Offline に設定する
 						$ini[$key]['state'] = 'Offline';
 						$ini[$key]['channel'] = '0';

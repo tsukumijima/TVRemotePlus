@@ -121,6 +121,10 @@ $tstask_path = $base_dir.'bin/TSTask/'.$tstask_exe;
 $tstaskcentreex_exe = 'TSTaskCentreEx.exe';
 $tstaskcentreex_path = $base_dir.'bin/TSTaskCentreEx/'.$tstaskcentreex_exe;
 
+// arib-subtitle-timedmetadater の名前とパス
+$arib_subtitle_timedmetadater_exe = 'arib-subtitle-timedmetadater-udpin.exe';
+$arib_subtitle_timedmetadater_path = $base_dir.'bin/arib-subtitle-timedmetadater/'.$arib_subtitle_timedmetadater_exe;
+
 // rplsinfo の名前とパス
 $rplsinfo_exe =  'rplsinfo-tvrp.exe';
 $rplsinfo_path =  $base_dir.'bin/rplsinfo/'.$rplsinfo_exe;
