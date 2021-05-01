@@ -165,7 +165,7 @@
 
 					// 現在のストリームを終了する
 					stream_stop($stream);
-          usleep(200000);  // magic!（これがないとタイミングの関係で m3u8 のコピーがうまくいかない）
+          usleep(500000);  // magic!（これがないとタイミングの関係で m3u8 のコピーがうまくいかない）
 
 					// Offline に設定する
 					$ini[$stream]['state'] = 'Offline';

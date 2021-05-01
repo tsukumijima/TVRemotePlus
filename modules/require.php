@@ -122,7 +122,7 @@ $tstaskcentreex_exe = 'TSTaskCentreEx.exe';
 $tstaskcentreex_path = $base_dir.'bin/TSTaskCentreEx/'.$tstaskcentreex_exe;
 
 // arib-subtitle-timedmetadater の名前とパス
-$arib_subtitle_timedmetadater_exe = 'arib-subtitle-timedmetadater-udpin.exe';
+$arib_subtitle_timedmetadater_exe = 'arib-subtitle-timedmetadater.exe';
 $arib_subtitle_timedmetadater_path = $base_dir.'bin/arib-subtitle-timedmetadater/'.$arib_subtitle_timedmetadater_exe;
 
 // rplsinfo の名前とパス
