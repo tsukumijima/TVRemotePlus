@@ -198,6 +198,9 @@
 		// 設定ファイル読み込み
 		$settings = json_decode(file_get_contents_lock_sh($inifile), true);
 
+		// UDPポート
+		$stream_port = $udp_port + intval($stream);
+
 		// 以前の state が ONAir (TSTask を再利用できる)
 		if ($settings[strval($stream)]['state'] === 'ONAir') {
 
@@ -215,7 +218,11 @@
 				// TSTaskCentreEx のコマンド
 				$tstaskcentreex_cmd = (
 					// チャンネルをセット
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" "
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" && ".
+					// TCP 送信を終了
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StopStreaming && ".
+					// TCP 送信を開始
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StartStreaming -o \"Port:{$stream_port}|Address:127.0.0.1\""
 				);
 
 			// BonDriver が違うので BonDriver を読み込み直してからチャンネルを切り替える
@@ -228,7 +235,11 @@
 					// チューナーを開く
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c OpenTuner && ".
 					// チャンネルをセット
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" "
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" && ".
+					// TCP 送信を終了
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StopStreaming && ".
+					// TCP 送信を開始
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StartStreaming -o \"Port:{$stream_port}|Address:127.0.0.1\""
 				);
 			}
 
@@ -242,14 +253,11 @@
 			$tstaskcentreex_cmd = '';
 		}
 
-		// UDPポート
-		$stream_port = $udp_port + intval($stream);
-
 		// 字幕切り替え
 		switch ($subtitle) {
 
 			case 'true':
-				$subtitle_ffmpeg_cmd = '-map 0 -ignore_unknown';
+				$subtitle_ffmpeg_cmd = '-map 0:v -map 0:a -map 0:d';
 				$subtitle_other_cmd = '--sub-copy asdata';
 			break;
 
@@ -357,7 +365,7 @@
 		}
 
 		// arib-subtitle-timedmetadater
-		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -p {$stream_port}";
+		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -t {$stream_port}";
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
@@ -368,7 +376,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' -f mpegts -probesize 8192 -analyzeduration 0 -dual_mono_mode main -i -'.
+					' -f mpegts -probesize 8192 -dual_mono_mode main -i -'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -427,7 +435,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-analyze 0.7 --input-probesize 1000K -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-retry 15 --input-probesize 900K --input-analyze 0.67 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -491,7 +499,7 @@
 				@unlink($base_dir.'logs/stream'.$stream.'.tstask.log');
 			}
 
-			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
+			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /tcp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 						' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
 			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).'"';
 			win_exec($tstask_cmd);
