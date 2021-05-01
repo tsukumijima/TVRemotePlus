@@ -245,9 +245,6 @@
 		// UDPポート
 		$stream_port = $udp_port + intval($stream);
 
-		// UDP受信スキーム
-		$receive = "udp://127.0.0.1:{$stream_port}?pkt_size=262144&fifo_size=1000000&overrun_nonfatal=1";
-
 		// 字幕切り替え
 		switch ($subtitle) {
 
@@ -430,7 +427,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-analyze 0.67 --input-probesize 900k -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-analyze 0.7 --input-probesize 1000K -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
