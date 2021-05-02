@@ -264,7 +264,7 @@ class Jikkyo {
                     break;
                 // 404：Not found
                 case 404:
-                    return ['error' => '指定された放送 ID は存在しません。(HTTP Error 404)'];
+                    return ['error' => '現在放送中のニコニコ実況がありません。(HTTP Error 404)'];
                 // 500：Internal Server Error
                 case 500:
                     return ['error' => '現在、ニコニコ実況で障害が発生しています。(HTTP Error 500)'];

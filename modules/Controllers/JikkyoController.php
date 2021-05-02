@@ -3,7 +3,7 @@
 require_once ('classloader.php');
 
 class JikkyoController {
-    
+
 
     /**
      * コンストラクタ
@@ -23,8 +23,8 @@ class JikkyoController {
         if (isset($settings[$stream])) {
 
             // ストリーム状態が ON Air & チャンネルが 0 でない
-            if ($settings[$stream]['state'] === 'ONAir' and intval($settings[$stream]['channel']) !== 0){ 
-    
+            if ($settings[$stream]['state'] === 'ONAir' and intval($settings[$stream]['channel']) !== 0){
+
                 // モデルを初期化
                 $instance = new Jikkyo($nicologin_mail, $nicologin_password);
 
@@ -37,7 +37,7 @@ class JikkyoController {
 
                 // ストリーム番号から現在放送中のチャンネルの実況 ID を使う
                 } else {
-    
+
                     // BonDriver とチャンネルを取得
                     // 実際はチャンネルしか使わないのでこんなにいらない（👈技術的負債）
                     list($BonDriver_dll, $BonDriver_dll_T, $BonDriver_dll_S, // BonDriver
@@ -46,7 +46,7 @@ class JikkyoController {
                         $onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
                         $tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
                         = initBonChannel($BonDriver_dir);
-        
+
                     // 実況 ID を取得
                     if (isset($ch[$settings[$stream]['channel']])){
                         $nicojikkyo_id = $instance->getNicoJikkyoID($ch[$settings[$stream]['channel']]);
@@ -56,30 +56,30 @@ class JikkyoController {
                         $nicojikkyo_id = null;
                     }
                 }
-    
+
                 // ニコニコチャンネル/コミュニティ ID が定義済み or 実況 ID が存在する
                 if (isset($nicochannel_id) or $nicojikkyo_id !== null) {
-    
+
                     // ニコニコチャンネル/コミュニティ ID が定義されていない場合のみ、
                     // 実況 ID からニコニコチャンネル/コミュニティ ID を取得する
                     if (!isset($nicochannel_id)) {
                         $nicochannel_id = $instance->getNicoChannelID($nicojikkyo_id);
                     }
-    
+
                     // ニコニコチャンネル/コミュニティ ID が存在する（＝実況 ID がニコニコチャンネル上に存在する）
                     if ($nicochannel_id !== null) {
-    
+
                         // ニコ生のセッション情報を取得
                         $nicolive_session = $instance->getNicoliveSession($nicochannel_id);
-    
+
                         // 現在放送中でない（タイムシフト or 予約中）
                         if ($nicolive_session === null) {
-                            
+
                             $message = '現在放送中のニコニコ実況がありません。';
 
                         // HTTP エラー
                         } else if (isset($nicolive_session['error'])) {
-                            
+
                             $message = $nicolive_session['error'];
 
                         // WebSocket の URL が空
@@ -87,7 +87,7 @@ class JikkyoController {
 
                             $message = '視聴セッションを取得できませんでした。';
                         }
-                        
+
                     } else {
                         $message = 'このチャンネルのニコニコ実況は廃止されました。';
                     }
@@ -102,7 +102,7 @@ class JikkyoController {
                 // 録画の開始/終了時刻のタイムスタンプ
                 $start_timestamp = $settings[$stream]['start_timestamp'];
                 $end_timestamp = $settings[$stream]['end_timestamp'];
-    
+
                 // モデルを初期化
                 $instance = new Jikkyo($nicologin_mail, $nicologin_password);
 
