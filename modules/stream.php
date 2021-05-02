@@ -219,9 +219,9 @@
 				$tstaskcentreex_cmd = (
 					// チャンネルをセット
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" && ".
-					// TCP 送信を終了
+					// UDP 送信を終了
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StopStreaming && ".
-					// TCP 送信を開始
+					// UDP 送信を開始
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StartStreaming -o \"Port:{$stream_port}|Address:127.0.0.1\""
 				);
 
@@ -236,9 +236,9 @@
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c OpenTuner && ".
 					// チャンネルをセット
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" && ".
-					// TCP 送信を終了
+					// UDP 送信を終了
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StopStreaming && ".
-					// TCP 送信を開始
+					// UDP 送信を開始
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StartStreaming -o \"Port:{$stream_port}|Address:127.0.0.1\""
 				);
 			}
@@ -257,8 +257,8 @@
 		switch ($subtitle) {
 
 			case 'true':
-				$subtitle_ffmpeg_cmd = '-map 0:v -map 0:a -map 0:d';
-				$subtitle_other_cmd = '--sub-copy asdata';
+				$subtitle_ffmpeg_cmd = '-map 0:d?';
+				$subtitle_other_cmd = '--data-copy timed_id3';
 			break;
 
 			case 'false':
@@ -365,7 +365,7 @@
 		}
 
 		// arib-subtitle-timedmetadater
-		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -t {$stream_port}";
+		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -u {$stream_port}";
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
@@ -376,7 +376,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' -f mpegts -probesize 8192 -dual_mono_mode main -i -'.
+					' -f mpegts -probesize 8192 -analyzeduration 0 -dual_mono_mode main -i -'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -386,14 +386,14 @@
 					' -hls_flags delete_segments'.
 					' -hls_segment_filename stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
+					' -map 0:v:0 -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
 					// 音声
-					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
+					' -map 0:a:0 -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
-					' -flags +loop+global_header -movflags +faststart -threads auto'.
+					' -flags +loop+global_header -movflags +faststart -threads auto -max_interleave_delta 5M'.
 					// 出力
 					' stream'.$stream.'.m3u8';
 
@@ -418,12 +418,12 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality fastest --profile main --vpp-deinterlace normal --tff'.
 					// 音声
-					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0 -m max_interleave_delta:5M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -448,12 +448,12 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset performance --profile main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
-					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --max-procfps 90 --output-thread 0 -m max_interleave_delta:5M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -478,12 +478,12 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality fast --profile main --interlace tff --vpp-afs preset=default'.
 					// 音声
-					' --audio-codec aac#dual_mono_mode=main --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90'.
+					' --avsync forcecfr --max-procfps 90 -m max_interleave_delta:5M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -499,7 +499,7 @@
 				@unlink($base_dir.'logs/stream'.$stream.'.tstask.log');
 			}
 
-			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /tcp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
+			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 						' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
 			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).'"';
 			win_exec($tstask_cmd);
@@ -717,7 +717,7 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
 					// 音声
-					' --audio-codec aac'.$dual_mono_mode_other.' --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
@@ -747,7 +747,7 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
-					' --audio-codec aac'.$dual_mono_mode_other.' --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
 					// 字幕
 					' '.$subtitle_other_cmd.
@@ -777,7 +777,7 @@
 					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --interlace tff --vpp-afs preset=default --profile Main'.
 					// 音声
-					' --audio-codec aac'.$dual_mono_mode_other.' --audio-stream :stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
+					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
