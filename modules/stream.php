@@ -376,7 +376,8 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' -f mpegts -probesize 8192 -analyzeduration 0 -dual_mono_mode main -i -'.
+					// -probesize / -analyzeduration を短縮しすぎると音声多重+字幕放送で副音声がエンコードされてしまう可能性がある（？）
+					' -f mpegts -probesize 900K -analyzeduration 0.67 -dual_mono_mode main -i -'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -393,7 +394,7 @@
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
-					' -flags +loop+global_header -movflags +faststart -threads auto -max_interleave_delta 5M'.
+					' -flags +loop+global_header -movflags +faststart -threads auto -max_interleave_delta 1M'.
 					// 出力
 					' stream'.$stream.'.m3u8';
 
@@ -423,7 +424,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0 -m max_interleave_delta:5M'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0 -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -435,7 +436,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-retry 15 --input-probesize 900K --input-analyze 0.67 -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-probesize 900K --input-analyze 0.67 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -453,7 +454,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0 -m max_interleave_delta:5M'.
+					' --avsync forcecfr --max-procfps 90 --output-thread 0 -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -483,7 +484,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 -m max_interleave_delta:5M'.
+					' --avsync forcecfr --max-procfps 90 -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
