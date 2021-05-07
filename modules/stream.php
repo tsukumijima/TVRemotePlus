@@ -394,7 +394,7 @@
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
-					' -flags +loop+global_header -movflags +faststart -threads auto -max_interleave_delta 3M'.
+					' -flags +loop+global_header -movflags +faststart -threads auto -max_interleave_delta 5M'.
 					// 出力
 					' stream'.$stream.'.m3u8';
 
