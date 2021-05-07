@@ -1,5 +1,5 @@
 <?php
-	
+
 	// ***** 各種モジュール関数 *****
 
 	// 参考: http://www.cattlemute.com/2019/09/14/1830/
@@ -119,7 +119,7 @@
 			'[初]','[生]','[販]','[吹]','[PPV]','[演]','[移]','[他]','[収]','[・]','[英]','[韓]','[中]','[字/日英]','(二)','(字)','(再)',
 			'[3D]','[2K]','[4K]','[8K]','[5.1]','[7.1]','[22.2]','[60P]','[120P]','[d]','[HC]','[HDR]','[SHV]','[UHD]','[VOD]','[配]'
 		);
-		
+
 		foreach ($marktable as $value) {
 			if (strpos($string, $value) !== false){
 				$mark = str_replace('[', '', str_replace(']', '', $value)); // $value から [] を取る
@@ -164,7 +164,7 @@
 					'AuthName "Input your ID and Password."'."\n".
 					'AuthUserFile '.$base_dir.'htdocs/.htpasswd'."\n".
 					'require valid-user'."\n";
-				
+
 				file_put_contents($htaccess, $htaccess_conf);
 			}
 
@@ -217,63 +217,29 @@
 	// 見つからなかった場合は -1 を返す
 	function getTSTaskPID($stream) {
 
-		global $udp_port, $tstask_exe;
+		global $udp_port;
 
 		// 数値に変換しておく
 		$stream = intval($stream);
 
-		// ストリームの配信ポート
-		$stream_port = $udp_port + $stream;
-
-		// 超ゴリ押し PowerShell スクリプトをコマンドプロンプトから実行
-		$command = 'powershell -Command "'.
-		           // CSV がコンソール幅で改行されないようにコンソール幅を 9999 に設定
-		           '$h = get-host; $w = $h.ui.rawui; $n = $w.buffersize; $n.Width = 9999; $w.buffersize = $n; '.
-		           // Get-WmiObject で引数（コマンドライン）つきのプロセスリストを取得
-		           'Get-WmiObject win32_process | '.
-		           // cmd.exe から実行されているプロセスを除外
-		           '? { $_.CommandLine -notlike \'*cmd.exe*\' } | '.
-		           // コマンドラインに TSTask とポート番号が含まれているプロセスのみに絞り込み
-		           '? { $_.CommandLine -like \'*'.$tstask_exe.'*'.$stream_port.'*\' } | '.
-		           // プロセス ID とコマンドラインのみ取得
-		           'Select-Object ProcessId, CommandLine | '.
-		           // ConvertTo-CSV で tsv に変換
-		           'ConvertTo-Csv -NoTypeInformation  -Delimiter `t "';
-
-		exec($command, $result);
-
-		// CSV をパースして二次元配列に
-		$tstask_list = [];
-		foreach ($result as $index => $line) {
-
-			// ヘッダー
-			if ($index === 0) {
-				$tstask_list_header = str_getcsv(removeBOM($line), "\t"); // 悪しき BOM を除去
-				continue; // その後の処理をスキップ
-			}
-
-			// ヘッダー分のインデックスを詰める
-			$index = $index - 1; 
-
-			// データを連想配列に格納
-			foreach (str_getcsv($line, "\t") as $key => $value) {
-				$tstask_list[$index][$tstask_list_header[$key]] = $value;
+		// 検索用コメントを含むプロセスを探す
+		$parent_pids = array();
+		exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):TSTask'.$stream.'%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
+		foreach ($parent_pids as $parent_pid) {
+			$pid = (int)exec('wmic process where "parentprocessid = '.(int)$parent_pid.'" get processid 2>nul | findstr /b [1-9]');
+			if ($pid > 0) {
+				// PID を取得できた
+				return $pid;
 			}
 		}
 
-		if (isset($tstask_list[0]['ProcessId'])) {
-			// PID を取得できた
-			return intval($tstask_list[0]['ProcessId']);
-		} else {
-			// PID を取得できなかった
-			return -1;
-		}
-
+		// PID を取得できなかった
+		return -1;
 	}
 
 	// ストリーム状態を整形して返す関数
 	function getFormattedState($ini, $num, $flg=false){
-		
+
 		$num = strval($num);
 
 		if (isset($ini[$num])){
@@ -339,7 +305,7 @@
 			} else {
 				return $default; // default に指定した値を返す
 			}
-			
+
 		// Cookie が存在しない
 		} else {
 			return $default; // default に指定した値を返す
@@ -392,7 +358,7 @@
 
 		// 行頭と行末の改行・BOM削除・UTF-8へ変換
 		file_put_contents($csvfile, str_replace('yadif=0:-1:1,', 'yadif=0:-1:1.', trim(removeBOM(mb_convert_encoding(file_get_contents($csvfile), 'UTF-8', $encoding)))));
-	
+
 		// SplFileObject()を使用してCSVをロード
 		$file = new SplFileObject($csvfile);
 		$file->setFlags(
@@ -400,7 +366,7 @@
 			SplFileObject::SKIP_EMPTY |
 			SplFileObject::READ_AHEAD
 		);
-	
+
 		// 各行を処理
 		$records = array();
 		foreach ($file as $i => $row){
@@ -410,7 +376,7 @@
 				foreach($row as $j => $col) $colbook[$j] = $col;
 				continue;
 			}
-	
+
 			// 2行目以降はデータ行として取り込み
 			$line = array();
 			foreach($colbook as $j => $col) $line[$colbook[$j]] = @$row[$j];
@@ -484,9 +450,9 @@
 					// 定義しておく
 					if (!isset($program['description'])) $program['description'] = '';
 
-					// ジャンル : が現れるまで足し続ける 
+					// ジャンル : が現れるまで足し続ける
 					$program['description'] = $program['description']."\n".$value;
-					
+
 					break;
 			}
 		}
@@ -532,14 +498,14 @@
 
 			//余計なコメントを削除
 			$ch2_data = preg_replace("/;#SPACE.*/", "", $ch2_data);
-			
+
 			// 空行削除
 			$ch2_data = str_replace("\n\n", '', $ch2_data);
 			$ch2_data = rtrim($ch2_data);
-	
+
 			// 改行で分割
 			$ch2 = explode("\n", $ch2_data);
-	
+
 			// さらにコンマで分割
 			foreach ($ch2 as $key => $value) {
 				$line = explode(',', $ch2[$key]);
@@ -588,10 +554,10 @@
 			// 空行削除
 			$ch2_data = str_replace("\n\n", '', $ch2_data);
 			$ch2_data = rtrim($ch2_data);
-	
+
 			// 改行で分割
 			$ch2 = explode("\n", $ch2_data);
-	
+
 			// さらにコンマで分割
 			foreach ($ch2 as $key => $value) {
 				$ch2[$key] = explode(',', $ch2[$key]);
@@ -609,7 +575,7 @@
 			$BonDriver_dll[$i] = str_replace($BonDriver_dir, '', $file);
 		}
 		if (!isset($BonDriver_dll)) $BonDriver_dll = array();
-	
+
 		// BonDriver_dirから地デジ用BonDriverを検索
 		$search_T = array_merge(
 			glob($BonDriver_dir.'[bB]on[dD]river_*[tT].dll'),
@@ -646,7 +612,7 @@
 				}
 			}
 		}
-		
+
 		// 配列のインデックスを詰める
 		$BonDriver_dll_raw = array_values($BonDriver_dll_raw);
 

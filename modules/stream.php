@@ -502,7 +502,7 @@
 
 			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 						' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
-			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).'"';
+			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).' & rem TVRP('.$udp_port.'):TSTask'.$stream.'"';
 			win_exec($tstask_cmd);
 
 		// TSTask にチャンネル切り替えのコマンドを送信
@@ -513,7 +513,10 @@
 			win_exec($tstaskcentreex_cmd);
 		}
 
-		// ストリームを開始する（エンコーダーを起動する）
+		// エンコードコマンド
+		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd);
+
+		// ログを書き出すかどうか
 		if ($encoder_log == 'true') {
 
 			// 既にエンコーダーのログがあれば削除する
@@ -522,13 +525,14 @@
 				exec("del {$base_dir}logs/stream{$stream}.encoder.log");
 			}
 
-			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd).
-			              ' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
-		} else {
-			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd).'"';
+			$stream_cmd .= " > {$base_dir}logs/stream{$stream}.encoder.log 2>&1";
 		}
 
-		win_exec('pushd "'.$segment_folder.'" && '.$stream_cmd);
+		// エンコーダー検索用コメントを含める
+		$stream_cmd .= " & rem TVRP({$udp_port}):Encoder{$stream}\"";
+
+		// ストリームを開始する
+		win_exec("pushd \"{$segment_folder}\" && {$stream_cmd}");
 
 		// エンコードコマンドと TSTask のコマンドを返す
 		if (empty($tstaskcentreex_cmd)) {
@@ -542,7 +546,7 @@
 	// ファイル再生を開始する
 	function stream_file($stream, $filepath, $extension, $quality, $encoder, $subtitle) {
 
-		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $arib_subtitle_timedmetadater_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log, $encoder_window;
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $arib_subtitle_timedmetadater_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log, $encoder_window;
 
 		// 事前に前のストリームを終了する
 		stream_stop($stream);
@@ -793,6 +797,9 @@
 				break;
 		}
 
+		// エンコードコマンド
+		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd);
+
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true') {
 
@@ -802,14 +809,14 @@
 				exec("del {$base_dir}logs/stream{$stream}.encoder.log");
 			}
 
-			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd).
-			              ' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
-		} else {
-			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd).'"';
+			$stream_cmd .= " > {$base_dir}logs/stream{$stream}.encoder.log 2>&1";
 		}
 
+		// エンコーダー検索用コメントを含める
+		$stream_cmd .= " & rem TVRP({$udp_port}):Encoder{$stream}\"";
+
 		// ストリームを開始する
-		win_exec('pushd "'.$segment_folder.'" && '.$stream_cmd);
+		win_exec("pushd \"{$segment_folder}\" && {$stream_cmd}");
 
 		// エンコードコマンドを返す
 		return $stream_cmd;
@@ -820,32 +827,32 @@
 	// $exclude_tstask を true に設定すると終了対象から TSTask を除外する
 	function stream_stop($stream, $allstop = false, $exclude_tstask = false) {
 
-		global $inifile, $udp_port, $process_csv, $arib_subtitle_timedmetadater_exe, $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $tstaskcentreex_path, $segment_folder, $TSTask_shutdown;
+		global $udp_port, $arib_subtitle_timedmetadater_exe, $ffmpeg_exe, $qsvencc_exe, $nvencc_exe, $vceencc_exe, $tstask_exe, $tstaskcentreex_path, $segment_folder, $TSTask_shutdown;
 
 		// 全てのストリームを終了する
 		if ($allstop) {
 
 			// arib-subtitle-timedmetadater を終了する
-			win_exec('taskkill /F /IM '.$arib_subtitle_timedmetadater_exe);
+			win_exec("taskkill /F /IM {$arib_subtitle_timedmetadater_exe}");
 
 			// ffmpeg を終了する
-			win_exec('taskkill /F /IM '.$ffmpeg_exe);
+			win_exec("taskkill /F /IM {$ffmpeg_exe}");
 
 			// QSVEncC を終了する
-			win_exec('taskkill /F /IM '.$qsvencc_exe);
+			win_exec("taskkill /F /IM {$qsvencc_exe}");
 
 			// NVEncC を終了する
-			win_exec('taskkill /F /IM '.$nvencc_exe);
+			win_exec("taskkill /F /IM {$nvencc_exe}");
 
 			// VCEEncC を終了する
-			win_exec('taskkill /F /IM '.$vceencc_exe);
+			win_exec("taskkill /F /IM {$vceencc_exe}");
 
 			// TSTask を終了する
 			if ($exclude_tstask === false) { // TSTask を終了する場合のみ実行
 
 				if ($TSTask_shutdown == 'true') { // 強制終了
 
-					win_exec('taskkill /F /IM '.$tstask_exe);
+					win_exec("taskkill /F /IM {$tstask_exe}");
 
 				} else { // 通常終了
 
@@ -865,76 +872,36 @@
 			}
 
 			// フォルダ内の TS を削除
-			win_exec('pushd "'.$segment_folder.'" && del *.ts /S');
+			exec("pushd \"{$segment_folder}\" && del stream{$stream}*.ts /S");
 
 		// このストリームを終了する
 		} else {
 
-			// UDP ポート
-			$stream_port = $udp_port + intval($stream);
-
-			// 録画ファイルのファイルパス
-			$filepath = @json_decode(file_get_contents_lock_sh($inifile), true)[$stream]['filepath'];
-			if ($filepath === null) $filepath = '';
-
-			// 現在のプロセスのコマンドライン引数とプロセスIDを取得する
-			exec('wmic process get commandline,processid /format:csv > '.$process_csv);
-
-			// CSVをパースして取得
-			$process = getCSV($process_csv, 'UTF-16LE');
-
-			// プロセスごとに該当するかチェックしてKill
-			foreach ($process as $value) {
-
-				// arib-subtitle-timedmetadater
-				if (strpos($value['CommandLine'], $arib_subtitle_timedmetadater_exe) !== false and @strpos($value['CommandLine'], strval($stream_port)) !== false) {
-					win_exec('taskkill /F /PID '.$value['ProcessId']);
+			// エンコーダー検索用コメントを使ってエンコーダーを終了させる
+			$parent_pids = array();
+			exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):Encoder'.$stream.'%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
+			foreach ($parent_pids as $parent_pid) {
+				$encoder_pid = (int)exec('wmic process where "parentprocessid = '.(int)$parent_pid.'" get processid 2>nul | findstr /b [1-9]');
+				if ($encoder_pid > 0) {
+					win_exec("taskkill /F /PID {$encoder_pid}");
 				}
+			}
 
-				// ffmpeg
-				if (strpos($value['CommandLine'], $ffmpeg_exe) !== false and 
-				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
-					win_exec('taskkill /F /PID '.$value['ProcessId']);
-				}
-
-				// QSVEncC
-				if (strpos($value['CommandLine'], $qsvencc_exe) !== false and 
-				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
-					win_exec('taskkill /F /PID '.$value['ProcessId']);
-				}
-
-				// NVEncC
-				if (strpos($value['CommandLine'], $nvencc_exe) !== false and 
-				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
-					win_exec('taskkill /F /PID '.$value['ProcessId']);
-				}
-
-				// VCEEncC
-				if (strpos($value['CommandLine'], $vceencc_exe) !== false and 
-				    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
-					win_exec('taskkill /F /PID '.$value['ProcessId']);
-				}
-
-				// TSTask
-				if ($exclude_tstask === false) { // TSTask を終了する場合のみ実行
-
-					if (strpos($value['CommandLine'], $tstask_exe) !== false and 
-					    (@strpos($value['CommandLine'], strval($stream_port)) !== false or @strpos($value['CommandLine'], $filepath) !== false)) {
-
-						if ($TSTask_shutdown == 'true') { // 強制終了
-							win_exec('taskkill /F /PID '.$value['ProcessId']);
-						} else { // 通常終了
-							// TSTaskCentreEx で EndTask コマンドを送信
-							win_exec("\"{$tstaskcentreex_path}\" -p {$value['ProcessId']} -c EndTask");
-						}
+			// TSTask を終了する
+			if ($exclude_tstask === false) { // TSTask を終了する場合のみ実行
+				// 現在のストリームの TSTask の PID
+				$tstask_pid = getTSTaskPID($stream);
+				if ($tstask_pid !== -1) {
+					if ($TSTask_shutdown == 'true') { // 強制終了
+						win_exec("taskkill /F /PID {$tstask_pid}");
+					} else { // 通常終了
+						// TSTaskCentreEx で EndTask コマンドを送信
+						win_exec("\"$tstaskcentreex_path\" -p {$tstask_pid} -c EndTask");
 					}
 				}
 			}
 
-			// CSV ファイル自体はもういらないので削除
-			unlink($process_csv);
-
 			// フォルダ内のTSを削除
-			exec('pushd "'.$segment_folder.'" && del stream'.$stream.'*.ts /S');
+			exec("pushd \"{$segment_folder}\" && del stream{$stream}*.ts /S");
 		}
 	}

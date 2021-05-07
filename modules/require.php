@@ -107,9 +107,6 @@ $htaccess = $base_dir.'htdocs/.htaccess';
 // .htpasswd のパス
 $htpasswd = $base_dir.'htdocs/.htpasswd';
 
-// 一時的に書き出すCSVプロセスリストのパス
-$process_csv = $base_dir.'data/process.csv';
-
 
 // ***** 各種exeファイルのパス *****
 
