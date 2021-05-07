@@ -424,7 +424,7 @@ $(function() {
         // ワンクリックでストリーム開始する場合
         if (settings['onclick_stream']) {
             $('#broadcast-stream-box').hide();
-            $('.bluebutton').click();
+            $('#broadcast-stream-box .bluebutton').click();
         }
     });
 
