@@ -542,7 +542,7 @@
 	// ファイル再生を開始する
 	function stream_file($stream, $filepath, $extension, $quality, $encoder, $subtitle) {
 
-		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log, $encoder_window;
+		global $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $arib_subtitle_timedmetadater_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log, $encoder_window;
 
 		// 事前に前のストリームを終了する
 		stream_stop($stream);
@@ -560,8 +560,8 @@
 		switch ($subtitle) {
 
 			case 'true':
-				$subtitle_ffmpeg_cmd = '-map 0 -ignore_unknown';
-				$subtitle_other_cmd = '--sub-copy asdata';
+				$subtitle_ffmpeg_cmd = '-map 0:d?';
+				$subtitle_other_cmd = '--data-copy timed_id3';
 			break;
 
 			case 'false':
@@ -667,6 +667,9 @@
 			break;
 		}
 
+		// arib-subtitle-timedmetadater
+		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -i \"{$filepath}\"";
+
 		// 変換コマンド切り替え
 		switch ($encoder) {
 
@@ -676,7 +679,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' '.$dual_mono_mode_ffmpeg.' -i "'.$filepath.'"'.
+					' '.$dual_mono_mode_ffmpeg.' -i -'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -686,10 +689,10 @@
 					' -hls_flags delete_segments'.
 					' -hls_segment_filename stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
+					' -map 0:v:0 -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					' -aspect 16:9 -preset veryfast -r 30000/1001'.
 					// 音声
-					' -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
+					' -map 0:a:0 -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
@@ -705,7 +708,7 @@
 				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
-					' -i "'.$filepath.'"'.
+					' -i -'.
 					// avqsvエンコード
 					' --avqsv'.
 					// HLS
@@ -735,7 +738,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' -i "'.$filepath.'"'.
+					' -i -'.
 					// avcuvidエンコード
 					' --avcuvid'.
 					// HLS
@@ -765,7 +768,7 @@
 				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
-					' -i "'.$filepath.'"'.
+					' -i -'.
 					// avhwエンコード
 					' --avhw'.
 					// HLS
@@ -799,10 +802,10 @@
 				exec("del {$base_dir}logs/stream{$stream}.encoder.log");
 			}
 
-			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($stream_cmd).
+			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd).
 			              ' > '.$base_dir.'logs/stream'.$stream.'.encoder.log 2>&1"';
 		} else {
-			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($stream_cmd).'"';
+			$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd).'"';
 		}
 
 		// ストリームを開始する
