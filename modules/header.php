@@ -75,7 +75,7 @@
 <?php
 	if (strpos($backtrace[0]['file'], 'index.php') !== false) { // index.php のみ
     echo '  <script type="text/javascript" src="/files/DPlayer.min.js"></script>'."\n";
-    echo '  <script type="text/javascript" src="/files/hls-b24.min.js"></script>'."\n";
+    echo '  <script type="text/javascript" src="/files/hls.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/clusterize.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/swiper.min.js"></script>'."\n";
 		echo '  <script type="text/javascript" src="/files/index.js?'.$version.'"></script>'."\n";
