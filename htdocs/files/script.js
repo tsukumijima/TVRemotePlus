@@ -1570,7 +1570,7 @@ $(function() {
         // 動画のキャンバス
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        const caption = video.nextElementSibling;
+        const caption = dp.plugins.aribb24.getRawCanvas();
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         // 描画
