@@ -406,7 +406,7 @@
 				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-analyze 0 -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-probesize 900K --input-analyze 0.67 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -466,7 +466,7 @@
 				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-analyze 0 -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-probesize 900K --input-analyze 0.67 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
