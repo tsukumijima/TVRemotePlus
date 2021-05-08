@@ -359,6 +359,11 @@ Intel Graphics Driver 25.20.100.7327 (API v1.30)
 Intel Graphics Driver 27.20.100.8190 (API v1.32)
 Intel Graphics Driver 27.20.100.8681 (API v1.33)
 
+【検証環境 2021.04～】
+Win10 x64
+Core i7 11700K + GIGABYTE Z590I AORUS ULTRA
+16GB RAM
+
 【Intel Media SDKとAPIの対応関係】
 API v1.32 … Intel Media SDK 2020 R1
 API v1.29 … Intel Media SDK 2019 R1
@@ -382,6 +387,78 @@ API v1.1  … Intel Media SDK v2.0
 
 
 【どうでもいいメモ】
+2021.05.08 (5.01)
+・avsw/avhwでのファイル読み込み時にファイル解析サイズの上限を設定するオプションを追加。(--input-probesize)
+・--input-analyzeを小数点で指定可能なよう拡張。
+・読み込んだパケットの情報を出力するオプションを追加。( --log-packets )
+・data streamに限り、タイムスタンプの得られていないパケットをそのまま転送するようにする。
+・オプションを記載したファイルを読み込む機能を追加。( --option-file )
+・動画情報を取得できない場合のエラーメッセージを追加。
+・コピーするtrackをコーデック名で選択可能に。
+・字幕の変換が必要な場合の処理が有効化されていなかったのを修正。
+・5.00betaで-c rawを指定してもraw出力されないのを修正。
+・--vpp-subburnでサイズが0の字幕がくると異常終了が発生したのを修正。
+・OpenCLフィルタを使用時、またはAV1デコード時は、d3d11モードを優先するように。
+
+・--videoformatに関しては入力から容易に取得できないので、"auto"を削除。
+・--audio-source/--sub-sourceを複数指定した場合の挙動を改善。
+・字幕のmetadataが二重に出力されてしまっていた問題を修正。
+・--sub-metadata, --audio-metadataを指定した場合にも入力ファイルからのmetadataをコピーするように。
+
+・下記OpenCLによるvppフィルタを追加。
+  - --vpp-afs
+  - --vpp-colorspace
+  - --vpp-deband
+  - --vpp-decimate
+  - --vpp-edgelevel
+  - --vpp-mpdecimate
+  - --vpp-nnedi
+  - --vpp-pad
+  - --vpp-pmd
+  - --vpp-smooth
+  - --vpp-tweak
+  - --vpp-unsharp
+  - --vpp-warpsharp
+
+・yuv444→nv12/p010/ayuv/y410変換のAVX2/SSE2版を追加。
+・5.00 beta1から動かなかったLinuxビルドを修正。
+
+2021.04.07 (5.00 beta2)
+・SandyBridgeなどOpenCLのない環境で動作するように。
+・Broadwell以前の環境で、Failed to find d3d9 device.で動作しなくなっていたのを修正。
+・Broadwell以前の環境で、OpenCLでのコンパイルエラーが発生するのを修正。
+・不安定だったCPU版の--vpp-delogoを廃止し、OpenCL版の--vpp-delogoを実装。
+・RocketlakeでのAV1をHWデコードに対応。ただし、--d3d11を併せて指定する必要がある。
+・--fixed-funcを指定するとYUV444エンコードができないのを修正。
+
+既知の問題
+・Linux環境ではビルドできない。
+・YUV422/YUV444では、vppフィルタが動作しない場合がある。
+
+2021.03.30 (5.00 beta1)
+新機能
+・MediaSDKの更新、API 1.35に対応。
+・Icelakeへの対応を拡充。
+・Rocketlake対応の初期実装。
+・内部実装の刷新し、OpenCLフィルタを組み込み可能に。
+　・--vpp-knnの追加。
+　・--vpp-transposeの追加。
+・HEVC YUV422/YUV444デコードに対応。(Icelake/Rocketlake)
+・HEVC YUV444エンコードに対応。(--output-csp, Icelake/Rocketlake)
+・VP9 YUV444デコードに対応。(Icelake/Rocketlake)
+・--check-featuresで、HWデコードに対応している色空間の情報を追加。
+・リサイザのアルゴリズムを指定するオプションを追加。(--vpp-resize/--vpp-resize-mode)
+・H.264 Level 6, 6.1, 6.2を追加。
+
+既知の問題
+・Linux環境ではビルドできない。
+・--vpp-delogoが動作しない。
+・avhwリーダー以外を使用する際に動作が遅くなる場合がある。
+・YUV422/YUV444では、vppフィルタが動作しない場合がある。
+
+廃止
+・vpp-half-turnを廃止。--vpp-transform等で代用できる。
+
 2021.02.17 (4.13)
 ・AvisynthのUnicode対応を追加。
 ・Windows 10のlong path supportの追加。
