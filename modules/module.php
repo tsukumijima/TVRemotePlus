@@ -224,7 +224,7 @@
 
 		// 検索用コメントを含むプロセスを探す
 		$parent_pids = array();
-		exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):TSTask'.$stream.'%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
+		exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):TSTask('.$stream.')%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
 		foreach ($parent_pids as $parent_pid) {
 			$pid = (int)exec('wmic process where "parentprocessid = '.(int)$parent_pid.'" get processid 2>nul | findstr /b [1-9]');
 			if ($pid > 0) {

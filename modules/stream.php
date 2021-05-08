@@ -502,7 +502,7 @@
 
 			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 						' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
-			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).' & rem TVRP('.$udp_port.'):TSTask'.$stream.'"';
+			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).' & rem TVRP('.$udp_port.'):TSTask('.$stream.')"';
 			win_exec($tstask_cmd);
 
 		// TSTask にチャンネル切り替えのコマンドを送信
@@ -529,7 +529,7 @@
 		}
 
 		// エンコーダー検索用コメントを含める
-		$stream_cmd .= " & rem TVRP({$udp_port}):Encoder{$stream}\"";
+		$stream_cmd .= " & rem TVRP({$udp_port}):Encoder({$stream})\"";
 
 		// ストリームを開始する
 		win_exec("pushd \"{$segment_folder}\" && {$stream_cmd}");
@@ -813,7 +813,7 @@
 		}
 
 		// エンコーダー検索用コメントを含める
-		$stream_cmd .= " & rem TVRP({$udp_port}):Encoder{$stream}\"";
+		$stream_cmd .= " & rem TVRP({$udp_port}):Encoder({$stream})\"";
 
 		// ストリームを開始する
 		win_exec("pushd \"{$segment_folder}\" && {$stream_cmd}");
@@ -879,7 +879,7 @@
 
 			// エンコーダー検索用コメントを使ってエンコーダーを終了させる
 			$parent_pids = array();
-			exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):Encoder'.$stream.'%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
+			exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):Encoder('.$stream.')%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
 			foreach ($parent_pids as $parent_pid) {
 				$encoder_pid = (int)exec('wmic process where "parentprocessid = '.(int)$parent_pid.'" get processid 2>nul | findstr /b [1-9]');
 				if ($encoder_pid > 0) {
