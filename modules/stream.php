@@ -416,7 +416,7 @@
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
+					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality fastest --profile main --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
@@ -446,7 +446,7 @@
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
+					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset performance --profile main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
@@ -476,7 +476,7 @@
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
+					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality fast --profile main --interlace tff --vpp-afs preset=default'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
@@ -722,7 +722,7 @@
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
+					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
@@ -752,7 +752,7 @@
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
+					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
@@ -782,7 +782,7 @@
 					' -m hls_flags:delete_segments'.
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' --vbr '.$vb.' --qp-max 24:26:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
+					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
 					' --interlace tff --vpp-afs preset=default --profile Main'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
