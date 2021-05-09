@@ -114,7 +114,7 @@
             }
         },
         subtitle: {
-            type: 'webvtt',
+            type: 'aribb24',
         },
     });
 
