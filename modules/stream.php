@@ -424,7 +424,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0 -m max_interleave_delta:1M'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90 -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -454,7 +454,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0 -m max_interleave_delta:1M'.
+					' --avsync forcecfr --max-procfps 90 -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -730,7 +730,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --fallback-rc --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --fallback-rc --max-procfps 90'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -760,7 +760,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync forcecfr --max-procfps 90 --output-thread 0'.
+					' --avsync forcecfr --max-procfps 90'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 

@@ -99,8 +99,9 @@
             unlimited: false,
         },
         pluginOptions: {
-            // hls-b24.js
+            // hls.js
             hls: {
+              enableWorker: true,
               liveSyncDurationCount: 1,
             },
             // aribb24.js
