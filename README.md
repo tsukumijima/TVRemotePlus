@@ -603,14 +603,15 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 
 - Apache (2.4.46・Web サーバー)
 - PHP (7.4.4・実行環境)
-- TSTask (0.2.0(patch)・テレビ放送の受信、UDP 送信に利用)
-- TSTaskCentreEx (1.2.0・TSTask へのコマンド送信に利用)
-- rplsinfo (1.5.1・TSファイル内の番組情報取得に利用)
-- ffmpeg (4.1.6・UDP 受信 → エンコードに利用)
-- ffprobe (4.1.6・録画ファイルの情報取得に利用)
-- QSVEncC (5.01・UDP 受信 → ハードウェアエンコードに利用)
-- NVEncC (5.31・UDP 受信 → ハードウェアエンコードに利用)
-- VCEEncC (6.11・UDP 受信 → ハードウェアエンコードに利用)
+- TSTask (0.2.0(patch)・テレビ放送の受信 → UDP 送信)
+- TSTaskCentreEx (1.2.0・TSTask へのコマンド送信)
+- arib-subtitle-timedmetadater (3.0.0・ARIB 字幕を ID3 メタデータに変換)
+- rplsinfo (1.5.1・TS ファイル内の番組情報の取得に利用)
+- ffmpeg (4.1.6・UDP 受信 → エンコード)
+- ffprobe (4.1.6・録画ファイルの動画情報の取得に利用)
+- QSVEncC (5.01・UDP 受信 → ハードウェアエンコード)
+- NVEncC (5.31・UDP 受信 → ハードウェアエンコード)
+- VCEEncC (6.11・UDP 受信 → ハードウェアエンコード)
 
 ## 利用ライブラリ
 
@@ -621,17 +622,17 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 - **JavaScript ライブラリ**
   - jQuery (フレームワーク)
   - DPlayer (フォーク・JavaScript 製の動画プレイヤー)
-  - hls.js (HLS 形式の動画再生に利用)
+  - hls.js (HLS 形式の動画を再生するライブラリ)
   - aribb24.js (ARIB 字幕をブラウザで表示・再生できるライブラリ)
   - CSS Browser Selector (ブラウザや OS ごとにクラスを付与してくれるライブラリ)
-  - js-cookie (Cookie の読み取り・書き込みに利用)
+  - js-cookie (Cookie の読み取り・書き込みができるライブラリ)
   - moment.js (日付操作ライブラリ)
   - PWACompat (PWA 対応を楽にしてくれるライブラリ)
   - Swiper (スライダーライブラリ)
   - Toastr (トースト通知ライブラリ)
   - Velocity.js (アニメーションライブラリ)
 - **PHP ライブラリ**
-  - TwitterOAuth (Twitter 投稿に利用)
+  - TwitterOAuth (Twitter API ライブラリ)
   - CastV2inPHP (PHP からキャストできるライブラリ)
 
 ## 動作環境
