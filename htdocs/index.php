@@ -111,6 +111,8 @@
                 gaijiFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
                 drcsReplacement: true,
                 enableRawCanvas: true,
+                useStrokeText: true,
+                useHighResTextTrack: false,
             }
         },
         subtitle: {
