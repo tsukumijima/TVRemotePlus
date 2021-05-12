@@ -377,7 +377,7 @@
 
 					// 入力
 					// -probesize / -analyzeduration を短縮しすぎると音声多重+字幕放送で副音声がエンコードされてしまう可能性がある（？）
-					' -f mpegts -probesize 900K -analyzeduration 0.67 -dual_mono_mode main -i -'.
+					' -f mpegts -probesize 1000K -analyzeduration 0.7 -dual_mono_mode main -i -'.
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -406,7 +406,7 @@
 				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-probesize 900K --input-analyze 0.67 -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-probesize 1000K --input-analyze 0.7 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -424,7 +424,7 @@
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync vfr --fallback-rc --max-procfps 90 -m max_interleave_delta:1M'.
+					' --avsync cfr --fallback-rc --max-procfps 90 -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -436,7 +436,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-probesize 900K --input-analyze 0.67 -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-probesize 1000K --input-analyze 0.7 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -466,7 +466,7 @@
 				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
-					' --input-format mpegts --fps 30000/1001 --input-probesize 900K --input-analyze 0.67 -i -'.
+					' --input-format mpegts --fps 30000/1001 --input-probesize 1000K --input-analyze 0.7 -i -'.
 					// avhw エンコード
 					' --avhw'.
 					// HLS
