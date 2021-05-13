@@ -387,10 +387,10 @@
 					' -hls_flags delete_segments'.
 					' -hls_segment_filename stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' -map 0:v:0 -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
-					' -aspect 16:9 -preset veryfast -r 30000/1001'.
+					' -map 0:v:0 -vcodec libx264 -vb '.$vb.' -r 30000/1001 -aspect 16:9'.
+					' -preset veryfast -profile:v main -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					// 音声
-					' -map 0:a:0 -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
+					' -map 0:a:0 -acodec aac -ac 2 -ab '.$ab.' -ar '.$samplerate.' -af volume='.$volume.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
@@ -417,14 +417,14 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --quality fastest --profile main --vpp-deinterlace normal --tff'.
+					' --quality balanced --profile main --interlace tff --vpp-deinterlace normal'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync cfr --fallback-rc --max-procfps 90 -m max_interleave_delta:1M'.
+					' --avsync vfr --max-procfps 90 --fallback-rc -m max_interleave_delta:1M'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -447,10 +447,10 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --preset performance --profile main --cabac --vpp-deinterlace normal --tff'.
+					' --preset default --profile main --interlace tff --vpp-deinterlace normal --cabac'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
@@ -477,7 +477,7 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --quality fast --profile main --interlace tff --vpp-afs preset=default'.
+					' --preset default --profile main --interlace tff --vpp-afs preset=default'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
@@ -693,10 +693,10 @@
 					' -hls_flags delete_segments'.
 					' -hls_segment_filename stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
-					' -map 0:v:0 -vcodec libx264 -vb '.$vb.' -vf yadif=0:-1:1,scale='.$width.':'.$height.
-					' -aspect 16:9 -preset veryfast -r 30000/1001'.
+					' -map 0:v:0 -vcodec libx264 -vb '.$vb.' -r 30000/1001 -aspect 16:9'.
+					' -preset veryfast -profile:v main -vf yadif=0:-1:1,scale='.$width.':'.$height.
 					// 音声
-					' -map 0:a:0 -acodec aac -ab '.$ab.' -ar '.$samplerate.' -ac 2 -af volume='.$volume.
+					' -map 0:a:0 -acodec aac -ac 2 -ab '.$ab.' -ar '.$samplerate.' -af volume='.$volume.
 					// 字幕
 					' '.$subtitle_ffmpeg_cmd.
 					// その他
@@ -713,8 +713,8 @@
 
 					// 入力
 					' -i -'.
-					// avqsvエンコード
-					' --avqsv'.
+					// avhw エンコード
+					' --avhw'.
 					// HLS
 					' -m hls_time:'.$hlsfile_time.' --gop-len '.($hlsfile_time * 30).
 					' -m hls_list_size:0'.
@@ -723,14 +723,14 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --quality balanced --profile Main --vpp-deinterlace normal --tff'.
+					' --quality balanced --profile main --interlace tff --vpp-deinterlace normal'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
-					' --avsync vfr --fallback-rc --max-procfps 90'.
+					' --avsync vfr --max-procfps 90 --fallback-rc'.
 					// 出力
 					' -o stream'.$stream.'.m3u8';
 
@@ -743,8 +743,8 @@
 
 					// 入力
 					' -i -'.
-					// avcuvidエンコード
-					' --avcuvid'.
+					// avhw エンコード
+					' --avhw'.
 					// HLS
 					' -m hls_time:'.$hlsfile_time.' --gop-len '.($hlsfile_time * 30).
 					' -m hls_list_size:0'.
@@ -753,10 +753,10 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --preset default --profile Main --cabac --vpp-deinterlace normal --tff'.
+					' --preset default --profile main --interlace tff --vpp-deinterlace normal --cabac'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
-					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30 --audio-ignore-notrack-error'.
+					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
 					// 字幕
 					' '.$subtitle_other_cmd.
 					// その他
@@ -773,7 +773,7 @@
 
 					// 入力
 					' -i -'.
-					// avhwエンコード
+					// avhw エンコード
 					' --avhw'.
 					// HLS
 					' -m hls_time:'.$hlsfile_time.' --gop-len '.($hlsfile_time * 30).
@@ -783,7 +783,7 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --qp-max 26:27:28 --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --interlace tff --vpp-afs preset=default --profile Main'.
+					' --preset default --profile main --interlace tff --vpp-afs preset=default'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
