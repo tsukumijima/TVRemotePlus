@@ -106,13 +106,12 @@
             },
             // aribb24.js
             aribb24: {
-                forceStrokeColor: 'black',
                 normalFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
                 gaijiFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
-                drcsReplacement: true,
-                enableRawCanvas: true,
-                useStrokeText: true,
-                useHighResTextTrack: false,
+                forceStrokeColor: 'black',  // 縁取りする色
+                drcsReplacement: true,  // DRCS 文字を対応する Unicode 文字に置換
+                enableRawCanvas: true,  // 高解像度の字幕 Canvas を取得できるように
+                useStrokeText: true,  // 縁取りに strokeText API を利用
             }
         },
         subtitle: {
