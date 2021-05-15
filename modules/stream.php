@@ -373,7 +373,7 @@
 		}
 
 		// arib-subtitle-timedmetadater
-		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -u {$stream_port}";
+		$ast_cmd = "\"{$arib_subtitle_timedmetadater_path}\" -t {$stream_port}";
 
 		// 変換コマンド切り替え
 		switch ($encoder) {
@@ -508,7 +508,7 @@
 				@unlink($base_dir.'logs/stream'.$stream.'.tstask.log');
 			}
 
-			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /udp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
+			$tstask_cmd = '"'.$tstask_path.'" '.($TSTask_window == 'true' ? '/xclient' : '/min /xclient-').' /tcp /port '.$stream_port.' /sid '.$sid.' /tsid '.$tsid.
 						' /d '.$BonDriver.' /sendservice 1 /logfile '.$base_dir.'logs/stream'.$stream.'.tstask.log';
 			$tstask_cmd = 'start "TSTask Process" /B /min cmd.exe /C "'.win_exec_escape($tstask_cmd).' & rem TVRP('.$udp_port.'):TSTask('.$stream.')"';
 			win_exec($tstask_cmd);
