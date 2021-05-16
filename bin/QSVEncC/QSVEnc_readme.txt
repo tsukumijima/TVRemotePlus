@@ -363,6 +363,7 @@ Intel Graphics Driver 27.20.100.8681 (API v1.33)
 Win10 x64
 Core i7 11700K + GIGABYTE Z590I AORUS ULTRA
 16GB RAM
+Intel Graphics Driver 27.20.100.9466 (API v1.34)
 
 【Intel Media SDKとAPIの対応関係】
 API v1.32 … Intel Media SDK 2020 R1
@@ -387,7 +388,24 @@ API v1.1  … Intel Media SDK v2.0
 
 
 【どうでもいいメモ】
+2021.05.16 (5.02)
+[QSVEncC]
+・5.01で、必要ない場面でもd3d11が優先して使用されていたのをd3d9を使用するようもとに戻す。
+・5.01で、--avsync forcecfr使用時に連続16フレーム以上挿入ができなかったのを18000フレーム(実際は無制限)に挿入可能とする。
+  連続16フレーム以上挿入しようとすると異常終了が発生していた。
+・5.01で、--vpp-mpdecimate, --vpp-decimateを使用すると誤ってリサイズ行われる状態になっていたのを修正。
+・5.01で、--vpp-pad, --cropで正しくない解像度操作・変更がなされていたのを修正。
+・5.01で、--vpp-afs, --vpp-mpdecimate, --vpp-decimateで異常終了(Failed to acquire OpenCL interop)が発生していたのを修正。
+・5.01で、--vpp-deinterlace bobで異常終了(Application provided invalid, non monotonically increasing dts to muxer)が発生していたのを修正。
+・5.01で、Win7のSandybridge環境ではデコードが正常に行われなくなってしまう(緑の絵が出る)問題を回避する。
+・5.01で、-c raw使用時にOpenCLフィルタを使用するとエラーが発生していたのを修正。
+・デバッグ用のログメッセージの改善。
+
+[QSVEnc.auo]
+・設定画面からリサイズを指定しても効果がなかったのを修正。
+
 2021.05.08 (5.01)
+・5.00 beta1から動かなかったLinuxビルドを修正。
 ・avsw/avhwでのファイル読み込み時にファイル解析サイズの上限を設定するオプションを追加。(--input-probesize)
 ・--input-analyzeを小数点で指定可能なよう拡張。
 ・読み込んだパケットの情報を出力するオプションを追加。( --log-packets )
@@ -421,7 +439,9 @@ API v1.1  … Intel Media SDK v2.0
   - --vpp-warpsharp
 
 ・yuv444→nv12/p010/ayuv/y410変換のAVX2/SSE2版を追加。
-・5.00 beta1から動かなかったLinuxビルドを修正。
+
+既知の問題
+・YUV422/YUV444では、vppフィルタが動作しない場合がある。
 
 2021.04.07 (5.00 beta2)
 ・SandyBridgeなどOpenCLのない環境で動作するように。
@@ -430,6 +450,8 @@ API v1.1  … Intel Media SDK v2.0
 ・不安定だったCPU版の--vpp-delogoを廃止し、OpenCL版の--vpp-delogoを実装。
 ・RocketlakeでのAV1をHWデコードに対応。ただし、--d3d11を併せて指定する必要がある。
 ・--fixed-funcを指定するとYUV444エンコードができないのを修正。
+・--async-depthのデフォルト値を3に変更。不必要にメモリを多く使用していた。
+・-c raw使用時に、OpenCLフィルタを使用すると異常終了が発生することがあったのを修正。
 
 既知の問題
 ・Linux環境ではビルドできない。
