@@ -475,8 +475,9 @@
 
 					// 入力
 					' --input-format mpegts --fps 30000/1001 --input-probesize 1000K --input-analyze 0.7 -i -'.
-					// avhw エンコード
-					' --avhw'.
+					// avsw エンコード
+					// VCE の HW デコーダーはエラー耐性が低く TS を扱う用途では不安定なので、SW デコーダーを利用する
+					' --avsw'.
 					// HLS
 					' -m hls_time:'.$hlslive_time.' --gop-len '.($hlslive_time * 30).
 					' -m hls_list_size:'.$hlslive_list.
@@ -789,8 +790,9 @@
 
 					// 入力
 					' -i -'.
-					// avhw エンコード
-					' --avhw'.
+					// avsw エンコード
+					// VCE の HW デコーダーはエラー耐性が低く TS を扱う用途では不安定なので、SW デコーダーを利用する
+					' --avsw'.
 					// HLS
 					' -m hls_time:'.$hlsfile_time.' --gop-len '.($hlsfile_time * 30).
 					' -m hls_list_size:0'.
