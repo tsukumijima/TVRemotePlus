@@ -485,7 +485,7 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --max-bitrate '.$vb_max.' --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --preset default --profile main --interlace tff --vpp-afs preset=default'.
+					' --preset balanced --profile main --interlace tff --vpp-afs preset=default'.
 					// 音声
 					' --audio-codec 1?aac#dual_mono_mode=main --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
@@ -769,7 +769,7 @@
 					' -m hls_segment_filename:stream'.$stream.'-'.date('mdHi').'_%05d.ts'.
 					// 映像
 					' --vbr '.$vb.' --max-bitrate '.$vb_max.' --output-res '.$width.'x'.$height.' --sar '.$sar.
-					' --preset default --profile main --interlace tff --vpp-deinterlace normal --cabac'.
+					' --preset balanced --profile main --interlace tff --vpp-deinterlace normal --cabac'.
 					// 音声
 					' --audio-codec 1?aac'.$dual_mono_mode_other.' --audio-stream 1?:stereo --audio-bitrate '.$ab.' --audio-samplerate '.$samplerate.
 					' --audio-filter volume='.$volume.' --audio-ignore-decode-error 30'.
