@@ -218,11 +218,7 @@
 				// TSTaskCentreEx のコマンド
 				$tstaskcentreex_cmd = (
 					// チャンネルをセット
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" && ".
-					// UDP 送信を終了
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StopStreaming && ".
-					// UDP 送信を開始
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StartStreaming -o \"Port:{$stream_port}|Address:127.0.0.1\""
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\""
 				);
 
 			// BonDriver が違うので BonDriver を読み込み直してからチャンネルを切り替える
@@ -235,11 +231,7 @@
 					// チューナーを開く
 					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c OpenTuner && ".
 					// チャンネルをセット
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\" && ".
-					// UDP 送信を終了
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StopStreaming && ".
-					// UDP 送信を開始
-					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c StartStreaming -o \"Port:{$stream_port}|Address:127.0.0.1\""
+					"\"{$tstaskcentreex_path}\" -p {$tstask_pid} -c SetChannel -o \"ServiceID:{$sid}|TransportStreamID:{$tsid}\""
 				);
 			}
 
