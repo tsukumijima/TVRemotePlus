@@ -193,7 +193,7 @@
 	// ライブ配信を開始する
 	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle) {
 
-		global $inifile, $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $tstaskcentreex_path, $arib_subtitle_timedmetadater_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window, $TSTask_window;
+		global $inifile, $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $tstaskcentreex_path, $arib_subtitle_timedmetadater_path, $asyncbuf_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window, $TSTask_window;
 
 		// 設定ファイル読み込み
 		$settings = json_decode(file_get_contents_lock_sh($inifile), true);
@@ -514,8 +514,11 @@
 			win_exec($tstaskcentreex_cmd);
 		}
 
+		// asyncbuf.exe
+		$asyncbuf_cmd = "\"{$asyncbuf_path}\" 50000000 0";  // 50MB 
+
 		// エンコードコマンド
-		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd);
+		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.$asyncbuf_cmd.' | '.win_exec_escape($stream_cmd);
 
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true') {
@@ -888,13 +891,20 @@
 		} else {
 
 			// エンコーダー検索用コメントを使ってエンコーダーを終了させる
-			$parent_pids = array();
+			$parent_pids = [];
 			exec('wmic process where "commandline like \'% [r]em TVRP('.$udp_port.'):Encoder('.$stream.')%\'" get processid 2>nul | findstr /b [1-9]', $parent_pids);
+			// 親プロセスごとに実行
 			foreach ($parent_pids as $parent_pid) {
-				$encoder_pid = (int)exec('wmic process where "parentprocessid = '.(int)$parent_pid.'" get processid 2>nul | findstr /b [1-9]');
-				if ($encoder_pid > 0) {
-					win_exec("taskkill /F /PID {$encoder_pid}");
+				// すべての子プロセスを終了
+				$encoder_pids = [];
+				exec('wmic process where "parentprocessid = '.(int)$parent_pid.'" get processid 2>nul | findstr /b [1-9]', $encoder_pids);
+				foreach ($encoder_pids as $encoder_pid) {
+					if ($encoder_pid > 0) {
+						win_exec("taskkill /F /PID {$encoder_pid}");
+					}
 				}
+				// 親プロセスを終了
+				win_exec("taskkill /F /PID {$parent_pid}");
 			}
 
 			// TSTask を終了する
