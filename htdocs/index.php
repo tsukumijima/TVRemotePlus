@@ -106,8 +106,8 @@
             },
             // aribb24.js
             aribb24: {
-                normalFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
-                gaijiFont: '"Windows TV MaruGothic","Windows TV Gothic","Hiragino Sans","Yu Gothic Medium",sans-serif',
+                normalFont: '"Windows TV MaruGothic","Hiragino Maru Gothic Pro","Yu Gothic Medium",sans-serif',
+                gaijiFont: '"Windows TV MaruGothic","Hiragino Maru Gothic Pro","Yu Gothic Medium",sans-serif',
                 forceStrokeColor: 'black',  // 縁取りする色
                 drcsReplacement: true,  // DRCS 文字を対応する Unicode 文字に置換
                 enableRawCanvas: true,  // 高解像度の字幕 Canvas を取得できるように
