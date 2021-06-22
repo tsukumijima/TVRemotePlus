@@ -1,23 +1,28 @@
 
 // 個人設定を反映
-$(window).on('load', function(){
+$(window).on('load', () => {
 
-    if (settings['twitter_show']){
+    if (settings['twitter_show']) {
         $('#twitter_show').prop('checked', true);
     } else {
         $('#twitter_show').prop('checked', false);
     }
-    if (settings['comment_show']){
+    if (settings['comment_show']) {
         $('#comment_show').prop('checked', true);
     } else {
         $('#comment_show').prop('checked', false);
     }
 
+    // コメントフィルターの値を読み込み
+    const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
+    // ; で連結してフォームに表示
+    $('#comment_filter').val(comment_filter.join(';'));
+
 });
 
 $(function(){
 
-    $('#setting-user').submit(function(event){
+    $('#setting-user').submit((event) => {
 
         event.preventDefault();
         $('.bluebutton').attr('disabled', true);
@@ -40,23 +45,36 @@ $(function(){
         settings['player_floating'] = $('#player_floating').prop('checked');
 
         // ダークモード切り替え
-        if (settings['dark_theme']){
+        if (settings['dark_theme']) {
             $('html').addClass('dark-theme');
         } else {
             $('html').removeClass('dark-theme');
         }
 
         // ナビゲーションメニュー切り替え
-        if (settings['vertical_navmenu']){
+        if (settings['vertical_navmenu']) {
             $('html').addClass('vertical-navmenu');
         } else {
             $('html').removeClass('vertical-navmenu');
         }
 
-        var json = JSON.stringify(settings);
+        // コメントフィルターを保存
+        // 参考: https://ezolab.blog.fc2.com/blog-entry-41.html
+        if (!String.prototype.trimAny) {
+            String.prototype.trimAny = function(any) {
+              return this.replace(new RegExp("^" + any + "+|" + any + "+$", "g"),'');
+            };
+          }
+        // 両端から ; を削除した上で、; でキーワードを分割して配列にする
+        const comment_filter = $('#comment_filter').val().trimAny(';').split(';');
+        // localStorage に保存
+        localStorage.setItem('tvrp-comment-filter', JSON.stringify(comment_filter));
+
+        // 個人設定を Cookie に保存
+        const json = JSON.stringify(settings);
         Cookies.set('tvrp_settings', json, { expires: 365 });
         toastr.success('個人設定を保存しました。');
-        setTimeout(function(){
+        setTimeout(() => {
             $('.bluebutton').attr('disabled', false);
         }, 200);
 

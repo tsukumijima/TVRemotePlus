@@ -273,6 +273,7 @@ select {
     -moz-appearance: none;
     height: 35px;
     padding: 6px 12px;
+    padding-right: 45px;
     border: 1.5px solid var(--color-border);
     background-color: var(--color-white);
     color: var(--color-text);
