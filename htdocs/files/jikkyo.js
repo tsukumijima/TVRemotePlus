@@ -85,7 +85,6 @@ class Scroll {
             const scroll = Math.ceil(this.comment_draw_box.scrollTop + this.comment_draw_box.clientHeight);  // スクロールで見えている部分の下辺
             const diff = Math.abs(height - scroll); // 絶対値を取得
             // 差が 8 以内なら（イコールだとたまにずれる時に判定漏れが起きる）
-            console.log(diff)
             if (diff <= 8) {
                 return true;
             } else {
@@ -602,6 +601,16 @@ function newNicoJKAPIBackendONAir() {
                 return;
             }
 
+            // コメントがコメントフィルターに設定されたキーワードと一致したら描画しない
+            const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
+            for (const keyword of comment_filter) {
+                // コメント内にキーワードが部分一致で含まれている
+                if (comment.content.includes(keyword)) {
+                    console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${comment.content}`);
+                    return;
+                }
+            }
+
             // 色・位置
             let color = '#FFFFFF';  // 色のデフォルト
             let position = 'right';  // 位置のデフォルト
@@ -988,28 +997,28 @@ function newNicoJKAPIBackendFile() {
                 comment_counter.textContent = `コメント数: ${dp.danmaku.dan.length}`;
 
                 // コメントごとに実行
-                for (danmaku of dp.danmaku.dan) {
+                for (const danmaku of dp.danmaku.dan) {
 
                     // コメントが空ならスルー
-                    if (danmaku['text'] === '') {
+                    if (danmaku.text === '') {
                         continue;
                     }
 
                     // 再生時間を配列に追加
-                    comment_time.push(danmaku['time']);
+                    comment_time.push(danmaku.time);
 
                     // 分と秒を計算
-                    let second = Math.floor(danmaku['time'] % 60);
-                    let minutes = Math.floor(danmaku['time'] / 60);
+                    let second = Math.floor(danmaku.time % 60);
+                    let minutes = Math.floor(danmaku.time / 60);
                     if (second < 10) second = '0' + second;
                     if (minutes < 10) minutes = '0' + minutes;
                     let time = minutes + ':' + second;
 
                     // 末尾に追加
                     html.push(
-                        `<tr class="comment-file" onclick="dp.video.dispatchEvent(new CustomEvent('commentclick', {detail: ${danmaku['time']}}))">
+                        `<tr class="comment-file" onclick="dp.video.dispatchEvent(new CustomEvent('commentclick', {detail: ${danmaku.time}}))">
                             <td class="time" align="center">${time}</td>
-                            <td class="comment">${danmaku['text']}</td>
+                            <td class="comment">${danmaku.text}</td>
                         </tr>`
                     );
                 }
@@ -1168,6 +1177,20 @@ function newNicoJKAPIBackendFile() {
                 }
                 return;
             }
+
+            // コメントがコメントフィルターに設定されたキーワードと一致したら描画しない
+            const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
+            // Array.filter() でコメントの入った配列をフィルタリング
+            comment.kakolog = comment.kakolog.filter((danmaku) => {
+                for (const keyword of comment_filter) {
+                    // コメント内にキーワードが部分一致で含まれている
+                    if (danmaku.text.includes(keyword)) {
+                        console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${danmaku.text}`);
+                        return false;  // 要素を削除
+                    }
+                }
+                return true;  // 要素を残す
+            });
 
             // 取得したコメントを DPlayer 側に送信
             options.success(comment.kakolog);
