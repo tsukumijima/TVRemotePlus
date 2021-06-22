@@ -188,8 +188,8 @@ select {
     width: 100%;
 }
 
-#setting-user .select-wrap, #setting-user .text-box {
-    max-width: 200px;
+.select-wrap, .text-box {
+    flex-shrink: 0;
 }
 
 .download, .download:link, .download:visited {

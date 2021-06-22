@@ -423,7 +423,12 @@
             <h4><i class="fas fa-comment-alt"></i>コメント</h4>
 
             <div class="setting-form setting-select">
-              <span>コメントのフォントサイズ</span>
+              <div class="setting-content">
+                <span>コメントのフォントサイズ</span>
+                <p>
+                  大きめ・ふつう・小さめ から選択できます<br>
+                </p>
+              </div>
               <div class="select-wrap">
                 <select id="comment_size" required>
 <?php	if (isSettingsItem('comment_size', '42') !== false){ ?>
@@ -448,7 +453,14 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>コメントの遅延時間（ライブ配信・秒）</span>
+              <div class="setting-content">
+                <span>コメントの遅延秒数（ライブ配信）</span>
+                <p>
+                  どうしても TVTest 等で直接視聴する場合と比較して数秒の遅延があるため、その分コメント描画を遅らせるための設定です<br>
+                  家の中で利用する場合は 5 秒前後が目安ですが、外出先から利用する場合は回線状況に左右されるほか、エンコーダーのエンコード速度にもよるため一概には言えません<br>
+                  お使いの環境でちょうどいい表示タイミングになるように適宜調整してください<br>
+                </p>
+              </div>
 <?php	if (isSettingsItem('comment_delay') !== false){ ?>
               <input class="text-box" id="comment_delay" type="number" min="0" max="120" placeholder="5" value="<?= isSettingsItem('comment_delay'); ?>" required />
 <?php	} else { ?>
@@ -457,7 +469,14 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>コメントの遅延時間（ファイル再生・秒）</span>
+              <div class="setting-content">
+                <span>コメントの遅延秒数（ファイル再生）</span>
+                <p>
+                  EDCB などの予約録画ソフト側で設定した録画マージン分、コメント描画を遅らせるための設定です<br>
+                  ファイル再生ではコメントを録画番組の開始時刻から取得しているため、録画マージンが指定されているとその分だけコメントが早く描画されてしまいます<br>
+                  お使いの予約録画ソフトの設定に応じて適宜調整してください<br>
+                </p>
+              </div>
 <?php	if (isSettingsItem('comment_file_delay') !== false){ ?>
               <input class="text-box" id="comment_file_delay" type="number" min="0" max="120" placeholder="0" value="<?= isSettingsItem('comment_file_delay'); ?>" required />
 <?php	} else { ?>
@@ -466,7 +485,14 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>コメントリストのパフォーマンス（ファイル再生のみ）</span>
+              <div class="setting-content">
+                <span>コメントリストのパフォーマンス</span>
+                <p>
+                  適用されるのはファイル再生のみです<br>
+                  軽量モードでは技術上の制約でコメントリストからはみ出たコメントは改行せずに省略されますが、その分標準モードと比較し圧倒的に高速で軽量です<br>
+                  標準モードでは映画など全体のコメント数が多い録画番組でコメント描画も含め全体の動作が著しく重くなるため、高速な PC 以外では軽量モードにしておくことを推奨します<br>
+                </p>
+              </div>
               <div class="select-wrap">
                 <select id="comment_list_performance" required>
 <?php	if (isSettingsItem('comment_list_performance', 'normal') !== false){ ?>
@@ -483,10 +509,32 @@
               </div>
             </div>
 
+            <div class="setting-form setting-input">
+              <div class="setting-content">
+                <span>コメントフィルター</span>
+                <p>
+                  煩わしかったり不快なコメントを非表示にしたい場合に利用できます ライブ配信・ファイル再生の両方に適用されます<br>
+                  非表示にしたいコメントのキーワードを指定します セミコロン (;) 区切りで複数指定できます<br>
+                  このコメントフィルターに登録されているキーワードと一部でも一致したコメントは表示されません<br>
+                  たとえば wwwwww と指定すると、これより文字数の多いコメントも含めて草刈りができます<br>
+                </p>
+              </div>
+              <div class="password-box-wrap">
+                <input class="password-box" id="comment_filter" type="password" placeholder="wwwwww;草草草草草;すううううう;" required />
+                <i class="password-box-input fas fa-eye-slash"></i>
+              </div>
+            </div>
+
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
 
             <div class="setting-form setting-select">
-              <span>デフォルトの動画の画質（環境設定よりも優先されます）</span>
+              <div class="setting-content">
+                <span>デフォルトの動画の画質</span>
+                <p>
+                  端末ごとにデフォルトの動画の画質を変えたいときに利用できます 環境設定よりも優先されます<br>
+                  たとえば家の中で使う PC では 1080p で、低スペックなタブレットでは 720p で、外出時に使うスマホや 360p で、といった使い方ができると思います<br>
+                </p>
+              </div>
               <div class="select-wrap">
                 <select id="quality_user_default" required>
                   <?php $quality_user_default = isSettingsItem('quality_user_default'); ?>
@@ -504,7 +552,12 @@
             </div>
 
             <div class="setting-form setting-select">
-              <span>一度に表示する録画番組リストの番組数（件）</span>
+              <div class="setting-content">
+                <span>一度に表示する録画番組リストの番組数（件）</span>
+                <p>
+                  件数を多くするほど一度に多くの番組が表示されますが、その分端末によっては若干重くなります<br>
+                </p>
+              </div>
 <?php	if (isSettingsItem('list_view_number') !== false){ ?>
               <input class="text-box" id="list_view_number" type="number" min="10" max="100" placeholder="30" value="<?= isSettingsItem('list_view_number'); ?>" required />
 <?php	} else { ?>
@@ -513,7 +566,13 @@
             </div>
 
             <div class="setting-form">
-              <span>デフォルト設定を使い 1 クリックでストリームを開始する</span>
+              <div class="setting-content">
+                <span>デフォルト設定を使い 1 クリックでストリームを開始する</span>
+                <p>
+                  チャンネルや録画番組をクリック（タップ）すると、画質やエンコーダーを選択するダイヤログを表示せずに、デフォルト設定を使って即時にストリームを開始します<br>
+                  「画質やエンコーダーを変えることがなく、とにかくすぐ視聴したい」という方におすすめです<br>
+                </p>
+              </div>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('onclick_stream', true) !== false){ ?>
                 <input id="onclick_stream" class="toggle-input" type="checkbox" value="true" checked />
@@ -525,7 +584,13 @@
             </div>
 
             <div class="setting-form">
-              <span>番組表へスクロールした時にプレイヤーをフローティング表示する (＊)</span>
+              <div class="setting-content">
+                <span>チャンネルリストへスクロールした時にプレイヤーをフローティング表示する (＊)</span>
+                <p>
+                  視聴ページのチャンネルリストで次のチャンネルを選ぶ時に、現在視聴中の番組を右上にフローティング表示して見続けられるようにします<br>
+                  問題がなければオンにしておくことを推奨します<br>
+                </p>
+              </div>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('player_floating', true) !== false){ ?>
                 <input id="player_floating" class="toggle-input" type="checkbox" value="true" checked />
