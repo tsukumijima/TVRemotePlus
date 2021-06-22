@@ -606,7 +606,7 @@ function newNicoJKAPIBackendONAir() {
             for (const keyword of comment_filter) {
                 // コメント内にキーワードが部分一致で含まれている
                 if (comment.content.includes(keyword)) {
-                    console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${comment.content}`);
+                    // console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${comment.content}`);
                     return;
                 }
             }
@@ -1185,7 +1185,7 @@ function newNicoJKAPIBackendFile() {
                 for (const keyword of comment_filter) {
                     // コメント内にキーワードが部分一致で含まれている
                     if (danmaku.text.includes(keyword)) {
-                        console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${danmaku.text}`);
+                        // console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${danmaku.text}`);
                         return false;  // 要素を削除
                     }
                 }
