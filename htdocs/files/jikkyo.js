@@ -604,10 +604,13 @@ function newNicoJKAPIBackendONAir() {
             // コメントがコメントフィルターに設定されたキーワードと一致したら描画しない
             const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
             for (const keyword of comment_filter) {
-                // コメント内にキーワードが部分一致で含まれている
-                if (comment.content.includes(keyword)) {
-                    // console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${comment.content}`);
-                    return;
+                // キーワードが空でないか（空の場合、全てのコメントをフィルタリングしてしまう）
+                if (keyword !== '') {
+                    // コメント内にキーワードが部分一致で含まれている
+                    if (comment.content.includes(keyword)) {
+                        // console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${comment.content}`);
+                        return;
+                    }
                 }
             }
 
@@ -1183,10 +1186,13 @@ function newNicoJKAPIBackendFile() {
             // Array.filter() でコメントの入った配列をフィルタリング
             comment.kakolog = comment.kakolog.filter((danmaku) => {
                 for (const keyword of comment_filter) {
-                    // コメント内にキーワードが部分一致で含まれている
-                    if (danmaku.text.includes(keyword)) {
-                        // console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${danmaku.text}`);
-                        return false;  // 要素を削除
+                    // キーワードが空でないか（空の場合、全てのコメントをフィルタリングしてしまう）
+                    if (keyword !== '') {
+                        // コメント内にキーワードが部分一致で含まれている
+                        if (danmaku.text.includes(keyword)) {
+                            // console.log(`コメントをフィルタリングしました(keyword: ${keyword}): ${danmaku.text}`);
+                            return false;  // 要素を削除
+                        }
                     }
                 }
                 return true;  // 要素を残す
