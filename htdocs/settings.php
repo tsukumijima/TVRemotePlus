@@ -5,7 +5,7 @@
 
 	// ヘッダー読み込み
 	require_once ('../modules/header.php');
-  
+
 	// モジュール読み込み
 	require_once ('../modules/stream.php');
 
@@ -18,7 +18,7 @@
 		$onid, $onid_T, $onid_S, $onid_CS, // ONID(NID)
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
         = initBonChannel($BonDriver_dir);
-	
+
 	// 時計
 	$clock = date('Y/m/d H:i:s');
 
@@ -260,7 +260,7 @@
 			// リバースプロキシからのアクセスの時に環境設定を隠す設定になっていない &
 			// リバースプロキシからのアクセスでないなら
 			if (!($reverse_proxy and $setting_hide == 'true')){
-			
+
 				// ファイル読み込み
 				$tvrp_conf = file_get_contents($tvrp_conf_file);
 
@@ -281,7 +281,7 @@
 					if (strpos($set, '\\') !== false){
 						$set = str_replace('\\', '/', $set);
 					}
-					
+
 					// キーに不正な文字がなければ
 					if (preg_match('/[^0-9A-Za-z_]/', $key) === 0) {
 						// config.php を書き換え
@@ -289,7 +289,7 @@
 					}
 
 				}
-				
+
 				// ファイル書き込み
 				file_put_contents($tvrp_conf_file, $tvrp_conf);
 
@@ -317,7 +317,7 @@
           <p>
             <?= $site_title; ?> の設定ができます。<br>
           </p>
-          
+
           <form id="setting-user" class="setting-form-wrap">
 
             <input type="hidden" name="setting-user" value="true" />
@@ -515,7 +515,7 @@
                 <p>
                   煩わしかったり不快なコメントを非表示にしたい場合に利用できます ライブ配信・ファイル再生の両方に適用されます<br>
                   非表示にしたいコメントのキーワードを指定します セミコロン (;) 区切りで複数指定できます<br>
-                  このコメントフィルターに登録されているキーワードと一部でも一致したコメントは表示されません<br>
+                  このコメントフィルターに登録されているキーワードが含まれるコメントは表示されなくなります<br>
                   たとえば wwwwww と指定すると、これより文字数の多いコメントも含めて草刈りができます<br>
                 </p>
               </div>
@@ -605,7 +605,7 @@
 <?php	if (!($reverse_proxy and $setting_hide == 'true')){ ?>
 
           <form id="setting-env" class="setting-form-wrap">
-          
+
             <input type="hidden" name="_csrf_token" value="<?= $csrf_token ?>">
             <input type="hidden" name="setting-env" value="true" />
 
@@ -628,9 +628,9 @@
                 <p>
                   新規インストール時のデフォルトは 1080p (1440×1080) です<br>
                   テレビ放送は一部の BS 局を除き基本的に 1440×1080 で放送されています<br>
-                  再生させる端末のスペックや液晶の大きさや解像度等に合わせ、適宜変更してください<br>
+                  再生させる端末のスペック・液晶の大きさ・解像度などに合わせ、適宜変更してください<br>
                   240p は画質は低くなりますが、ワンセグよりも高画質で低通信量にて視聴できます<br>
-                  144p はさらに画質が低くなりますが、高音質で通信量を 約3.8MB/分 まで削減できます<br>
+                  144p はさらに画質が低くなりますが、通信量を 約3.8MB/分 まで削減できます<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -651,10 +651,10 @@
               <div class="setting-content">
                 <span>デフォルトのエンコーダー</span>
                 <p>
-                  ffmpeg が通常のエンコーダー(ソフトウェアエンコーダー)、
+                  ffmpeg が通常のエンコーダー（ソフトウェアエンコーダー）、
                   QSVEncC・NVEncC・VCEEncC がハードウェアエンコーダーです<br>
                   QSVEncC・NVEncC・VCEEncC の方が CPU を消費しない・エンコードが早いためおすすめですが、
-                  QSVEncC は Intel 製の一部の GPU 、NVEncC は nvidia 製の GPU 、VCEEncC は AMD の Radeon GPU でしか利用できません<br>
+                  QSVEncC は Intel 製の一部の GPU 、NVEncC は NVIDIA 製の GPU 、VCEEncC は AMD の Radeon GPU でしか利用できません<br>
                 </p>
               </div>
               <div class="select-wrap">
@@ -669,10 +669,10 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>デフォルトの BonDriver (地デジ用)</span>
+                <span>デフォルトの BonDriver（地デジ用）</span>
                 <p>
-                  デフォルトで利用する BonDriver (地デジ用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
+                  デフォルトで利用する地デジ用の BonDriver を設定します<br>
+                  うまく再生できない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
                   Spinel よりも BonDriverProxyEx の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
@@ -691,10 +691,10 @@
 
             <div class="setting-form setting-input">
               <div class="setting-content">
-                <span>デフォルトの BonDriver (BS・CS用)</span>
+                <span>デフォルトの BonDriver（ BS・CS 用）</span>
                 <p>
-                  デフォルトで利用する BonDriver (BS・CS用) です<br>
-                  うまく再生出来ない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
+                  デフォルトで利用する BS・CS 用の BonDriver を設定します<br>
+                  うまく再生できない場合、BonDriver_Spinel もしくは BonDriver_Proxy を利用すると安定して視聴できる場合があります<br>
                   BonDriver_Spinel よりも BonDriver_Proxy の方がストリーム開始にかかる時間は短くなります<br>
                 </p>
               </div>
@@ -755,10 +755,9 @@
               <div class="setting-content">
                 <span>ライブ配信時にデフォルトで字幕をストリームに含める</span>
                 <p>
-                  この設定をオンにすると、ライブ配信時に字幕を表示出来るようになります<br>
-                  ただし、まれにエラーを吐いてストリームが開始出来ない場合があったり、
-                  字幕の無い番組やCMに入った等のタイミングで一部のセグメントのエンコードが遅れ、ストリームがカクつく場合もあります<br>
-                  字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオフにして、字幕付きで見たい時だけオンにすることをおすすめします<br>
+                  この設定をオンにすると、ライブ配信時に字幕を表示できるようになります<br>
+                  以前は字幕をオンにするとエンコードが不安定になるなどの諸問題がありましたが、字幕の表示方式の変更により、現在では字幕を含めてエンコードする事による問題はほとんど起きなくなっています<br>
+                  基本的にはオンにしておくことを推奨します<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -776,10 +775,9 @@
               <div class="setting-content">
                 <span>ファイル再生時にデフォルトで字幕をストリームに含める</span>
                 <p>
-                  この設定をオンにすると、ファイル再生時に字幕を表示出来るようになります<br>
-                  ファイル再生時は、基本的にライブ配信時のようなエンコードの問題は起こりません<br>
-                  ただ、ごく稀に字幕付きでエンコードした事で途中でエンコードが失敗する場合があるため、念のため設定できるようにしています<br>
-                  字幕自体は個々にプレイヤー側で表示/非表示を切り替え可能なので、デフォルトはオンにして、問題が起きたときのみオフにすることをおすすめします<br>
+                  この設定をオンにすると、ファイル再生時に字幕を表示できるようになります<br>
+                  以前は字幕をオンにするとエンコードが不安定になるなどの諸問題がありましたが、字幕の表示方式の変更により、現在では字幕を含めてエンコードする事による問題はほとんど起きなくなっています<br>
+                  基本的にはオンにしておくことを推奨します<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -808,7 +806,7 @@
               <div class="setting-content">
                 <span>番組情報ファイルのあるフォルダ</span>
                 <p>
-                  ファイル再生の際、番組情報が録画ファイルから取得できない場合 ( MP4 ファイル等) に利用します<br>
+                  ファイル再生の際、番組情報が録画ファイルから取得できない場合（ MP4・MKV など）に利用します<br>
                   フォルダを指定しない場合、録画ファイルと同じファイル名の .ts.program.txt を参照します<br>
                 </p>
               </div>
@@ -820,9 +818,9 @@
                 <span>EDCB Material WebUI (EMWUI) のある URL</span>
                 <p>
                   番組表取得などで利用します<br>
-                  この機能を利用する場合、予め <a href="https://github.com/EMWUI/EDCB_Material_WebUI" target="_blank">EDCB Material WebUI</a> を導入しておいてください<br>
+                  この機能を利用する場合、あらかじめ <a href="https://github.com/EMWUI/EDCB_Material_WebUI" target="_blank">EDCB Material WebUI</a> を導入しておいてください<br>
                   以前は http://192.168.x.xx:5510/api/ のように指定していましたが、変更になりました<br>
-                  TVRock 等を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）を代わりに設定することで番組情報が表示できるようになります<br>
+                  TVRock を利用している場合、<a href="http://vb45wb5b.seesaa.net/" target="_blank">TVRemoteViewer_VB</a> 2.93m（再うｐ版）以降を導入し TVRemoteViewer_VB の URL（例：http://192.168.x.xx:40003/ ）を代わりに設定することで番組情報が表示できるようになります<br>
                 </p>
               </div>
               <input class="text-box" name="EDCB_http_url" type="url" value="<?= $EDCB_http_url; ?>" placeholder="http://192.168.x.xx:5510/" />
@@ -915,9 +913,9 @@
               <div class="setting-content">
                 <span>ニコニコにログインする際のメールアドレス</span>
                 <p>
-                  ニコニコ実況へのコメントの投稿に必須です（過去ログ再生では不要になりました）<br>
-                  利用する場合、予めニコニコアカウントを作成しておく必要があります<br>
-                  ログインしなくても生放送のコメントは取得できますが、コメント投稿はできません<br>
+                  ニコニコ実況へのコメントの投稿に必須です<br>
+                  利用する場合、あらかじめニコニコアカウントを作成しておく必要があります<br>
+                  ログインしなくてもコメントは表示できますが、コメントの投稿はできません<br>
                   また、同時視聴者数が多くなった場合に追い出されやすくなります<br>
                 </p>
               </div>
@@ -928,9 +926,9 @@
               <div class="setting-content">
                 <span>ニコニコにログインする際のパスワード</span>
                 <p>
-                  ニコニコ実況へのコメントの投稿に必須です（過去ログ再生では不要になりました）<br>
-                  利用する場合、予めニコニコアカウントを作成しておく必要があります<br>
-                  ログインしなくても生放送のコメントは取得できますが、コメント投稿はできません<br>
+                  ニコニコ実況へのコメントの投稿に必須です<br>
+                  利用する場合、あらかじめニコニコアカウントを作成しておく必要があります<br>
+                  ログインしなくてもコメントは表示できますが、コメントの投稿はできません<br>
                   また、同時視聴者数が多くなった場合に追い出されやすくなります<br>
                 </p>
               </div>
@@ -940,17 +938,17 @@
               </div>
             </div>
 
-            <h4><i class="fab fa-twitter"></i>Twitter 投稿</h4>
+            <h4><i class="fab fa-twitter"></i>Twitter 連携</h4>
 
             <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>ハッシュタグ付きツイートを連投したと判断しハッシュタグを外すまでの秒数</span>
                 <p>
                   アカウントのシャドウバンを回避するための設定です<br>
-                  Twitter の規制が厳しいため、ハッシュタグをつけたツイートを60秒以下（？）の間隔で連投すると、シャドウバン (Search Ban・検索に引っかからなくなる) されてしまうことがあります<br>
-                  例えば 60 (秒) に設定した場合、ハッシュタグ付きツイートを投稿してから60秒以内に、再びハッシュタグ付きツイートを投稿しようとした場合にツイートからハッシュタグを外します<br>
-                  シャドウバンを避けるため、60 (秒) より下には設定しないことをお勧めします<br>
-                  連投と判定されたツイートは 「#」の右にスペースを入れハッシュタグとして機能しないようにしてから投稿されますが、鬱陶しい場合は 0 (秒) に設定すればオフになります<br>
+                  Twitter の規制が厳しいため、ハッシュタグをつけたツイートを 60 秒以下（？）の間隔で連投すると、シャドウバン（ Search Ban・検索に引っかからなくなる）されてしまうことがあります<br>
+                  例えば 60（秒）に設定した場合、ハッシュタグ付きツイートを送信してから 60 秒以内に、再びハッシュタグ付きツイートを送信しようとした場合にツイートからハッシュタグを外します<br>
+                  シャドウバンを避けるため、60（秒）より下には設定しないことをお勧めします<br>
+                  連投と判定されたツイートは 「#」の右にスペースを入れハッシュタグとして機能しないようにしてから送信されますが、鬱陶しい場合は 0 (秒) に設定すればオフになります<br>
                 </p>
               </div>
               <input class="text-box" name="tweet_time" type="number" min="0" max="120" placeholder="60" value="<?= $tweet_time; ?>" required />
@@ -960,8 +958,8 @@
               <div class="setting-content">
                 <span>画像付きツイートを投稿する時に一度アップロードする画像の保存フォルダ</span>
                 <p>
-                空に設定すると、自動で (TVRemotePlusをインストールしたフォルダ)/data/upload/ に保存されます<br>
-                ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、適宜録画用の HDD 内のフォルダを指定しておくのも良いと思います<br>
+                  空に設定すると、自動で (TVRemotePlusをインストールしたフォルダ)/data/upload/ に保存されます<br>
+                  ずっと画像付きツイートをしているとそこそこのファイルサイズになるので、録画用の HDD 内のフォルダを指定しておいても良いでしょう<br>
                 </p>
               </div>
               <input class="text-box" name="tweet_upload" type="text" value="<?= $tweet_upload; ?>" placeholder="E:/TV-Capture/" />
@@ -972,7 +970,7 @@
                 <span>画像付きツイートを投稿する時に一度アップロードした画像を削除する</span>
                 <p>
                   削除する場合はオン、削除しない場合はオフです<br>
-                  アップロードした画像を削除しない場合、画像は上の項目で設定したフォルダに保存されます<br>
+                  アップロードした画像を削除しない場合、画像は上記の項目で設定したフォルダに保存されます<br>
                 </p>
               </div>
               <div class="toggle-switch">
@@ -990,7 +988,7 @@
               <div class="setting-content">
                 <span>TwitterAPI のコンシューマーキー (Consumer Key)</span>
                 <p>
-                TVRemotePlus からのツイート投稿に必須です<br>
+                TVRemotePlus からツイートする場合に必須です<br>
                 コンシューマーキーは25文字のランダムな英数字です<br>
                 </p>
               </div>
@@ -1001,13 +999,13 @@
               <div class="setting-content">
                 <span>TwitterAPI のコンシューマーシークレット (Consumer Secret)</span>
                 <p>
-                TVRemotePlus からのツイート投稿に必須です<br>
+                TVRemotePlus からツイートする場合に必須です<br>
                 コンシューマーシークレットは50文字のランダムな英数字です<br>
                 </p>
               </div>
               <input class="text-box" name="CONSUMER_SECRET" type="text" pattern="[A-Za-z0-9]{50}" value="<?= $CONSUMER_SECRET; ?>" placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" />
             </div>
-            
+
             <h4><i class="fas fa-lock"></i>Basic 認証</h4>
 
             <div class="setting-form setting-input">
@@ -1053,7 +1051,7 @@
                 <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
-            
+
             <h4><i class="fas fa-hammer"></i>詳細設定</h4>
 
             <div class="setting-form setting-input">
@@ -1206,7 +1204,7 @@
             </div>
 
 		  </form>
-		  
+
 
 		  <?php	if (!$reverse_proxy){ ?>
           <div id="setting-other" class="setting-form-wrap">
@@ -1218,7 +1216,7 @@
                 <span>HTTPS アクセス用の自己署名証明書のダウンロード</span>
                 <p>
                   PWA (Progressive Web Apps) 機能を利用する場合は、HTTPS でのアクセスが必須です<br>
-                  そのため、インストール時に作成した自己署名証明書を予め TVRemotePlus を利用する端末にインポートしておく必要があります<br>
+                  そのため、インストール時に作成した自己署名証明書をあらかじめ TVRemotePlus を利用する端末にインポートしておく必要があります<br>
                   右 or 下のダウンロードボタンから証明書 (server.crt) をダウンロードしてください<br>
                   証明書のインストール手順は <a href="https://github.com/tsukumijima/TVRemotePlus#pwa-%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E6%89%8B%E9%A0%86" target="_blank">こちら</a> を参照してください<br>
                 </p>
@@ -1256,7 +1254,7 @@
               </a>
             </div>
 <?php		} // 括弧終了 ?>
-            
+
           </div>
 <?php	} // 括弧終了 ?>
 <?php	} // 括弧終了 ?>
@@ -1309,7 +1307,7 @@
             <p>エンコーダー：<?= $ini[$stream]['encoder']; ?></p>
             <p>エンコードコマンド：<?= $stream_cmd; ?></p>
 <?php			} //括弧終了 ?>
-          
+
 <?php		} else if (!($reverse_proxy and $setting_hide == 'true')){ ?>
           <div class="setting-form-wrap">
             <p>環境設定を保存しました。</p>
@@ -1336,7 +1334,7 @@
     </div>
 
   </section>
-	
+
   <section id="footer">
     <?= $site_title.' '.$version; ?>
 
