@@ -33,7 +33,7 @@ $(function() {
     function refresh_status() {
         $.ajax({
             url: '/api/status/' + stream,
-            data: { 'hash': status_hash, 'hold': 1 },
+            data: { 'hash': status_hash, 'hold': 1, 'sess': status_data.sess || '' },
             dataType: 'json',
             cache: false,
         }).done(function(data) {
