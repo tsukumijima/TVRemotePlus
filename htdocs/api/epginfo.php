@@ -16,8 +16,8 @@
 		$tsid, $tsid_T, $tsid_S, $tsid_CS) // TSID
 		= initBonChannel($BonDriver_dir);
 
-    // ストリーム番号を取得
-	$stream = getStreamNumber($_SERVER['REQUEST_URI']);
+	// 前回応答のハッシュを取得
+	$hash = (string)filter_var($_REQUEST['hash'] ?? null);
 
 	// 設定ファイル読み込み
 	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
@@ -197,7 +197,7 @@
 		$key = strval($key);
 
 		if ($ini[$key]['state'] == 'ONAir' or $ini[$key]['state'] == 'File'){
-			$standby = file_get_contents($standby_m3u8);
+			$standby = file_get_contents($silent == 'true' ? $standby_silent_m3u8 : $standby_m3u8);
 			$stream_m3u8 = @file_get_contents($segment_folder.'stream'.$key.'.m3u8');
 			if ($standby == $stream_m3u8){
 				$status = 'standby';
@@ -291,6 +291,15 @@
 		}
 	}
 
+	$response = json_encode(['ffffffff', $epginfo], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+	$hash_new = '_'.md5($response);
+	if ($hash_new !== $hash) {
+		$response = substr_replace($response, $hash_new, strpos($response, 'ffffffff'), 8);
+	} else {
+		// 前回応答と同じなので省略
+		$response = json_encode([$hash_new], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+	}
+
 	// 出力
 	header('content-type: application/json; charset=utf-8');
-	echo json_encode($epginfo, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+	echo $response;

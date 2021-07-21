@@ -28,12 +28,21 @@ $(function() {
 
     // ***** 視聴数カウント・ストリーム状態把握 *****
 
-    setInterval((function status() {
+    let status_hash = '';
+    let status_data = {};
+    function refresh_status() {
         $.ajax({
             url: '/api/status/' + stream,
+            data: { 'hash': status_hash, 'hold': 1 },
             dataType: 'json',
             cache: false,
         }).done(function(data) {
+
+            status_hash = data[0];
+            if (data[1]) {
+                status_data = data[1];
+            }
+            data = status_data;
 
             // 視聴数を表示
             document.getElementById('watching').textContent = data['watching'] + '人が視聴中';
@@ -147,15 +156,16 @@ $(function() {
             document.getElementById('status').textContent = data['status'];
             // console.log('status: ' + data['status']);
 
+            setTimeout(refresh_status, 1000);
         }).fail(function(data, status, error) {
 
             // エラーメッセージ
             message = 'failed to get status. status: ' + status + '\nerror: ' + error.message;
             console.error(message);
-
+            setTimeout(refresh_status, 1000);
         });
-        return status;
-    }()),1000);
+    }
+    refresh_status();
 
 
     // ***** 番組表・ストリーム一覧表示 *****
@@ -177,12 +187,21 @@ $(function() {
     const epginfo_progress = document.getElementById('progress');
     let broadcast_elems = [];
 
-    setInterval((function status() {
+    let epginfo_hash = '';
+    let epginfo_data = {};
+    function refresh_epginfo() {
         $.ajax({
-            url: '/api/epginfo/' + stream,
+            url: '/api/epginfo',
+            data: { 'hash': epginfo_hash },
             dataType: 'json',
             cache: false,
         }).done(function(data) {
+
+            epginfo_hash = data[0];
+            if (data[1]) {
+                epginfo_data = data[1];
+            }
+            data = epginfo_data;
 
             // 結果をHTMLにぶち込む
 
@@ -388,13 +407,15 @@ $(function() {
             // 高さ調整(初回のみ)
             if (flg) $('.swiper-wrapper').eq(1).css('height', $('.broadcast-nav.swiper-slide').height() + 'px');
 
+            setTimeout(refresh_epginfo, 8000);
         }).fail(function(data, status, error) {
 
             // エラーメッセージ
             console.error(`failed to get epginfo. status: ${status}\nerror: ${error.message}`);
+            setTimeout(refresh_epginfo, 8000);
         });
-        return status;
-    }()), 8000);
+    }
+    refresh_epginfo();
 
 
     // ***** ストリーム開始 *****
