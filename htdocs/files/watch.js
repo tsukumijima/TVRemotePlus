@@ -95,8 +95,8 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
                     `<div class="search-file-box">
                         <div class="search-file-thumb">
                             <img class="search-file-thumb-img" src="/files/thumb/` + fileinfo[i]['thumb'] + `">
-                            <div class="search-file-ext ` + fileinfo[i]['pathinfo']['extension'] + `">` + fileinfo[i]['pathinfo']['extension'].toUpperCase() + `</div>
-                                ` + (fileinfo[i]['pathinfo']['extension'].toLowerCase() == 'ts' ? encode : download) + `
+                            <div class="search-file-ext ext-` + fileinfo[i]['pathinfo']['extension'] + `">` + fileinfo[i]['pathinfo']['extension'].toUpperCase() + `</div>
+                                ` + (/^\.(?:ts|mts|m2t|m2ts)$/.test(fileinfo[i]['pathinfo']['extension'].toLowerCase()) ? encode : download) + `
                             </div>
                             <div class="search-file-content">
                                 <div class="search-file-path">` + fileinfo[i]['file'] + `</div>

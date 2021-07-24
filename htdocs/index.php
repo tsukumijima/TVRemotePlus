@@ -81,7 +81,7 @@
         theme: '#007cff',
         // 読み込む m3u8 を指定する
         video: {
-<?php	if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'): ?>
+<?php	if ($ini[$stream]['state'] == 'File' and !preg_match('/^(?:ts|mts|m2t|m2ts)$/', $ini[$stream]['fileext']) and $ini[$stream]['encoder'] == 'Progressive'): ?>
             url: '/api/stream/<?= $stream; ?>?_=<?= time(); ?>',
             type: 'normal',
 <?php	else: ?>

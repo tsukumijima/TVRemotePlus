@@ -198,15 +198,16 @@ section {
     -webkit-user-select: none;
 }
 
-.search-file-ext.ts {
+.search-file-ext.ext-ts, .search-file-ext.ext-mts,
+.search-file-ext.ext-m2t, .search-file-ext.ext-m2ts {
     background-color: #e91d5d;
 }
 
-.search-file-ext.mp4 {
+.search-file-ext.ext-mp4 {
     background-color: #007cff;
 }
 
-.search-file-ext.mkv {
+.search-file-ext.ext-mkv {
     background-color: #744bff;
 }
 

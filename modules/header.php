@@ -129,7 +129,7 @@
     });
 
 <?php	if (strpos($backtrace[0]["file"], 'index.php') !== false) { // index.php のみ ?>
-<?php		if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive') { ?>
+<?php		if ($ini[$stream]['state'] == 'File' and !preg_match('/^(?:ts|mts|m2t|m2ts)$/', $ini[$stream]['fileext']) and $ini[$stream]['encoder'] == 'Progressive') { ?>
     stream = '<?= $stream; ?>';
     streamurl = 'http://<?= $_SERVER['SERVER_NAME'].':'.$http_port; ?>/api/stream/<?= $stream; ?>';
     streamtype = 'video/mp4';

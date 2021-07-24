@@ -32,7 +32,7 @@
 		// スタートならChromecast起動
 		if ($cast['cmd'] == 'start' and isset($_POST['ip']) and isset($_POST['port'])){
 
-			if ($ini[$stream]['state'] == 'File' and $ini[$stream]['fileext'] != 'ts' and $ini[$stream]['encoder'] == 'Progressive'){
+			if ($ini[$stream]['state'] == 'File' and !preg_match('/^(?:ts|mts|m2t|m2ts)$/', $ini[$stream]['fileext']) and $ini[$stream]['encoder'] == 'Progressive'){
 				$streamurl = 'http://'.$_SERVER['SERVER_NAME'].':'.$http_port.'/api/stream/'.$stream;
 				$streamtype = 'video/mp4';
 			} else {
