@@ -520,7 +520,7 @@
                 </p>
               </div>
               <div class="password-box-wrap">
-                <input class="password-box" id="comment_filter" type="password" placeholder="wwwwww;草草草草草;すううううう;" />
+                <input class="password-box" id="comment_filter" type="password" placeholder="wwwwww;草草草草草;すううううう;" autocomplete="new-password" />
                 <i class="password-box-input fas fa-eye-slash"></i>
               </div>
             </div>
