@@ -566,7 +566,7 @@
 <?php	} // 括弧終了 ?>
             </div>
 
-            <div class="setting-form">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>デフォルト設定を使い 1 クリックでストリームを開始する</span>
                 <p>
@@ -584,7 +584,7 @@
               </div>
             </div>
 
-            <div class="setting-form">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>チャンネルリストへスクロールした時にプレイヤーをフローティング表示する (＊)</span>
                 <p>

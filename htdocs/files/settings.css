@@ -159,6 +159,7 @@ h4:before {
     display: inline-block;
     width: 90%;
     margin-right: auto;
+    padding-right: 20px;
 }
 
 .setting-content {
@@ -282,12 +283,6 @@ select {
 }
 
 @media screen and (max-width: 768px){
-    #setting-user .toggle-switch {
-        margin-left: 20px;
-    }
-    #setting-env .toggle-switch {
-        margin-left: auto;
-    }
     input[type="text"], input[type="number"], input[type="url"], input[type="email"], input[type="password"] {
         width: 100%;
         margin-left: 0px;
@@ -295,6 +290,9 @@ select {
     .setting-input {
         flex-direction: column;
         align-items: start;
+    }
+    .setting-input .toggle-switch {
+        margin-left: auto;
     }
     .select-wrap {
         width: 100%;
