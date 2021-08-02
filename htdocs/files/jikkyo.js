@@ -602,7 +602,7 @@ function newNicoJKAPIBackendONAir() {
             }
 
             // コメントがコメントフィルターに設定されたキーワードと一致したら描画しない
-            const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
+            const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || '[]');
             for (const keyword of comment_filter) {
                 // キーワードが空でないか（空の場合、全てのコメントをフィルタリングしてしまう）
                 if (keyword !== '') {
@@ -1182,7 +1182,7 @@ function newNicoJKAPIBackendFile() {
             }
 
             // コメントがコメントフィルターに設定されたキーワードと一致したら描画しない
-            const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
+            const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || '[]');
             // Array.filter() でコメントの入った配列をフィルタリング
             comment.kakolog = comment.kakolog.filter((danmaku) => {
                 for (const keyword of comment_filter) {

@@ -14,7 +14,7 @@ $(window).on('load', () => {
     }
 
     // コメントフィルターの値を読み込み
-    const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || []);
+    const comment_filter = JSON.parse(localStorage.getItem('tvrp-comment-filter') || '[]');
     // ; で連結してフォームに表示
     $('#comment_filter').val(comment_filter.join(';'));
 
