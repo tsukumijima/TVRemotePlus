@@ -555,8 +555,15 @@
 		// 事前に前のストリームを終了する
 		stream_stop($stream);
 
+		// MP4 または MKV かどうか
+		if ($extension === 'mp4' or $extension === 'mkv') {
+			$is_mp4_or_mkv = true;
+		} else {
+			$is_mp4_or_mkv = false;
+		}
+
 		// dual_mono_mode
-		if ($extension == 'mp4' or $extension == 'mkv') {
+		if ($is_mp4_or_mkv) {
 			$dual_mono_mode_ffmpeg = '';
 			$dual_mono_mode_other = '';
 		} else {
@@ -695,7 +702,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' '.$dual_mono_mode_ffmpeg.' -i -'.
+					' '.$dual_mono_mode_ffmpeg.' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -724,7 +731,7 @@
 				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
-					' -i -'.
+					' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -754,7 +761,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' -i -'.
+					' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -784,7 +791,7 @@
 				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
-					' -i -'.
+					' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
 					// avsw エンコード
 					// VCE の HW デコーダーはエラー耐性が低く TS を扱う用途では不安定なので、SW デコーダーを利用する
 					' --avsw'.
@@ -811,7 +818,10 @@
 		}
 
 		// エンコードコマンド
-		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.win_exec_escape($stream_cmd);
+		$stream_cmd = (
+			"start \"${encoder} Encoding...\" ".($encoder_window == 'true' ? '' : '/B /min').' '.
+			'cmd.exe /C "'.(!$is_mp4_or_mkv ? win_exec_escape($ast_cmd).' | ' : '').win_exec_escape($stream_cmd)
+		);
 
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true') {
