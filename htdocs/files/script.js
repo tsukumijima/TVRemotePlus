@@ -571,7 +571,7 @@ $(function() {
 
     // スマホの場合に Twitter フォームだけ下にフロート表示
     $('#tweet').focusin(function(event) {
-        if ($(window).width() <= 500) {
+        if ($(window).width() <= 500 && navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
             $('#top').hide();
             $('#tweet-box').addClass('open');
             $('#tweet-close').addClass('open');
@@ -579,7 +579,7 @@ $(function() {
         }
     });
     $('#tweet-hashtag').focusin(function(event) {
-        if ($(window).width() <= 500) {
+        if ($(window).width() <= 500 && navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
             $('#top').hide();
             $('#tweet-box').addClass('open');
             $('#tweet-close').addClass('open');
@@ -587,7 +587,7 @@ $(function() {
         }
     });
     $('#tweet-close').click(function(event) {
-        if ($(window).width() <= 500) {
+        if ($(window).width() <= 500 && navigator.userAgent.match(/iPhone|Android.+Mobile/)) {
             $('#top').show();
             $('#tweet-box').removeClass('open');
             $('#tweet-close').removeClass('open');

@@ -1688,20 +1688,17 @@ td {
 #tweet-capture-box.display {
     display: flex;
 }
-@media screen and (min-width: 1025px) {
-    #tweet-capture-box::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-        background: var(--color-hover);
-    }
-    #tweet-capture-box::-webkit-scrollbar-corner {
-        background: var(--color-hover);
-    }
-    #tweet-capture-box::-webkit-scrollbar-thumb {
-        background: #657586;
-    }
+#tweet-capture-box::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: var(--color-hover);
 }
-
+#tweet-capture-box::-webkit-scrollbar-corner {
+    background: var(--color-hover);
+}
+#tweet-capture-box::-webkit-scrollbar-thumb {
+    background: #657586;
+}
 .tweet-capture {
     position: relative;
     width: 87px;
@@ -1716,7 +1713,7 @@ td {
     cursor: auto;
 }
 .tweet-capture:last-of-type {
-    padding-right: 12px;
+    margin-right: 0px;
 }
 
 .tweet-capture-cover {
@@ -1755,33 +1752,25 @@ td {
 .dark-theme .tweet-capture.disabled .tweet-capture-cover {
     background: rgb(245, 245, 245, 30%);
 }
-.tweet-capture:last-of-type .tweet-capture-cover {
-    margin-right: 12px;
-}
 
-@media screen and (min-width: 1025px) {
-    .tweet-capture-focus {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 3.2px solid var(--color-tweet);
-        border-radius: 5px;
-        font-size: 28px;
-        visibility: hidden;
-        opacity: 0;
-    }
-    .tweet-capture.focus .tweet-capture-focus {
-        visibility: visible;
-        opacity: 1;
-    }
-    .tweet-capture:last-of-type .tweet-capture-focus {
-        margin-right: 12px;
-    }
+.tweet-capture-focus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 3.2px solid var(--color-tweet);
+    border-radius: 5px;
+    font-size: 28px;
+    visibility: hidden;
+    opacity: 0;
+}
+.tweet-capture.focus .tweet-capture-focus {
+    visibility: visible;
+    opacity: 1;
 }
 
 .tweet-capture-img {
@@ -2488,7 +2477,7 @@ td {
     #broadcast-stream-box {
         top: auto;
         width: 100%;
-        height: 531px;
+        height: 533px;
         padding: 20px 18px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
@@ -2499,7 +2488,7 @@ td {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     .android.chrome #broadcast-stream-box {
         height: 513px;
     }
