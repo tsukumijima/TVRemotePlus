@@ -16,7 +16,7 @@ Aviutl 1.00 以降
 VCEが載ったハードウェア
   AMD製 GPU Radeon HD 7xxx以降
   AMD製 APU Trinity世代(第2世代)以降
-AMD Radeon Software Adrenalin Edition 20.11.2 以降
+AMD Radeon Software Adrenalin Edition 21.6.1 以降
 
 
 【VCEEnc 使用にあたっての注意事項】
@@ -204,6 +204,18 @@ Radeon RX460
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【どうでもいいメモ】
+2021.07.29 (6.13)
+・最近のAMDドライバが、GetFormatAt関数で適切な値を返さないため、
+  ... does not support input/output format などのエラーが生じる問題を回避。
+・AMFを1.4.21に更新。AMD Driver 21.6.1以降が必要。
+・入力ファイルと出力ファイルが同じである場合にエラー終了するように。
+・OpenCLでcropすると色成分がずれるのを修正。
+・y4m読み込みの際、指定したインタレ設定が上書きされてしまうのを修正。
+・OpenCLのyuv444→nv12の修正。
+・--vpp-decimateの計算用領域が不足していた不具合を修正。
+・yuv444→p010のavx2版の色ずれを修正。
+・AvisynthNeo環境などで生じるエラー終了を修正。
+
 2021.05.23 (6.12)
 ・raw出力、log出力の際にカレントディレクトリに出力しようとすると異常終了が発生する問題を修正。
 

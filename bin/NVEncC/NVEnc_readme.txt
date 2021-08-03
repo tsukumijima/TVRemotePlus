@@ -16,17 +16,8 @@ Aviutl 1.00 以降
 NVEncが載ったハードウェア
   NVIDIA製 GPU GeForce Kepler世代以降 (GT/GTX 6xx 以降)
   ※GT 63x, 62x等はFermi世代のリネームであるため非対応なものがあります。
-NVEnc 0.00 NVIDIA グラフィックドライバ 334.89以降
-NVEnc 1.00 NVIDIA グラフィックドライバ 347.09以降
-NVEnc 2.00 NVIDIA グラフィックドライバ 358   以降
-NVEnc 2.08 NVIDIA グラフィックドライバ 368.69以降
-NVEnc 3.02 NVIDIA グラフィックドライバ 369.30以降
-NVEnc 3.08 NVIDIA グラフィックドライバ 378.66以降
-NVEnc 4.00 NVIDIA グラフィックドライバ 390.77以降
-NVEnc 4.31 NVIDIA グラフィックドライバ 418.81以降
-NVEnc 4.51 NVIDIA グラフィックドライバ 436.15以降
-NVEnc 5.10 NVIDIA グラフィックドライバ 418.81以降
-NVEnc 5.24 NVIDIA グラフィックドライバ 456.81 以降
+NVIDIA グラフィックドライバ 418.81以降 (x64版)
+NVIDIA グラフィックドライバ 456.81以降 (x86版)
 
 
 【NVIDIA CORPORATION CUDA SAMPLES EULA のライセンス規定の準拠表記】
@@ -170,11 +161,24 @@ NVIDIA グラフィックドライバ 456.71
 NVIDIA グラフィックドライバ 457.09
 NVIDIA グラフィックドライバ 461.09
 NVIDIA グラフィックドライバ 461.40
+NVIDIA グラフィックドライバ 471.11
 
 【お断り】
 今後の更新で設定ファイルの互換性がなくなるかもしれません。
 
 【メモ】
+2021.07.31 (5.36)
+・NVENC SDK 11.1に更新。
+・色差のQPオフセットを指定可能に。(--chroma-qp-offset)
+・Linux環境でCUDA11.4からコンパイルできなくなっていた問題を修正。
+・NVEnc.auoの設定画面で--lookahead 16が指定できなかった問題を修正。
+
+2021.07.24 (5.35)
+・Linux環境でvpp-colorspaceを使用すると、NVEncFilterColorspaceFunc.hが存在しないというエラーが発生するのを修正。 
+・字幕や音声の順序がおかしくなる場合があったのを修正。
+・5.31からyuv444→p010の変換で色成分がずれてしまっていたのを修正。
+・libassのログレベルを変更。
+
 2021.06.15 (5.34)
 ・AvisynthNeo環境などで生じるエラー終了を修正。
 ・入力ファイルと出力ファイルが同じである場合にエラー終了するように。
