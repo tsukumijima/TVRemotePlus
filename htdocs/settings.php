@@ -423,7 +423,7 @@
 
             <h4><i class="fas fa-comment-alt"></i>コメント</h4>
 
-            <div class="setting-form setting-select">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>コメントのフォントサイズ</span>
                 <p>
@@ -453,7 +453,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-select">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>コメントの遅延秒数（ライブ配信）</span>
                 <p>
@@ -469,7 +469,7 @@
 <?php	} // 括弧終了 ?>
             </div>
 
-            <div class="setting-form setting-select">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>コメントの遅延秒数（ファイル再生）</span>
                 <p>
@@ -485,7 +485,7 @@
 <?php	} // 括弧終了 ?>
             </div>
 
-            <div class="setting-form setting-select">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>コメントリストのパフォーマンス</span>
                 <p>
@@ -528,7 +528,7 @@
 
             <h4><i class="fas fa-sliders-h"></i>機能</h4>
 
-            <div class="setting-form setting-select">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>デフォルトの動画の画質</span>
                 <p>
@@ -552,7 +552,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-select">
+            <div class="setting-form setting-input">
               <div class="setting-content">
                 <span>一度に表示する録画番組リストの番組数（件）</span>
                 <p>
@@ -566,7 +566,7 @@
 <?php	} // 括弧終了 ?>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>デフォルト設定を使い 1 クリックでストリームを開始する</span>
                 <p>
@@ -584,7 +584,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>チャンネルリストへスクロールした時にプレイヤーをフローティング表示する (＊)</span>
                 <p>
@@ -712,7 +712,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>ライブ配信開始時に現在視聴中のストリームをデフォルトのストリームにする</span>
                 <p>
@@ -732,7 +732,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>ファイル再生開始時に常にメインストリームをデフォルトのストリームにする</span>
                 <p>
@@ -752,7 +752,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>ライブ配信時にデフォルトで字幕をストリームに含める</span>
                 <p>
@@ -772,7 +772,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>ファイル再生時にデフォルトで字幕をストリームに含める</span>
                 <p>
@@ -840,7 +840,7 @@
               <input class="text-box" name="reverse_proxy_url" type="url" value="<?= $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>リバースプロキシからのアクセス時に環境設定を非表示にする</span>
                 <p>
@@ -861,7 +861,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>配信休止中・配信準備中時の動画の BGM を消す</span>
                 <p>
@@ -890,7 +890,7 @@
               <input class="text-box" name="history_keep" type="number" min="1" max="100" placeholder="15" value="<?= $history_keep; ?>" required />
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>TVRemotePlus のアップデートを確認する</span>
                 <p>
@@ -966,7 +966,7 @@
               <input class="text-box" name="tweet_upload" type="text" value="<?= $tweet_upload; ?>" placeholder="E:/TV-Capture/" />
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>画像付きツイートを投稿する時に一度アップロードした画像を削除する</span>
                 <p>
@@ -1009,7 +1009,7 @@
 
             <h4><i class="fas fa-lock"></i>Basic 認証</h4>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>Basic 認証を利用する</span>
                 <p>
@@ -1055,7 +1055,7 @@
 
             <h4><i class="fas fa-hammer"></i>詳細設定</h4>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>ストリーム開始後に再生画面へリダイレクトする</span>
                 <p>
@@ -1074,7 +1074,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>エンコーダーのログをファイルに書き出す</span>
                 <p>
@@ -1093,7 +1093,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>エンコーダーのウインドウを表示する</span>
                 <p>
@@ -1113,7 +1113,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>TSTask の起動時に TSTaskCentre も起動する</span>
                 <p>
@@ -1132,7 +1132,7 @@
               </div>
             </div>
 
-            <div class="setting-form setting-input">
+            <div class="setting-form setting-input setting-toggle">
               <div class="setting-content">
                 <span>ストリーム終了時に TSTask を強制終了する</span>
                 <p>

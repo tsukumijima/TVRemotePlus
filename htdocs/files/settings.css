@@ -149,6 +149,7 @@ h4:before {
 
 .setting-form {
     display: flex;
+    position: relative;
     align-items: center;
     margin-left: 20px;
     margin-bottom: 15px;
@@ -164,6 +165,7 @@ h4:before {
 
 .setting-content {
     margin-right: auto;
+    padding-right: 20px;
     width: 66%;
 }
 
@@ -291,15 +293,18 @@ select {
         flex-direction: column;
         align-items: start;
     }
-    .setting-input .toggle-switch {
-        margin-left: auto;
+    .setting-toggle .setting-content span {
+        padding-right: 66px;
+        box-sizing: border-box;
+    }
+    .setting-toggle .toggle-switch {
+        position: absolute;
+        top: -3px;
+        right: 0;
     }
     .select-wrap {
         width: 100%;
         margin-left: 0px;
-    }
-    #setting-user .select-wrap, #setting-user .text-box {
-        width: 135px;
     }
     .setting-content {
         width: 100%;
@@ -313,7 +318,7 @@ select {
         margin-bottom: 15px;
     }
     .setting-form span {
-        width: calc(100% - 135px);
+        width: 100%;
     }
 }
 
