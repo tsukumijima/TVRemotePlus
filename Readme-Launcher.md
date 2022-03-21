@@ -1,7 +1,7 @@
 
 # TVRemotePlus-Launcher
 
-TVRemotePlus を起動するためのランチャーアプリです。C# (WPF) で構築されています。   
+TVRemotePlus を起動するためのランチャーアプリです。C# (WPF) で構築されています。
 
 TVRemotePlus の起動中、サーバー (Apache) のコンソールウインドウがずっとタスクバーに居座ってしまう問題を解消するために開発されました。  
 起動するとタスクトレイに格納され、Apache はバックグラウンドで実行されます。   

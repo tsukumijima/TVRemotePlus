@@ -1,13 +1,17 @@
 
-# TwitterAPI 開発者アカウントの取得について
+# Twitter API 開発者アカウントの取得について
+
+> このドキュメントは 2019 年に書かれたものです。  
+> 現在は Twitter Developers の仕様が大きく変わってしまったため、このドキュメントの内容はかなり古くなってしまっています。  
+> あくまで参考程度にお読みください。
 
 TVRemotePlus のツイート機能を利用するには、まずお使いの Twitter アカウントで Twitter API の開発者アカウントを取得する必要があります。  
 ですが、スパムをばら撒くような不正利用が横行しているせいか、近年開発者アカウントの登録申請が厳しくなってしまっています。
 
-ここでは、私が TwitterAPI 開発者アカウントを取得した際の備忘録を（参考程度に）載せています。  
+ここでは、私が Twitter API 開発者アカウントを取得した際の備忘録を（参考程度に）載せています。  
 一部現状と異なっている場合もあるかもしれませんが、取得の際の参考にしてください。  
 ただし、長くなってしまうため、あまり詳細な方法は解説しません。  
-解説されている記事は沢山あるので、それを参考にしてください。
+解説されている記事はたくさんあるので、それを参考にしてください。
 
 ## 開発者アカウントの取得
 
@@ -31,7 +35,7 @@ Japan を選択します。
 
 #### Want updates about the Twitter API?
 
-TwitterAPI に関するメールを受け取りたい場合はチェックします。
+Twitter API に関するメールを受け取りたい場合はチェックします。
 
 以上を設定したら、「 Next 」をクリックします｡
 
@@ -39,11 +43,11 @@ TwitterAPI に関するメールを受け取りたい場合はチェックしま
 
 #### In your words
 
-ここで、英語で 200 文字以上、TwitterAPI を取得する理由を説明します。  
+ここで、英語で 200 文字以上、Twitter API を取得する理由を説明します。  
 
 日本語で書いて日本語→英語、英語→日本語と Google 翻訳して、意味が違ってないか確認しながら書くのがいいと思います。  
 この文章を書く際、確認としてサブアカウントにて以前通った時の文をコピペして申請したら「申請されませんでした」と一発却下され、  
-以後そのアカウントで認証できなくなってしまったので、あくまで「自分の言葉で」書いてください…（そのため、コピペ用の文章は敢えて置いていません）   
+以後そのアカウントで認証できなくなってしまったので、あくまで「自分の言葉で」書いてください（そのため、コピペ用の文章は敢えて置いていません）。   
 一度入力した内容はもしかすると再度コピペすると一発却下されるようになってしまったのかもしれません…
 
 #### The specifics
@@ -86,18 +90,18 @@ Twitter コンテンツが政府機関に利用可能にはならないので、
 Please confirm your email address to complete your application. 」  
 というメールが来ると思うので、「 Confirm your email 」をクリックします。
 
-### Application Under Review
+**Application Under Review**
 
 と出るので、メールが届くまで待ちます。  
-何回か追加の情報を求められる場合があります。その際は、そのメールに追加情報を書いて返信してください。  
-上記の通り、この文章を書く際に、確認として以前通った文を修正・コピペして登録を申請した所、一発でリジェクトされてしまい、  
-以後そのアカウントでは登録申請ができなくなってしまったので、本当に申請が通るかは微妙です… 頑張ってくださいとしか…
+何回か追加の情報を求められる場合があります。その際は、そのメールに追加情報を書いて返信してください。
+
+ここの文章を書く際に、確認として以前通った文を修正・コピペして登録を申請したところ、一発でリジェクトされてしまい、以後そのアカウントでは登録申請ができなくなってしまいました。  
+申請が実際に通るかは微妙で、あとは頑張ってくださいとしか…。
 
 ## アプリ作成フォーム(例)
 
 もし開発者アカウントを取得できたら、ようやくアプリの作成に入ります。  
-このアプリのコンシューマーキー・コンシューマーシークレットキーを TVRemotePlus に登録し、  
-ここで作ったアプリに TVRemotePlus からお使いの Twitter アカウントでアプリ連携することで、ツイートできるようになります。  
+このアプリのコンシューマーキー・コンシューマーシークレットキーを TVRemotePlus に登録し、ここで作ったアプリに TVRemotePlus からお使いの Twitter アカウントでアプリ連携することで、ツイートできるようになります。  
 アカウント作成は通っているので、App name・Callback URLs 以外は適当で大丈夫だと思います。
 
 ### App name（必須・重複不可らしい）
@@ -119,47 +123,45 @@ Please confirm your email address to complete your application. 」
 
 ### Enable Sign in with Twitter
 
-必ずチェックを入れます（入れないと Twitter ログインができません）
+必ずチェックを入れます（入れないと Twitter ログインができません）。
 
 ### Callback URLs
 
-http://(稼働させているPCのLAN内IPアドレス):8000/tweet/callback.php と入力  
-（例）http://192.168.1.11:8000/tweet/callback.php
+http://(稼働させているPCのLAN内IPアドレス):8000/tweet/callback と入力します。  
+（例）http://192.168.1.11:8000/tweet/callback
 
-HTTPS接続用にもう一つ、https://(稼働させているPCのLAN内IPアドレス):8100/tweet/callback.php と入力  
-（例）https://192.168.1.11:8100/tweet/callback.php
+HTTPS接続用にもう一つ、https://(稼働させているPCのLAN内IPアドレス):8100/tweet/callback と入力します。    
+（例）https://192.168.1.11:8100/tweet/callback
 
-リバースプロキシを使うなどして、別の URL からアクセスする場合はそれも入力してください  
-（例）https://example.com/tvrp/tweet/callback.php
+リバースプロキシを使うなどして、別の URL からアクセスする場合はそれも入力してください。  
+（例）https://example.com/tvrp/tweet/callback
 
 ### Terms of service URL
 
-無記入で OK
+無記入で OK です。
 
 ### Privacy policy URL
 
-無記入で OK
+無記入で OK です。
 
 ### Organization name
 
-無記入で OK
+無記入で OK です。
 
 ### Organization website URL
 
-無記入で OK
+無記入で OK です。
 
 ### Tell us how this app will be used（必須）  
 
-（例）私が運営している TVRemotePlus という私のためだけの非公開のサイトから、直接つぶやきを投稿できるようにするアプリケーションです。  
-私のアプリケーションはツイートと1枚の画像だけを TVRemotePlus から投稿します。スパムに使うことはありません。  
+（例）私が運営している TVRemotePlus という私のためだけの非公開のサイトから、直接ツイートを投稿できるようにするアプリケーションです。  
+私のアプリケーションはツイートと画像だけを TVRemotePlus から投稿します。スパムに使うことはありません。  
 投稿したツイートに返事があった場合は手動で返信したいと思っています。  
-「 ReTweet 」・「 Likes 」はしません。
+「リツイート」・「いいね」はしません。
 
 #### (英語・こちらをコピペ)
 
 It is an application that allows you to post tweets directly from  TVRemotePlus, a private site only for me, which I operate.  
-My application only posts tweets and one image from TVRemotePlus. It is not used for spam.  
+My application only posts tweets and images from TVRemotePlus. It is not used for spam.  
 I would like to reply manually if there is a reply to the posted tweets.
 "ReTweet" · "Likes" does not do.  
-
-

@@ -834,7 +834,7 @@
                   リバースプロキシからのアクセス時のみ利用されます<br>
                   リバースプロキシからのアクセスをしない場合は空のままで OK です<br>
                   また、リバースプロキシから Twitter 投稿機能を利用する場合は、
-                  <a href="https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Twitter_Develop.md#%E3%82%A2%E3%83%97%E3%83%AA%E4%BD%9C%E6%88%90%E7%94%BB%E9%9D%A2%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E4%BE%8B" target="_blank">こちら</a> を参考に Twitter API アプリ作成フォームの Callback URLs に (ここで指定したURL)/tweet/callback.php と追加しておいてください<br>
+                  <a href="https://github.com/tsukumijima/TVRemotePlus/blob/master/docs/Twitter_Develop.md#%E3%82%A2%E3%83%97%E3%83%AA%E4%BD%9C%E6%88%90%E7%94%BB%E9%9D%A2%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E4%BE%8B" target="_blank">こちら</a> を参考に Twitter API アプリ作成フォームの Callback URLs に (ここで指定したURL)/tweet/callback と追加しておいてください<br>
                 </p>
               </div>
               <input class="text-box" name="reverse_proxy_url" type="url" value="<?= $reverse_proxy_url; ?>" placeholder="https://example.com/tvrp/" />
