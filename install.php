@@ -260,9 +260,9 @@
 	if_mkdir('/');
 	if_copy ('/config.default.php', true);
 	if_copy ('/createcert.bat', true);
-	if_copy ('/LICENSE.txt', true);
-	if_copy ('/README.md', true);
-	if_copy ('/README-Launcher.md', true);
+	if_copy ('/License.txt', true);
+	if_copy ('/Readme.md', true);
+	if_copy ('/Readme-Launcher.md', true);
 	if_copy ('/stream.bat', true);
 	if_copy ('/TVRemotePlus.exe', true);
 	if_copy ('/TVRemotePlus.exe.config', true);

@@ -679,4 +679,4 @@ TVRemotePlus の字幕表示機能は aribb24.js を DPlayer に組み込んで�
 [Release_Notes.md](docs/Release_Notes.md)
 
 ## License
-[MIT License](LICENSE.txt)
+[MIT License](License.txt)
