@@ -544,7 +544,7 @@ class Jikkyo {
 
     /**
      * 実況勢いを取得する
-     * サーバーに負荷をかけないように、実行結果はファイルにキャッシュして 1 分以上経ったら更新する
+     * サーバーに負荷をかけないように、実行結果はファイルにキャッシュして 20 秒以上経ったら更新する
      *
      * @param string $nicojikkyo_id 実況ID
      * @return string 実況勢い
@@ -577,7 +577,7 @@ class Jikkyo {
                 $jikkyo_ikioi = [];
 
                 // 実況チャンネルごとに勢いを取得
-                foreach ($table as $nicojikkyo_id) {
+                foreach (array_keys($table) as $nicojikkyo_id) {
 
                     // 実況勢いを取得
                     $jikkyo_ikioi_elem = $document->xpath("/channels//video[text()=\"{$nicojikkyo_id}\"]/..")[0];
@@ -598,7 +598,7 @@ class Jikkyo {
             } else {
 
                 // 取得失敗
-                foreach ($table as $nicojikkyo_id) {
+                foreach (array_keys($table) as $nicojikkyo_id) {
                     $jikkyo_ikioi[$nicojikkyo_id] = "取得失敗 ({$status_code} Error)";
                 }
             }
