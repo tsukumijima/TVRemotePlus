@@ -50,6 +50,10 @@ class Jikkyo {
         'jk211' => 'ch2646846', // BS11
         'jk222' => 'co5193029', // BS12
         'jk236' => 'co5296297', // BSアニマックス
+        'jk252' => 'co5683458', // WOWOW PLUS
+        'jk260' => 'co5682554', // BS松竹東急
+        'jk263' => 'co5682551', // BSJapanext
+        'jk265' => 'co5682548', // BSよしもと
         'jk333' => 'co5245469', // AT-X
     ];
 
@@ -539,8 +543,8 @@ class Jikkyo {
 
 
     /**
-     * 実況勢いをちくわちゃんランキング（ちくラン）から取得
-     * サーバーに負荷をかけないように、実行結果はファイルにキャッシュし 1 分以上経ったら更新する
+     * 実況勢いを取得する
+     * サーバーに負荷をかけないように、実行結果はファイルにキャッシュして 1 分以上経ったら更新する
      *
      * @param string $nicojikkyo_id 実況ID
      * @return string 実況勢い
@@ -550,7 +554,7 @@ class Jikkyo {
         // jikkyo_ikioi.json を更新
         $update = function($table, $jikkyo_ikioi_file): void {
 
-            $namami_url = 'http://jk.from.tv/api/v2_app/getchannels';
+            $namami_url = 'https://jikkyo.tsukumijima.net/namami/api/v2/getchannels';
 
             // namami から実況勢いを取得
             $curl = curl_init();
@@ -573,7 +577,7 @@ class Jikkyo {
                 $jikkyo_ikioi = [];
 
                 // 実況チャンネルごとに勢いを取得
-                foreach ($table as $nicojikkyo_id => $nicochannel_id) {
+                foreach ($table as $nicojikkyo_id) {
 
                     // 実況勢いを取得
                     $jikkyo_ikioi_elem = $document->xpath("/channels//video[text()=\"{$nicojikkyo_id}\"]/..")[0];
@@ -594,7 +598,7 @@ class Jikkyo {
             } else {
 
                 // 取得失敗
-                foreach ($table as $nicojikkyo_id => $nicochannel_id) {
+                foreach ($table as $nicojikkyo_id) {
                     $jikkyo_ikioi[$nicojikkyo_id] = "取得失敗 ({$status_code} Error)";
                 }
             }
