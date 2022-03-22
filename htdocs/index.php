@@ -70,15 +70,14 @@
 
     const dp = new DPlayer({
         container: document.getElementById('dplayer'),
-        volume: 1.0,
-        autoplay: true,
-        screenshot: true,
-        airplay: false,
-        apiBackend: newNicoJKAPIBackend('<?= $ini[$stream]['state']; ?>'),
-        live: <?= ($ini[$stream]['state'] !== 'File' ? 'true' : 'false'); ?>,
-        loop: true,
-        lang: 'ja-jp',
-        theme: '#007cff',
+        theme: '#007CFF',  // テーマカラー
+        lang: 'ja-jp',  // 言語
+        live: <?= ($ini[$stream]['state'] !== 'File' ? 'true' : 'false'); ?>,  // ライブモード
+        loop: true,  // ループ再生
+        airplay: false,  // AirPlay 機能 (うまく動かないため無効化)
+        autoplay: true,  // 自動再生
+        screenshot: true,  // スクリーンショット
+        volume: 1.0,  // 音量の初期値
         // 読み込む m3u8 を指定する
         video: {
 <?php	if ($ini[$stream]['state'] == 'File' and !preg_match('/^(?:ts|mts|m2t|m2ts)$/', $ini[$stream]['fileext']) and $ini[$stream]['encoder'] == 'Progressive'): ?>
@@ -89,25 +88,26 @@
             type: 'hls',
 <?php	endif; ?>
         },
-        // コメント設定
+        // コメント
         danmaku: {
             id: 'TVRemotePlus',
             user: 'TVRemotePlus',
             api: '',
-            bottom: '10%',
-            height: settings['comment_size'],
-            unlimited: false,
+            fontSize: settings['comment_size'],
         },
+        // コメント API バックエンド
+        apiBackend: newNicoJKAPIBackend('<?= $ini[$stream]['state']; ?>'),
+        // プラグイン
         pluginOptions: {
             // hls.js
             hls: {
-              enableWorker: true,
-              liveSyncDurationCount: 1,
+                enableWorker: true,
+                liveSyncDurationCount: 1,
             },
             // aribb24.js
             aribb24: {
-                normalFont: '"Windows TV MaruGothic","Hiragino Maru Gothic Pro","Yu Gothic Medium",sans-serif',
-                gaijiFont: '"Windows TV MaruGothic","Hiragino Maru Gothic Pro","Yu Gothic Medium",sans-serif',
+                normalFont: '"Windows TV MaruGothic", "Hiragino Maru Gothic Pro", "Yu Gothic Medium", sans-serif',
+                gaijiFont: '"Windows TV MaruGothic", "Hiragino Maru Gothic Pro", "Yu Gothic Medium", sans-serif',
                 forceStrokeColor: 'black',  // 縁取りする色
                 drcsReplacement: true,  // DRCS 文字を対応する Unicode 文字に置換
                 enableRawCanvas: true,  // 高解像度の字幕 Canvas を取得できるように
@@ -115,7 +115,7 @@
             }
         },
         subtitle: {
-            type: 'aribb24',
+            type: 'aribb24',  // aribb24.js を有効化
         },
     });
 

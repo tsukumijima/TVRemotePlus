@@ -285,7 +285,7 @@ $(function() {
                     broadcast_elems[`ch${key}`]['wrap'].dataset.title != data['onair'][key]['program_name']) {
 
                     // 書き換え用html
-                    let html = 
+                    let html =
                         `<div class="broadcast-channel-box">
                             <div class="broadcast-channel">` + broadcast_elems[`ch${key}`]['wrap'].dataset.channel + `</div>
                             <div class="broadcast-name-box">
@@ -356,7 +356,7 @@ $(function() {
                         (elem === undefined || elem.getElementsByClassName('stream-title')[0].innerHTML != data['stream'][key]['program_name'])) {
 
                     // 書き換え用 html
-                    var streamview = 
+                    var streamview =
                         `<div class="stream-box">
                             <div class="stream-number-title">Stream</div><div class="stream-number">` + key + `</div>
                             <div class="stream-stop ` + (data['stream'][key]['state'] == 'Offline' ? 'disabled' : '') + `">
@@ -821,7 +821,7 @@ $(function() {
             }
         }
 
-        // Twitter 機能が有効 & 
+        // Twitter 機能が有効 &
         // キャプチャ画像リストにフォーカスしている &
         // プレイヤーにフォーカスされていない &
         // キャプチャが存在する &
@@ -1039,7 +1039,7 @@ $(function() {
 
     /**
      * キャプチャした画像をリストに追加する
-     * @param {Blob} blob 
+     * @param {Blob} blob
      */
     function addCaptureImage(blob) {
 
@@ -1089,7 +1089,7 @@ $(function() {
                 deselectCaptureImage(elem, true);
 
                 // インデックスを書き換え
-                elem.dataset.index++; 
+                elem.dataset.index++;
             }
         });
 
@@ -1591,7 +1591,8 @@ $(function() {
         // 動画のキャンバス
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        const caption = dp.plugins.aribb24.getRawCanvas();
+        const aribb24Caption = dp.plugins.aribb24Caption.getRawCanvas();
+        const aribb24Superimpose = dp.plugins.aribb24Superimpose.getRawCanvas();
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         // 描画
@@ -1601,22 +1602,26 @@ $(function() {
                     // キャプチャを描画
                     context.drawImage(video, 0, 0, canvas.width, canvas.height);
                     // 字幕を描画（ Shift キーが押されていない & 字幕キャンバスが存在する場合のみ）
-                    if (!window.isShiftKey && caption !== null) {
-                        context.drawImage(caption, 0, 0, canvas.width, canvas.height);
+                    if (!window.isShiftKey && aribb24Caption !== null) {
+                        context.drawImage(aribb24Caption, 0, 0, canvas.width, canvas.height);
+                    }
+                    // 文字スーパーを描画（ Shift キーが押されていない & 文字スーパーキャンバスが存在する場合のみ）
+                    if (!window.isShiftKey && aribb24Superimpose !== null) {
+                        context.drawImage(aribb24Superimpose, 0, 0, canvas.width, canvas.height);
                     }
                 } catch (error) {
                     // エラーを捕捉
                     console.error(`Error: Capture failed. (${error.name}: ${error.message})`)
-                    // Android 向け Firefox 
+                    // Android 向け Firefox
                     if (error.name === 'NS_ERROR_NOT_AVAILABLE' ||
                         error.message === 'CanvasRenderingContext2D.drawImage: Passed-in image is "broken"') {
                         $('#tweet-status').html('<span class="error">Android 向け Firefox では、ブラウザの不具合が原因でキャプチャができません。</span>');
                         throw error;
                     // それ以外
-                    } else { 
+                    } else {
                         $('#tweet-status').html('<span class="error">キャプチャに失敗しました…</span>');
                         throw error;
-                    } 
+                    }
                 }
                 console.log('Video Canvas Size: ' + canvas.width + 'x' + canvas.height);
                 resolve({canvas});
