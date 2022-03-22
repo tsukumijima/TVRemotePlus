@@ -448,10 +448,8 @@ $(function() {
 
                 // スタイルを除去
                 ljicrop_video.style.position = '';
-                ljicrop_video.style.width = '';
-                ljicrop_video.style.height = '';
-                ljicrop_video.style.left = '';
-                ljicrop_video.style.bottom = '';
+                ljicrop_video.style.transform = '';
+                ljicrop_video.style.transformOrigin = '';
 
             // 有効ならＬ字クロップを実行
             } else if (ljicrop_toggle) {
@@ -467,77 +465,71 @@ $(function() {
 
                     // 空文字を入れると style 属性から当該スタイルが除去される
                     ljicrop_video.style.position = '';
-                    ljicrop_video.style.width = '';
-                    ljicrop_video.style.height = '';
-                    ljicrop_video.style.left = '';
-                    ljicrop_video.style.bottom = '';
+                    ljicrop_video.style.transform = '';
+                    ljicrop_video.style.transformOrigin = '';
 
                 } else {
 
-                    // video 要素を拡大
+                    // transform をクリア
                     ljicrop_video.style.position = 'relative';
-                    ljicrop_video.style.width = ljicrop_magnification + '%';
-                    ljicrop_video.style.height = ljicrop_magnification + '%';
+                    ljicrop_video.style.transform = '';
 
-                    // 拡大起点別
+                    // 拡大起点別に
                     switch (ljicrop_type) {
 
                         // 右上
-                        case 'upperright':
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
-                                ljicrop_video.style.left = -(ljicrop_magnification - ljicrop_coordinateX - 100) + '%';
-                            } else {
-                                ljicrop_video.style.left = -(ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
-                            }
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
-                                ljicrop_video.style.bottom = ljicrop_coordinateY + '%';
-                            } else {
-                                ljicrop_video.style.bottom = (ljicrop_magnification - 100) + '%';
-                            }
-                        break;
+                        case 'upperright': {
+
+                            // 拡大起点を右上に設定
+                            ljicrop_video.style.transformOrigin = 'right top';
+
+                            // 動画の表示サイズを 100% として、拡大率を超えない範囲で座標をずらす
+                            ljicrop_video.style.transform += `translateX(${(ljicrop_magnification - 100) * (ljicrop_coordinateX / 100)}%) `;
+                            ljicrop_video.style.transform += `translateY(-${(ljicrop_magnification - 100) * (ljicrop_coordinateY / 100)}%) `;
+                            break;
+                        }
 
                         // 右下
-                        case 'lowerright':
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
-                                ljicrop_video.style.left = -(ljicrop_magnification - ljicrop_coordinateX - 100) + '%';
-                            } else {
-                                ljicrop_video.style.left = -(ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
-                            }
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
-                                ljicrop_video.style.bottom = (ljicrop_magnification - ljicrop_coordinateY - 100) + '%';
-                            } else {
-                                ljicrop_video.style.bottom = (ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
-                            }
-                        break;
+                        case 'lowerright': {
+
+                            // 拡大起点を右下に設定
+                            ljicrop_video.style.transformOrigin = 'right bottom';
+
+                            // 動画の表示サイズを 100% として、拡大率を超えない範囲で座標をずらす
+                            ljicrop_video.style.transform += `translateX(${(ljicrop_magnification - 100) * (ljicrop_coordinateX / 100)}%) `;
+                            ljicrop_video.style.transform += `translateY(${(ljicrop_magnification - 100) * (ljicrop_coordinateY / 100)}%) `;
+                            break;
+                        }
 
                         // 左上
-                        case 'upperleft':
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
-                                ljicrop_video.style.left = -ljicrop_coordinateX + '%';
-                            } else {
-                                ljicrop_video.style.left = -(ljicrop_magnification - 100) + '%';
-                            }
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
-                                ljicrop_video.style.bottom = ljicrop_coordinateY + '%';
-                            } else {
-                                ljicrop_video.style.bottom = (ljicrop_magnification - 100) + '%';
-                            }
-                        break;
+                        case 'upperleft': {
+
+                            // 拡大起点を左上に設定
+                            ljicrop_video.style.transformOrigin = 'left top';
+
+                            // 動画の表示サイズを 100% として、拡大率を超えない範囲で座標をずらす
+                            ljicrop_video.style.transform += `translateX(-${(ljicrop_magnification - 100) * (ljicrop_coordinateX / 100)}%) `;
+                            ljicrop_video.style.transform += `translateY(-${(ljicrop_magnification - 100) * (ljicrop_coordinateY / 100)}%) `;
+                            break;
+                        }
 
                         // 左下
-                        case 'lowerleft':
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateX) {
-                                ljicrop_video.style.left = -ljicrop_coordinateX + '%';
-                            } else {
-                                ljicrop_video.style.left = -(ljicrop_magnification - 100) + '%';
-                            }
-                            if ((ljicrop_magnification - 100) > ljicrop_coordinateY) {
-                                ljicrop_video.style.bottom = (ljicrop_magnification - ljicrop_coordinateY - 100) + '%';
-                            } else {
-                                ljicrop_video.style.bottom = (ljicrop_magnification - (ljicrop_magnification - 100) - 100) + '%';
-                            }
-                        break;
+                        case 'lowerleft': {
+
+                            // 拡大起点を左下に設定
+                            ljicrop_video.style.transformOrigin = 'left bottom';
+
+                            // 動画の表示サイズを 100% として、拡大率を超えない範囲で座標をずらす
+                            ljicrop_video.style.transform += `translateX(-${(ljicrop_magnification - 100) * (ljicrop_coordinateX / 100)}%) `;
+                            ljicrop_video.style.transform += `translateY(${(ljicrop_magnification - 100) * (ljicrop_coordinateY / 100)}%) `;
+                            break;
+                        }
                     }
+
+                    // video 要素を拡大
+                    // transform は後ろから適用されるため、先にリサイズしておかないと正しく座標をずらせない
+                    // ref: https://techblog.kayac.com/css-transform-tips
+                    ljicrop_video.style.transform += `scale(${ljicrop_magnification / 100})`;
                 }
             }
         }
@@ -669,7 +661,7 @@ $(function() {
                 Object.keys(data['scandata']).forEach(function(key){
 
                     // htmlを生成
-                    html += 
+                    html +=
                         `<div class="chromecast-device" data-ip="` + data['scandata'][key]['ip'] + `" data-port="` + data['scandata'][key]['port'] + `">
                             <i class="fas fa-tv"></i>
                             <div class="chromecast-name-box">
@@ -683,7 +675,7 @@ $(function() {
                 if (html == ''){
 
                     // htmlを生成
-                    html += 
+                    html +=
                         `<div class="error">
                             キャストするデバイスがありません。<br>
                             右上の︙メニューから、デバイスをスキャンしてください。<br>
@@ -949,7 +941,7 @@ function controlBrowserCast(){
             });
 
         },
-        function(e) { 
+        function(e) {
             console.error(e);
         }
     );
@@ -1033,7 +1025,7 @@ function controlServerCast(state){
     // ファイル再生のみ
     if (state == 'File'){
 
-        // 再生系処理 
+        // 再生系処理
         $.ajax({
             url: '/api/chromecast/' + stream,
             type: 'post',

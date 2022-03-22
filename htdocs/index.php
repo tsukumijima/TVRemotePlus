@@ -700,20 +700,6 @@
         <div id="ljicrop-point-box">
           <label class="ljicrop-point">
             <div class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input"  name="ljicrop_type" value="upperright" checked>
-              <div class="custom-control-label"></div>
-            </div>
-            右上
-          </label>
-          <label class="ljicrop-point">
-            <div class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input"  name="ljicrop_type" value="lowerright" checked>
-              <div class="custom-control-label"></div>
-            </div>
-            右下
-          </label>
-          <label class="ljicrop-point">
-            <div class="custom-control custom-radio">
               <input type="radio" class="custom-control-input"  name="ljicrop_type" value="upperleft" checked>
               <div class="custom-control-label"></div>
             </div>
@@ -725,6 +711,20 @@
               <div class="custom-control-label"></div>
             </div>
             左下
+          </label>
+          <label class="ljicrop-point">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input"  name="ljicrop_type" value="upperright" checked>
+              <div class="custom-control-label"></div>
+            </div>
+            右上
+          </label>
+          <label class="ljicrop-point">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input"  name="ljicrop_type" value="lowerright" checked>
+              <div class="custom-control-label"></div>
+            </div>
+            右下
           </label>
         </div>
         <div id="button-box" class="broadcast-button-box">
