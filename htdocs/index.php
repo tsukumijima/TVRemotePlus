@@ -74,6 +74,7 @@
         lang: 'ja-jp',  // 言語
         live: <?= ($ini[$stream]['state'] !== 'File' ? 'true' : 'false'); ?>,  // ライブモード
         loop: true,  // ループ再生
+        syncWhenPlayingLive: false,  // ライブモードでの再生時に同期しない
         airplay: false,  // AirPlay 機能 (うまく動かないため無効化)
         autoplay: true,  // 自動再生
         screenshot: true,  // スクリーンショット
