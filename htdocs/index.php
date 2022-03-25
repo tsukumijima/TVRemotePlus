@@ -68,6 +68,16 @@
           <div id="dplayer"></div>
           <script id="dplayer-script">
 
+    // 文字スーパー用の内蔵音をロード
+    const audios = [];  // Audio() のインスタンスが入る配列
+    for (let index = 1; index <= 14; index++) {
+      const audio = new Audio(`/files/superimpose/RomSound${String(index).padStart(2, 0)}.wav`);
+      audio.load();  // 内蔵音をロード
+      audio.volume = 1;  // 音量を設定
+      audios.push(audio);  // 読み込んだのでインスタンス追加
+    }
+
+    // DPlayer を初期化
     const dp = new DPlayer({
         container: document.getElementById('dplayer'),
         theme: '#007CFF',  // テーマカラー
@@ -113,6 +123,11 @@
                 drcsReplacement: true,  // DRCS 文字を対応する Unicode 文字に置換
                 enableRawCanvas: true,  // 高解像度の字幕 Canvas を取得できるように
                 useStrokeText: true,  // 縁取りに strokeText API を利用
+                PRACallback: (index) => {  // 文字スーパーの PRA (内蔵音再生コマンド) のコールバックを指定
+                  // 最初までシークしてから index に応じた内蔵音を鳴らす
+                  audios[index].currentTime = 0;
+                  audios[index].play();
+                },
             }
         },
         subtitle: {
