@@ -586,7 +586,7 @@ TS 抜きチューナーで録画した番組を普通のテレビで気軽に�
 - PHP (7.4.4・実行環境)
 - TSTask (0.2.0(patch)・テレビ放送の受信 → UDP 送信)
 - TSTaskCentreEx (1.2.0・TSTask へのコマンド送信)
-- arib-subtitle-timedmetadater (4.0.7・ARIB 字幕を ID3 メタデータに変換)
+- arib-subtitle-timedmetadater (4.0.9・ARIB 字幕を ID3 メタデータに変換)
 - rplsinfo (1.5.2・TS ファイル内の番組情報の取得に利用)
 - ffmpeg (4.4・UDP 受信 → エンコード)
 - ffprobe (4.4・録画ファイルの動画情報の取得に利用)
