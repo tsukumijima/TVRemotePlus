@@ -126,6 +126,10 @@ $arib_subtitle_timedmetadater_path = $base_dir.'bin/arib-subtitle-timedmetadater
 $asyncbuf_exe = 'asyncbuf.exe';
 $asyncbuf_path = $base_dir.'bin/arib-subtitle-timedmetadater/'.$asyncbuf_exe;
 
+// tsreadex の名前とパス
+$tsreadex_exe = 'tsreadex.exe';
+$tsreadex_path = $base_dir.'bin/tsreadex/'.$tsreadex_exe;
+
 // rplsinfo の名前とパス
 $rplsinfo_exe =  'rplsinfo-tvrp.exe';
 $rplsinfo_path =  $base_dir.'bin/rplsinfo/'.$rplsinfo_exe;

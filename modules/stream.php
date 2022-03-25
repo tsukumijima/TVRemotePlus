@@ -193,7 +193,7 @@
 	// ライブ配信を開始する
 	function stream_start($stream, $ch, $sid, $tsid, $BonDriver, $quality, $encoder, $subtitle) {
 
-		global $inifile, $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $tstaskcentreex_path, $arib_subtitle_timedmetadater_path, $asyncbuf_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window, $TSTask_window;
+		global $inifile, $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $tstask_path, $tstaskcentreex_path, $arib_subtitle_timedmetadater_path, $asyncbuf_path, $tsreadex_path, $segment_folder, $hlslive_time, $hlslive_list, $base_dir, $encoder_log, $encoder_window, $TSTask_window;
 
 		// 設定ファイル読み込み
 		$settings = json_decode(file_get_contents_lock_sh($inifile), true);
@@ -515,10 +515,44 @@
 		}
 
 		// asyncbuf.exe
-		$asyncbuf_cmd = "\"{$asyncbuf_path}\" 50000000 0";  // 50MB 
+		$asyncbuf_cmd = "\"{$asyncbuf_path}\" 50000000 0";  // 50MB
+
+		// tsreadex.exe
+		// KonomiTV のエンコードタスク機能からのバックポート
+		$tsreadex_cmd = implode(' ', [
+			// tsreadex のパス
+			"\"{$tsreadex_path}\"",
+			// 取り除く TS パケットの10進数の PID
+			// EIT の PID を指定
+			'-x', '18/38/39',
+			// 特定サービスのみを選択して出力するフィルタを有効にする
+			// 有効にすると、特定のストリームのみ PID を固定して出力される
+			'-n', '-1',
+			// 主音声ストリームが常に存在する状態にする
+			// ストリームが存在しない場合、無音の AAC ストリームが出力される
+			// 音声がモノラルであればステレオにする
+			// デュアルモノを2つのモノラル音声に分離し、右チャンネルを副音声として扱う
+			'-a', '13',
+			// 副音声ストリームが常に存在する状態にする
+			// ストリームが存在しない場合、無音の AAC ストリームが出力される
+			// 音声がモノラルであればステレオにする
+			'-b', '5',
+			// 字幕ストリームが常に存在する状態にする
+			// ストリームが存在しない場合、PMT の項目が補われて出力される
+			'-c', '1',
+			// 文字スーパーストリームが常に存在する状態にする
+			// ストリームが存在しない場合、PMT の項目が補われて出力される
+			'-u', '1',
+			// 字幕と文字スーパーを aribb24.js が解釈できる ID3 timed-metadata に変換する
+			// +4: FFmpeg のバグを打ち消すため、変換後のストリームに規格外の5バイトのデータを追加する
+			// +8: FFmpeg のエラーを防ぐため、変換後のストリームの PTS が単調増加となるように調整する
+			'-d', '13',
+			// 標準入力を設定
+			'-',
+		]);
 
 		// エンコードコマンド
-		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.$asyncbuf_cmd.' | '.win_exec_escape($stream_cmd);
+		$stream_cmd = 'start "'.$encoder.' Encoding..." '.($encoder_window == 'true' ? '' : '/B /min').' cmd.exe /C "'.win_exec_escape($ast_cmd).' | '.$asyncbuf_cmd.' | '.$tsreadex_cmd.' | '.win_exec_escape($stream_cmd);
 
 		// ログを書き出すかどうか
 		if ($encoder_log == 'true') {
@@ -550,7 +584,7 @@
 	// ファイル再生を開始する
 	function stream_file($stream, $filepath, $extension, $quality, $encoder, $subtitle) {
 
-		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $arib_subtitle_timedmetadater_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log, $encoder_window;
+		global $udp_port, $ffmpeg_path, $qsvencc_path, $nvencc_path, $vceencc_path, $arib_subtitle_timedmetadater_path, $tsreadex_path, $segment_folder, $hlsfile_time, $base_dir, $encoder_log, $encoder_window;
 
 		// 事前に前のストリームを終了する
 		stream_stop($stream);
@@ -817,10 +851,44 @@
 				break;
 		}
 
+		// tsreadex.exe
+		// KonomiTV のエンコードタスク機能からのバックポート
+		$tsreadex_cmd = implode(' ', [
+			// tsreadex のパス
+			"\"{$tsreadex_path}\"",
+			// 取り除く TS パケットの10進数の PID
+			// EIT の PID を指定
+			'-x', '18/38/39',
+			// 特定サービスのみを選択して出力するフィルタを有効にする
+			// 有効にすると、特定のストリームのみ PID を固定して出力される
+			'-n', '-1',
+			// 主音声ストリームが常に存在する状態にする
+			// ストリームが存在しない場合、無音の AAC ストリームが出力される
+			// 音声がモノラルであればステレオにする
+			// デュアルモノを2つのモノラル音声に分離し、右チャンネルを副音声として扱う
+			'-a', '13',
+			// 副音声ストリームが常に存在する状態にする
+			// ストリームが存在しない場合、無音の AAC ストリームが出力される
+			// 音声がモノラルであればステレオにする
+			'-b', '5',
+			// 字幕ストリームが常に存在する状態にする
+			// ストリームが存在しない場合、PMT の項目が補われて出力される
+			'-c', '1',
+			// 文字スーパーストリームが常に存在する状態にする
+			// ストリームが存在しない場合、PMT の項目が補われて出力される
+			'-u', '1',
+			// 字幕と文字スーパーを aribb24.js が解釈できる ID3 timed-metadata に変換する
+			// +4: FFmpeg のバグを打ち消すため、変換後のストリームに規格外の5バイトのデータを追加する
+			// +8: FFmpeg のエラーを防ぐため、変換後のストリームの PTS が単調増加となるように調整する
+			'-d', '13',
+			// 標準入力を設定
+			'-',
+		]);
+
 		// エンコードコマンド
 		$stream_cmd = (
 			"start \"${encoder} Encoding...\" ".($encoder_window == 'true' ? '' : '/B /min').' '.
-			'cmd.exe /C "'.(!$is_mp4_or_mkv ? win_exec_escape($ast_cmd).' | ' : '').win_exec_escape($stream_cmd)
+			'cmd.exe /C "'.($is_mp4_or_mkv === false ? win_exec_escape($ast_cmd).' | '.$tsreadex_cmd.' | ' : '').win_exec_escape($stream_cmd)
 		);
 
 		// ログを書き出すかどうか
