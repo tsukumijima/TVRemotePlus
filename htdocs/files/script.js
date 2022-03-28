@@ -421,7 +421,7 @@ $(function() {
     // ***** ストリーム開始 *****
 
     // 再生開始ボックス
-    $('body').on('click','.broadcast-wrap',function() {
+    $('body').on('click', '.broadcast-wrap', function() {
         var $elem = $(this);
         $('#broadcast-stream-title').html($elem.data('channel') + ' ' + $elem.data('name'));
         $('#broadcast-stream-info').html($elem.find('.broadcast-title-id').html());
@@ -467,7 +467,7 @@ $(function() {
 
     // ***** ストリーム終了・遷移 *****
 
-    $('body').on('click','.stream-view',function(event) {
+    $('body').on('click', '.stream-view', function(event) {
 
         // ストリーム終了ボタン
         if ($(event.target).hasClass('stream-stop-icon') && !$(event.target).parent().hasClass('disabled')) {
@@ -535,7 +535,7 @@ $(function() {
     let capture_selected = [];
 
     // キャプチャ画像の最大保持数
-    let capture_maxcount = 10; // 10個
+    let capture_maxcount = 30; // 30個
 
     // キャプチャ画像リストにフォーカスしているか
     let capture_list_focus = false;
@@ -543,7 +543,7 @@ $(function() {
     // ツイートの文字数をカウント
     var count;
     var limit = 140;
-    $('#tweet, #tweet-hashtag').on('keydown keyup keypress change',function(event) {
+    $('#tweet, #tweet-hashtag').on('keydown keyup keypress change', function(event) {
         tweet_count(event);
     });
 
@@ -568,6 +568,10 @@ $(function() {
             $('#tweet-account-box').css('opacity', 0);
         }
     });
+
+    // フォーカスされた際に box-shadow を表示する
+    $('#tweet').on('focus', () => $('#tweet-main').addClass('focus'));
+    $('#tweet').on('blur', () => $('#tweet-main').removeClass('focus'));
 
     // スマホの場合に Twitter フォームだけ下にフロート表示
     $('#tweet').focusin(function(event) {
@@ -1409,6 +1413,9 @@ $(function() {
 
             $('#tweet-capture-box').removeClass('show');
 
+            // ツイート本文にフォーカスを当てる
+            $('#tweet').focus();
+
             // 0.1 秒遅らせてから display: none; を適用
             setTimeout(function() {
                 $('#tweet-capture-box').removeClass('display'); // 必ず後
@@ -1541,7 +1548,7 @@ $(function() {
                                 top: 0;
                                 bottom: 0;
                                 font-size: 29px;
-                                font-family: 'Open Sans','Segoe UI','Arial',sans-serif;
+                                font-family: 'Open Sans', 'Segoe UI', 'Arial',sans-serif;
                                 color: #fff;
                             }
                             .dplayer-danmaku .dplayer-danmaku-item {

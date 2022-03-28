@@ -1487,6 +1487,11 @@ td {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom: 2px var(--color-tweet) solid;
+    transition: border 0.1s ease, box-shadow 0.1s ease;
+}
+#tweet-main.focus {
+    box-shadow: rgb(29 161 242 / 50%) 0 0 0 3.5px;
+    border-bottom: 2px transparent solid;  /* ボックスの高さが変わらないように透過した上で付けたままにする */
 }
 
 #tweet-hashtag {
