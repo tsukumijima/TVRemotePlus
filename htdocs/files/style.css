@@ -1706,7 +1706,7 @@ td {
 }
 .tweet-capture {
     position: relative;
-    width: 87px;
+    width: 100px;
     height: 87px;
     margin-right: 12px;
     cursor: pointer;
@@ -1780,7 +1780,7 @@ td {
 
 .tweet-capture-img {
     display: block;
-    width: 87px;
+    width: 100px;
     height: 87px;
     border-radius: 5px;
     background: #272727;

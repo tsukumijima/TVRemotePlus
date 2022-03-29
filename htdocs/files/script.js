@@ -572,6 +572,8 @@ $(function() {
     // フォーカスされた際に box-shadow を表示する
     $('#tweet').on('focus', () => $('#tweet-main').addClass('focus'));
     $('#tweet').on('blur', () => $('#tweet-main').removeClass('focus'));
+    $('#tweet-hashtag').on('focus', () => $('#tweet-main').addClass('focus'));
+    $('#tweet-hashtag').on('blur', () => $('#tweet-main').removeClass('focus'));
 
     // スマホの場合に Twitter フォームだけ下にフロート表示
     $('#tweet').focusin(function(event) {
@@ -852,13 +854,13 @@ $(function() {
                 var focus_elem_dummy = focus_elem.getBoundingClientRect().width + focus_elem_margin;
 
                 // スクロールにかける時間
-                var focus_elem_scroll_time = 350; // 350 (ミリ秒)
+                var focus_elem_scroll_time = 300; // 300 (ミリ秒)
             }
 
             switch (event.key) {
 
                 // Space
-                case ' ':
+                case ' ': {
 
                     // イベントをキャンセル
                     event.preventDefault();
@@ -876,11 +878,11 @@ $(function() {
                             selectCaptureImage(focus_elem);
                         }
                     }
-
-                break;
+                    break;
+                }
 
                 // ←
-                case 'ArrowLeft':
+                case 'ArrowLeft': {
 
                     // イベントをキャンセル
                     event.preventDefault();
@@ -888,7 +890,7 @@ $(function() {
                     // コメント入力フォームのフォーカスを外す
                     dp.comment.hide();
 
-                    // focus_elem があれば
+                    // フォーカスされている要素があれば
                     if (exists_focus_elem) {
 
                         // 前の要素があれば
@@ -937,11 +939,11 @@ $(function() {
                         // 最初の要素にフォーカス
                         document.getElementsByClassName('tweet-capture')[0].classList.add('focus');
                     }
-
-                break;
+                    break;
+                }
 
                 // →
-                case 'ArrowRight':
+                case 'ArrowRight': {
 
                     // イベントをキャンセル
                     event.preventDefault();
@@ -998,8 +1000,8 @@ $(function() {
                         // 最初の要素にフォーカス
                         document.getElementsByClassName('tweet-capture')[0].classList.add('focus');
                     }
-
-                break;
+                    break;
+                }
             }
         }
     });
@@ -1009,6 +1011,9 @@ $(function() {
 
     // キャプチャ画像表示用の Luminous インスタンス
     let luminous = null;
+
+    // Luminous が開かれているか
+    let luminousIsOpen = false;
 
     // キャプチャした画像の一覧を表示
     $('#tweet-capture-list').click(function(event) {
@@ -1115,6 +1120,8 @@ $(function() {
                 sourceAttribute: 'data-url',  // 拡大画像の URL がある属性
                 openTrigger: 'contextmenu',  // 右クリックで開く
                 closeTrigger: 'click',  // 普通のクリックで閉じる
+                onOpen: () => luminousIsOpen = true,  // 開かれたときのイベント
+                onClose: () => luminousIsOpen = false,  // 閉じられたときのイベント
             });
         }
     }
@@ -1360,10 +1367,13 @@ $(function() {
         // キャプチャ画像の選択をすべて解除
         deselectAllCaptureImage();
 
-        // フォーカスを外す
+        // キャプチャへのフォーカスを外す
         if (document.querySelectorAll('.tweet-capture.focus').length === 1) {
             document.querySelector('.tweet-capture.focus').classList.remove('focus');
         }
+
+        // フォームへのフォーカスを外す
+        $('#tweet').blur();
 
         // 文字数リミットをリセット
         limit = 140;
