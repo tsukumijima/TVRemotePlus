@@ -881,6 +881,42 @@ $(function() {
                     break;
                 }
 
+                // Enter
+                case 'Enter': {
+
+                    // イベントをキャンセル
+                    event.preventDefault();
+
+                    // フォーカスされている要素がある & Luminous が初期化されている
+                    if (exists_focus_elem && luminous !== null) {
+
+                        // Luminous が開かれている
+                        if (luminousIsOpen === true) {
+
+                            // 既に開かれている Luminous をすべて閉じる
+                            for (const luminousInstance of luminous.luminousInstances.filter((element) => element.isOpen)) {
+                                luminousInstance.close();
+                            }
+
+                        } else {
+
+                            // フォーカスされている要素の Luminous を開く
+                            for (const luminousInstance of luminous.luminousInstances) {
+                                if (luminousInstance.trigger === focus_elem) {
+                                    // まだ _completeClose() が実行されていない段階で open() してしまうと、正しく Luminous を開けない
+                                    // そこで、DOM に要素が追加されていれば open() する前に _completeClose() を試みる
+                                    if (luminousInstance.lightbox.elementBuilt === true) {
+                                        luminousInstance.lightbox._completeClose();
+                                    }
+                                    // Luminous を開く
+                                    luminousInstance.open();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+
                 // ←
                 case 'ArrowLeft': {
 
@@ -926,6 +962,34 @@ $(function() {
 
                                 // 今までのスクロール幅を引く
                                 $(box_elem).animate({scrollLeft: box_elem.scrollLeft - box_elem_scrollLeft}, focus_elem_scroll_time, 'swing');
+                            }
+
+                            // Luminous が初期化されていて、かつ Luminous が開かれている
+                            if (luminous !== null && luminousIsOpen === true) {
+
+                                // 現在表示されている Luminous インスタンス
+                                const currentLuminousInstance = luminous.luminousInstances.find((element) => element.isOpen);
+
+                                // 開かれている Luminous インスタンスがなぜかなければ実行しない
+                                if (currentLuminousInstance === undefined) {
+                                    luminousIsOpen = false;
+                                    return;
+                                }
+
+                                // 現在フォーカスされているキャプチャに差し替える
+                                // ref: https://github.com/imgix/luminous/blob/v2.4.0/src/js/Lightbox.js#L333-L337
+                                // ref: https://github.com/imgix/luminous/blob/v2.4.0/src/js/Lightbox.js#L292-L326
+                                currentLuminousInstance.lightbox.currentTrigger = focus_elem.previousElementSibling;
+                                if (currentLuminousInstance.lightbox.elementBuilt === false) {
+                                    // まだ DOM に追加されていなかったら DOM を組み立てる
+                                    currentLuminousInstance.lightbox._buildElement();
+                                    currentLuminousInstance.lightbox._bindEventListeners();
+                                    currentLuminousInstance.lightbox.elementBuilt = true;
+                                }
+                                currentLuminousInstance.lightbox._updateImgSrc();
+                                currentLuminousInstance.lightbox._updateCaption();
+                                currentLuminousInstance.lightbox._sizeImgWrapperEl();
+                                currentLuminousInstance.lightbox.settings._gallery.onChange({imgEl: currentLuminousInstance.lightbox.imgEl});
                             }
                         }
 
@@ -987,6 +1051,34 @@ $(function() {
 
                                 // 今までのスクロール幅を足す
                                 $(box_elem).animate({scrollLeft: box_elem.scrollLeft + box_elem_scrollLeft}, focus_elem_scroll_time, 'swing');
+                            }
+
+                            // Luminous が初期化されていて、かつ Luminous が開かれている
+                            if (luminous !== null && luminousIsOpen === true) {
+
+                                // 現在表示されている Luminous インスタンス
+                                const currentLuminousInstance = luminous.luminousInstances.find((element) => element.isOpen);
+
+                                // 開かれている Luminous インスタンスがなぜかなければ実行しない
+                                if (currentLuminousInstance === undefined) {
+                                    luminousIsOpen = false;
+                                    return;
+                                }
+
+                                // 現在フォーカスされているキャプチャに差し替える
+                                // ref: https://github.com/imgix/luminous/blob/v2.4.0/src/js/Lightbox.js#L333-L337
+                                // ref: https://github.com/imgix/luminous/blob/v2.4.0/src/js/Lightbox.js#L292-L326
+                                currentLuminousInstance.lightbox.currentTrigger = focus_elem.nextElementSibling;
+                                if (currentLuminousInstance.lightbox.elementBuilt === false) {
+                                    // まだ DOM に追加されていなかったら DOM を組み立てる
+                                    currentLuminousInstance.lightbox._buildElement();
+                                    currentLuminousInstance.lightbox._bindEventListeners();
+                                    currentLuminousInstance.lightbox.elementBuilt = true;
+                                }
+                                currentLuminousInstance.lightbox._updateImgSrc();
+                                currentLuminousInstance.lightbox._updateCaption();
+                                currentLuminousInstance.lightbox._sizeImgWrapperEl();
+                                currentLuminousInstance.lightbox.settings._gallery.onChange({imgEl: currentLuminousInstance.lightbox.imgEl});
                             }
                         }
 
@@ -1109,13 +1201,14 @@ $(function() {
         if (luminous !== null) {
             luminous.destroy();
             luminous = null;
+            luminousIsOpen = false;
         }
 
         // Luminous を初期化
         const luminousTrigger = document.querySelectorAll('.tweet-capture');
         if (luminousTrigger !== null) {
             luminous = new LuminousGallery(luminousTrigger, {
-                arrowNavigation: true,  // 左右のボタンを表示する
+                arrowNavigation: false,  // キーボード操作でスライドしない
             }, {
                 sourceAttribute: 'data-url',  // 拡大画像の URL がある属性
                 openTrigger: 'contextmenu',  // 右クリックで開く
