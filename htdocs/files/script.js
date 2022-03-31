@@ -702,11 +702,14 @@ $(function() {
     //   Alt + 2 キー：コメント付きでキャプチャ
     //   Alt + 3 キー：フォームをリセット
 
-    // ページ全体
-    $(document).keydown(function(event) {
+    // コメントを送信した後にプレイヤーへのフォーカスを解除する
+    // ページ全体のキー入力のイベントの方が発火が遅いので、それを待ってから実行
+    dp.template.commentInput.addEventListener('keydown', (event) => {
+        if (event.keyCode === 13) setTimeout(() => dp.focus = false, 100);
+    });
 
-        // クロスブラウザ対応用
-        var event = event || window.event;
+    // ページ全体のキー入力のイベント
+    $(document).keydown(function(event) {
 
         // Ctrl + Enter キー
         // Twitter 機能が有効 & 送信ボタンが有効
@@ -787,6 +790,15 @@ $(function() {
             }
         }
 
+        // C キー
+        // コメント入力フォームを表示してフォーカスするキー
+        // コメント入力フォームにフォーカスしている際に DPlayer 上のフォーカスフラグが true になっていないと誤動作を引き起こしかねない
+        // document 直下の keydown イベントの発火は遅いので、すでにコメント入力フォームにフォーカスされた状態になっている
+        if (event.key.toUpperCase() == 'C') {
+            event.preventDefault();
+            dp.focus = true;
+        }
+
         // Alt (or option) キー
         // Twitter 機能が有効
         if (settings['twitter_show']) {
@@ -827,12 +839,12 @@ $(function() {
             }
         }
 
-        // Twitter 機能が有効 &
-        // キャプチャ画像リストにフォーカスしている &
-        // プレイヤーにフォーカスされていない &
-        // キャプチャが存在する &
-        // 変換中ではない
-        if (settings['twitter_show'] && capture_list_focus && dp.focus === false && capture.length > 0 && window.isComposing === false) {
+        if (settings['twitter_show'] &&      // Twitter 機能が有効
+            capture_list_focus === true &&   // キャプチャ画像リストにフォーカスしている
+            dp.focus === false &&            // プレイヤーにフォーカスされていない
+            document.activeElement.className !== 'dplayer-comment-input' &&  // コメント入力フォームにフォーカスされていない
+            capture.length > 0 &&            // キャプチャが存在する
+            window.isComposing === false) {  // IME変換中ではない
 
             // ボックス
             let box_elem = document.getElementById('tweet-capture-box');
@@ -864,9 +876,6 @@ $(function() {
 
                     // イベントをキャンセル
                     event.preventDefault();
-
-                    // コメント入力フォームのフォーカスを外す
-                    dp.comment.hide();
 
                     // focus_elem があれば
                     if (exists_focus_elem) {
@@ -922,9 +931,6 @@ $(function() {
 
                     // イベントをキャンセル
                     event.preventDefault();
-
-                    // コメント入力フォームのフォーカスを外す
-                    dp.comment.hide();
 
                     // フォーカスされている要素があれば
                     if (exists_focus_elem) {
@@ -1011,9 +1017,6 @@ $(function() {
 
                     // イベントをキャンセル
                     event.preventDefault();
-
-                    // コメント入力フォームのフォーカスを外す
-                    dp.comment.hide();
 
                     // focus_elem があれば
                     if (exists_focus_elem) {
