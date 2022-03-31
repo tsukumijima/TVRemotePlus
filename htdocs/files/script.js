@@ -794,8 +794,7 @@ $(function() {
         // コメント入力フォームを表示してフォーカスするキー
         // コメント入力フォームにフォーカスしている際に DPlayer 上のフォーカスフラグが true になっていないと誤動作を引き起こしかねない
         // document 直下の keydown イベントの発火は遅いので、すでにコメント入力フォームにフォーカスされた状態になっている
-        if (event.key.toUpperCase() == 'C') {
-            event.preventDefault();
+        if (document.activeElement.id != 'tweet' && document.activeElement.id != 'tweet-hashtag' && event.key.toUpperCase() == 'C') {
             dp.focus = true;
         }
 
