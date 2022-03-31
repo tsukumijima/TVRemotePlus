@@ -18,8 +18,8 @@
 	// セッション開始
 	session_start();
 
-	// TwitterOAuthの読み込み
-	require_once ('../../modules/TwitterOAuth/autoload.php');
+	// TwitterOAuth の読み込み
+	require_once ('../../modules/classloader.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	// コンシューマーキーが空の場合
@@ -59,13 +59,13 @@
 			echo '<b>エラー：TVRemotePlus の Callback URL が TwitterAPI 側に承認されていない、または一致しないため、アプリ連携ができません。</b><br>';
 			echo 'TwitterAPI のアプリ設定にて、Callback URLs の項目に Callback URL ('.$OAUTH_CALLBACK.') を追加し、もう一度アプリ連携し直してください。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
-			
+
 		} else if (preg_match('/Could not authenticate you.*/', $e)){
 			echo '<b>エラー：TwitterAPI の認証に失敗したため、アプリ連携ができません。</b><br>';
 			echo '設定した Consumer Key・Consumer Secret が間違っている可能性があります。<br>';
 			echo '<a href="/settings/">環境設定</a> から Consumer Key・Consumer Secret が正しいかどうか確認し、もう一度アプリ連携し直してください。<br>';
 			echo '<a href="/">ホームに戻る</a><br>';
-			
+
 		} else {
 			echo '<b>エラー：認証中に不明なエラーが発生したため、アプリ連携ができません。</b><br>';
 			echo '<b>'.$e.'</b><br>';

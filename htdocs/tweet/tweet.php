@@ -17,8 +17,8 @@
 	// セッション開始
 	session_start();
 
-	// TwitterOAuthの読み込み
-	require_once ('../../modules/TwitterOAuth/autoload.php');
+	// TwitterOAuth の読み込み
+	require_once ('../../modules/classloader.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	if (isset($_SESSION['oauth_token']) and isset($_SESSION['oauth_token_secret'])){ //OAuthトークンがセッションにあるなら
@@ -71,12 +71,12 @@
 
 					// 間隔が空いててハッシュタグあるならハッシュタグもつける
 					$tweet_text = $_POST['tweet'].' '.$hashtag;
-					
+
 					// ハッシュタグついてるのでタイムスタンプをCookieに記録する
 					$cookie['tweet_latest'] = time();
 					setcookie('tvrp_twitter_settings', json_encode($cookie, JSON_UNESCAPED_UNICODE), time() + 7776000, '/');
 
-				} else { 
+				} else {
 					// 指定した秒数空いてないのでハッシュタグを無効化
 					$tweet_text = $_POST['tweet'].' '.str_replace('#', '# ', $hashtag);
 				}
@@ -107,10 +107,10 @@
 						if ($index === 'picture5') {
 							break; // ループを抜ける
 						}
-	
+
 						// アップロードするパス
 						$picture = $tweet_upload.'/Capture_'.date('Ymd-His').'_'.str_replace('picture', '', $index).'.jpg';
-						
+
 						// 画像をアップロード先のフォルダに移動
 						if (move_uploaded_file($file['tmp_name'], $picture)){
 
@@ -133,7 +133,7 @@
 						}
 
 					}
-					
+
 					$tweet_type = '画像付きツイート';
 
 					// 投稿後に画像を削除するなら
@@ -169,7 +169,7 @@
 			// ツイートする
 			// $resultにはbool型で実行結果が出力される
 			$result = $connection->post('statuses/update', $tweet);
-		
+
 		} catch(Exception $e) {
 			echo '<span class="tweet-failed">投稿中にエラーが発生しました：投稿に失敗しました…</span>';
 			exit(1);

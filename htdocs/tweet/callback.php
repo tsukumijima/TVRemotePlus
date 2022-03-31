@@ -17,8 +17,8 @@
 	// セッション開始
 	session_start();
 
-	// TwitterOAuthの読み込み
-	require_once ('../../modules/TwitterOAuth/autoload.php');
+	// TwitterOAuth の読み込み
+	require_once ('../../modules/classloader.php');
 	use Abraham\TwitterOAuth\TwitterOAuth;
 
 	if (!isset($_GET['denied'])){ // deniedでないなら
@@ -32,7 +32,7 @@
 		// セッション関数に入れておいたコールバック用トークンを差し替える
 		$_SESSION['oauth_token'] = $access_token['oauth_token'];
 		$_SESSION['oauth_token_secret'] = $access_token['oauth_token_secret'];
-		
+
 		// 取得したトークンでもう一度接続
 		$_connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
