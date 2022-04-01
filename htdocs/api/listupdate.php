@@ -3,6 +3,11 @@
 	// モジュール読み込み
 	require_once ('../../modules/require.php');
 	require_once ('../../modules/module.php');
+	require_once ('../../modules/classloader.php');
+
+	// Symfony/Process を読み込み
+	use Symfony\Component\Process\Exception\ProcessTimedOutException;
+	use Symfony\Component\Process\Process;
 
 	// かなり長くなることがあるので実行時間制限をオフに
 	ignore_user_abort(true);
@@ -66,7 +71,7 @@
 		// 数値に変換
 		$start_hour = intval($start_hour);
 		$start_min = intval($start_min);
-	
+
 		if ($start_hour !== 0){
 			// 繰り上がり
 			$start = ($start_hour * 60) + $start_min;
@@ -83,7 +88,7 @@
 
 		// 0埋めする
 		$end = sprintf('%02d', $end_hour).':'.sprintf('%02d', $end_min);
-	
+
 		return $end;
 	}
 
@@ -139,13 +144,14 @@
 			return $cmp !== 0 ? $cmp : strcmp($a, $b);
 		});
 
-		$TSfile['data'] = array();
+		// $TSfile['data'] のデータを初期化する
+		$TSfile['data'] = [];
 
 		foreach ($search as $key => $value) {
-			
+
 			// 誤作動の原因になるので変数は破棄しておく
-			unset($ffmpeg_cmd, $ffmpeg_result, $ffmpeg_return,
-				  $rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return, 
+			unset($ffmpeg_process, $ffmpeg_process_successful,
+				  $rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return,
 				  $ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
 			// 録画ファイル保存フォルダからのパスを含めたファイル名
@@ -166,46 +172,98 @@
 			// ファイル名のmd5
 			$md5 = md5($TSfile_dir.'/'.$value);
 
-			// サムネイルが存在するなら
-			if (file_exists($base_dir.'htdocs/files/thumb/'.$md5.'.jpg')){
+			// 現在の録画ファイルに対応する $TSfile['info'] の値
+			$TSfile_info = @$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']];
 
-				$TSfile['data'][$key]['thumb_state'] = 'generated'; // サムネイル生成フラグ
+			// サムネイルが存在するなら
+			if (file_exists("{$base_dir}htdocs/files/thumb/{$md5}.jpg")) {
+
+				$TSfile['data'][$key]['thumb_state'] = 'generated'; // サムネイル生成フラグを generated に
 				$TSfile['data'][$key]['thumb'] = $md5.'.jpg'; // サムネイル画像のパス(拡張子なしファイル名のmd5)
 
 			// 以前サムネイル生成に失敗している場合
 			// サムネイル生成に失敗した＝壊れてるTSファイルなので、毎回生成させると時間を食う
-			} else if (isset($TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['thumb_state']) and 
-					$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['thumb_state'] == 'failed'){
+			} else if ($TSfile_info !== null and array_key_exists('thumb_state', $TSfile_info) and $TSfile_info['thumb_state'] === 'failed') {
 
-				$TSfile['data'][$key]['thumb_state'] = 'failed'; // サムネイル生成フラグ
+				$TSfile['data'][$key]['thumb_state'] = 'failed'; // サムネイル生成フラグを failed に
 				$TSfile['data'][$key]['thumb'] = 'thumb_default.jpg'; // サムネイル画像のパス
 
-			} else { 
+			} else {
 
-				// ないならデフォルトにする
+				// サムネイルがないならデフォルトのサムネイル画像にする
 				$TSfile['data'][$key]['thumb'] = 'thumb_default.jpg'; // サムネイル画像のパス
 
-				// ffmpegでサムネイルを生成
-				$ffmpeg_cmd = '"'.$ffmpeg_path.'" -y -ss 72 -i "'.$TSfile_dir.'/'.$value.'" -vframes 1 -f image2 -s 480x270 "'.$base_dir.'htdocs/files/thumb/'.$md5.'.jpg" 2>&1';
-				exec($ffmpeg_cmd, $ffmpeg_result, $ffmpeg_return);
+				// ffmpeg でサムネイルを生成するコマンドを実行 (開始 72 秒でキャプチャを撮る)
+				// タイムアウトは 10 秒（タイムアウトを設定するために Symfony/Process を導入したようなもの）
+				$ffmpeg_process = new Process([
+					$ffmpeg_path, '-y', '-ss', '72', '-i', "{$TSfile_dir}/{$value}",
+					'-vframes', '1', '-f', 'image2', '-s', '480x270', "{$base_dir}htdocs/files/thumb/{$md5}.jpg",
+				]);
+				$ffmpeg_process->setTimeout(10);
+				$ffmpeg_process_successful = true;
+				try {
+					$ffmpeg_process->run();
+					$ffmpeg_process_successful = $ffmpeg_process->isSuccessful();
+				} catch (ProcessTimedOutException $ex) {  // タイムアウトした場合
+					$ffmpeg_process_successful = false;
+				}
 
-				// 生成成功
-				if ($ffmpeg_return === 0){
+				// コマンドの実行に成功 & 実際にサムネイル画像が生成されている
+				if ($ffmpeg_process_successful === true and file_exists("{$base_dir}htdocs/files/thumb/{$md5}.jpg")){
 
-					// サムネイル生成フラグ
+					// サムネイル生成フラグを generated に
 					$TSfile['data'][$key]['thumb_state'] = 'generated';
 
-				// 生成失敗
+				// コマンドの実行に失敗
 				} else {
 
-					// サムネイル生成フラグ
+					// サムネイル生成フラグを failed に
 					$TSfile['data'][$key]['thumb_state'] = 'failed';
 
+					// ffmpeg のコマンド自体は成功していて、かつ ffmpeg のコマンド出力に "Output file is empty, nothing was encoded (check -ss / -t / -frames parameters if used)" が含まれる場合
+					// 録画データが 72 秒未満だったため、72 秒までシークできずにサムネイルを生成できなかったと考えられる
+					if ($ffmpeg_process_successful === true and str_contains($ffmpeg_process->getErrorOutput(), 'Output file is empty, nothing was encoded (check -ss / -t / -frames parameters if used)')) {
+
+						// 開始 30 秒でキャプチャを撮り直してみる
+						$ffmpeg_process = new Process([
+							$ffmpeg_path, '-y', '-ss', '30', '-i', "{$TSfile_dir}/{$value}",
+							'-vframes', '1', '-f', 'image2', '-s', '480x270', "{$base_dir}htdocs/files/thumb/{$md5}.jpg",
+						]);
+						$ffmpeg_process->setTimeout(10);
+						try {
+							$ffmpeg_process->run();
+						} catch (ProcessTimedOutException $ex) {  // タイムアウトした場合
+							// 何もしない
+						}
+
+						// コマンドの実行に成功 & 実際にサムネイル画像が生成されている
+						// 2回目はうまくいったので、サムネイル生成フラグを generated にする
+						if ($ffmpeg_process_successful === true and file_exists("{$base_dir}htdocs/files/thumb/{$md5}.jpg")){
+							$TSfile['data'][$key]['thumb_state'] = 'generated';
+						}
+					}
+
+					// この時点でサムネイル生成フラグが failed で、かつファイルの最終更新時刻から 10 分経過している場合
+					// 録画中はサムネイル生成ができない事があるが、最終更新時刻から時間が立っているならその可能性もない
+					// 今後サムネイルの再生成を試みても失敗する可能性が高いため、$TSfile['info'] の方の thumb_state も failed に設定する
+					clearstatcache();  // 念のためキャッシュをクリアしておく
+					if ($TSfile['data'][$key]['thumb_state'] === 'failed' and filemtime("{$TSfile_dir}/{$value}")) {
+						if ($TSfile_info !== null) {
+							$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['thumb_state'] = 'failed';
+						} else {
+							// 何らかの理由で $TSfile['info'] にキーがない場合
+							$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = [];
+							$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['thumb_state'] = 'failed';
+							$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state'] = 'failed';
+						}
+						// 今後の参照のために更新しておく
+						$TSfile_info = @$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']];
+					}
 				}
 
 				// サムネイル画像のパス(拡張子なしファイル名のmd5)
 				// 仮になかった場合デフォルト画像が表示される
-				$TSfile['data'][$key]['thumb'] = $md5.'.jpg';
+				$TSfile['data'][$key]['thumb'] = "{$md5}.jpg";
 			}
 
 			// デフォルト値（取得に失敗したとき用）
@@ -220,22 +278,21 @@
 			$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
 
 			// 番組情報が取得できているなら
-			if (isset($TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state']) and 
-				$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']]['info_state'] == 'generated'){
+			if ($TSfile_info !== null and array_key_exists('info_state', $TSfile_info) and $TSfile_info['info_state'] == 'generated'){
 
 				// 拡張子の情報を一時的に保管
 				$extension = $TSfile['data'][$key]['pathinfo']['extension'];
-				
+
 				// 前に取得した情報を読み込む
 				// MP4・MKVからは番組情報を取得できないので、同じファイル名のTSがあればその番組情報を使う
-				$TSfile['data'][$key] = $TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']];
+				$TSfile['data'][$key] = $TSfile_info;
 
 				// ファイルパスがTSのものに上書きされてしまうのでここで戻しておく
 				$TSfile['data'][$key]['file'] = '/'.$value;
 
 				// 拡張子も.tsとして上書きされてしまうのでこれも戻しておく（ついでに小文字化）
 				$TSfile['data'][$key]['pathinfo']['extension'] = strtolower($extension);
-				
+
 				// 番組情報取得フラグ
 				$TSfile['data'][$key]['info_state'] = 'generated';
 
@@ -244,7 +301,7 @@
 			} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4' and $TSfile['data'][$key]['pathinfo']['extension'] != 'mkv'){
 
 				// rplsinfoでファイル情報を取得
-				$rplsinfo_cmd = '"'.$rplsinfo_path.'" -C -dtpcbieg -l 10 "'.$TSfile_dir.'/'.$value.'" 2>&1';
+				$rplsinfo_cmd = "\"{$rplsinfo_path}\" -C -dtpcbieg -l 10 \"{$TSfile_dir}/{$value}\" 2>&1";
 				exec($rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return);
 
 				// 取得成功
@@ -255,7 +312,7 @@
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?は有効なTS, rplsファイルではありません./", '', $rplsinfo_result);
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?から有効な番組情報を検出できませんでした./", '', $rplsinfo_result);
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?を開くのに失敗しました./", '', $rplsinfo_result);
-				
+
 					$fileinfo = str_getcsv(str_replace('　', ' ', mb_convert_kana($rplsinfo_result, 'asv', 'UTF-8'))); // Parseして配列にする
 
 					// 出力
@@ -323,12 +380,12 @@
 
 					// 結果を保存する
 					$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
-				
+
 				// ffprobe で動画の長さだけでも取得する
 				} else {
-				
+
 					// コマンドを実行
-					$ffprobe_cmd = '"'.$ffprobe_path.'" -i "'.$TSfile_dir.'/'.$value.'" -loglevel quiet -show_streams -print_format json';
+					$ffprobe_cmd = "\"{$ffprobe_path}\" -i \"{$TSfile_dir}/{$value}\" -loglevel quiet -show_streams -print_format json";
 					exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
 
 					if ($ffprobe_return === 0){
