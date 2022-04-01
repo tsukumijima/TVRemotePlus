@@ -3,7 +3,7 @@
 	// モジュール読み込み
 	require_once (dirname(__FILE__).'/require.php');
 	require_once (dirname(__FILE__).'/module.php');
-  
+
 	// 設定変更用のトークンを管理
 	if (isset($_COOKIE['tvrp_csrf_token']) && is_string($_COOKIE['tvrp_csrf_token'])) {
 		$csrf_token = $_COOKIE['tvrp_csrf_token'];
@@ -281,7 +281,7 @@
     </a>
 <?php
 	if ($update_confirm == 'true') {
-		$update_context = stream_context_create( array('http' => array('timeout' => 5)) );
+		$update_context = stream_context_create(['http' => ['timeout' => 1]]);  // 1秒でタイムアウト
 		$update = file_get_contents('https://raw.githubusercontent.com/tsukumijima/TVRemotePlus/master/data/version.txt?_='.time(), false, $update_context);
 		// 取得したバージョンと現在のバージョンが違う場合のみ
 		if ($update != $version) {
@@ -310,5 +310,5 @@
 <?php	} // 括弧終了 ?>
   <div id="nav-close"></div>
   <div id="menu-close"></div>
-  
+
   <section id="main">

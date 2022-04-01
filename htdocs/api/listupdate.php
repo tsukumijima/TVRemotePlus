@@ -150,9 +150,7 @@
 		foreach ($search as $key => $value) {
 
 			// 誤作動の原因になるので変数は破棄しておく
-			unset($ffmpeg_process, $ffmpeg_process_successful,
-				  $rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return,
-				  $ffprobe_cmd, $ffprobe_result, $ffprobe_return);
+			unset($ffmpeg_process, $ffmpeg_process_successful, $rplsinfo_process, $rplsinfo_result, $ffprobe_process);
 
 			// 録画ファイル保存フォルダからのパスを含めたファイル名
 			$TSfile['data'][$key]['file'] = '/'.$value;
@@ -300,14 +298,20 @@
 			// MP4・MKVには番組情報は含まれていないので除外
 			} else if ($TSfile['data'][$key]['pathinfo']['extension'] != 'mp4' and $TSfile['data'][$key]['pathinfo']['extension'] != 'mkv'){
 
-				// rplsinfoでファイル情報を取得
-				$rplsinfo_cmd = "\"{$rplsinfo_path}\" -C -dtpcbieg -l 10 \"{$TSfile_dir}/{$value}\" 2>&1";
-				exec($rplsinfo_cmd, $rplsinfo_result, $rplsinfo_return);
+				// rplsinfo でファイル情報を取得
+				// タイムアウトは 30 秒
+				$rplsinfo_process = new Process([$rplsinfo_path, '-C', '-dtpcbieg', '-l', '10', "{$TSfile_dir}/{$value}"]);
+				$rplsinfo_process->setTimeout(30);
+				try {
+					$rplsinfo_process->run();
+				} catch (ProcessTimedOutException $ex) {  // タイムアウトした場合
+					// 何もしない
+				}
 
 				// 取得成功
-				if ($rplsinfo_return == 0){
+				if ($rplsinfo_process->isSuccessful()){
 
-					$rplsinfo_result = mb_convert_encoding(implode("\n", $rplsinfo_result), 'UTF-8', 'SJIS'); // 実行結果の配列を連結して一旦文字列に
+					$rplsinfo_result = mb_convert_encoding($rplsinfo_process->getOutput(), 'UTF-8', 'SJIS-WIN'); // 実行結果の配列を連結して一旦文字列に
 					// 正規表現でエラーメッセージを置換する
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?は有効なTS, rplsファイルではありません./", '', $rplsinfo_result);
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?から有効な番組情報を検出できませんでした./", '', $rplsinfo_result);
@@ -385,14 +389,24 @@
 				} else {
 
 					// コマンドを実行
-					$ffprobe_cmd = "\"{$ffprobe_path}\" -i \"{$TSfile_dir}/{$value}\" -loglevel quiet -show_streams -print_format json";
-					exec($ffprobe_cmd, $ffprobe_result, $ffprobe_return);
+					// タイムアウトはサムネイル生成と同じく 10 秒
+					$ffprobe_process = new Process([
+						$ffprobe_path, '-i', "{$TSfile_dir}/{$value}",
+						'-loglevel', 'quiet', '-show_streams', '-print_format', 'json',
+					]);
+					$ffprobe_process->setTimeout(10);
+					try {
+						$ffprobe_process->run();
+					} catch (ProcessTimedOutException $ex) {  // タイムアウトした場合
+						// 何もしない
+					}
 
-					if ($ffprobe_return === 0){
+					// 動画の情報を取得できた
+					if ($ffprobe_process->isSuccessful()){
 
-						$TSinfo = json_decode(implode("\n", $ffprobe_result), true);
-
-						$TSfile['data'][$key]['tsinfo_state'] = 'generated';
+						// JSON をデコード
+						$TSinfo = json_decode($ffprobe_process->getOutput(), true);
+						$TSfile['data'][$key]['tsinfo_state'] = 'generated';  // generated に設定
 
 						// 取得した情報を格納
 						if (isset($TSinfo['streams'][0]['duration'])){
@@ -400,12 +414,15 @@
 						} else {
 							$duration = 0; // 取得できなかった場合
 						}
+						$TSfile['data'][$key]['info_state'] = 'generated';  // 生成できたことにする
 						$TSfile['data'][$key]['start_timestamp'] = $TSfile['data'][$key]['update'] - $duration;
 						$TSfile['data'][$key]['end_timestamp'] = $TSfile['data'][$key]['update'];
 						$TSfile['data'][$key]['start'] = date('H:i', $TSfile['data'][$key]['start_timestamp']).'?';
 						$TSfile['data'][$key]['end'] = date('H:i', $TSfile['data'][$key]['end_timestamp']).'?';
 						$TSfile['data'][$key]['duration'] = intval(round($duration / 60));
 
+						// 結果を保存する
+						$TSfile['info'][$TSfile['data'][$key]['pathinfo']['filename']] = $TSfile['data'][$key];
 					}
 				}
 			}
@@ -414,12 +431,11 @@
 			if (isset($TSfile['data'][$key]['title'])) $TSfile['data'][$key]['title'] = trim($TSfile['data'][$key]['title']);
 			if (isset($TSfile['data'][$key]['title_raw'])) $TSfile['data'][$key]['title_raw'] = trim($TSfile['data'][$key]['title_raw']);
 			if (isset($TSfile['data'][$key]['info'])) $TSfile['data'][$key]['info'] = trim($TSfile['data'][$key]['info']);
-
 		}
 
 		// もう存在しないファイルの情報を削除
 		if (isset($TSfile['info'])) {
-			$swept_info = array();
+			$swept_info = [];
 			foreach ($TSfile['data'] as $value) {
 				if (isset($TSfile['info'][$value['pathinfo']['filename']])) {
 					$swept_info[$value['pathinfo']['filename']] = $TSfile['info'][$value['pathinfo']['filename']];
@@ -434,18 +450,17 @@
 		// lockファイルを削除
 		@unlink($infofile.'.lock');
 
-		$json = array(
+		$json = [
 			'api' => 'listupdate',
 			'status' => 'success',
-		);
+		];
 
 	} else {
 
-		$json = array(
+		$json = [
 			'api' => 'listupdate',
 			'status' => 'duplication',
-		);
-
+		];
 	}
 
 	// 出力
