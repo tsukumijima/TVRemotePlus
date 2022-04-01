@@ -181,7 +181,7 @@ class Scroll {
 
 /**
  * 一旦この関数に集約
- * @param {string} stream_state ストリームの状態 (ONAir / File / Offline) 
+ * @param {string} stream_state ストリームの状態 (ONAir / File / Offline)
  */
 function newNicoJKAPIBackend(stream_state) {
 
@@ -219,7 +219,7 @@ function newNicoJKAPIBackendONAir() {
 
     // コメントセッション WebSocket への接続情報など
     let commentsession_info;
-  
+
     // 各要素
     // コメントボックス
     let comment_draw_box = null;
@@ -665,8 +665,8 @@ function newNicoJKAPIBackendONAir() {
                         comment_live = document.getElementsByClassName('comment-live');
                     }
 
-                    // コメント数が 100 個を超えたら古いコメントを削除
-                    if (comment_live.length > 100){
+                    // コメント数が 500 個を超えたら古いコメントを削除
+                    if (comment_live.length > 500){
                         comment_live[0].remove();
                     }
                 }
@@ -929,7 +929,7 @@ function newNicoJKAPIBackendONAir() {
  * ファイル再生向け
  */
 function newNicoJKAPIBackendFile() {
-  
+
     // 各要素
     // コメントボックス
     let comment_draw_box = null;
