@@ -20,7 +20,7 @@ $(window).on('load', () => {
 
 });
 
-$(function(){
+$(function() {
 
     $('#setting-user').submit((event) => {
 
@@ -71,8 +71,7 @@ $(function(){
         localStorage.setItem('tvrp-comment-filter', JSON.stringify(comment_filter));
 
         // 個人設定を Cookie に保存
-        const json = JSON.stringify(settings);
-        Cookies.set('tvrp_settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', JSON.stringify(settings), { expires: 365 });
         toastr.success('個人設定を保存しました。');
         setTimeout(() => {
             $('.bluebutton').attr('disabled', false);

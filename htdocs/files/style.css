@@ -857,11 +857,16 @@ google-cast-launcher:hover + #cast-toggle:before, google-cast-launcher:hover + #
     }
 
     .vertical-navmenu #menu-content {
-        top: calc(100vh - 208px - 54px - 15px);
+        top: calc(100vh - 256px - 54px - 15px);
         left: 8px;
         right: auto;
     }
     @media screen and (max-width: 1024px) {
+        .vertical-navmenu #menu-content {
+            top: calc(100vh - 208px - 54px - 15px);
+        }
+    }
+    @media screen and (max-width: 767px) {
         .vertical-navmenu #menu-content {
             top: calc(100vh - 160px - 54px - 15px);
         }
@@ -1987,6 +1992,7 @@ td {
 }
 
 #watching {
+    font-size: 16.4px; /* magic! (for iOS Safari) */
     margin-right: 6px;
 }
 
@@ -3184,6 +3190,11 @@ td {
 
 @media screen and (max-width: 1024px) {
     #hotkey {
+        display: none;
+    }
+}
+@media screen and (max-width: 767px) {
+    #layout-toggle {
         display: none;
     }
 }

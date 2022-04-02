@@ -33,8 +33,8 @@ function isFullScreen() {
 }
 
 // ロード時 & リサイズ時に発火
-var timer = false;
-var lastWindowWidth = window.innerWidth;
+let timer = false;
+let lastWindowWidth = window.innerWidth;
 $(window).on('DOMContentLoaded resize', function(event){
 
     // ロード時のみ発火
@@ -52,11 +52,12 @@ $(window).on('DOMContentLoaded resize', function(event){
     }
 
     // 画面の横幅を取得
-    var windowWidth = window.innerWidth;
+    // window.innerWidth だと iOS Safari で正しくリサイズ時の横幅が取れない…
+    const windowWidth = document.documentElement.clientWidth;
     // 画面の高さを取得
-    var windowHeight = window.innerHeight;
+    const windowHeight = window.innerHeight;
     // 画面の向きを取得
-    var orientation = window.orientation;
+    const orientation = window.orientation;
 
     $(window).on('load', function() {
         // スマホ・タブレットならplaceholder書き換え
@@ -354,8 +355,7 @@ $(function() {
         $('#nav-close').toggleClass('open');
         // Cookieに書き込み
         settings['subchannel_show'] = true;
-        var json = JSON.stringify(settings);
-        Cookies.set('tvrp_settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', JSON.stringify(settings), { expires: 365 });
         // リロード
         setTimeout(function(){
             location.reload();
@@ -366,8 +366,7 @@ $(function() {
         $('#nav-close').toggleClass('open');
         // Cookieに書き込み
         settings['subchannel_show'] = false;
-        var json = JSON.stringify(settings);
-        Cookies.set('tvrp_settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', JSON.stringify(settings), { expires: 365 });
         // リロード
         setTimeout(function(){
             location.reload();
@@ -376,17 +375,17 @@ $(function() {
 
     // ***** Ｌ字画面クロップ設定 *****
 
-    $('#ljicrop').click(function(){
+    $('#ljicrop').click(() => {
         $('#nav-close').toggleClass('open');
         $('#ljicrop-box').toggleClass('open');
     });
 
-    $('#ljicrop-box').click(function(event){
+    $('#ljicrop-box').click(() => {
         $('#nav-close').removeClass('open');
         $('#ljicrop-box').removeClass('open');
     });
 
-    $('#ljicrop-wrap').click(function(event){
+    $('#ljicrop-wrap').click((event) => {
         event.stopPropagation();
     });
 
@@ -536,6 +535,39 @@ $(function() {
         }
     }
 
+    // ***** 画面レイアウトを変更 *****
+
+    $('#layout-toggle').click(() => {
+
+        // Cookie から設定をデコード
+        const settings = JSON.parse(Cookies.get('tvrp_settings'));
+
+        // 「ナビゲーションメニューを垂直に配置」がオンなら
+        if (settings['vertical_navmenu']) {
+
+            // 「ナビゲーションメニューを垂直に配置」をオフに
+            settings['vertical_navmenu'] = false;
+
+            // コメントリストを表示する
+            settings['comment_show'] = true;
+
+        // 「ナビゲーションメニューを垂直に配置」がオフなら
+        } else {
+
+            // 「ナビゲーションメニューを垂直に配置」をオンに
+            settings['vertical_navmenu'] = true;
+
+            // コメントリストを表示しない
+            settings['comment_show'] = false;
+        }
+
+        // Cookieに書き込み
+        Cookies.set('tvrp_settings', JSON.stringify(settings), { expires: 365 });
+
+        // リロードをかける
+        // すこし間を空けないとうまく行かなかった気がする
+        setTimeout(() => location.reload(), 300);
+    });
 
     // ***** キーボードショートカット一覧 *****
 
