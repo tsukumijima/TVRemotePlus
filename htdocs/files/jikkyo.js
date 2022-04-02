@@ -664,8 +664,8 @@ function newNicoJKAPIBackendONAir() {
                         comment_live = document.getElementsByClassName('comment-live');
                     }
 
-                    // コメント数が 500 個を超えたら古いコメントを削除
-                    if (comment_live.length > 500){
+                    // コメント数が 250 個を超えたら古いコメントを削除
+                    if (comment_live.length > 250){
                         comment_live[0].remove();
                     }
                 }
