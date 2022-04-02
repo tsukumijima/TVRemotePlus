@@ -3,7 +3,7 @@
 	// モジュール読み込み
 	require_once ('../../modules/require.php');
 	require_once ('../../modules/module.php');
-	
+
 	// 設定ファイルのパス
 	$castfile = $base_dir.'modules/Cast/cast.json';
 	$scanfile = $base_dir.'modules/Cast/scan.json';
@@ -15,9 +15,7 @@
 	$ini = json_decode(file_get_contents_lock_sh($inifile), true);
 	$cast = json_decode(file_get_contents_lock_sh($castfile), true);
 
-	$json = array(
-		'api' => 'chromecast'
-	);
+	$json = ['api' => 'chromecast'];
 
 	if (!isset($_COOKIE['tvrp_csrf_token']) || !is_string($_COOKIE['tvrp_csrf_token']) ||
 	    !isset($_POST['_csrf_token']) || $_POST['_csrf_token'] !== $_COOKIE['tvrp_csrf_token']) {
@@ -83,7 +81,7 @@
 				// スキャン結果からChromeCastだけ抽出
 				foreach ($scan as $key => $value) {
 					if (preg_match("/googlecast/", $key) and !preg_match("/Google-Home/", $key)){
-						
+
 						$scandata[$key] = $value;
 						if (preg_match("/Chromecast/", $key)){
 							$scandata[$key]['type'] = 'Chromecast';
@@ -117,7 +115,7 @@
 		if ($scandata !== false) {
 			$scandata = json_decode($scandata, true);
 		} else {
-			$scandata = array();
+			$scandata = [];
 		}
 	}
 
@@ -156,7 +154,7 @@
 
 	if ($cast['cmd'] == 'start' and $start_ip !== false and $start_port !== false){
 		while (true){
-			
+
 			// 0.5秒ごとに読み込み
 			usleep(500000);
 			$cast_ = json_decode(file_get_contents_lock_sh($castfile), true);

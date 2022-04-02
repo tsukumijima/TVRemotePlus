@@ -2,7 +2,7 @@
 
 	// Shift-JIS‚É
 	ini_set('default_charset', 'sjis-win');
-	
+
 	// ‚×[ƒXƒtƒHƒ‹ƒ_
 	$base_dir = rtrim(str_replace('\\','/',dirname(__FILE__)), '/');
 
@@ -11,8 +11,8 @@
 
 	// Shift-JIS‚Ìƒ_ƒ•¶š‘Îô
 	function sj_str($text) {
-		$str_arr = array('\\','ƒ\\','„\\','‡\\','‰\\','Š\\','‹\\','Œ\\','\\','\\','\\','\\','‘\\','’\\','“\\','”\\','•\\','–\\','—\\',
-						'˜\\','™\\','š\\','›\\','œ\\','\\','\\','Ÿ\\','à\\','á\\','â\\','ã\\','ä\\','å\\','æ\\','ç\\','è\\','é\\','ê\\', "");
+		$str_arr = ['\\','ƒ\\','„\\','‡\\','‰\\','Š\\','‹\\','Œ\\','\\','\\','\\','\\','‘\\','’\\','“\\','”\\','•\\','–\\','—\\',
+						'˜\\','™\\','š\\','›\\','œ\\','\\','\\','Ÿ\\','à\\','á\\','â\\','ã\\','ä\\','å\\','æ\\','ç\\','è\\','é\\','ê\\', ""];
 		$text = str_replace("\\\\", "\\", $text);
 		for ($i = 0; $str_arr[$i] != ""; $i++) {
 			$text = str_replace($str_arr[$i] . "\\", mb_substr($str_arr[$i], 0, 1), $text); // æ‚É\‚ª‚Â‚¢‚Ä‚¢‚½‚çÁ‚µ‚Ä
@@ -20,7 +20,7 @@
 		}
 		return $text;
 	}
-	
+
 	// ' // ©ƒGƒfƒBƒ^‚Ì•\¦‚ª‚¨‚©‚µ‚­‚È‚éŒ»Û‚Ö‚Ì‘Îô
 
 	// ƒtƒHƒ‹ƒ_ƒRƒs[ŠÖ”
@@ -127,7 +127,7 @@
 		if ($update_flg == 2) $update = false;
 		else $update = true;
 		echo "\n";
-	} else {	
+	} else {
 		$update = false;
 	}
 
@@ -293,7 +293,7 @@
 		copy($httpd_default_file, $httpd_conf_file);
 		// php.default.ini ‚ğ php.ini ‚ÉƒRƒs[
 		copy($php_default_file, $php_ini_file);
-		
+
 		// TSTask ‚ÌƒRƒs[
 		if ($bondriver == 2){
 			copy($serverroot.'/bin/TSTask/64bit/BonDriver_TSTask.dll', $serverroot.'/bin/TSTask/BonDriver_TSTask.dll');
@@ -384,7 +384,7 @@
 		echo "\n";
 		if ($return2 == 0) echo '    ƒVƒ‡[ƒgƒJƒbƒg‚ğì¬‚µ‚Ü‚µ‚½B'."\n";
 		else echo '    ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½c'."\n";
-		
+
 		echo "\n";
 
 	// ƒAƒbƒvƒf[ƒgˆ—
@@ -455,10 +455,10 @@
 				if (strpos($set, '\\') !== false){
 					$set = str_replace('\\', '/', $set);
 				}
-				
+
 				// config.php ‚ğ‘‚«Š·‚¦
 				$tvrp_conf = preg_replace("/^\\$$key =.*;/m", '$'.$key.' = '.$set.';', $tvrp_conf); // ’uŠ·
-				
+
 			}
 		}
 

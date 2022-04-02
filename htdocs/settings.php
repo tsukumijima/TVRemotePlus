@@ -46,7 +46,7 @@
 
 		// 環境設定設定時に処理を行わないようにする
 		// 2行目の条件文は重複してストリームを再起動しないための措置
-		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or 
+		if ((!isset($_POST['restart']) and !isset($_POST['setting-env'])) or
 			(isset($_POST['restart']) and !isset($_POST['setting-env']) and time() - filemtime($segment_folder.'stream'.$stream.'.m3u8') > 20)){
 
 			// File
@@ -73,16 +73,16 @@
 				if ($TSfile !== false) {
 					$TSfile = json_decode($TSfile, true);
 				} else {
-					$TSfile = array('data' => array());
+					$TSfile = ['data' => []];
 				}
 
 				$history = file_get_contents_lock_sh($historyfile);
 				if ($history !== false) {
 					$history = json_decode($history, true);
 				} else {
-					$history = array(
-						'data' => array()
-					);
+					$history = [
+						'data' => [],
+          ];
 				}
 
 				// 再生履歴の数
@@ -269,7 +269,7 @@
 				foreach ($_POST as $key => $value) {
 
 					// PHPの文字列リテラルにあると面倒な文字を取り除く
-					$value = str_replace(array("\n", "\r", '\'', '"'), '', $value);
+					$value = str_replace(["\n", "\r", '\'', '"'], '', $value);
 
 					// 数値化できるものは数値に変換しておく
 					if (is_numeric($value) and mb_substr($value, 0, 1) != '0'){
@@ -367,7 +367,7 @@
 <?php	if (isSettingsItem('dark_theme', true) !== false){ ?>
                 <input id="dark_theme" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="dark_theme" class="toggle-input" type="checkbox" value="true" /> 
+                <input id="dark_theme" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="dark_theme" class="toggle-label"></label>
               </div>
@@ -379,7 +379,7 @@
 <?php	if (isSettingsItem('subchannel_show', true) !== false){ ?>
                 <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" /> 
+                <input id="subchannel_show" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="subchannel_show" class="toggle-label"></label>
               </div>
@@ -391,7 +391,7 @@
 <?php	if (isSettingsItem('list_view', true) !== false){ ?>
                 <input id="list_view" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="list_view" class="toggle-input" type="checkbox" value="true" /> 
+                <input id="list_view" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="list_view" class="toggle-label"></label>
               </div>
@@ -403,7 +403,7 @@
 <?php	if (isSettingsItem('logo_show', true, true) !== false){ ?>
                 <input id="logo_show" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="logo_show" class="toggle-input" type="checkbox" value="true" /> 
+                <input id="logo_show" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="logo_show" class="toggle-label"></label>
               </div>
@@ -415,7 +415,7 @@
 <?php	if (isSettingsItem('vertical_navmenu', true, false) !== false){ ?>
                 <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" checked />
 <?php	} else { ?>
-                <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" /> 
+                <input id="vertical_navmenu" class="toggle-input" type="checkbox" value="true" />
 <?php	} // 括弧終了 ?>
                 <label for="vertical_navmenu" class="toggle-label"></label>
               </div>
@@ -474,7 +474,7 @@
                 <span>コメントの遅延秒数（ファイル再生）</span>
                 <p>
                   EDCB などの予約録画ソフト側で設定した録画マージン分、コメント描画を遅らせるための設定です<br>
-                  ファイル再生ではコメントを録画番組の開始時刻から取得しているため、録画マージンが指定されているとその分だけコメントが早く描画されてしまいます<br>
+                  ファイル再生ではコメントを録画番組の EPG 上の開始時刻から取得しているため、録画マージンが指定されているとその分だけコメントが早く描画されてしまいます<br>
                   お使いの予約録画ソフトの設定に応じて適宜調整してください<br>
                 </p>
               </div>

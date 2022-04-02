@@ -1,6 +1,7 @@
-$(function() {
 
-    // 生放送・ファイル再生共通
+// ライブ配信・ファイル再生共通のスクリプト
+
+$(function() {
 
     // ***** 一般 *****
 
@@ -1867,6 +1868,4 @@ $(function() {
         var date = new Date();
         return Math.floor( date.getTime() / 1000 );
     }
-
 });
-

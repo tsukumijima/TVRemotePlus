@@ -51,7 +51,7 @@
 	// エラー捕捉
 	try {
 		// 認証URLを取得するためのリクエストトークンの生成
-		$request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $OAUTH_CALLBACK.'?stream='.$stream));
+		$request_token = $connection->oauth('oauth/request_token', ['oauth_callback' => $OAUTH_CALLBACK.'?stream='.$stream]);
 
 	} catch(Exception $e) {
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">';
@@ -80,9 +80,8 @@
 	$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 
 	// 認証URLの取得
-	$url = $connection->url('oauth/authenticate', array('oauth_token' => $request_token['oauth_token']));
+	$url = $connection->url('oauth/authenticate', ['oauth_token' => $request_token['oauth_token']]);
 
 	// 認証ページにリダイレクト
 	header('Location: '.$url);
 	exit;
-

@@ -18,21 +18,21 @@
 	if ($TSfile !== false) {
 		$TSfile = json_decode($TSfile, true);
 	} else {
-		$TSfile = array('data' => array());
+		$TSfile = ['data' => []];
 	}
 
 	// リストリセット
 	if (isset($_GET['list_reset'])){
 
 		// jsonを空にする
-		file_put_contents($infofile, json_encode(array('data' => array()), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
+		file_put_contents($infofile, json_encode(['data' => []], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 		// ロックファイルを削除
 		@unlink($infofile.'.lock');
 
-		$json = array(
+		$json = [
 			'api' => 'listupdate',
 			'status' => 'list_reset',
-		);
+		];
 
 		// レスポンス
 		echo json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
@@ -44,12 +44,12 @@
 	if (isset($_GET['history_reset'])){
 
 		// jsonを空にする
-		file_put_contents($historyfile, json_encode(array('data' => array()), JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
+		file_put_contents($historyfile, json_encode(['data' => []], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT), LOCK_EX);
 
-		$json = array(
+		$json = [
 			'api' => 'listupdate',
 			'status' => 'history_reset',
-		);
+		];
 
 		// レスポンス
 		echo json_encode($json, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
@@ -131,10 +131,10 @@
 
 		// ファイルを四階層まで検索する
 		// MP4・MKVファイルも検索する
-		$search_extensions = array('ts', 'mts', 'm2t', 'm2ts', 'mp4', 'mkv');
+		$search_extensions = ['ts', 'mts', 'm2t', 'm2ts', 'mp4', 'mkv'];
 		$search = @scandir_and_match_files($TSfile_dir, '/.\\.('.implode('|', $search_extensions).')$/i', 4);
 		if ($search === false) {
-			$search = array();
+			$search = [];
 		}
 
 		// 拡張子順にソート

@@ -1,8 +1,10 @@
 <?php
-//document.php 2020/11/06 https://qiita.com/economist/items/aefccb2f073ed9429607
 
-
-class Document extends \DOMDocument{ // https://www.php.net/manual/ja/class.domdocument.php
+/**
+ * PHP から HTML を操作する
+ * ref: https://qiita.com/economist/items/aefccb2f073ed9429607
+ */
+class Document extends \DOMDocument { // https://www.php.net/manual/ja/class.domdocument.php
 
     function __construct($str = '<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><title></title></head><body></body></html>'){
         parent::__construct();

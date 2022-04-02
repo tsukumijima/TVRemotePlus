@@ -27,17 +27,17 @@
 
 	// 番組情報を取得する関数
 	function getEpgInfo($ch, $chnum, $sid, $onid, $tsid){
-		
+
 		global $EDCB_http_url, $nicologin_mail, $nicologin_password;
-		
+
 		// ------------- 実況勢い -------------
 
 		// モデルを初期化
 		$instance = new Jikkyo($nicologin_mail, $nicologin_password);
-		
+
 		// 実況 ID を取得
 		$nicojikkyo_id = $instance->getNicoJikkyoID($ch[$chnum]);
-    
+
 		// 実況 ID が存在する
 		if ($nicojikkyo_id !== null) {
 
@@ -49,11 +49,11 @@
 			// 実況勢いを取得できなかった
 			$ikioi = '-';
 		}
-		
+
 		// -----------------------------------
 
 		if (!empty($EDCB_http_url)){
-		
+
 			// 番組表 API
 			@$epg = simplexml_load_file($EDCB_http_url.'api/EnumEventInfo?onair=&onid='.$onid.'&sid='.$sid.'&tsid='.$tsid);
 
@@ -77,7 +77,7 @@
 			}
 			if (isset($epg->items->eventinfo[0]->event_name)){
 				//文字列に変換してさらに半角に変換して改行をbrにする
-				$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'asv')); 
+				$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'asv'));
 			} else {
 				if (isset($epg->items->eventinfo[0]->service_name)){
 					$program_name = '放送休止';
@@ -109,7 +109,7 @@
 			}
 			if (isset($epg->items->eventinfo[1]->event_name)){
 				//文字列に変換してさらに半角に変換して改行をbrにする
-				$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv')); 
+				$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv'));
 			} else {
 				if (isset($epg->items->eventinfo[1]->service_name)){
 					$next_program_name = '放送休止';
@@ -140,45 +140,45 @@
 			$next_starttime = date("H:i", $next_starttimestamp);
 			$next_endtime = date("H:i", $next_endtimestamp);
 
-			return array(
+			return [
 				'ch' => intval($chnum),
 				'ch_str' => strval($chnum),
 				'tsid' => intval($tsid),
 				'channel' => $channel,
 				'ikioi'=> $ikioi,
-				'timestamp' => $starttimestamp, 
-				'duration' => $endtimestamp - $starttimestamp, 
-				'starttime' => $starttime, 
-				'to' => '～', 
-				'endtime' => $endtime, 
+				'timestamp' => $starttimestamp,
+				'duration' => $endtimestamp - $starttimestamp,
+				'starttime' => $starttime,
+				'to' => '～',
+				'endtime' => $endtime,
 				'program_name' => decorateMark($program_name),
 				'program_info' => decorateMark($program_info),
-				'next_starttime' => $next_starttime, 
-				'next_endtime' => $next_endtime, 
+				'next_starttime' => $next_starttime,
+				'next_endtime' => $next_endtime,
 				'next_program_name' => decorateMark($next_program_name),
 				'next_program_info' => decorateMark($next_program_info),
-			);
+			];
 
 		} else {
 
-			return array(
+			return [
 				'ch' => intval($chnum),
 				'ch_str' => strval($chnum),
 				'tsid' => intval($tsid),
 				'channel' => 'チャンネル名を取得できませんでした',
 				'ikioi'=> $ikioi,
-				'duration' => '', 
-				'starttime' => '00:00', 
-				'to' => '～', 
-				'endtime' => '00:00', 
+				'duration' => '',
+				'starttime' => '00:00',
+				'to' => '～',
+				'endtime' => '00:00',
 				'program_name' => '番組情報を取得できませんでした',
 				'program_info' => '番組情報を表示するには、EDCB Material WebUI の API がある URL が設定されている必要があります。<br>'.
 								  '左上の ≡ サイドメニュー → 設定 → 環境設定 から設定できます。',
-				'next_starttime' => '00:00', 
-				'next_endtime' => '00:00', 
+				'next_starttime' => '00:00',
+				'next_endtime' => '00:00',
 				'next_program_name' => '番組情報を取得できませんでした',
 				'next_program_info' => '',
-			);
+			];
 		}
 	}
 
@@ -189,7 +189,7 @@
 		$epginfo['onair'][strval($key)] = getEpgInfo($ch, $key, $value, $onid[strval($key)], $tsid[strval($key)]);
 	}
 
-	if (!isset($epginfo['onair'])) $epginfo['onair'] = array();
+	if (!isset($epginfo['onair'])) $epginfo['onair'] = [];
 
 	// ストリーム状態とストリームの番組情報を取得する
 	foreach ($ini as $key => $value) {
@@ -207,7 +207,7 @@
 		} else {
 			$status = 'offline';
 		}
-	
+
 		if ($ini[$key]['state'] === null) $ini[$key]['state'] = 'Offline';
 
 		// ONAir状態なら
@@ -218,26 +218,26 @@
 				$epginfo['stream'][$key] = $epginfo['onair'][$ini[$key]['channel']];
 			// サブチャンネルをオフにした後にサブチャンネルのストリームが残っている場合用
 			} else {
-				$epginfo['stream'][$key] = array(
+				$epginfo['stream'][$key] = [
 					'state' => $ini[$key]['state'],
 					'status' => $status,
 					'ch' => intval($ini[$key]['channel']),
 					'ch_str' => strval($ini[$key]['channel']),
 					'tsid' => '',
 					'channel' => 'チャンネル名を取得できませんでした',
-					'timestamp' => '', 
-					'duration' => '', 
-					'starttime' => '', 
-					'to' => '', 
-					'endtime' => '', 
+					'timestamp' => '',
+					'duration' => '',
+					'starttime' => '',
+					'to' => '',
+					'endtime' => '',
 					'program_name' => '番組情報を取得できませんでした',
 					'program_info' => 'サブチャンネルの番組情報を表示するには、サブチャンネルが番組表に表示されている必要があります。<br>'.
 					                  '右上の︙メニュー →［サブチャンネルを表示］から表示を切り替えられます。',
-					'next_starttime' => '', 
-					'next_endtime' => '', 
+					'next_starttime' => '',
+					'next_endtime' => '',
 					'next_program_name' => '番組情報を取得できませんでした',
 					'next_program_info' => '',
-				);
+				];
 			}
 
 			// ステータス
@@ -252,42 +252,41 @@
 		// ファイル再生
 		} else if ($ini[$key]['state'] == 'File'){
 
-			$epginfo['stream'][$key] = array(
+			$epginfo['stream'][$key] = [
 				'state' => $ini[$key]['state'],
 				'status' => $status,
 				'ch' => 0,
 				'tsid' => 0,
 				'channel' => $ini[$key]['filechannel'],
 				'time' => $ini[$key]['filetime'],
-				'start_timestamp' => $ini[$key]['start_timestamp'], 
-				'end_timestamp' => $ini[$key]['end_timestamp'], 
+				'start_timestamp' => $ini[$key]['start_timestamp'],
+				'end_timestamp' => $ini[$key]['end_timestamp'],
 				'program_name' => $ini[$key]['filetitle'],
 				'program_info' => $ini[$key]['fileinfo'],
-			);
+			];
 
 		// オフライン
 		} else {
 
-			$epginfo['stream'][$key] = array(
+			$epginfo['stream'][$key] = [
 				'state' => $ini[$key]['state'],
 				'status' => $status,
 				'ch' => 0,
 				'ch_str' => '0',
 				'tsid' => 0,
 				'channel' => '',
-				'timestamp' => '', 
-				'duration' => '', 
-				'starttime' => '', 
-				'to' => '', 
-				'endtime' => '', 
+				'timestamp' => '',
+				'duration' => '',
+				'starttime' => '',
+				'to' => '',
+				'endtime' => '',
 				'program_name' => '配信休止中…',
 				'program_info' => '',
-				'next_starttime' => '', 
-				'next_endtime' => '', 
+				'next_starttime' => '',
+				'next_endtime' => '',
 				'next_program_name' => '',
 				'next_program_info' => '',
-			);
-
+			];
 		}
 	}
 

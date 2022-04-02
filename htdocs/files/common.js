@@ -1,4 +1,6 @@
 
+// すべてのページ共通のスクリプト
+
 // 参考: https://qiita.com/yukiTTT/items/773356c2483b96c9d4e0
 function handleTouchMove(event) {
     var path = event.path || (event.composedPath && event.composedPath());
@@ -7,7 +9,7 @@ function handleTouchMove(event) {
     for (var i = 0; i < path.length; i++) {
         if (path[i].id == 'nav-content'){
             return;
-        } 
+        }
     }
 
     // それ以外はスクロールを無効化
@@ -28,7 +30,7 @@ function isClickScrollbar(event){
     }
 }
 
-$(function(){
+$(function() {
 
     // ***** リンク *****
     $('a[href]:not(a[target="_blank"]):not(a[download]):not(a[href="javascript:void(0);"]), .stream-view, button[type="submit"]').click(function(event){
@@ -121,7 +123,7 @@ $(function(){
 
         if ($('#epg-box').offset() !== undefined) {
             position_target = $('#epg-box').offset().top; // 計算めんどいのであえて jQuery
-        } 
+        }
 
         // 表示・非表示
         // ターゲット座標以上
@@ -169,5 +171,4 @@ $(function(){
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     }
-
 });

@@ -574,9 +574,9 @@
 
 		// エンコードコマンドと TSTask のコマンドを返す
 		if (empty($tstaskcentreex_cmd)) {
-			return array($stream_cmd, $tstask_cmd); // 通常起動
+			return [$stream_cmd, $tstask_cmd]; // 通常起動
 		} else {
-			return array($stream_cmd, $tstaskcentreex_cmd); // TSTaskCentreEx
+			return [$stream_cmd, $tstaskcentreex_cmd]; // TSTaskCentreEx
 		}
 
 	}

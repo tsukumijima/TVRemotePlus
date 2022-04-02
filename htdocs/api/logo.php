@@ -12,7 +12,7 @@
 
 	// onid と sid がついている場合のみ
 	if ($logo_onid !== false and $logo_sid !== false) {
-		
+
 		// ブラウザにキャッシュしてもらえるようにヘッダーを設定
 		// 参考: https://qiita.com/yuuuking/items/4f11ccfc822f4c198ab0
 		header('Cache-Control: public, max-age=2592000');  // 30日間
@@ -48,6 +48,6 @@
 		// エラー画像
 		header('Content-Type: image/jpeg');
 		readfile('../files/thumb_default.jpg');
-		
+
 		exit();
 	}

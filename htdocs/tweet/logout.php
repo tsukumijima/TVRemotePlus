@@ -18,7 +18,7 @@
 	session_start();
 
 	// セッション変数を全て解除する
-	$_SESSION = array();
+	$_SESSION = [];
 
 	// セッションを切断するにはセッションCookieも削除する
 	// Note: セッション情報だけでなくセッションを破壊する
@@ -35,4 +35,3 @@
 
 	// 出力
 	echo '<span class="tweet-failed">ログアウトしました。　<a id="tweet-login" href="/tweet/auth.php"><i class="fas fa-sign-in-alt"></i>再ログイン</a></span>';
-

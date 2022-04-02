@@ -156,7 +156,7 @@
               </select>
             </div>
           </div>
-							
+
           <div class="setencoder form">
             <span>エンコード：</span>
             <div class="select-wrap">
@@ -202,7 +202,7 @@
 
   <section id="footer">
     <?= $site_title.' '.$version; ?>
-    
+
   </section>
 
 <?php
@@ -216,18 +216,18 @@
 	// MP4・MKVファイルも検索する
 	$search = @scandir_and_match_files($TSfile_dir, '/.\\.(ts|mts|m2t|m2ts|mp4|mkv)$/i', 4);
 	if ($search === false) {
-		$search = array();
+		$search = [];
 	}
-  
+
 	$TSfile = file_get_contents_lock_sh($infofile);
 	if ($TSfile !== false) {
 		$TSfile = json_decode($TSfile, true);
 	} else {
-		$TSfile = array('data' => array());
+		$TSfile = ['data' => []];
 	}
 
 	// ファイルリストに記録されたファイル数と異なる場合
-	if (count($search) != count($TSfile['data'])){
+	if (count($search) != count($TSfile['data'])) {
 
 ?>
 

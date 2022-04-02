@@ -96,17 +96,17 @@
 		$status = 'offline';
 		$streamtype = 'normal';
 	}
-	
+
 	if (!isset($ini[$stream]) or $ini[$stream]['state'] === null) $ini[$stream]['state'] = 'Offline';
 
-	$json = array(
+	$json = [
 		'api' => 'status',
 		'state' => $ini[$stream]['state'],
 		'status' => $status,
 		'watching' => $watching,
 		'streamtype' => $streamtype,
 		'sess' => $sess,
-	);
+	];
 
 	$response = json_encode(['ffffffff', $json], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 	$hash_new = '_'.md5($response);

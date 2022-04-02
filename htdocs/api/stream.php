@@ -114,8 +114,8 @@
 	    ($pathinfo['extension'] == 'mp4' or $pathinfo['extension'] == 'mkv')){
 
 		loadVideo($TSfile_dir.'/'.$file, $pathinfo['extension']);
-		exit();	
-		
+		exit();
+
 	// 指定されたストリームのファイルを出力する(stateがFileでかつMP4・MKVのみ)
 	} else if ($ini[$stream]['state'] == 'File' and $ini[$stream]['encoder'] == 'Progressive' and
 	           ($ini[$stream]['fileext'] == 'mp4' or $ini[$stream]['fileext'] == 'mkv')){
@@ -128,7 +128,7 @@
 		// エラー画像
 		header('Content-Type: image/jpeg');
 		readfile('../files/thumb_default.jpg');
-		
+
 		exit();
 
 	}

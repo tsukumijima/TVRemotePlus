@@ -1,9 +1,9 @@
 
 // データを取得して引数にあわせてソートする関数
-function sortFileinfo(json, sortnum, flg = 'normal'){
+function sortFileinfo(json, sort_number, flg = 'normal'){
 
     $.ajax({
-        url: '/files/' + json + '.json',
+        url: `/files/${json}.json`,
         dataType: 'json',
         cache: false,
     }).done(function(data) {
@@ -20,45 +20,49 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
         $('#search-more-box').remove();
 
         // 録画ファイル情報リスト
-        var fileinfo = data['data'];
+        let fileinfo = data['data'];
 
         // キーワード検索
-        var text = $('#search-find-form').val();
+        const text = $('#search-find-form').val();
         if (text !== undefined && text !== ''){ // 検索キーワードがあるなら
-            var fileinfo = $.grep(fileinfo,
+            fileinfo = $.grep(fileinfo,
                 function(a, b) {
                     // 正規表現
-                    regexp = new RegExp('.*' + text + '.*', 'ig');
+                    regexp = new RegExp(`.*${text}.*`, 'ig');
                     // 配列にフィルターをかける
                     return a.title.match(regexp);
                 }
             );
-            $('#search-info').html(fileinfo.length + '件ヒットしました。').hide().delay(200).velocity('fadeIn', 500);
+            $('#search-info').html(`${fileinfo.length}件ヒットしました。`).hide().delay(200).velocity('fadeIn', 500);
         }
 
-        // console.log(fileinfo);
-
-        switch (sortnum){
+        // 録画番組をソート
+        switch (sort_number){
+            // 録画が新しい順
             case 1:
                 fileinfo.sort(function(a, b) {
                     return (a.start_timestamp > b.start_timestamp) ? -1 : 1;
                 });
                 break;
+            // 録画が古い順
             case 2:
                 fileinfo.sort(function(a, b) {
                     return (a.start_timestamp < b.start_timestamp) ? -1 : 1;
                 });
                 break;
+            // 名前昇順
             case 3:
                 fileinfo.sort(function(a, b) {
                     return (a.title < b.title) ? -1 : 1;
                 });
                 break;
+            // 名前降順
             case 4:
                 fileinfo.sort(function(a, b) {
                     return (a.title > b.title) ? -1 : 1;
                 });
                 break;
+            // 再生履歴
             case 5:
                 fileinfo.sort(function(a, b) {
                     return (a.play > b.play) ? -1 : 1;
@@ -67,9 +71,9 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
         }
 
         // html
-        var html = '';
+        let html = '';
 
-        var length = $('.search-file-box').length + Number(settings['list_view_number'] || 30);
+        let length = $('.search-file-box').length + Number(settings['list_view_number'] || 30);
         // console.log(length)
         // 全体の配列数より表示する動画数の方が大きくなったら
         if (fileinfo.length < length){
@@ -82,7 +86,8 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
             for (var i = $('.search-file-box').length; i < length; i++){
 
                 const download =
-                    `<a class="search-file-download" href="/api/stream?file=` + encodeURIComponent(fileinfo[i]['file']) + `" target="blank" download="` + fileinfo[i]['title_raw'] + '.' + fileinfo[i]['pathinfo']['extension'] + `">
+                    `<a class="search-file-download" href="/api/stream?file=${encodeURIComponent(fileinfo[i]['file'])}" target="blank"
+                        download="${fileinfo[i]['title_raw']}.${fileinfo[i]['pathinfo']['extension']}">
                         <i class="fas fa-download"></i>
                     </a>`;
 
@@ -147,7 +152,7 @@ function sortFileinfo(json, sortnum, flg = 'normal'){
         $('#search-more-box').remove();
 
         // エラー吐く
-        if (sortnum == 5){
+        if (sort_number == 5){
             $('#search-info').html('再生履歴がありません。録画番組を再生するとここに履歴が表示されます。').hide().delay(200).velocity('fadeIn', 500);
         } else {
             $('#search-info').html('録画リストがありません。<br>右上の︙メニュー →「リストを更新」から作成してください。').hide().delay(200).velocity('fadeIn', 500);

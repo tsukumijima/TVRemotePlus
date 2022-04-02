@@ -38,14 +38,15 @@ if (isset($_SERVER['HTTP_X_FORWARDED_HOST']) or isset($_SERVER['HTTP_X_FORWARDED
 
 // 自己署名証明書の許可用
 // 参考：https://blog.hanhans.net/2018/06/16/simplexml-load-file/
-$ssl_context = stream_context_create(
-	array('ssl' => array(
+$ssl_context = stream_context_create([
+	'ssl' => [
 		'allow_self_signed'=> true,
 		'verify_peer' => false,
-	),'http' => array(
+	],
+	'http' => [
 		'ignore_errors' => true,
-	))
-);
+	],
+]);
 
 
 // ***** ファイルパス *****

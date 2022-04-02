@@ -4,7 +4,6 @@ require_once ('classloader.php');
 
 class Jikkyo {
 
-
     // ログイン情報を保存する Cookie ファイル
     private $cookie_file;
 
@@ -101,10 +100,10 @@ class Jikkyo {
         $url = 'https://account.nicovideo.jp/api/v1/login';
 
         // 送信するデータ
-        $data = array(
+        $data = [
             'mail' => $this->nicologin_mail, // メールアドレス
             'password' => $this->nicologin_password, // パスワード
-        );
+        ];
 
         // curl を初期化
         $curl = curl_init();

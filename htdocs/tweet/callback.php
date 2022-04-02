@@ -27,7 +27,7 @@
 		$connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
 		// APIのアクセスに必要なトークンを取得
-		$access_token = $connection->oauth('oauth/access_token', array('oauth_verifier' => $_REQUEST['oauth_verifier']));
+		$access_token = $connection->oauth('oauth/access_token', ['oauth_verifier' => $_REQUEST['oauth_verifier']]);
 
 		// セッション関数に入れておいたコールバック用トークンを差し替える
 		$_SESSION['oauth_token'] = $access_token['oauth_token'];
@@ -40,11 +40,11 @@
 		$info = $_connection->get("account/verify_credentials");
 
 		// アカウント情報をCookieに登録しておく
-		$cookie = json_encode(array(
+		$cookie = json_encode([
 			'account_name' => $info->name,
 			'account_id' => $info->screen_name,
 			'account_icon' => str_replace('_normal', '', $info->profile_image_url_https),
-		), JSON_UNESCAPED_UNICODE);
+		], JSON_UNESCAPED_UNICODE);
 		setcookie('tvrp_twitter_settings', $cookie, time() + 7776000, '/');
 
 		// トップページにリダイレクト
@@ -63,6 +63,4 @@
 		echo 'Twitter投稿機能を利用する場合は、「連携アプリを認証」を押して、アプリ連携し直してください。<br>';
 		echo '<a href="/">ホームに戻る</a><br>';
 		exit(1);
-
 	}
-
