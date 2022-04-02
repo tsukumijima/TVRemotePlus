@@ -135,6 +135,14 @@
         },
     });
 
+<?php	if ($ini[$stream]['state'] == 'ONAir'): ?>
+    // 字幕が非表示になっていても、文字スーパーは表示する (ライブ配信のみ)
+    dp.plugins.aribb24Superimpose.show();
+    dp.on('subtitle_hide', () => {
+        dp.plugins.aribb24Superimpose.show();
+    });
+<?php	endif; ?>
+
 <?php	if ($ini[$stream]['state'] == 'File'): ?>
     // ファイル再生でエンコード中、再生時間が最新のセグメントの範囲にシークされてしまうのを防ぐ
     // 動画の読み込みが終わった後に（👈重要）currentTime を 0（秒）に設定する
