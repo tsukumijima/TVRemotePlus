@@ -257,7 +257,7 @@
           </div>
 <?php	endif; ?>
 <?php	if ($ini[$stream]['state'] == 'File'): ?>
-          <div id="epg-info"><?= $ini[$stream]['fileinfo']; ?></div>
+          <div id="epg-info"><?= str_replace("\n", '<br>', trim($ini[$stream]['fileinfo'])); ?></div>
 <?php	else: ?>
           <div id="epg-info"></div>
 <?php	endif; ?>
@@ -267,7 +267,7 @@
 <?php	if ($ini[$stream]['state'] == 'ONAir'): ?>
           <span id="state" style="color: #007cff;" value="ONAir">● ON Air</span>
           <span id="status"></span>
-          <div id="epg-chinfo"> 
+          <div id="epg-chinfo">
 <?php		if ($ini[$stream]['channel'] < 55): ?>
             <span id="epg-channel">Ch: <?= sprintf('%03d', str_replace('_', '', $ini[$stream]['channel'])).' '.$channel; ?></span>
 <?php		else: ?>
@@ -279,7 +279,7 @@
           </div>
 <?php	elseif ($ini[$stream]['state'] == 'File'): ?>
           <span id="status"></span>
-          <div id="epg-chinfo"> 
+          <div id="epg-chinfo">
             <span id="state" style="color: #4ECDC4;" value="File">● File</span>
             <span id="epg-channel"><?= $ini[$stream]['filechannel']; ?></span>
           </div>
@@ -421,7 +421,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="progressbar">
                   <div class="progress"></div>
                 </div>
@@ -463,7 +463,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="progressbar">
                   <div class="progress"></div>
                 </div>
@@ -505,7 +505,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="progressbar">
                   <div class="progress"></div>
                 </div>
@@ -593,7 +593,7 @@
             </select>
           </div>
         </div>
-        
+
         <div class="setencoder form">
           <span>エンコード：</span>
           <div class="select-wrap">
