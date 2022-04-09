@@ -3,10 +3,10 @@
 
 // 参考: https://qiita.com/yukiTTT/items/773356c2483b96c9d4e0
 function handleTouchMove(event) {
-    var path = event.path || (event.composedPath && event.composedPath());
+    const path = event.path || (event.composedPath && event.composedPath());
 
     // タップした要素（から遡った親要素）がメニューだったらスクロールを有効にする
-    for (var i = 0; i < path.length; i++) {
+    for (let i = 0; i < path.length; i++) {
         if (path[i].id == 'nav-content'){
             return;
         }
@@ -19,9 +19,9 @@ function handleTouchMove(event) {
 // クリックされた部分がスクロールバーかどうかをevent情報から返す関数
 function isClickScrollbar(event){
 
-    var target_width = event.currentTarget.offsetWidth
-    var scrollbar_width = target_width - event.currentTarget.clientWidth;
-    var x = event.clientX - event.currentTarget.getBoundingClientRect().left;
+    const target_width = event.currentTarget.offsetWidth
+    const scrollbar_width = target_width - event.currentTarget.clientWidth;
+    const x = event.clientX - event.currentTarget.getBoundingClientRect().left;
 
     if (target_width - x < scrollbar_width){
         return true;
@@ -101,7 +101,7 @@ $(function() {
     $('.password-box-input').click(function(){
         $('.password-box-input').toggleClass('fa-eye-slash');
         $('.password-box-input').toggleClass('fa-eye');
-        var input = $(this).prev("input");
+        const input = $(this).prev("input");
         // type切替
         if (input.attr('type') == 'password') {
                 input.attr('type', 'text');
@@ -142,9 +142,9 @@ $(function() {
     $('#scroll').click(function(){
 
         $('#scroll').addClass('hover');
-        var topPos = $(window).scrollTop();
+        const top_position = $(window).scrollTop();
 
-        if (topPos > 400) {
+        if (top_position > 400) {
             $('html, body').velocity('scroll', { duration: 700, offset: (settings['vertical_navmenu'] ? 0 : -54) });
             setTimeout(function(){
                 $('#scroll').removeClass('hover');

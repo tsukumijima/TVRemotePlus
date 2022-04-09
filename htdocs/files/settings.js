@@ -105,12 +105,12 @@ $(function() {
     $(window).scroll(function() {
 
         // スクロール位置を取得
-        var topPos = $(this).scrollTop();
+        const top_position = $(this).scrollTop();
 
         if ($('#setting-env').length === 1){
             // 表示・非表示
-            if (topPos > $('#setting-env').offset().top &&
-                ($('#setting-other').length === 0 || topPos + $(window).height() < $('#setting-other').offset().top)) {
+            if (top_position > $('#setting-env').offset().top &&
+                ($('#setting-other').length === 0 || top_position + $(window).height() < $('#setting-other').offset().top)) {
                 $('#save').css('opacity', '1');
                 $('#save').css('visibility', 'visible');
             } else {

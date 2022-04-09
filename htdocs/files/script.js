@@ -1635,7 +1635,7 @@ $(function() {
     }
 
     // Zenzawatch のコードより一部改変した上で使わせて頂いています
-    // 参考
+    // 参考:
     // https://developer.mozilla.org/ja/docs/Web/HTML/Canvas/Drawing_DOM_objects_into_a_canvas
     // Chrome だと toBlob した際に汚染されるので DataURI に変換する
     // https://qiita.com/kjunichi/items/f5993d34838e1623daf5
@@ -1827,7 +1827,7 @@ $(function() {
         });
     };
 
-    // ここまでZenzaWatchより拝借
+    // ここまで ZenzaWatch より拝借
 
 
     // ***** Utils *****
@@ -1841,31 +1841,30 @@ $(function() {
     function clock() {
 
         // 曜日を表す各文字列の配列
-        var weeks = new Array("Sun","Mon","Thu","Wed","Thr","Fri","Sat");
+        const weeks = ['Sun', 'Mon', 'Thu', 'Wed', 'Thr', 'Fri', 'Sat'];
+
         // 現在日時を表すインスタンスを取得
-        var now = new Date();
-        var y = now.getFullYear(); // 年
-        var mo = now.getMonth() + 1; // 月 0~11で取得されるので実際の月は+1したものとなる
-        var d = now.getDate(); // 日
-        var w = weeks[now.getDay()]; // 曜日 0~6で日曜始まりで取得されるのでweeks配列のインデックスとして指定する
+        const now = new Date();
+        const year = now.getFullYear();   // 年
+        let month = now.getMonth() + 1; // 月 (0~11で取得されるので実際の月は +1 したものとなる)
+        let date = now.getDate();       // 日
+        let week = weeks[now.getDay()]; // 曜日 (0~6で日曜始まりで取得されるので weeks 配列のインデックスとして指定する)
+        let hours = now.getHours();     // 時
+        let minutes = now.getMinutes(); // 分
+        let seconds = now.getSeconds(); // 秒
 
-        var h = now.getHours(); // 時
-        var mi = now.getMinutes(); // 分
-        var s = now.getSeconds(); // 秒
+        // 日付時刻文字列のなかで常に2桁にしておきたい部分
+        if (month < 10) month = '0' + month;
+        if (date < 10) date = '0' + date;
+        if (hours < 10) hours = '0' + hours;
+        if (minutes < 10) minutes = '0' + minutes;
+        if (seconds < 10) seconds = '0' + seconds;
 
-        // 日付時刻文字列のなかで常に2ケタにしておきたい部分はここで処理
-        if (mo < 10) mo = "0" + mo;
-        if (d < 10) d = "0" + d;
-        if (h < 10) h = "0" + h;
-        if (mi < 10) mi = "0" + mi;
-        if (s < 10) s = "0" + s;
-
-        $('#clock').text(y + '/' + mo + '/' + d + ' ' + h + ':' + mi + ':' + s);
+        $('#clock').text(`${year}/${month}/${date} ${hours}:${minutes}:${seconds}`);
     }
 
     // タイムスタンプ取得
     function time() {
-        var date = new Date();
-        return Math.floor( date.getTime() / 1000 );
+        return Math.floor((new Date()).getTime() / 1000);
     }
 });
