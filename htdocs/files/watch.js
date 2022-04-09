@@ -83,7 +83,7 @@ function sortFileinfo(json, sort_number, flg = 'normal'){
         // ファイルが1件以上あれば
         if (fileinfo.length > 0){
 
-            for (var i = $('.search-file-box').length; i < length; i++){
+            for (let i = $('.search-file-box').length; i < length; i++){
 
                 const download =
                     `<a class="search-file-download" href="/api/stream?file=${encodeURIComponent(fileinfo[i]['file'])}" target="blank"
@@ -100,7 +100,8 @@ function sortFileinfo(json, sort_number, flg = 'normal'){
                     `<div class="search-file-box">
                         <div class="search-file-thumb">
                             <img class="search-file-thumb-img" src="/files/thumb/${fileinfo[i]['thumb']}">
-                            <div class="search-file-ext ext-${fileinfo[i]['pathinfo']['extension']}">
+                            <div class="search-file-ext ext-${fileinfo[i]['pathinfo']['extension']}"
+                                 data-ext="${fileinfo[i]['pathinfo']['extension']}">
                                 ${fileinfo[i]['pathinfo']['extension'].toUpperCase()}
                             </div>
                             ${(/^(?:ts|mts|m2t|m2ts)$/.test(fileinfo[i]['pathinfo']['extension'].toLowerCase()) ? encode : download)}
@@ -302,13 +303,13 @@ $(function(){
     $('body').on('click','.search-file-box',function(){
 
         // 怒涛のDOM追加
-        var $elem = $(this);
-        $('#search-stream-title').html($elem.find('.search-file-title').html());
+        const $elem = $(this);
+        $('#search-stream-title').html($elem.find('.search-file-title').html().trim());
         $('#search-stream-info').text($elem.find('.search-file-date').text() + ' ' + $elem.find('.search-file-time').text());
         $('#stream-filepath').val($elem.find('.search-file-path').text());
-        $('#stream-filetitle').val($elem.find('.search-file-title').html());
-        $('#stream-fileinfo').val($elem.find('.search-file-description').html());
-        $('#stream-fileext').val($elem.find('.search-file-ext').text().toLowerCase());
+        $('#stream-filetitle').val($elem.find('.search-file-title').html().trim());
+        $('#stream-fileinfo').val($elem.find('.search-file-description').html().trim());
+        $('#stream-fileext').val($elem.find('.search-file-ext').data('ext').trim());
         $('#stream-filechannel').val($elem.find('.search-file-channel').text());
         $('#stream-filetime').val($elem.find('.search-file-date').text() + ' ' + $elem.find('.search-file-time').text());
         $('#stream-start_timestamp').val($elem.find('.start_timestamp').text());
@@ -318,7 +319,7 @@ $(function(){
         $('html').toggleClass('open');
 
         // MP4・MKVの場合
-        // この辺クソコード、保守もうむりしんどい
+        // この辺クソコード過ぎてダメ
         if (($('#stream-fileext').val() == 'mp4' || $('#stream-fileext').val() == 'mkv') && $('option[name=quality_default]').text() != 'デフォルト (Original)'){
             changeToProgressiveEncoder();
             // プログレッシブオプションを追加
@@ -423,8 +424,7 @@ $(function(){
     $('body').on('click', '#list-view', function(){
         // Cookieに書き込み
         settings['list_view'] = true;
-        var json = JSON.stringify(settings);
-        Cookies.set('tvrp_settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', JSON.stringify(settings), { expires: 365 });
         // 再表示
         sortFileinfo('fileinfo', 1, 'search');
         setTimeout(function(){
@@ -440,8 +440,7 @@ $(function(){
     $('body').on('click', '#normal-view', function(){
         // Cookieに書き込み
         settings['list_view'] = false;
-        var json = JSON.stringify(settings);
-        Cookies.set('tvrp_settings', json, { expires: 365 });
+        Cookies.set('tvrp_settings', JSON.stringify(settings), { expires: 365 });
         // 再表示
         sortFileinfo('fileinfo', 1, 'search');
         setTimeout(function(){
