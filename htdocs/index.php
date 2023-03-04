@@ -380,15 +380,19 @@
 <?php		// リモコン番号が被ってるチャンネル
 			// もうちょっとスマートに実装したかったけどうまくいかなかったのでハードコード
 			$subchcount = substr($i, -1);
-			if ($i > 60){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i) - 60).$subchcount.'-3';
-      		} elseif ($i > 40){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i) - 40).$subchcount.'-2';
-			} elseif ($i > 20){
-				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i) - 20).$subchcount.'-1';
+
+			//「_」区切りで代入
+			$remoconNum = explode("_",$i);
+
+			if ($remoconNum[0] > 60){
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($remoconNum[0]) - 60).$subchcount.'-3';
+      		} elseif ($remoconNum[0] > 40){
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($remoconNum[0]) - 40).$subchcount.'-2';
+			} elseif ($remoconNum[0] > 20){
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($remoconNum[0]) - 20).$subchcount.'-1';
 			// 通常
       		} else {
-				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($i)).$subchcount;
+				$ch_T_channel = 'Ch: '.sprintf('%02d', intval($remoconNum[0])).$subchcount;
 			}
 ?>
               <div id="ch<?= str_replace('.', '_', $i); ?>" class="broadcast-wrap" data-ch="<?= $i; ?>"
