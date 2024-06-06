@@ -337,7 +337,7 @@
 
             <h4><i class="fas fa-eye"></i>表示</h4>
 
-            <div class="setting-form">
+            <div class="setting-form" style="display: none;">
               <span>Twitter 投稿</span>
               <div class="toggle-switch">
 <?php	if (isSettingsItem('twitter_show', true, true) !== false){ ?>

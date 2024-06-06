@@ -279,7 +279,7 @@
       <i class="fas fa-video"></i>
       <span class="nav-link-href">録画番組を再生</span>
     </a>
-    <a class="nav-link" href="/tweet/auth">
+    <a class="nav-link" href="/tweet/auth" style="display: none;">
       <i class="fab fa-twitter"></i>
       <span class="nav-link-href">Twitter ログイン</span>
     </a>

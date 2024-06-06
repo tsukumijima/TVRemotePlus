@@ -1395,6 +1395,8 @@ td {
     padding-right: 3vw;
     font-size: 90%;
     z-index: 100;
+    /* Twitter 機能は API v1.1 廃止で動作しなくなったため無効化 */
+    display: none;
 }
 
 #tweet-box.open {
