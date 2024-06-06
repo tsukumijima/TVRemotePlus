@@ -2,17 +2,20 @@
 # <img alt="Logo" src="docs/logo.png" width="350">
 
 > [!WARNING]
-> 現在の master ブランチでは、[Eschamali 氏による Apache 2.4.55 / PHP 8.2 対応フォーク](https://github.com/Eschamali/TVRemotePlus) の取り込みやテレビ東京のニコニコ実況コメントが表示されなくなった問題など、いくつか追加の修正を行っています。  
+> **現在の master ブランチ (v2.8.0) では、[Eschamali 氏による Apache 2.4.55 / PHP 8.2 対応フォーク](https://github.com/Eschamali/TVRemotePlus) の取り込み、テレビ東京のニコニコ実況コメントが表示されなくなった問題など、いくつか追加の修正を行っています。**  
+> なお Twitter 投稿機能は Twitter API v1.1 の廃止により動作しなくなったため、UI 上から削除しています（内部的にはそのまま）。  
 > 
-> v2.7.1 から移行するには、ファイルの更新後に `bin/Apache/conf/httpd.conf` 内の記述を下記のように修正する必要があります。
+> v2.7.1 から移行するには、ファイルの更新後に `bin/Apache/conf/httpd.conf` を下記の通り修正する必要があります。  
 > ```
-> ...
 > # PHP module
 > # LoadModule php7_module "${SRVROOT}/bin/PHP/php7apache2_4.dll"  # <- この行をコメントアウト
 > LoadModule php_module "${SRVROOT}/bin/PHP/php8apache2_4.dll"  # <- この行を追加
-> ...
 > ```
-> 手間の関係でリリースは行いませんので、必要な方は直接 git clone / git pull してご利用ください。
+> **現在の TVRemotePlus は大元の作りが非常に雑なことに加え、老朽化により様々な箇所にガタが来ています。**  
+> **下記に「メンテナンスモード」とある通り、現在は個人的に使い続けるための最低限の修正のみを行っています。他環境での動作は保証しません。**  
+> 
+> ドキュメントの内容は 2022 年以降一切更新されていないため、随所に現状を反映していない/情報が古い記述があります。  
+> また手間の関係でリリースは行いませんので (リリース方法を忘れた…) 、必要な方は git pull などで直接ファイルを更新してください。  
 
 PHP / JavaScript 製のテレビのリモート視聴ソフト（いわゆるロケフリ）です。  
 YouTube やニコニコ動画などの動画配信サービスの UI を意識した、モバイルフレンドリーなレスポンシブ Web UI が特徴です。  
