@@ -13,6 +13,7 @@
     { "JikkyoID": 8,  "NetworkID": 15,  "ServiceID": "0x0420",  "Area": "関東広域",  "Channel": "フジテレビジョン" },
     { "JikkyoID": 5,  "NetworkID": 15,  "ServiceID": "0x0428",  "Area": "関東広域",  "Channel": "テレビ朝日" },
     { "JikkyoID": 7,  "NetworkID": 15,  "ServiceID": "0x0430",  "Area": "関東広域",  "Channel": "テレビ東京" },
+    { "JikkyoID": 7,  "NetworkID": 15,  "ServiceID": "0x0430",  "Area": "関東広域",  "Channel": "テレ東" },
     { "JikkyoID": 231,  "NetworkID": 15,  "ServiceID": "0x0440",  "Area": "関東広域",  "Channel": "放送大学" },
     { "JikkyoID": 2,  "NetworkID": 15,  "ServiceID": "0x0808",  "Area": "近畿広域",  "Channel": "NHKEテレ大阪" },
     { "JikkyoID": 6,  "NetworkID": 15,  "ServiceID": "0x0810",  "Area": "近畿広域",  "Channel": "MBS毎日放送" },
