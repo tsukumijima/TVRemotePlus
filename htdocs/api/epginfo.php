@@ -59,7 +59,7 @@
 
 			// チャンネル名
 			if (isset($epg->items->eventinfo[0]->service_name)){
-				$channel = mb_convert_kana(strval($epg->items->eventinfo[0]->service_name), 'asv');
+				$channel = mb_convert_kana(strval($epg->items->eventinfo[0]->service_name), 'as');
 			} else {
 				$channel = 'チャンネル名を取得できませんでした';
 			}
@@ -77,7 +77,7 @@
 			}
 			if (isset($epg->items->eventinfo[0]->event_name)){
 				//文字列に変換してさらに半角に変換して改行をbrにする
-				$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'asv'));
+				$program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_name), 'as'));
 			} else {
 				if (isset($epg->items->eventinfo[0]->service_name)){
 					$program_name = '放送休止';
@@ -87,7 +87,7 @@
 			}
 			if (isset($epg->items->eventinfo[0]->event_text)){
 				//文字列に変換してさらに半角に変換して改行をbrにする
-				$program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_text), 'asv'));
+				$program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[0]->event_text), 'as'));
 			} else {
 				if (isset($epg->items->eventinfo[0]->service_name)){
 					$program_info = '放送休止';
@@ -109,7 +109,7 @@
 			}
 			if (isset($epg->items->eventinfo[1]->event_name)){
 				//文字列に変換してさらに半角に変換して改行をbrにする
-				$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'asv'));
+				$next_program_name = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_name), 'as'));
 			} else {
 				if (isset($epg->items->eventinfo[1]->service_name)){
 					$next_program_name = '放送休止';
@@ -119,7 +119,7 @@
 			}
 			if (isset($epg->items->eventinfo[1]->event_text)){
 				//文字列に変換してさらに半角に変換して改行をbrにする
-				$next_program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_text), 'asv'));
+				$next_program_info = str_replace("\n", "<br>\n", mb_convert_kana(strval($epg->items->eventinfo[1]->event_text), 'as'));
 			} else {
 				if (isset($epg->items->eventinfo[1]->service_name)){
 					$next_program_info = '放送休止';

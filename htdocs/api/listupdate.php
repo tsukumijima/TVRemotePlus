@@ -317,7 +317,7 @@
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?から有効な番組情報を検出できませんでした./", '', $rplsinfo_result);
 					$rplsinfo_result = preg_replace("/番組情報元ファイル.*?を開くのに失敗しました./", '', $rplsinfo_result);
 
-					$fileinfo = str_getcsv(str_replace('　', ' ', mb_convert_kana($rplsinfo_result, 'asv', 'UTF-8'))); // Parseして配列にする
+					$fileinfo = str_getcsv(str_replace('　', ' ', mb_convert_kana($rplsinfo_result, 'as', 'UTF-8'))); // Parseして配列にする
 
 					// 出力
 					$TSfile['data'][$key]['title'] = decorateMark($fileinfo[4]); // 取得した番組名の方が正確なので修正

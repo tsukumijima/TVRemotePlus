@@ -736,7 +736,7 @@
 				$stream_cmd = '"'.$ffmpeg_path.'"'.
 
 					// 入力
-					' '.$dual_mono_mode_ffmpeg.' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
+					' '.$dual_mono_mode_ffmpeg.' -i '.($is_mp4_or_mkv ? "\"{$filepath}\"" : '-').
 					// HLS
 					' -f hls'.
 					' -hls_segment_type mpegts'.
@@ -765,7 +765,7 @@
 				$stream_cmd = '"'.$qsvencc_path.'"'.
 
 					// 入力
-					' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
+					' -i '.($is_mp4_or_mkv ? "\"{$filepath}\"" : '-').
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -795,7 +795,7 @@
 				$stream_cmd = '"'.$nvencc_path.'"'.
 
 					// 入力
-					' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
+					' -i '.($is_mp4_or_mkv ? "\"{$filepath}\"" : '-').
 					// avhw エンコード
 					' --avhw'.
 					// HLS
@@ -825,7 +825,7 @@
 				$stream_cmd = '"'.$vceencc_path.'"'.
 
 					// 入力
-					' -i '.($is_mp4_or_mkv ? "\"${filepath}\"" : '-').
+					' -i '.($is_mp4_or_mkv ? "\"{$filepath}\"" : '-').
 					// avsw エンコード
 					// VCE の HW デコーダーはエラー耐性が低く TS を扱う用途では不安定なので、SW デコーダーを利用する
 					' --avsw'.
@@ -887,7 +887,7 @@
 
 		// エンコードコマンド
 		$stream_cmd = (
-			"start \"${encoder} Encoding...\" ".($encoder_window == 'true' ? '' : '/B /min').' '.
+			"start \"{$encoder} Encoding...\" ".($encoder_window == 'true' ? '' : '/B /min').' '.
 			'cmd.exe /C "'.($is_mp4_or_mkv === false ? win_exec_escape($ast_cmd).' | '.$tsreadex_cmd.' | ' : '').win_exec_escape($stream_cmd)
 		);
 
