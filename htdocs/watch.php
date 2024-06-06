@@ -212,22 +212,22 @@
 	ob_flush();
 	flush();
 
-	// ファイルを四階層まで検索する
-	// MP4・MKVファイルも検索する
-	$search = @scandir_and_match_files($TSfile_dir, '/.\\.(ts|mts|m2t|m2ts|mp4|mkv)$/i', 4);
-	if ($search === false) {
-		$search = [];
-	}
+	// // ファイルを四階層まで検索する
+	// // MP4・MKVファイルも検索する
+	// $search = @scandir_and_match_files($TSfile_dir, '/.\\.(ts|mts|m2t|m2ts|mp4|mkv)$/i', 4);
+	// if ($search === false) {
+	// 	$search = [];
+	// }
 
-	$TSfile = file_get_contents_lock_sh($infofile);
-	if ($TSfile !== false) {
-		$TSfile = json_decode($TSfile, true);
-	} else {
-		$TSfile = ['data' => []];
-	}
+	// $TSfile = file_get_contents_lock_sh($infofile);
+	// if ($TSfile !== false) {
+	// 	$TSfile = json_decode($TSfile, true);
+	// } else {
+	// 	$TSfile = ['data' => []];
+	// }
 
-	// ファイルリストに記録されたファイル数と異なる場合
-	if (count($search) != count($TSfile['data'])) {
+	// // ファイルリストに記録されたファイル数と異なる場合
+	// if (count($search) != count($TSfile['data'])) {
 
 ?>
 
@@ -260,7 +260,7 @@
     });
 
     </script>
-<?php	} // 括弧終了 ?>
+<?php	// } // 括弧終了 ?>
 </body>
 
 </html>
